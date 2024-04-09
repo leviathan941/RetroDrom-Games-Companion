@@ -1,0 +1,5 @@
+<resources>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="top_bar_title_home">Home</string>
+</resources>
