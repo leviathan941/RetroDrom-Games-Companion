@@ -18,21 +18,30 @@
 
 package org.leviathan941.retrodromcompanion.ui
 
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
+import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavGraph
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
+import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 
 @Composable
 fun MainView(
@@ -57,10 +66,37 @@ fun MainView(
     ) {
         Scaffold(
             topBar = {
-                TopBarView(titleText = uiState.topBarTitle)
+                TopBarView(
+                    prefs = uiState.currentScreen.topBarPrefs,
+                )
             }
         ) { paddings ->
-            MainNavGraph(navController, paddings = paddings)
+            NavHost(
+                modifier = Modifier.padding(paddings),
+                navController = navController,
+                startDestination = MainDestination.LOADING.route,
+            ) {
+                MainDestination.entries.forEach { destination ->
+                    composable(destination.route) {
+                        val currentScreen = uiState.currentScreen
+                        when (destination) {
+                            MainDestination.LOADING -> LoadingScreen()
+                            MainDestination.RSS_FEED -> {
+                                require(currentScreen is MainNavScreen.RssFeed)
+                                RssFeedScreen(currentScreen)
+                            }
+                        }
+                    }
+                }
+            }
+            LaunchedEffect(key1 = uiState) {
+                uiState.currentScreen.takeUnless {
+                    it.route == navController.currentDestination?.route
+                }?.let { screen ->
+                    Log.d(MAIN_VIEW_TAG, "Navigate to ${screen.route}")
+                    navigationActions.navigateTo(screen)
+                }
+            }
         }
     }
 }

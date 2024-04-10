@@ -18,13 +18,8 @@
 
 package org.leviathan941.retrodromcompanion.rssreader
 
-internal const val FEED_URL_SUFFIX = "feed"
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
-internal object Rss {
-    const val CHANNEL_TAG = "channel"
-    const val ITEM_TAG = "item"
-    const val DC_CREATOR_TAG = "dc:creator"
-    const val CATEGORY_TAG = "category"
-    const val PUBLICATION_DATE_TAG = "pubDate"
-    const val IMAGE_TAG = "image"
-}
+fun RssPublicationDate.asDateTime(): ZonedDateTime =
+    ZonedDateTime.parse(value, DateTimeFormatter.RFC_1123_DATE_TIME)

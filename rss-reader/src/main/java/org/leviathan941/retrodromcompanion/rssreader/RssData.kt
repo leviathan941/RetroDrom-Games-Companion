@@ -18,30 +18,19 @@
 
 package org.leviathan941.retrodromcompanion.rssreader
 
-import tw.ktrssreader.annotation.RssRawData
-import tw.ktrssreader.annotation.RssTag
-import java.io.Serializable
-
-@RssTag(name = Rss.CHANNEL_TAG)
 data class RssChannel(
-    val title: String?,
-    @RssTag(name = Rss.ITEM_TAG)
+    val title: String,
+    val link: String,
     val items: List<RssChannelItem>,
-): Serializable
+)
 
-@RssTag(name = Rss.ITEM_TAG)
 data class RssChannelItem(
-    val title: String?,
-    val link: String?,
-    val pubDate: String?,
-    val description: String?,
-    @RssTag(name = Rss.CATEGORY_TAG)
-    val categories: List<RssCategory>,
-    @RssRawData(rawTags = [Rss.DC_CREATOR_TAG])
-    val creator: String?,
-): Serializable
+    val title: String,
+    val link: String,
+    val pubDate: RssPublicationDate,
+    val categories: List<String>,
+)
 
-@RssTag(name = Rss.CATEGORY_TAG)
-data class RssCategory(
-    val name: String?,
-): Serializable
+data class RssPublicationDate(
+    val value: String,
+)

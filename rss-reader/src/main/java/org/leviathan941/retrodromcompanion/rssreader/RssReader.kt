@@ -20,30 +20,42 @@ package org.leviathan941.retrodromcompanion.rssreader
 
 import android.net.Uri
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
+import org.leviathan941.retrodromcompanion.rssreader.internal.toPublic
+import tw.ktrssreader.Reader
 import tw.ktrssreader.config.readerGlobalConfig
-import tw.ktrssreader.generated.RssChannelReader
+import tw.ktrssreader.generated.ParsedRssChannelReader
 
 class RssReader(
     private val baseUrl: String,
 ) {
-    val feed: Flow<RssChannel> by lazy {
-        RssChannelReader.flowRead(
-            url = Uri.parse(baseUrl).buildUpon()
-                .appendPath(FEED_URL_SUFFIX)
-                .build()
-                .toString()
-        ).flowOn(Dispatchers.IO)
-    }
-
     init {
         readerGlobalConfig {
             enableLog = BuildConfig.DEBUG
         }
     }
 
-    private companion object {
-        private const val FEED_URL_SUFFIX = "feed"
+    suspend fun fetchFeedChannels(useCache: Boolean = true): List<RssChannel> =
+        withContext(Dispatchers.IO) {
+            listOfNotNull(
+                coRead(FEED_URL_SUFFIX, useCache),
+            )
+        }
+
+    fun clearCache() {
+        Reader.clearCache()
+    }
+
+    private suspend fun coRead(path: String, useCache: Boolean): RssChannel? {
+        return ParsedRssChannelReader.coRead(
+            url = Uri.parse(baseUrl).buildUpon()
+                .appendPath(path)
+                .build()
+                .toString(),
+            config = {
+                this.useCache = useCache
+                flushCache = !useCache
+            }
+        ).toPublic()
     }
 }

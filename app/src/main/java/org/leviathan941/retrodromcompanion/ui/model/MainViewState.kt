@@ -18,9 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-import org.leviathan941.retrodromcompanion.rssreader.RssChannel
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 data class MainViewState(
-    val topBarTitle: String = "",
-    val currentRssChannel: RssChannel? = null,
+    val allScreens: List<MainNavScreen> = emptyList(),
+    val currentScreen: MainNavScreen = MainNavScreen.Loading,
 )

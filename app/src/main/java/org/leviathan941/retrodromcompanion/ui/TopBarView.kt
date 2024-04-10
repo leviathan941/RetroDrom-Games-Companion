@@ -24,11 +24,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import org.leviathan941.retrodromcompanion.ui.model.TopBarPrefs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarView(
-    titleText: String,
+    prefs: TopBarPrefs,
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -36,7 +37,7 @@ fun TopBarView(
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {
-            Text(text = titleText)
+            Text(text = prefs.title)
         }
     )
 }

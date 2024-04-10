@@ -2,4 +2,32 @@
     <string name="title_activity_main">MainActivity</string>
 
     <string name="top_bar_title_home">Home</string>
+    <string name="top_bar_title_loading">Loading</string>
+    <string name="rss_feed_item_publication_icon_desc">Post was published at</string>
+
+    <string name="rss_feed_item_publication_time_just_now">just now</string>
+    <plurals name="rss_feed_item_publication_time_minutes">
+        <item quantity="one">%d minute ago</item>
+        <item quantity="other">%d minutes ago</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_hours">
+        <item quantity="one">%d hour ago</item>
+        <item quantity="other">%d hours ago</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_days">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_weeks">
+        <item quantity="one">%d week ago</item>
+        <item quantity="other">%d weeks ago</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_months">
+        <item quantity="one">%d month ago</item>
+        <item quantity="other">%d months ago</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_years">
+        <item quantity="one">%d year ago</item>
+        <item quantity="other">%d years ago</item>
+    </plurals>
 </resources>

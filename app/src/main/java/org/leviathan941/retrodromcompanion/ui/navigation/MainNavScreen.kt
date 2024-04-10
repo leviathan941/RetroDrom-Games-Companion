@@ -18,27 +18,26 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import org.leviathan941.retrodromcompanion.ui.feed.MainFeed
+import org.leviathan941.retrodromcompanion.rssreader.RssChannel
+import org.leviathan941.retrodromcompanion.ui.model.TopBarPrefs
 
-@Composable
-fun MainNavGraph(
-    navController: NavHostController,
-    paddings: PaddingValues,
-) {
-    NavHost(
-        modifier = Modifier.padding(paddings),
-        navController = navController,
-        startDestination = BuiltInDestinations.HOME,
-    ) {
-        composable(BuiltInDestinations.HOME) {
-            MainFeed()
-        }
+sealed interface MainNavScreen {
+    val route: String
+    val topBarPrefs: TopBarPrefs
+
+    data object Loading : MainNavScreen {
+        override val route: String = MainDestination.LOADING.route
+        override val topBarPrefs: TopBarPrefs
+            get() = TopBarPrefs(
+                title = route,
+            )
+    }
+
+    data class RssFeed(
+        val rssChannel: RssChannel,
+    ) : MainNavScreen {
+        override val route: String = MainDestination.RSS_FEED.route
+        override val topBarPrefs: TopBarPrefs
+            get() = TopBarPrefs(rssChannel.title)
     }
 }

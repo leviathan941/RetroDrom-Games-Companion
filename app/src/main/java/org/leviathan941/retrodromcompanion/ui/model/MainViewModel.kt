@@ -18,33 +18,47 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.rssreader.RssReader
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 class MainViewModel : ViewModel() {
-    private val rssReader = RssReader(BASE_URL)
+    private val screensProvider = MainScreenProvider(BASE_URL)
 
-    private val _uiState = MutableStateFlow(MainViewState())
+    private val _uiState = MutableStateFlow(
+        MainViewState(
+            allScreens = screensProvider.initialScreens,
+            currentScreen = MainNavScreen.Loading,
+        )
+    )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            rssReader.feed.collect { rssChannel ->
-                Log.d(TAG, "Received RSS channel: $rssChannel")
-                _uiState.value = _uiState.value.copy(currentRssChannel = rssChannel)
+            screensProvider.fetchScreens().let { screens ->
+                updateScreens(
+                    screens,
+                    changeCurrentScreen = screens.find { it !is MainNavScreen.Loading },
+                )
             }
         }
     }
 
+    private fun updateScreens(
+        screens: List<MainNavScreen>,
+        changeCurrentScreen: MainNavScreen? = null,
+    ) {
+        _uiState.value = _uiState.value.copy(
+            allScreens = screens,
+            currentScreen = changeCurrentScreen ?: _uiState.value.currentScreen,
+        )
+    }
+
     private companion object {
-        const val TAG = "MainViewModel"
         const val BASE_URL = "https://retrodrom.games/"
     }
 }

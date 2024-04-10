@@ -20,16 +20,19 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 
 import androidx.navigation.NavController
 
-object BuiltInDestinations {
-    const val HOME = "Home"
+enum class MainDestination(val route: String) {
+    LOADING("Loading"),
+    RSS_FEED("RssFeed"),
+    ;
 }
 
 class MainNavActions(
     private val navController: NavController,
 ) {
-    fun navigateToHome() {
-        navController.navigate(BuiltInDestinations.HOME) {
-            popUpTo(BuiltInDestinations.HOME)
+    fun navigateTo(screen: MainNavScreen) {
+        if (navController.currentDestination?.route == screen.route) return
+        navController.navigate(screen.route) {
+            popUpTo(MainDestination.LOADING.route)
             launchSingleTop = true
         }
     }

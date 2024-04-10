@@ -16,15 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.rssreader
+package org.leviathan941.retrodromcompanion.ui.screen
 
-internal const val FEED_URL_SUFFIX = "feed"
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 
-internal object Rss {
-    const val CHANNEL_TAG = "channel"
-    const val ITEM_TAG = "item"
-    const val DC_CREATOR_TAG = "dc:creator"
-    const val CATEGORY_TAG = "category"
-    const val PUBLICATION_DATE_TAG = "pubDate"
-    const val IMAGE_TAG = "image"
+@Composable
+fun LoadingScreen() {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(text = "Loading...")
+    }
 }
