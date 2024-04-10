@@ -21,6 +21,7 @@ package org.leviathan941.retrodromcompanion.rssreader.internal
 import android.util.Log
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
+import org.leviathan941.retrodromcompanion.rssreader.RssDescription
 import org.leviathan941.retrodromcompanion.rssreader.RssPublicationDate
 
 internal const val TAG = "RssReader"
@@ -37,8 +38,8 @@ internal fun ParsedRssChannel.toPublic(): RssChannel? =
         )
     }
 
-internal fun ParsedRssChannelItem.toPublic(): RssChannelItem? =
-    if (title == null || link == null || pubDate == null) {
+internal fun ParsedRssItem.toPublic(): RssChannelItem? =
+    if (title == null || link == null || pubDate == null || description == null) {
         Log.e(TAG, "Invalid RSS channel item: $this")
         null
     } else {
@@ -47,5 +48,15 @@ internal fun ParsedRssChannelItem.toPublic(): RssChannelItem? =
             link = link,
             pubDate = RssPublicationDate(pubDate),
             categories = categories ?: emptyList(),
+            description = parseRssDescription(description),
         )
     }
+
+private fun parseRssDescription(description: String): RssDescription {
+    return HtmlParser(description).parse().let {
+        RssDescription(
+            imageUrl = it.images.firstOrNull(),
+            paragraphs = it.paragraphs,
+        )
+    }
+}

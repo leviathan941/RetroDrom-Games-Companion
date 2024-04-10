@@ -18,28 +18,32 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import org.leviathan941.retrodromcompanion.rssreader.Rss
-import tw.ktrssreader.annotation.RssRawData
-import tw.ktrssreader.annotation.RssTag
-import java.io.Serializable
+import android.text.Html
 
-@RssTag(name = Rss.CHANNEL_TAG)
-data class ParsedRssChannel(
-    val title: String?,
-    val link: String?,
-    @RssTag(name = Rss.ITEM_TAG)
-    val items: List<ParsedRssItem>?,
-) : Serializable
+internal class HtmlParser(
+    private val html: String
+) {
+    var images: List<String> = emptyList()
+        private set
+    var paragraphs: List<String> = emptyList()
+        private set
 
-@RssTag(name = Rss.ITEM_TAG)
-data class ParsedRssItem(
-    val title: String?,
-    val link: String?,
-    @RssTag(name = Rss.PUBLICATION_DATE_TAG)
-    val pubDate: String?,
-    @RssTag(name = Rss.CATEGORY_TAG)
-    val categories: List<String>?,
-    @RssRawData(rawTags = [Rss.DC_CREATOR_TAG])
-    val creator: String?,
-    val description: String?,
-) : Serializable
+    fun parse(): HtmlParser {
+        val foundImages = mutableListOf<String>()
+        val imageHandler = Html.ImageGetter { imageSrc ->
+            foundImages.add(imageSrc)
+            null
+        }
+        val tagHandler = Html.TagHandler { _, _, _, _ -> }
+        Html.fromHtml(
+            html,
+            Html.FROM_HTML_MODE_COMPACT,
+            imageHandler,
+            tagHandler
+        ).split("\n")
+            .filterNot { it.isBlank() || it == "\ufffc" }
+            .let { paragraphs = it }
+        images = foundImages
+        return this
+    }
+}

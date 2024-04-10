@@ -29,8 +29,14 @@ data class RssChannelItem(
     val link: String,
     val pubDate: RssPublicationDate,
     val categories: List<String>,
+    val description: RssDescription?,
 )
 
 data class RssPublicationDate(
     val value: String,
+)
+
+data class RssDescription(
+    val imageUrl: String?,
+    val paragraphs: List<String>,
 )
