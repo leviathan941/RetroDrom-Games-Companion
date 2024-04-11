@@ -27,11 +27,14 @@ import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 class MainViewModel : ViewModel() {
-    private val screensProvider = MainScreenProvider(BASE_URL)
+    private val initialScreens = listOf(
+        MainNavScreen.Loading,
+    )
+    private val screensProvider = RssFeedScreensProvider(BASE_URL)
 
     private val _uiState = MutableStateFlow(
         MainViewState(
-            allScreens = screensProvider.initialScreens,
+            allScreens = initialScreens,
             currentScreen = MainNavScreen.Loading,
         )
     )
@@ -39,12 +42,16 @@ class MainViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            screensProvider.fetchScreens().let { screens ->
-                updateScreens(
-                    screens,
-                    changeCurrentScreen = screens.find { it !is MainNavScreen.Loading },
-                )
+            val screens = try {
+                screensProvider.fetchAllScreens(useCache = false)
+            } catch (e: RssFeedScreensProvider.FetchException) {
+                // If fetching failed, try to use cache.
+                screensProvider.fetchAllScreens(useCache = true)
             }
+            updateScreens(
+                screens,
+                changeCurrentScreen = screens.firstOrNull(),
+            )
         }
     }
 
@@ -53,7 +60,7 @@ class MainViewModel : ViewModel() {
         changeCurrentScreen: MainNavScreen? = null,
     ) {
         _uiState.value = _uiState.value.copy(
-            allScreens = screens,
+            allScreens = initialScreens + screens,
             currentScreen = changeCurrentScreen ?: _uiState.value.currentScreen,
         )
     }
