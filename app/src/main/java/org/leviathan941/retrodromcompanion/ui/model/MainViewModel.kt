@@ -24,13 +24,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.ui.BASE_TITLE
+import org.leviathan941.retrodromcompanion.ui.BASE_URL
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 class MainViewModel : ViewModel() {
     private val initialScreens = listOf(
         MainNavScreen.Loading,
     )
-    private val screensProvider = RssFeedScreensProvider(BASE_URL)
 
     private val _uiState = MutableStateFlow(
         MainViewState(
@@ -42,12 +43,13 @@ class MainViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            val screens = try {
-                screensProvider.fetchAllScreens(useCache = false)
-            } catch (e: RssFeedScreensProvider.FetchException) {
-                // If fetching failed, try to use cache.
-                screensProvider.fetchAllScreens(useCache = true)
-            }
+            // TODO: Fetch the real categories.
+            val screens = listOf(
+                MainNavScreen.RssFeed(
+                    title = BASE_TITLE,
+                    channelUrl = BASE_URL,
+                ),
+            )
             updateScreens(
                 screens,
                 changeCurrentScreen = screens.firstOrNull(),
@@ -63,9 +65,5 @@ class MainViewModel : ViewModel() {
             allScreens = initialScreens + screens,
             currentScreen = changeCurrentScreen ?: _uiState.value.currentScreen,
         )
-    }
-
-    private companion object {
-        const val BASE_URL = "https://retrodrom.games/"
     }
 }

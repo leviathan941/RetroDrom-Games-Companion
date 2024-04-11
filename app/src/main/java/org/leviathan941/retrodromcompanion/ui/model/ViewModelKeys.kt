@@ -16,28 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.navigation
+package org.leviathan941.retrodromcompanion.ui.model
 
-import org.leviathan941.retrodromcompanion.ui.model.TopBarPrefs
-
-sealed interface MainNavScreen {
-    val route: String
-    val topBarPrefs: TopBarPrefs
-
-    data object Loading : MainNavScreen {
-        override val route: String = MainDestination.LOADING.route
-        override val topBarPrefs: TopBarPrefs
-            get() = TopBarPrefs(
-                title = route,
-            )
-    }
-
-    data class RssFeed(
-        val title: String,
-        val channelUrl: String,
-    ) : MainNavScreen {
-        override val route: String = MainDestination.RSS_FEED.route
-        override val topBarPrefs: TopBarPrefs
-            get() = TopBarPrefs(title)
-    }
+object ViewModelKeys {
+    const val RSS_FEED_VIEW_MODEL = "rss_feed_view_model"
 }

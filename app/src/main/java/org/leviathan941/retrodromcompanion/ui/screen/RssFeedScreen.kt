@@ -18,30 +18,82 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import org.leviathan941.retrodromcompanion.rssreader.asDateTime
+import androidx.lifecycle.viewmodel.compose.viewModel
+import org.leviathan941.retrodromcompanion.ui.model.RssFeedContentType
+import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
+import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModelFactory
+import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
-import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem
+import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedShowContent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RssFeedScreen(screen: MainNavScreen.RssFeed) {
-    LazyColumn {
-        screen.rssChannel.items.forEach { rssFeedItem ->
-            item {
-                RssFeedItem(
-                    title = rssFeedItem.title,
-                    categories = rssFeedItem.categories,
-                    pubDate = rssFeedItem.pubDate.asDateTime(),
-                    imageUrl = rssFeedItem.description?.imageUrl,
-                    description = rssFeedItem.description?.paragraphs?.firstOrNull(),
-                )
-                HorizontalDivider(
-                    thickness = 1.dp,
+fun RssFeedScreen(
+    screen: MainNavScreen.RssFeed
+) {
+    val screenViewModel: RssFeedViewModel = viewModel(
+        factory = RssFeedViewModelFactory(screen.channelUrl),
+        key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
+    )
+    val uiState by screenViewModel.uiState.collectAsState()
+
+    val pullToRefreshState = rememberPullToRefreshState(
+        positionalThreshold = 96.dp,
+    )
+
+    Box(
+        modifier = Modifier
+            .nestedScroll(pullToRefreshState.nestedScrollConnection),
+    ) {
+        when (uiState.contentType) {
+            RssFeedContentType.LOADING -> {
+                LoadingScreen()
+            }
+
+            RssFeedContentType.SHOW -> {
+                val channel = uiState.rssChannel
+                require(channel != null) {
+                    "RssChannel must not be null to be shown"
+                }
+                RssFeedShowContent(
+                    channel = channel,
                 )
             }
+
+            RssFeedContentType.ERROR -> {
+                // TODO: Show error screen
+            }
         }
+
+        if (pullToRefreshState.isRefreshing) {
+            LaunchedEffect(key1 = true) {
+                screenViewModel.refreshChannel()
+            }
+        }
+        LaunchedEffect(key1 = uiState.isRefreshing) {
+            if (uiState.isRefreshing) {
+                pullToRefreshState.startRefresh()
+            } else {
+                pullToRefreshState.endRefresh()
+            }
+        }
+
+        PullToRefreshContainer(
+            modifier = Modifier
+                .align(Alignment.TopCenter),
+            state = pullToRefreshState,
+        )
     }
 }

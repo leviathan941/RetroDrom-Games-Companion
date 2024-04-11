@@ -28,6 +28,8 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 internal const val MAIN_VIEW_TAG = "MainView"
+internal const val BASE_URL = "https://retrodrom.games/"
+internal const val BASE_TITLE = "RetroDrom Games"
 
 fun ZonedDateTime.toRssFeedPublicationTime(
     resources: Resources,

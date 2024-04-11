@@ -19,16 +19,13 @@
 package org.leviathan941.retrodromcompanion.ui.model
 
 import android.util.Log
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
+import org.leviathan941.retrodromcompanion.rssreader.RssChannel
 import org.leviathan941.retrodromcompanion.rssreader.RssFetcher
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import java.io.InvalidClassException
 
-class RssFeedScreensProvider(
-    private val baseUrl: String,
+class RssFeedProvider(
+    private val channelUrl: String,
 ) {
     enum class FetchError {
         UNKNOWN_ERROR,
@@ -42,30 +39,9 @@ class RssFeedScreensProvider(
     ) : Exception(throwable)
 
     @Throws(FetchException::class)
-    suspend fun fetchAllScreens(useCache: Boolean): List<MainNavScreen.RssFeed> {
-        val channelUrls = listOf(baseUrl)
-        return coroutineScope {
-            channelUrls.map {
-                async { safeFetchRssScreen(it, useCache) }
-            }.awaitAll().filterNotNull()
-        }
-    }
-
-    @Throws(FetchException::class)
-    suspend fun refreshScreen(screen: MainNavScreen.RssFeed): MainNavScreen.RssFeed {
-        return safeFetchRssScreen(
-            channelUrl = screen.rssChannel.link,
-            useCache = false,
-        ) ?: screen
-    }
-
-    @Throws(FetchException::class)
-    private suspend fun safeFetchRssScreen(
-        channelUrl: String,
-        useCache: Boolean,
-    ): MainNavScreen.RssFeed? {
+    suspend fun fetch(useCache: Boolean): RssChannel? {
         return try {
-            fetchRssScreen(channelUrl, useCache)
+            fetchRssChannel(useCache)
         } catch (e: InvalidClassException) {
             val error = if (useCache) FetchError.INVALID_CACHE else FetchError.UNKNOWN_ERROR
             throw FetchException(error, e)
@@ -74,16 +50,13 @@ class RssFeedScreensProvider(
         }
     }
 
-    private suspend fun fetchRssScreen(
-        channelUrl: String,
-        useCache: Boolean = true,
-    ): MainNavScreen.RssFeed? {
+    private suspend fun fetchRssChannel(useCache: Boolean): RssChannel? {
         return RssFetcher.fetchFeed(
             channelUrl,
             useCache,
         )?.let { rssChannel ->
             Log.d(MAIN_VIEW_TAG, "Received RSS channel: $rssChannel")
-            MainNavScreen.RssFeed(rssChannel)
+            rssChannel
         } ?: run {
             Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS channel for $channelUrl.")
             null
