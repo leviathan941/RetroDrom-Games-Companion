@@ -86,15 +86,13 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
-    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
 
     implementation(libs.google.material)
 
     implementation(libs.compose.compiler)
     implementation(libs.compose.ui)
-    implementation(libs.compose.runtime.livedata)
     implementation(libs.compose.material3)
 
     implementation(libs.activity.compose)

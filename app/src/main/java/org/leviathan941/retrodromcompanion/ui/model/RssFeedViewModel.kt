@@ -47,9 +47,11 @@ class RssFeedViewModel(
         }
     }
 
-    fun refreshChannel() {
+    fun refreshChannel(showIsRefreshing: Boolean = true) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isRefreshing = true)
+            if (showIsRefreshing) {
+                _uiState.value = _uiState.value.copy(isRefreshing = true)
+            }
             fetchChannel()?.let { channel ->
                 _uiState.value = _uiState.value.copy(
                     rssChannel = channel,

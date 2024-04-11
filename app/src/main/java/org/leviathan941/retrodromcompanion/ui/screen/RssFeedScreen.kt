@@ -29,7 +29,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedContentType
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
@@ -52,6 +54,8 @@ fun RssFeedScreen(
     val pullToRefreshState = rememberPullToRefreshState(
         positionalThreshold = 96.dp,
     )
+
+    val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
 
     Box(
         modifier = Modifier
@@ -95,5 +99,14 @@ fun RssFeedScreen(
                 .align(Alignment.TopCenter),
             state = pullToRefreshState,
         )
+    }
+
+    LaunchedEffect(key1 = lifecycleState) {
+        if (lifecycleState == Lifecycle.State.RESUMED &&
+            uiState.contentType != RssFeedContentType.LOADING &&
+            !uiState.isRefreshing
+        ) {
+            screenViewModel.refreshChannel(showIsRefreshing = false)
+        }
     }
 }
