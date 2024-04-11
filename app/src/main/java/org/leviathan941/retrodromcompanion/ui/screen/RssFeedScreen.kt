@@ -35,6 +35,8 @@ fun RssFeedScreen(screen: MainNavScreen.RssFeed) {
                     title = rssFeedItem.title,
                     categories = rssFeedItem.categories,
                     pubDate = rssFeedItem.pubDate.asDateTime(),
+                    imageUrl = rssFeedItem.description?.imageUrl,
+                    description = rssFeedItem.description?.paragraphs?.firstOrNull(),
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
