@@ -6,6 +6,7 @@ compose = "1.6.5"
 composeActivity = "1.8.2"
 composeCompiler = "1.5.11"
 composeMaterial3 = "1.2.1"
+composeWebview = "0.33.6"
 coreKtx = "1.12.0"
 googleMaterial = "1.11.0"
 gson = "2.10.1"
@@ -38,6 +39,7 @@ ktrssreader-processor = { group = "com.github.ivanisidrowu.KtRssReader", name = 
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+webview-compose = { group = "io.github.kevinnzou", name = "compose-webview", version.ref = "composeWebview" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidPlugin" }

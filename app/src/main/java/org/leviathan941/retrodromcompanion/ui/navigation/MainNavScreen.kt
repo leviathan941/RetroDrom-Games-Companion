@@ -21,14 +21,14 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import org.leviathan941.retrodromcompanion.ui.model.TopBarPrefs
 
 sealed interface MainNavScreen {
-    val route: String
+    val destination: MainDestination
     val topBarPrefs: TopBarPrefs
 
     data object Loading : MainNavScreen {
-        override val route: String = MainDestination.LOADING.route
+        override val destination: MainDestination = MainDestination.LOADING
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
-                title = route,
+                title = MainDestination.LOADING.route,
             )
     }
 
@@ -36,7 +36,16 @@ sealed interface MainNavScreen {
         val title: String,
         val channelUrl: String,
     ) : MainNavScreen {
-        override val route: String = MainDestination.RSS_FEED.route
+        override val destination: MainDestination = MainDestination.RSS_FEED
+        override val topBarPrefs: TopBarPrefs
+            get() = TopBarPrefs(title)
+    }
+
+    data class WebView(
+        val title: String,
+        val url: String,
+    ) : MainNavScreen {
+        override val destination: MainDestination = MainDestination.WEB_VIEW
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(title)
     }

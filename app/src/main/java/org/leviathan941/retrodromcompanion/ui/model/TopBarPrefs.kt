@@ -19,5 +19,5 @@
 package org.leviathan941.retrodromcompanion.ui.model
 
 data class TopBarPrefs(
-    val title: String,
+    val title: String = "",
 )

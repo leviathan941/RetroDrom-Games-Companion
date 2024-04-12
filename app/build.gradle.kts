@@ -101,6 +101,8 @@ dependencies {
 
     implementation(libs.coil.compose)
 
+    implementation(libs.webview.compose)
+
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.tooling.preview)
 }

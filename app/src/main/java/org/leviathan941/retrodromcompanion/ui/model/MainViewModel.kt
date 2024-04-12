@@ -29,41 +29,27 @@ import org.leviathan941.retrodromcompanion.ui.BASE_URL
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 class MainViewModel : ViewModel() {
-    private val initialScreens = listOf(
-        MainNavScreen.Loading,
-    )
-
-    private val _uiState = MutableStateFlow(
-        MainViewState(
-            allScreens = initialScreens,
-            currentScreen = MainNavScreen.Loading,
-        )
-    )
+    private val _uiState = MutableStateFlow(MainViewState())
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
             // TODO: Fetch the real categories.
-            val screens = listOf(
-                MainNavScreen.RssFeed(
-                    title = BASE_TITLE,
-                    channelUrl = BASE_URL,
-                ),
+            val rssFeedScreen = MainNavScreen.RssFeed(
+                title = BASE_TITLE,
+                channelUrl = BASE_URL,
             )
-            updateScreens(
-                screens,
-                changeCurrentScreen = screens.firstOrNull(),
+            _uiState.value = _uiState.value.copy(
+                rssFeedData = listOf(rssFeedScreen),
             )
         }
     }
 
-    private fun updateScreens(
-        screens: List<MainNavScreen>,
-        changeCurrentScreen: MainNavScreen? = null,
-    ) {
-        _uiState.value = _uiState.value.copy(
-            allScreens = initialScreens + screens,
-            currentScreen = changeCurrentScreen ?: _uiState.value.currentScreen,
-        )
+    fun setWebViewData(screen: MainNavScreen.WebView) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                webViewData = screen,
+            )
+        }
     }
 }

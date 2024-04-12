@@ -19,5 +19,6 @@
 package org.leviathan941.retrodromcompanion.ui.model
 
 object ViewModelKeys {
+    const val MAIN_VIEW_MODEL = "main_view_model"
     const val RSS_FEED_VIEW_MODEL = "rss_feed_view_model"
 }

@@ -67,12 +67,16 @@ class RssFeedViewModel(
         }
     }
 
-    private suspend fun fetchChannel(): RssChannel? {
+    private suspend fun fetchChannel(useCache: Boolean = false): RssChannel? {
         return try {
-            feedProvider.fetch(useCache = false)
+            feedProvider.fetch(useCache)
         } catch (e: RssFeedProvider.FetchException) {
-            // If fetching failed, try to use cache.
-            feedProvider.fetch(useCache = true)
+            if (!useCache) {
+                // If fetching failed, try to use cache.
+                fetchChannel(useCache = true)
+            } else {
+                null
+            }
         }
     }
 }

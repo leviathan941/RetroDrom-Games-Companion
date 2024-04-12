@@ -23,16 +23,24 @@ import androidx.navigation.NavController
 enum class MainDestination(val route: String) {
     LOADING("Loading"),
     RSS_FEED("RssFeed"),
+    WEB_VIEW("WebView"),
     ;
 }
 
 class MainNavActions(
     private val navController: NavController,
 ) {
-    fun navigateTo(screen: MainNavScreen) {
-        if (navController.currentDestination?.route == screen.route) return
-        navController.navigate(screen.route) {
-            popUpTo(MainDestination.LOADING.route)
+    fun navigateToRssFeed(channelId: Int) {
+        navController.navigate("${MainDestination.RSS_FEED.route}/$channelId") {
+            popUpTo(MainDestination.LOADING.route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToWebView() {
+        navController.navigate(MainDestination.WEB_VIEW.route) {
             launchSingleTop = true
         }
     }

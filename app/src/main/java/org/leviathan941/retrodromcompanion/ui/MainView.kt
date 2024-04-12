@@ -19,8 +19,6 @@
 package org.leviathan941.retrodromcompanion.ui
 
 import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -30,32 +28,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
-import org.leviathan941.retrodromcompanion.ui.model.MainViewState
+import org.leviathan941.retrodromcompanion.ui.model.TopBarPrefs
+import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
+import org.leviathan941.retrodromcompanion.ui.screen.WebViewScreen
 
 @Composable
-fun MainView(
-    activity: ComponentActivity,
-) {
-    val mainViewModel: MainViewModel by activity.viewModels()
-
-    val uiState: MainViewState by mainViewModel.uiState.collectAsState()
-
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
+fun MainView() {
     val navController = rememberNavController()
     val navigationActions = remember(navController) {
         MainNavActions(navController)
+    }
+
+    val mainViewModel: MainViewModel = viewModel(
+        key = ViewModelKeys.MAIN_VIEW_MODEL,
+    )
+
+    val uiState by mainViewModel.uiState.collectAsState()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val topBarPrefsState = remember {
+        mutableStateOf(TopBarPrefs())
     }
 
     ModalNavigationDrawer(
@@ -67,7 +73,7 @@ fun MainView(
         Scaffold(
             topBar = {
                 TopBarView(
-                    prefs = uiState.currentScreen.topBarPrefs,
+                    prefs = topBarPrefsState.value,
                 )
             }
         ) { paddings ->
@@ -76,27 +82,58 @@ fun MainView(
                 navController = navController,
                 startDestination = MainDestination.LOADING.route,
             ) {
-                MainDestination.entries.forEach { destination ->
-                    composable(destination.route) {
-                        val currentScreen = uiState.currentScreen
-                        when (destination) {
-                            MainDestination.LOADING -> LoadingScreen()
-                            MainDestination.RSS_FEED -> {
-                                require(currentScreen is MainNavScreen.RssFeed)
-                                RssFeedScreen(currentScreen)
-                            }
-                        }
+                composable(MainDestination.LOADING.route) {
+                    topBarPrefsState.value = MainNavScreen.Loading.topBarPrefs
+                    LoadingScreen()
+                }
+
+                composable(
+                    route = "${MainDestination.RSS_FEED.route}/{$RSS_FEED_NAV_CHANNEL_ID}",
+                    arguments = listOf(
+                        navArgument(RSS_FEED_NAV_CHANNEL_ID) { type = NavType.IntType },
+                    ),
+                ) { backStackEntry ->
+                    val screen = backStackEntry.arguments?.getInt(RSS_FEED_NAV_CHANNEL_ID, 0)?.let {
+                        uiState.rssFeedData.getOrNull(it)
+                    } ?: run {
+                        // TODO: Navigate to something goes wrong screen
+                        return@composable
                     }
+                    topBarPrefsState.value = screen.topBarPrefs
+                    RssFeedScreen(
+                        screen = screen,
+                        postClickListener = { title, url ->
+                            mainViewModel.setWebViewData(
+                                MainNavScreen.WebView(
+                                    title = title,
+                                    url = url,
+                                )
+                            )
+                            navigationActions.navigateToWebView()
+                        }
+                    )
+                }
+
+                composable(MainDestination.WEB_VIEW.route) {
+                    val screen = uiState.webViewData ?: run {
+                        // TODO: Navigate to something goes wrong screen
+                        return@composable
+                    }
+                    topBarPrefsState.value = TopBarPrefs(title = screen.title)
+                    WebViewScreen(url = screen.url)
                 }
             }
-            LaunchedEffect(key1 = uiState) {
-                uiState.currentScreen.takeUnless {
-                    it.route == navController.currentDestination?.route
-                }?.let { screen ->
-                    Log.d(MAIN_VIEW_TAG, "Navigate to ${screen.route}")
-                    navigationActions.navigateTo(screen)
-                }
-            }
+        }
+    }
+
+    LaunchedEffect(key1 = uiState) {
+        if (navController.currentDestination?.route == MainDestination.LOADING.route &&
+            uiState.rssFeedData.isNotEmpty()
+        ) {
+            Log.d(MAIN_VIEW_TAG, "Navigate after loading finished")
+            navigationActions.navigateToRssFeed(
+                channelId = 0,
+            )
         }
     }
 }

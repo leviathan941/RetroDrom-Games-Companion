@@ -53,6 +53,7 @@ import java.time.ZonedDateTime
 
 @Composable
 fun RssFeedItem(
+    modifier: Modifier,
     title: String,
     categories: List<String>,
     pubDate: ZonedDateTime,
@@ -60,7 +61,7 @@ fun RssFeedItem(
     description: String? = null,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(start = 15.dp, top = 8.dp, end = 15.dp, bottom = 10.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -158,6 +159,7 @@ fun RssFeedItem(
 )
 @Composable
 fun RssFeedItemPreview() = RssFeedItem(
+    modifier = Modifier,
     title = "Very interesting news! Be hurry to read it! Do not miss!",
     categories = listOf(
         "Category 1",
@@ -170,5 +172,5 @@ fun RssFeedItemPreview() = RssFeedItem(
     pubDate = ZonedDateTime.of(2024, 3, 1, 12, 0, 0, 0, ZoneId.systemDefault()),
     imageUrl = "https://example.com/image.jpg",
     description = "Clones of the Famicom console, released under local brands, " +
-            "are increasingly appearing in the catalogs of some Japanese retail chains."
+            "are increasingly appearing in the catalogs of some Japanese retail chains.",
 )

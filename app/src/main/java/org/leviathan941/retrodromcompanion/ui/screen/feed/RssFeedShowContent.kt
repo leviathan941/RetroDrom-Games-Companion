@@ -18,21 +18,30 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.feed
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
+import org.leviathan941.retrodromcompanion.ui.screen.RssPostClickListener
 
 @Composable
 fun RssFeedShowContent(
     channel: RssChannel,
+    postClickListener: RssPostClickListener,
 ) {
     LazyColumn {
         channel.items.forEach { rssFeedItem ->
             item {
                 RssFeedItem(
+                    modifier = Modifier.clickable {
+                        rssFeedItem.run {
+                            postClickListener.onPostClicked(title, link)
+                        }
+                    },
                     title = rssFeedItem.title,
                     categories = rssFeedItem.categories,
                     pubDate = rssFeedItem.pubDate.asDateTime(),

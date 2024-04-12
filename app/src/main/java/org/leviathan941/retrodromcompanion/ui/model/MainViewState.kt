@@ -21,6 +21,6 @@ package org.leviathan941.retrodromcompanion.ui.model
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 data class MainViewState(
-    val allScreens: List<MainNavScreen> = emptyList(),
-    val currentScreen: MainNavScreen = MainNavScreen.Loading,
+    val rssFeedData: List<MainNavScreen.RssFeed> = emptyList(),
+    val webViewData: MainNavScreen.WebView? = null,
 )
