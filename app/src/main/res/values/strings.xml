@@ -1,5 +1,5 @@
 <resources>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">RetroDrom Games</string>
 
     <string name="loading_screen_title">Loading</string>
     <string name="rss_feed_item_publication_icon_desc">Post was published at</string>
