@@ -20,7 +20,10 @@ package org.leviathan941.retrodromcompanion.ui
 
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
+import androidx.navigation.NavHostController
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.ui.model.MainViewState
+import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration
@@ -80,6 +83,22 @@ fun ZonedDateTime.toRssFeedPublicationTime(
                     diffYears
                 )
             }
+    }
+}
+
+internal fun NavHostController.currentDestinationUrl(
+    uiState: MainViewState,
+): String? = currentDestination?.route?.let { route ->
+    when {
+        route.startsWith(MainDestination.RSS_FEED.route) -> {
+            route.substringAfterLast('/').toIntOrNull()?.let {
+                uiState.rssFeedData.getOrNull(it)?.channelUrl
+            }
+        }
+
+        route == MainDestination.WEB_VIEW.route -> uiState.webViewData?.url
+
+        else -> null
     }
 }
 

@@ -16,8 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.model
+package org.leviathan941.retrodromcompanion.ui.topbar
 
 data class TopBarPrefs(
     val title: String = "",
+    val subtitle: String = "",
+    val navButton: TopBarNavButton = TopBarNavButton.NONE,
+    val actions: List<TopBarAction> = emptyList(),
 )
+
+enum class TopBarNavButton {
+    NONE,
+    BACK,
+    CLOSE,
+    DRAWER,
+    ;
+}
+
+enum class TopBarAction {
+    BROWSE,
+    ;
+}

@@ -39,16 +39,13 @@ import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedShowContent
-
-fun interface RssPostClickListener {
-    fun onPostClicked(title: String, url: String)
-}
+import org.leviathan941.retrodromcompanion.ui.screen.webview.WebViewOpener
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RssFeedScreen(
     screen: MainNavScreen.RssFeed,
-    postClickListener: RssPostClickListener,
+    webViewOpener: WebViewOpener,
 ) {
     val screenViewModel: RssFeedViewModel = viewModel(
         factory = RssFeedViewModelFactory(screen.channelUrl),
@@ -78,7 +75,7 @@ fun RssFeedScreen(
                 }
                 RssFeedShowContent(
                     channel = channel,
-                    postClickListener = postClickListener,
+                    webViewOpener = webViewOpener,
                 )
             }
 

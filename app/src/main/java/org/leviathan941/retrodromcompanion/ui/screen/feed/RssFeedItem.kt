@@ -82,10 +82,10 @@ fun RssFeedItem(
                         .data(imageUrl)
                         .build(),
                     placeholder = painterResource(
-                        id = R.drawable.image_placeholder
+                        id = R.drawable.google_material_image_placeholder
                     ),
                     error = painterResource(
-                        id = R.drawable.broken_image
+                        id = R.drawable.google_material_broken_image
                     ),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -121,7 +121,7 @@ fun RssFeedItem(
         ) {
             Image(
                 modifier = Modifier.size(12.dp),
-                painter = painterResource(id = R.drawable.rss_post_pub_date),
+                painter = painterResource(id = R.drawable.google_material_schedule),
                 contentDescription = stringResource(
                     id = R.string.rss_feed_item_publication_icon_desc
                 ),

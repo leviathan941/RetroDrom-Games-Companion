@@ -16,12 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.model
+package org.leviathan941.retrodromcompanion.ui.screen.webview
 
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
-data class MainViewState(
-    val loadingData: MainNavScreen.Loading = MainNavScreen.Loading(),
-    val rssFeedData: List<MainNavScreen.RssFeed> = emptyList(),
-    val webViewData: MainNavScreen.WebView? = null,
-)
+fun interface WebViewOpener {
+    fun open(screen: MainNavScreen.WebView)
+}

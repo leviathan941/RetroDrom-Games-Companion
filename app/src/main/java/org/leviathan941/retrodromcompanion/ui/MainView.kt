@@ -26,26 +26,33 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
-import org.leviathan941.retrodromcompanion.ui.model.TopBarPrefs
+import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.WebViewScreen
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @Composable
 fun MainView() {
@@ -56,13 +63,16 @@ fun MainView() {
 
     val mainViewModel: MainViewModel = viewModel(
         key = ViewModelKeys.MAIN_VIEW_MODEL,
+        factory = MainViewModelFactory(LocalContext.current),
     )
 
     val uiState by mainViewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val topBarPrefsState = remember {
-        mutableStateOf(TopBarPrefs())
+        mutableStateOf(uiState.loadingData.topBarPrefs)
     }
+    val coroutineScope = rememberCoroutineScope()
+    val uriHandler = LocalUriHandler.current
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -74,6 +84,26 @@ fun MainView() {
             topBar = {
                 TopBarView(
                     prefs = topBarPrefsState.value,
+                    onNavButtonClick = { navButton ->
+                        when (navButton) {
+                            TopBarNavButton.BACK -> navController.popBackStack()
+                            TopBarNavButton.CLOSE -> navController.navigateUp()
+                            TopBarNavButton.DRAWER -> coroutineScope.launch {
+                                drawerState.open()
+                            }
+
+                            TopBarNavButton.NONE -> Unit
+                        }
+                    },
+                    onActionClick = { action ->
+                        when (action) {
+                            TopBarAction.BROWSE -> {
+                                navController.currentDestinationUrl(uiState)?.let {
+                                    uriHandler.openUri(it)
+                                }
+                            }
+                        }
+                    }
                 )
             }
         ) { paddings ->
@@ -83,8 +113,10 @@ fun MainView() {
                 startDestination = MainDestination.LOADING.route,
             ) {
                 composable(MainDestination.LOADING.route) {
-                    topBarPrefsState.value = MainNavScreen.Loading.topBarPrefs
                     LoadingScreen()
+                    SideEffect {
+                        topBarPrefsState.value = uiState.loadingData.topBarPrefs
+                    }
                 }
 
                 composable(
@@ -99,19 +131,16 @@ fun MainView() {
                         // TODO: Navigate to something goes wrong screen
                         return@composable
                     }
-                    topBarPrefsState.value = screen.topBarPrefs
                     RssFeedScreen(
                         screen = screen,
-                        postClickListener = { title, url ->
-                            mainViewModel.setWebViewData(
-                                MainNavScreen.WebView(
-                                    title = title,
-                                    url = url,
-                                )
-                            )
+                        webViewOpener = {
+                            mainViewModel.setWebViewData(it)
                             navigationActions.navigateToWebView()
                         }
                     )
+                    SideEffect {
+                        topBarPrefsState.value = screen.topBarPrefs
+                    }
                 }
 
                 composable(MainDestination.WEB_VIEW.route) {
@@ -119,8 +148,10 @@ fun MainView() {
                         // TODO: Navigate to something goes wrong screen
                         return@composable
                     }
-                    topBarPrefsState.value = TopBarPrefs(title = screen.title)
                     WebViewScreen(url = screen.url)
+                    SideEffect {
+                        topBarPrefsState.value = screen.topBarPrefs
+                    }
                 }
             }
         }

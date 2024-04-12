@@ -18,18 +18,29 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.BASE_TITLE
 import org.leviathan941.retrodromcompanion.ui.BASE_URL
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
-class MainViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(MainViewState())
+class MainViewModel(
+    context: Context,
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(
+        MainViewState(
+            loadingData = MainNavScreen.Loading(
+                title = context.getString(R.string.loading_screen_title)
+            ),
+        )
+    )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
 
     init {
@@ -51,5 +62,14 @@ class MainViewModel : ViewModel() {
                 webViewData = screen,
             )
         }
+    }
+}
+
+class MainViewModelFactory(
+    private val context: Context,
+) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return MainViewModel(context) as T
     }
 }

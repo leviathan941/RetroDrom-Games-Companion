@@ -18,17 +18,21 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import org.leviathan941.retrodromcompanion.ui.model.TopBarPrefs
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
 
 sealed interface MainNavScreen {
     val destination: MainDestination
     val topBarPrefs: TopBarPrefs
 
-    data object Loading : MainNavScreen {
+    data class Loading(
+        val title: String = "",
+    ) : MainNavScreen {
         override val destination: MainDestination = MainDestination.LOADING
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
-                title = MainDestination.LOADING.route,
+                title,
             )
     }
 
@@ -43,10 +47,16 @@ sealed interface MainNavScreen {
 
     data class WebView(
         val title: String,
+        val subtitle: String,
         val url: String,
     ) : MainNavScreen {
         override val destination: MainDestination = MainDestination.WEB_VIEW
         override val topBarPrefs: TopBarPrefs
-            get() = TopBarPrefs(title)
+            get() = TopBarPrefs(
+                title = title,
+                subtitle = subtitle,
+                navButton = TopBarNavButton.CLOSE,
+                actions = listOf(TopBarAction.BROWSE),
+            )
     }
 }
