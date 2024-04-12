@@ -39,6 +39,7 @@ import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedShowContent
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.screen.webview.WebViewOpener
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,7 +66,7 @@ fun RssFeedScreen(
     ) {
         when (uiState.contentType) {
             RssFeedContentType.LOADING -> {
-                LoadingScreen()
+                LoadingScreen(LoadingState.InProgress)
             }
 
             RssFeedContentType.SHOW -> {

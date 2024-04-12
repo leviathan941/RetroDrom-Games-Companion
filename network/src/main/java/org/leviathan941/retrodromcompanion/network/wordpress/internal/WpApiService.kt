@@ -16,17 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.network.wordpress.internal
 
-import com.google.gson.annotations.SerializedName
+import org.leviathan941.retrodromcompanion.network.wordpress.WpFeedCategory
+import retrofit2.Response
+import retrofit2.http.GET
 
-data class WpFeedCategory(
-    @SerializedName("id")
-    val id: Int,
-    @SerializedName("name")
-    val name: String,
-    @SerializedName("link")
-    val link: String,
-    @SerializedName("count")
-    val postsCount: Int,
-)
+internal interface WpApiService {
+    @GET("wp-json/wp/v2/categories")
+    suspend fun fetchCategories(): Response<List<WpFeedCategory>>
+}

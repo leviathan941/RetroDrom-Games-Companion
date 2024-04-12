@@ -23,9 +23,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.tooling.preview.Preview
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 @Composable
-fun LoadingScreen() {
+fun LoadingScreen(
+    loadingState: LoadingState,
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -33,3 +37,11 @@ fun LoadingScreen() {
         Text(text = "Loading...")
     }
 }
+
+@Preview(
+    showBackground = true,
+)
+@Composable
+private fun InProgressLoadingScreen() = LoadingScreen(
+    loadingState = LoadingState.InProgress,
+)

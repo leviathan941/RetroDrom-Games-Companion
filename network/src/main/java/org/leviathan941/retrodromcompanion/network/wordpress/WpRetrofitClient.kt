@@ -18,6 +18,12 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress
 
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.WP_TAG
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpApiService
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -29,5 +35,34 @@ class WpRetrofitClient(
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    val wpApiService: WpApiService by lazy { retrofit.create(WpApiService::class.java) }
+    private val wpApiService: WpApiService by lazy { retrofit.create(WpApiService::class.java) }
+
+    @Throws(WpGetErrorException::class)
+    suspend fun fetchCategories(): List<WpFeedCategory> = withContext(Dispatchers.IO) {
+        wpApiService.fetchCategories().handleResponse() ?: emptyList()
+    }
+
+    private fun <T> Response<T>.handleResponse(): T? {
+        logResponse()
+        return if (isSuccessful) {
+            body()
+        } else {
+            throw WpGetErrorException(
+                code = code(),
+                message = message(),
+            )
+        }
+    }
+
+    private fun <T> Response<T>.logResponse() {
+        Log.d(
+            WP_TAG, """fetchCategories: {
+            isSuccessful=${isSuccessful},
+            code=${code()},
+            message=${message()},
+            errorBody=${errorBody()},
+            body=${body()}
+        }""".trimIndent()
+        )
+    }
 }

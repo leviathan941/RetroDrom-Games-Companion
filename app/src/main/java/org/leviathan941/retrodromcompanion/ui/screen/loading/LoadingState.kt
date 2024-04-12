@@ -16,17 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.ui.screen.loading
 
-import com.google.gson.annotations.SerializedName
-
-data class WpFeedCategory(
-    @SerializedName("id")
-    val id: Int,
-    @SerializedName("name")
-    val name: String,
-    @SerializedName("link")
-    val link: String,
-    @SerializedName("count")
-    val postsCount: Int,
-)
+sealed interface LoadingState {
+    data object InProgress : LoadingState
+    data object Success : LoadingState
+    data class Failure(
+        val code: Int,
+        val message: String,
+    ) : LoadingState
+}

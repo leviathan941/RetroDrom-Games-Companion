@@ -113,7 +113,7 @@ fun MainView() {
                 startDestination = MainDestination.LOADING.route,
             ) {
                 composable(MainDestination.LOADING.route) {
-                    LoadingScreen()
+                    LoadingScreen(uiState.loadingData.state)
                     SideEffect {
                         topBarPrefsState.value = uiState.loadingData.topBarPrefs
                     }

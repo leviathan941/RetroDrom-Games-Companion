@@ -18,6 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
@@ -28,6 +29,7 @@ sealed interface MainNavScreen {
 
     data class Loading(
         val title: String = "",
+        val state: LoadingState = LoadingState.InProgress,
     ) : MainNavScreen {
         override val destination: MainDestination = MainDestination.LOADING
         override val topBarPrefs: TopBarPrefs

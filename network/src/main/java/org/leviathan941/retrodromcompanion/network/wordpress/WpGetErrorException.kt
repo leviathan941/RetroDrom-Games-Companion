@@ -18,15 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress
 
-import com.google.gson.annotations.SerializedName
-
-data class WpFeedCategory(
-    @SerializedName("id")
-    val id: Int,
-    @SerializedName("name")
-    val name: String,
-    @SerializedName("link")
-    val link: String,
-    @SerializedName("count")
-    val postsCount: Int,
-)
+class WpGetErrorException(
+    val code: Int,
+    message: String,
+) : Exception(message)

@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.model
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -27,13 +28,19 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.network.wordpress.WpGetErrorException
+import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
 import org.leviathan941.retrodromcompanion.ui.BASE_TITLE
 import org.leviathan941.retrodromcompanion.ui.BASE_URL
+import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 class MainViewModel(
     context: Context,
 ) : ViewModel() {
+    private val wpRetrofitClient = WpRetrofitClient(BASE_URL)
+
     private val _uiState = MutableStateFlow(
         MainViewState(
             loadingData = MainNavScreen.Loading(
@@ -45,14 +52,21 @@ class MainViewModel(
 
     init {
         viewModelScope.launch {
-            // TODO: Fetch the real categories.
-            val rssFeedScreen = MainNavScreen.RssFeed(
-                title = BASE_TITLE,
-                channelUrl = BASE_URL,
-            )
-            _uiState.value = _uiState.value.copy(
-                rssFeedData = listOf(rssFeedScreen),
-            )
+            _uiState.value = try {
+                _uiState.value.copy(
+                    loadingData = _uiState.value.loadingData.copy(
+                        state = LoadingState.Success,
+                    ),
+                    rssFeedData = fetchRssScreens(),
+                )
+            } catch (e: WpGetErrorException) {
+                Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS categories", e)
+                _uiState.value.copy(
+                    loadingData = _uiState.value.loadingData.copy(
+                        state = LoadingState.Failure(e.code, e.message.orEmpty())
+                    )
+                )
+            }
         }
     }
 
@@ -62,6 +76,25 @@ class MainViewModel(
                 webViewData = screen,
             )
         }
+    }
+
+    @Throws(WpGetErrorException::class)
+    private suspend fun fetchRssScreens(): List<MainNavScreen.RssFeed> {
+        val rssCategories = wpRetrofitClient.fetchCategories()
+            .filter { it.postsCount > 0 }
+            .map {
+                MainNavScreen.RssFeed(
+                    title = it.name,
+                    channelUrl = it.link,
+                )
+            }
+        val mainCategory = MainNavScreen.RssFeed(
+            title = BASE_TITLE,
+            channelUrl = BASE_URL,
+        )
+        val allCategories = listOf(mainCategory) + rssCategories
+        Log.d(MAIN_VIEW_TAG, "Fetched RSS categories: $allCategories")
+        return allCategories
     }
 }
 

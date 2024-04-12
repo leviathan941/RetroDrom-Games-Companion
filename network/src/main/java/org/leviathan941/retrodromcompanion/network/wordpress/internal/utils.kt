@@ -16,11 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.network.wordpress.internal
 
-import retrofit2.http.GET
-
-interface WpApiService {
-    @GET("wp-json/wp/v2/categories")
-    suspend fun fetchCategories(): List<WpFeedCategory>
-}
+internal const val WP_TAG = "WordpressRetrofit"
