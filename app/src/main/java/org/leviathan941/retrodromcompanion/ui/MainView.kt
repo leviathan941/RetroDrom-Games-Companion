@@ -76,12 +76,11 @@ fun MainView(
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: MainDestination.LOADING.route
 
     ModalNavigationDrawer(
         drawerContent = {
             DrawerView(
-                currentRoute = currentRoute,
+                navBackStackEntry = currentNavBackStackEntry,
                 navActions = navigationActions,
                 closeDrawer = {
                     coroutineScope.launch { drawerState.close() }
@@ -130,7 +129,7 @@ fun MainView(
                         navArgument(RSS_FEED_NAV_CHANNEL_ID) { type = NavType.IntType },
                     ),
                 ) { stackEntry ->
-                    val screen = stackEntry.arguments?.getInt(RSS_FEED_NAV_CHANNEL_ID, -1)?.let {
+                    val screen = stackEntry.getRssFeedChannelId()?.let {
                         uiState.rssFeedData[it]
                     } ?: run {
                         // TODO: Navigate to something goes wrong screen

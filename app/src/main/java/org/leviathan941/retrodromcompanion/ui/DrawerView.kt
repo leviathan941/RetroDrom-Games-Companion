@@ -20,6 +20,7 @@ package org.leviathan941.retrodromcompanion.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
@@ -46,16 +48,21 @@ import org.leviathan941.retrodromcompanion.ui.theme.DrawerLogoGradientStartColor
 
 @Composable
 fun DrawerView(
-    currentRoute: String,
+    navBackStackEntry: NavBackStackEntry?,
     navActions: MainNavActions,
     closeDrawer: () -> Unit,
     rssScreens: List<MainNavScreen.RssFeed>,
 ) {
     ModalDrawerSheet(
         modifier = Modifier
-            .fillMaxWidth(fraction = 0.8f),
+            .fillMaxWidth(fraction = 0.7f),
     ) {
-        DrawerHeader()
+        DrawerHeader(
+            onClick = {
+                closeDrawer()
+                rssScreens.find { it.id == MAIN_RSS_FEED_ID }?.let { navActions.navigateTo(it) }
+            }
+        )
 
         HorizontalDivider(
             modifier = Modifier.padding(bottom = 4.dp),
@@ -64,9 +71,8 @@ fun DrawerView(
 
         RssNavigations(
             rssScreens,
-            isSelected = {
-                // FIXME: This way does not work
-                currentRoute == rssFeedScreenRoute(it.id)
+            isSelected = { screen ->
+                navBackStackEntry?.isOnScreen(screen) == true
             },
             onClick = {
                 closeDrawer()
@@ -80,7 +86,9 @@ fun DrawerView(
     showBackground = true,
 )
 @Composable
-private fun DrawerHeader() {
+private fun DrawerHeader(
+    onClick: () -> Unit = {},
+) {
     val backgroundGradient = Brush.verticalGradient(
         colors = listOf(
             DrawerLogoGradientStartColor,
@@ -90,7 +98,8 @@ private fun DrawerHeader() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(backgroundGradient),
+            .background(backgroundGradient)
+            .clickable { onClick() },
     ) {
         Image(
             modifier = Modifier
@@ -108,7 +117,7 @@ fun RssNavigations(
     isSelected: (MainNavScreen.RssFeed) -> Boolean = { false },
     onClick: (MainNavScreen.RssFeed) -> Unit = {},
 ) {
-    rssScreens.forEach { rssScreen ->
+    rssScreens.sortedBy { it.id }.forEach { rssScreen ->
         NavigationDrawerItem(
             modifier = Modifier
                 .height(50.dp),
