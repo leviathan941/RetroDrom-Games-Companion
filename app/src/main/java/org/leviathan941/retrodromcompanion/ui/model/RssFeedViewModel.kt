@@ -18,74 +18,77 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
+import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 
-class RssFeedViewModel(
-    channelUrl: String,
-) : ViewModel() {
-    private val feedProvider = RssFeedProvider(channelUrl)
+class RssFeedViewModel : ViewModel() {
+    private val loadedChannels = mutableSetOf<String>()
 
     private val _uiState = MutableStateFlow(RssFeedViewState())
     val uiState: StateFlow<RssFeedViewState> = _uiState.asStateFlow()
 
-    init {
+    fun loadChannel(channelUrl: String) {
         viewModelScope.launch {
+            Log.d(MAIN_VIEW_TAG, "Load RSS channel: $channelUrl")
             _uiState.value = _uiState.value.copy(contentType = RssFeedContentType.LOADING)
-            fetchChannel()?.let { channel ->
-                _uiState.value =
-                    RssFeedViewState(rssChannel = channel, contentType = RssFeedContentType.SHOW)
-            } ?: run {
-                _uiState.value = _uiState.value.copy(contentType = RssFeedContentType.ERROR)
-            }
+            onFetchFinished(
+                fetchChannel(
+                    channelUrl,
+                    useCache = channelUrl in loadedChannels,
+                )
+            )
         }
     }
 
-    fun refreshChannel(showIsRefreshing: Boolean = true) {
+    fun refreshChannel(
+        channelUrl: String,
+        showIsRefreshing: Boolean = false
+    ) {
+        Log.d(MAIN_VIEW_TAG, "Refresh RSS channel: $channelUrl")
         viewModelScope.launch {
             if (showIsRefreshing) {
                 _uiState.value = _uiState.value.copy(isRefreshing = true)
             }
-            fetchChannel()?.let { channel ->
-                _uiState.value = _uiState.value.copy(
-                    rssChannel = channel,
-                    contentType = RssFeedContentType.SHOW,
-                    isRefreshing = false,
-                )
-            } ?: run {
-                _uiState.value = _uiState.value.copy(
-                    contentType = RssFeedContentType.ERROR,
-                    isRefreshing = false,
-                )
-            }
+            onFetchFinished(fetchChannel(channelUrl))
         }
     }
 
-    private suspend fun fetchChannel(useCache: Boolean = false): RssChannel? {
+    private fun onFetchFinished(channel: RssChannel?) {
+        if (channel == null) {
+            _uiState.value = _uiState.value.copy(
+                contentType = RssFeedContentType.ERROR,
+                isRefreshing = false,
+            )
+        } else {
+            loadedChannels.add(channel.link)
+            _uiState.value = _uiState.value.copy(
+                rssChannel = channel,
+                contentType = RssFeedContentType.SHOW,
+                isRefreshing = false,
+            )
+        }
+    }
+
+    private suspend fun fetchChannel(
+        channelUrl: String,
+        useCache: Boolean = false
+    ): RssChannel? {
         return try {
-            feedProvider.fetch(useCache)
+            RssFeedProvider(channelUrl).fetch(useCache)
         } catch (e: RssFeedProvider.FetchException) {
             if (!useCache) {
                 // If fetching failed, try to use cache.
-                fetchChannel(useCache = true)
+                fetchChannel(channelUrl, useCache = true)
             } else {
                 null
             }
         }
-    }
-}
-
-class RssFeedViewModelFactory(
-    private val channelUrl: String,
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RssFeedViewModel(channelUrl) as T
     }
 }

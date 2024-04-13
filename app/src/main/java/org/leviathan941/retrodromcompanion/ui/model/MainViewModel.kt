@@ -18,9 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-import android.content.Context
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,21 +30,21 @@ import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.network.wordpress.WpGetErrorException
 import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
-import org.leviathan941.retrodromcompanion.ui.BASE_TITLE
 import org.leviathan941.retrodromcompanion.ui.BASE_URL
+import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 class MainViewModel(
-    context: Context,
-) : ViewModel() {
+    application: Application,
+) : AndroidViewModel(application) {
     private val wpRetrofitClient = WpRetrofitClient(BASE_URL)
 
     private val _uiState = MutableStateFlow(
         MainViewState(
             loadingData = MainNavScreen.Loading(
-                title = context.getString(R.string.loading_screen_title)
+                title = application.getString(R.string.loading_screen_title)
             ),
         )
     )
@@ -79,30 +79,30 @@ class MainViewModel(
     }
 
     @Throws(WpGetErrorException::class)
-    private suspend fun fetchRssScreens(): List<MainNavScreen.RssFeed> {
-        val rssCategories = wpRetrofitClient.fetchCategories()
+    private suspend fun fetchRssScreens(): Map<Int, MainNavScreen.RssFeed> {
+        val rssCategoryScreens = wpRetrofitClient.fetchCategories()
             .filter { it.postsCount > 0 }
             .map {
                 MainNavScreen.RssFeed(
+                    id = it.id,
                     title = it.name,
                     channelUrl = it.link,
                 )
             }
-        val mainCategory = MainNavScreen.RssFeed(
-            title = BASE_TITLE,
+        val mainCategoryScreen = MainNavScreen.RssFeed(
+            id = MAIN_RSS_FEED_ID,
+            title = getApplication<Application>().getString(R.string.main_rss_feed_title),
             channelUrl = BASE_URL,
         )
-        val allCategories = listOf(mainCategory) + rssCategories
-        Log.d(MAIN_VIEW_TAG, "Fetched RSS categories: $allCategories")
-        return allCategories
+        val allScreens = sequenceOf(mainCategoryScreen)
+            .plus(rssCategoryScreens)
+            .associateBy { it.id }
+            .toMap()
+        Log.d(MAIN_VIEW_TAG, "Fetched RSS categories: $allScreens")
+        return allScreens
     }
 }
 
 class MainViewModelFactory(
-    private val context: Context,
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(context) as T
-    }
-}
+    application: Application,
+) : ViewModelProvider.AndroidViewModelFactory(application)

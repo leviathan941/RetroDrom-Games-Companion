@@ -35,7 +35,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedContentType
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
-import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedShowContent
@@ -49,7 +48,6 @@ fun RssFeedScreen(
     webViewOpener: WebViewOpener,
 ) {
     val screenViewModel: RssFeedViewModel = viewModel(
-        factory = RssFeedViewModelFactory(screen.channelUrl),
         key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
     )
     val uiState by screenViewModel.uiState.collectAsState()
@@ -85,9 +83,10 @@ fun RssFeedScreen(
             }
         }
 
-        if (pullToRefreshState.isRefreshing) {
-            LaunchedEffect(key1 = true) {
-                screenViewModel.refreshChannel()
+
+        LaunchedEffect(key1 = pullToRefreshState.isRefreshing) {
+            if (pullToRefreshState.isRefreshing) {
+                screenViewModel.refreshChannel(screen.channelUrl, showIsRefreshing = true)
             }
         }
         LaunchedEffect(key1 = uiState.isRefreshing) {
@@ -110,7 +109,15 @@ fun RssFeedScreen(
             uiState.contentType != RssFeedContentType.LOADING &&
             !uiState.isRefreshing
         ) {
-            screenViewModel.refreshChannel(showIsRefreshing = false)
+            screenViewModel.refreshChannel(screen.channelUrl, showIsRefreshing = false)
+        }
+    }
+
+    LaunchedEffect(key1 = screen) {
+        if (!uiState.isRefreshing &&
+            uiState.rssChannel?.link != screen.channelUrl
+        ) {
+            screenViewModel.loadChannel(screen.channelUrl)
         }
     }
 }

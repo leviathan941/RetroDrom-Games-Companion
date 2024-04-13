@@ -32,8 +32,9 @@ import kotlin.time.toDuration
 
 internal const val MAIN_VIEW_TAG = "MainView"
 internal const val BASE_URL = "https://retrodrom.games/"
-internal const val BASE_TITLE = "RetroDrom Games"
+
 internal const val RSS_FEED_NAV_CHANNEL_ID = "rss_feed_channel_id"
+internal const val MAIN_RSS_FEED_ID = 0
 
 fun ZonedDateTime.toRssFeedPublicationTime(
     resources: Resources,
@@ -92,7 +93,7 @@ internal fun NavHostController.currentDestinationUrl(
     when {
         route.startsWith(MainDestination.RSS_FEED.route) -> {
             route.substringAfterLast('/').toIntOrNull()?.let {
-                uiState.rssFeedData.getOrNull(it)?.channelUrl
+                uiState.rssFeedData[it]?.channelUrl
             }
         }
 
@@ -101,6 +102,9 @@ internal fun NavHostController.currentDestinationUrl(
         else -> null
     }
 }
+
+internal fun rssFeedScreenRoute(channelId: Int): String =
+    "${MainDestination.RSS_FEED.route}/$channelId"
 
 private fun Resources.getTimeQuantityString(
     @PluralsRes id: Int,

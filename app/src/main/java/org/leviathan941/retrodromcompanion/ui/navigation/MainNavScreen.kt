@@ -39,12 +39,16 @@ sealed interface MainNavScreen {
     }
 
     data class RssFeed(
+        val id: Int,
         val title: String,
         val channelUrl: String,
     ) : MainNavScreen {
         override val destination: MainDestination = MainDestination.RSS_FEED
         override val topBarPrefs: TopBarPrefs
-            get() = TopBarPrefs(title)
+            get() = TopBarPrefs(
+                title = title,
+                navButton = TopBarNavButton.DRAWER,
+            )
     }
 
     data class WebView(

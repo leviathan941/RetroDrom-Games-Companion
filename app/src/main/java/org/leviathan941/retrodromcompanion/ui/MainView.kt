@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui
 
 import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -33,37 +34,38 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
-import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.WebViewScreen
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
+import org.leviathan941.retrodromcompanion.ui.topbar.MainNavButtonHandler
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
-import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @Composable
-fun MainView() {
+fun MainView(
+    activity: ComponentActivity,
+) {
     val navController = rememberNavController()
     val navigationActions = remember(navController) {
         MainNavActions(navController)
     }
 
     val mainViewModel: MainViewModel = viewModel(
-        key = ViewModelKeys.MAIN_VIEW_MODEL,
-        factory = MainViewModelFactory(LocalContext.current),
+        factory = MainViewModelFactory(activity.application),
     )
 
     val uiState by mainViewModel.uiState.collectAsState()
@@ -73,10 +75,19 @@ fun MainView() {
     }
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
+    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentNavBackStackEntry?.destination?.route ?: MainDestination.LOADING.route
 
     ModalNavigationDrawer(
         drawerContent = {
-            DrawerView()
+            DrawerView(
+                currentRoute = currentRoute,
+                navActions = navigationActions,
+                closeDrawer = {
+                    coroutineScope.launch { drawerState.close() }
+                },
+                rssScreens = uiState.rssFeedData.values.toList(),
+            )
         },
         drawerState = drawerState,
     ) {
@@ -84,17 +95,11 @@ fun MainView() {
             topBar = {
                 TopBarView(
                     prefs = topBarPrefsState.value,
-                    onNavButtonClick = { navButton ->
-                        when (navButton) {
-                            TopBarNavButton.BACK -> navController.popBackStack()
-                            TopBarNavButton.CLOSE -> navController.navigateUp()
-                            TopBarNavButton.DRAWER -> coroutineScope.launch {
-                                drawerState.open()
-                            }
-
-                            TopBarNavButton.NONE -> Unit
-                        }
-                    },
+                    navButtonListener = MainNavButtonHandler(
+                        navigationActions = navigationActions,
+                        drawerState = drawerState,
+                        coroutineScope = coroutineScope,
+                    ),
                     onActionClick = { action ->
                         when (action) {
                             TopBarAction.BROWSE -> {
@@ -124,9 +129,9 @@ fun MainView() {
                     arguments = listOf(
                         navArgument(RSS_FEED_NAV_CHANNEL_ID) { type = NavType.IntType },
                     ),
-                ) { backStackEntry ->
-                    val screen = backStackEntry.arguments?.getInt(RSS_FEED_NAV_CHANNEL_ID, 0)?.let {
-                        uiState.rssFeedData.getOrNull(it)
+                ) { stackEntry ->
+                    val screen = stackEntry.arguments?.getInt(RSS_FEED_NAV_CHANNEL_ID, -1)?.let {
+                        uiState.rssFeedData[it]
                     } ?: run {
                         // TODO: Navigate to something goes wrong screen
                         return@composable
@@ -135,7 +140,7 @@ fun MainView() {
                         screen = screen,
                         webViewOpener = {
                             mainViewModel.setWebViewData(it)
-                            navigationActions.navigateToWebView()
+                            navigationActions.navigateTo(it)
                         }
                     )
                     SideEffect {
@@ -159,12 +164,14 @@ fun MainView() {
 
     LaunchedEffect(key1 = uiState) {
         if (navController.currentDestination?.route == MainDestination.LOADING.route &&
-            uiState.rssFeedData.isNotEmpty()
+            uiState.loadingData.state is LoadingState.Success
         ) {
-            Log.d(MAIN_VIEW_TAG, "Navigate after loading finished")
-            navigationActions.navigateToRssFeed(
-                channelId = 0,
-            )
+            uiState.rssFeedData.run {
+                getOrElse(MAIN_RSS_FEED_ID) { values.first() }
+            }.let {
+                Log.d(MAIN_VIEW_TAG, "Navigate after success loading: $it")
+                navigationActions.navigateTo(it)
+            }
         }
     }
 }

@@ -3,9 +3,13 @@
 
     <string name="loading_screen_title">Loading</string>
     <string name="rss_feed_item_publication_icon_desc">Post was published at</string>
+
     <string name="top_bar_navigation_icon_desc_back">Back</string>
     <string name="top_bar_navigation_icon_desc_close">Close</string>
+    <string name="top_bar_navigation_icon_desc_drawer">Open menu</string>
     <string name="top_bar_action_icon_desc_open_in_browser">Open in browser</string>
+
+    <string name="main_rss_feed_title">RetroDrom Games</string>
 
     <string name="rss_feed_item_publication_time_just_now">just now</string>
     <plurals name="rss_feed_item_publication_time_minutes">

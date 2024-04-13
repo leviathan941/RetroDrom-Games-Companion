@@ -22,6 +22,6 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 data class MainViewState(
     val loadingData: MainNavScreen.Loading = MainNavScreen.Loading(),
-    val rssFeedData: List<MainNavScreen.RssFeed> = emptyList(),
+    val rssFeedData: Map<Int, MainNavScreen.RssFeed> = emptyMap(),
     val webViewData: MainNavScreen.WebView? = null,
 )
