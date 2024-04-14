@@ -93,6 +93,7 @@ dependencies {
 
     implementation(libs.compose.compiler)
     implementation(libs.compose.ui)
+    implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
 
     implementation(libs.activity.compose)
@@ -104,5 +105,4 @@ dependencies {
     implementation(libs.webview.compose)
 
     debugImplementation(libs.compose.ui.tooling)
-    debugImplementation(libs.compose.ui.tooling.preview)
 }
