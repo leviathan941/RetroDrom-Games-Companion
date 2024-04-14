@@ -41,15 +41,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import org.leviathan941.retrodromcompanion.R
 
-fun interface TopBarNavButtonListener {
-    fun onClicked(button: TopBarNavButton)
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBarView(
     prefs: TopBarPrefs,
-    navButtonListener: TopBarNavButtonListener,
+    onNavButtonCLick: (TopBarNavButton) -> Unit = {},
     onActionClick: (TopBarAction) -> Unit = {},
 ) {
     TopAppBar(
@@ -66,8 +62,8 @@ fun TopBarView(
         },
         navigationIcon = {
             NavigationIconView(
-                navButton = prefs.navButton,
-                navButtonListener = navButtonListener,
+                button = prefs.navButton,
+                onButtonClick = onNavButtonCLick,
             )
         },
         actions = {
@@ -81,17 +77,17 @@ fun TopBarView(
 
 @Composable
 private fun NavigationIconView(
-    navButton: TopBarNavButton,
-    navButtonListener: TopBarNavButtonListener,
+    button: TopBarNavButton,
+    onButtonClick: (TopBarNavButton) -> Unit,
 ) {
-    when (navButton) {
+    when (button) {
         TopBarNavButton.NONE -> {
             // Show nothing
         }
 
         TopBarNavButton.BACK -> {
             ButtonView(
-                onClick = { navButtonListener.onClicked(TopBarNavButton.BACK) },
+                onClick = { onButtonClick(TopBarNavButton.BACK) },
                 painter = rememberVectorPainter(image = Icons.AutoMirrored.Filled.ArrowBack),
                 contentDescRes = R.string.top_bar_navigation_icon_desc_back,
             )
@@ -99,7 +95,7 @@ private fun NavigationIconView(
 
         TopBarNavButton.CLOSE -> {
             ButtonView(
-                onClick = { navButtonListener.onClicked(TopBarNavButton.CLOSE) },
+                onClick = { onButtonClick(TopBarNavButton.CLOSE) },
                 painter = rememberVectorPainter(image = Icons.Filled.Close),
                 contentDescRes = R.string.top_bar_navigation_icon_desc_close,
             )
@@ -107,7 +103,7 @@ private fun NavigationIconView(
 
         TopBarNavButton.DRAWER -> {
             ButtonView(
-                onClick = { navButtonListener.onClicked(TopBarNavButton.DRAWER) },
+                onClick = { onButtonClick(TopBarNavButton.DRAWER) },
                 painter = rememberVectorPainter(image = Icons.Filled.Menu),
                 contentDescRes = R.string.top_bar_navigation_icon_desc_drawer,
             )
@@ -170,7 +166,7 @@ private fun ActionsView(
     actions.forEach { action ->
         val onActionClick = { onClick(action) }
         when (action) {
-            TopBarAction.BROWSE -> {
+            is TopBarAction.Browse -> {
                 ButtonView(
                     onClick = onActionClick,
                     painter = painterResource(id = R.drawable.google_material_open_in_browser),
@@ -191,7 +187,6 @@ fun TopBarViewOneLineTitlePreview() = TopBarView(
         subtitle = "",
         navButton = TopBarNavButton.BACK,
     ),
-    navButtonListener = {},
 )
 
 @Preview(
@@ -204,5 +199,4 @@ fun TopBarViewTwoLineTitlePreview() = TopBarView(
         subtitle = "Subtitle",
         navButton = TopBarNavButton.CLOSE,
     ),
-    navButtonListener = {},
 )

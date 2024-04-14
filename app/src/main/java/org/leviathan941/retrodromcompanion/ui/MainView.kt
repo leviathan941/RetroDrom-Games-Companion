@@ -36,13 +36,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.navigation
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
+import org.leviathan941.retrodromcompanion.ui.drawer.RssFeedDrawerNavView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
@@ -51,8 +51,8 @@ import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.WebViewScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
-import org.leviathan941.retrodromcompanion.ui.topbar.MainNavButtonHandler
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @Composable
@@ -75,17 +75,29 @@ fun MainView(
     }
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
-    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
+    val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
 
     ModalNavigationDrawer(
         drawerContent = {
             DrawerView(
-                navBackStackEntry = currentNavBackStackEntry,
-                navActions = navigationActions,
-                closeDrawer = {
-                    coroutineScope.launch { drawerState.close() }
+                closeDrawer = closeDrawer,
+                onHeaderClick = {
+                    navigationActions.navigateToRssFeed()
                 },
-                rssScreens = uiState.rssFeedData.values.toList(),
+                navigationContent = {
+                    uiState.rssFeedData.takeUnless { it.isEmpty() }?.let { rssScreens ->
+                        RssFeedDrawerNavView(
+                            rssScreens = rssScreens.values.toList(),
+                            isSelected = { screen ->
+                                navController.currentDestination?.route == "${screen.id}"
+                            },
+                            onClick = { screen ->
+                                closeDrawer()
+                                navigationActions.navigateInsideRssFeed(screen)
+                            }
+                        )
+                    }
+                }
             )
         },
         drawerState = drawerState,
@@ -94,17 +106,21 @@ fun MainView(
             topBar = {
                 TopBarView(
                     prefs = topBarPrefsState.value,
-                    navButtonListener = MainNavButtonHandler(
-                        navigationActions = navigationActions,
-                        drawerState = drawerState,
-                        coroutineScope = coroutineScope,
-                    ),
+                    onNavButtonCLick = { button ->
+                        when (button) {
+                            TopBarNavButton.BACK -> navigationActions.navigateBack()
+                            TopBarNavButton.CLOSE -> navigationActions.navigateUp()
+                            TopBarNavButton.DRAWER -> coroutineScope.launch {
+                                drawerState.open()
+                            }
+
+                            TopBarNavButton.NONE -> Unit
+                        }
+                    },
                     onActionClick = { action ->
                         when (action) {
-                            TopBarAction.BROWSE -> {
-                                navController.currentDestinationUrl(uiState)?.let {
-                                    uriHandler.openUri(it)
-                                }
+                            is TopBarAction.Browse -> {
+                                uriHandler.openUri(action.url)
                             }
                         }
                     }
@@ -123,27 +139,25 @@ fun MainView(
                     }
                 }
 
-                composable(
-                    route = "${MainDestination.RSS_FEED.route}/{$RSS_FEED_NAV_CHANNEL_ID}",
-                    arguments = listOf(
-                        navArgument(RSS_FEED_NAV_CHANNEL_ID) { type = NavType.IntType },
-                    ),
-                ) { stackEntry ->
-                    val screen = stackEntry.getRssFeedChannelId()?.let {
-                        uiState.rssFeedData[it]
-                    } ?: run {
-                        // TODO: Navigate to something goes wrong screen
-                        return@composable
-                    }
-                    RssFeedScreen(
-                        screen = screen,
-                        webViewOpener = {
-                            mainViewModel.setWebViewData(it)
-                            navigationActions.navigateTo(it)
+                navigation(
+                    route = MainDestination.RSS_FEED.route,
+                    startDestination = "$MAIN_RSS_FEED_ID",
+                ) {
+                    uiState.rssFeedData.forEach { (id, screen) ->
+                        composable(
+                            route = "$id",
+                        ) {
+                            RssFeedScreen(
+                                screen = screen,
+                                webViewOpener = {
+                                    mainViewModel.setWebViewData(it)
+                                    navigationActions.navigateToWebView()
+                                }
+                            )
+                            SideEffect {
+                                topBarPrefsState.value = screen.topBarPrefs
+                            }
                         }
-                    )
-                    SideEffect {
-                        topBarPrefsState.value = screen.topBarPrefs
                     }
                 }
 
@@ -165,12 +179,8 @@ fun MainView(
         if (navController.currentDestination?.route == MainDestination.LOADING.route &&
             uiState.loadingData.state is LoadingState.Success
         ) {
-            uiState.rssFeedData.run {
-                getOrElse(MAIN_RSS_FEED_ID) { values.first() }
-            }.let {
-                Log.d(MAIN_VIEW_TAG, "Navigate after success loading: $it")
-                navigationActions.navigateTo(it)
-            }
+            Log.d(MAIN_VIEW_TAG, "Navigate after success loading")
+            navigationActions.navigateToRssFeed()
         }
     }
 }

@@ -33,7 +33,8 @@ enum class TopBarNavButton {
     ;
 }
 
-enum class TopBarAction {
-    BROWSE,
-    ;
+sealed interface TopBarAction {
+    data class Browse(
+        val url: String,
+    ) : TopBarAction
 }

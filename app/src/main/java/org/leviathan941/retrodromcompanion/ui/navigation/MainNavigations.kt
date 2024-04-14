@@ -21,7 +21,6 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import android.util.Log
 import androidx.navigation.NavController
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
-import org.leviathan941.retrodromcompanion.ui.rssFeedScreenRoute
 
 enum class MainDestination(val route: String) {
     LOADING("Loading"),
@@ -41,16 +40,15 @@ class MainNavActions(
         navController.navigateUp()
     }
 
-    fun navigateTo(screen: MainNavScreen) {
-        Log.d(MAIN_VIEW_TAG, "Navigate to: $screen")
-        when (screen) {
-            is MainNavScreen.Loading -> navigateToLoading()
-            is MainNavScreen.RssFeed -> navigateToRssFeed(screen.id)
-            is MainNavScreen.WebView -> navigateToWebView()
+    fun navigateInsideRssFeed(screen: MainNavScreen.RssFeed) {
+        Log.d(MAIN_VIEW_TAG, "Navigate inside RSS feed to screen: $screen")
+        navController.navigate(route = "${screen.id}") {
+            launchSingleTop = true
         }
     }
 
-    private fun navigateToLoading() {
+    fun navigateToLoading() {
+        Log.d(MAIN_VIEW_TAG, "Navigate to loading screen")
         navController.navigate(MainDestination.LOADING.route) {
             popUpTo(MainDestination.LOADING.route) {
                 inclusive = true
@@ -59,8 +57,9 @@ class MainNavActions(
         }
     }
 
-    private fun navigateToRssFeed(channelId: Int) {
-        navController.navigate(rssFeedScreenRoute(channelId)) {
+    fun navigateToRssFeed() {
+        Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen")
+        navController.navigate(MainDestination.RSS_FEED.route) {
             popUpTo(MainDestination.LOADING.route) {
                 inclusive = true
             }
@@ -68,7 +67,8 @@ class MainNavActions(
         }
     }
 
-    private fun navigateToWebView() {
+    fun navigateToWebView() {
+        Log.d(MAIN_VIEW_TAG, "Navigate to web view screen")
         navController.navigate(MainDestination.WEB_VIEW.route) {
             launchSingleTop = true
         }

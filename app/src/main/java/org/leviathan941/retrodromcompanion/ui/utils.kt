@@ -20,12 +20,7 @@ package org.leviathan941.retrodromcompanion.ui
 
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.ui.model.MainViewState
-import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration
@@ -37,7 +32,7 @@ internal const val RSS_SCREEN_TAG = "RssScreen"
 
 internal const val BASE_URL = "https://retrodrom.games/"
 
-internal const val RSS_FEED_NAV_CHANNEL_ID = "rss_feed_channel_id"
+//internal const val RSS_FEED_NAV_CHANNEL_ID = "rss_feed_channel_id"
 internal const val MAIN_RSS_FEED_ID = 0
 
 fun ZonedDateTime.toRssFeedPublicationTime(
@@ -90,38 +85,6 @@ fun ZonedDateTime.toRssFeedPublicationTime(
             }
     }
 }
-
-internal fun NavHostController.currentDestinationUrl(
-    uiState: MainViewState,
-): String? = currentBackStackEntry?.let { backStackEntry ->
-    when {
-        backStackEntry.destination.route?.startsWith(MainDestination.RSS_FEED.route) == true -> {
-            backStackEntry.getRssFeedChannelId()?.let { channelId ->
-                uiState.rssFeedData[channelId]?.channelUrl
-            }
-        }
-
-        backStackEntry.destination.route == MainDestination.WEB_VIEW.route ->
-            uiState.webViewData?.url
-
-        else -> null
-    }
-}
-
-internal fun rssFeedScreenRoute(channelId: Int): String =
-    "${MainDestination.RSS_FEED.route}/$channelId"
-
-internal fun NavBackStackEntry.isOnScreen(screen: MainNavScreen): Boolean = when (screen) {
-    is MainNavScreen.Loading -> destination.route == MainDestination.LOADING.route
-    is MainNavScreen.RssFeed ->
-        destination.route?.startsWith(MainDestination.RSS_FEED.route) == true &&
-                getRssFeedChannelId() == screen.id
-
-    is MainNavScreen.WebView -> destination.route == MainDestination.WEB_VIEW.route
-}
-
-internal fun NavBackStackEntry.getRssFeedChannelId(): Int? =
-    arguments?.getInt(RSS_FEED_NAV_CHANNEL_ID, -1).takeIf { it != -1 }
 
 private fun Resources.getTimeQuantityString(
     @PluralsRes id: Int,

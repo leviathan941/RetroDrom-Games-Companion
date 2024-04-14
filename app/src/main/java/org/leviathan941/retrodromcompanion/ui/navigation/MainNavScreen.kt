@@ -62,7 +62,9 @@ sealed interface MainNavScreen {
                 title = title,
                 subtitle = subtitle,
                 navButton = TopBarNavButton.CLOSE,
-                actions = listOf(TopBarAction.BROWSE),
+                actions = listOf(
+                    TopBarAction.Browse(url),
+                ),
             )
     }
 }

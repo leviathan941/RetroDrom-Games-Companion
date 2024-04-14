@@ -16,42 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui
+package org.leviathan941.retrodromcompanion.ui.drawer
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavBackStackEntry
 import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.theme.DrawerLogoGradientEndColor
 import org.leviathan941.retrodromcompanion.ui.theme.DrawerLogoGradientStartColor
 
 @Composable
 fun DrawerView(
-    navBackStackEntry: NavBackStackEntry?,
-    navActions: MainNavActions,
     closeDrawer: () -> Unit,
-    rssScreens: List<MainNavScreen.RssFeed>,
+    onHeaderClick: () -> Unit,
+    navigationContent: @Composable ColumnScope.() -> Unit,
 ) {
     ModalDrawerSheet(
         modifier = Modifier
@@ -60,7 +51,7 @@ fun DrawerView(
         DrawerHeader(
             onClick = {
                 closeDrawer()
-                rssScreens.find { it.id == MAIN_RSS_FEED_ID }?.let { navActions.navigateTo(it) }
+                onHeaderClick()
             }
         )
 
@@ -69,16 +60,7 @@ fun DrawerView(
             thickness = 1.dp,
         )
 
-        RssNavigations(
-            rssScreens,
-            isSelected = { screen ->
-                navBackStackEntry?.isOnScreen(screen) == true
-            },
-            onClick = {
-                closeDrawer()
-                navActions.navigateTo(it)
-            },
-        )
+        navigationContent()
     }
 }
 
@@ -107,45 +89,6 @@ private fun DrawerHeader(
             painter = painterResource(id = R.drawable.retrodrom_games_words),
             contentDescription = null,
             contentScale = ContentScale.Fit,
-        )
-    }
-}
-
-@Composable
-fun RssNavigations(
-    rssScreens: List<MainNavScreen.RssFeed>,
-    isSelected: (MainNavScreen.RssFeed) -> Boolean = { false },
-    onClick: (MainNavScreen.RssFeed) -> Unit = {},
-) {
-    rssScreens.sortedBy { it.id }.forEach { rssScreen ->
-        NavigationDrawerItem(
-            modifier = Modifier
-                .height(50.dp),
-            label = {
-                Text(
-                    text = rssScreen.title,
-                    style = MaterialTheme.typography.titleMedium,
-                )
-            },
-            selected = isSelected(rssScreen),
-            onClick = { onClick(rssScreen) },
-            shape = RectangleShape,
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RssNavigationPreview() {
-    Column {
-        RssNavigations(
-            rssScreens = List(5) { i ->
-                MainNavScreen.RssFeed(
-                    id = i,
-                    title = "Category ${i + 1}",
-                    channelUrl = "",
-                )
-            },
         )
     }
 }
