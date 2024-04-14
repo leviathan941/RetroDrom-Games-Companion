@@ -21,7 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.model
 import android.util.Log
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
 import org.leviathan941.retrodromcompanion.rssreader.RssFetcher
-import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
+import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 import java.io.InvalidClassException
 import java.net.SocketTimeoutException
 
@@ -59,10 +59,10 @@ class RssFeedProvider(
             channelUrl,
             useCache,
         )?.let { rssChannel ->
-            Log.d(MAIN_VIEW_TAG, "Received RSS channel: $rssChannel")
+            Log.d(RSS_SCREEN_TAG, "Received RSS channel: $rssChannel")
             rssChannel
         } ?: run {
-            Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS channel for $channelUrl.")
+            Log.e(RSS_SCREEN_TAG, "Failed to fetch RSS channel for $channelUrl.")
             null
         }
     }

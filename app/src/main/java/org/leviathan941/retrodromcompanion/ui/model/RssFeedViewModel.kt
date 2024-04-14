@@ -21,12 +21,15 @@ package org.leviathan941.retrodromcompanion.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
-import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
+import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 
 class RssFeedViewModel : ViewModel() {
     private val loadedChannels = mutableSetOf<String>()
@@ -34,16 +37,20 @@ class RssFeedViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(RssFeedViewState())
     val uiState: StateFlow<RssFeedViewState> = _uiState.asStateFlow()
 
-    fun loadChannel(channelUrl: String) {
-        viewModelScope.launch {
-            Log.d(MAIN_VIEW_TAG, "Load RSS channel: $channelUrl")
-            _uiState.value = _uiState.value.copy(contentType = RssFeedContentType.LOADING)
-            onFetchFinished(
-                fetchChannel(
-                    channelUrl,
-                    useCache = channelUrl in loadedChannels,
-                )
+    private var fetchJob: Job? = null
+
+    fun setChannel(channelUrl: String) {
+        val useCache = channelUrl in loadedChannels
+        Log.d(RSS_SCREEN_TAG, "Load RSS channel: $channelUrl, useCache: $useCache")
+        launchFetch {
+            _uiState.value = _uiState.value.copy(
+                contentType = RssFeedContentType.LOADING,
+                rssChannel = null,
             )
+            fetchChannel(channelUrl, useCache)
+                .takeIf { currentCoroutineContext().isActive }?.let {
+                    onFetchFinished(it)
+                }
         }
     }
 
@@ -51,12 +58,21 @@ class RssFeedViewModel : ViewModel() {
         channelUrl: String,
         showIsRefreshing: Boolean = false
     ) {
-        Log.d(MAIN_VIEW_TAG, "Refresh RSS channel: $channelUrl")
-        viewModelScope.launch {
+        Log.d(RSS_SCREEN_TAG, "Refresh RSS channel: $channelUrl")
+        launchFetch {
             if (showIsRefreshing) {
                 _uiState.value = _uiState.value.copy(isRefreshing = true)
             }
-            onFetchFinished(fetchChannel(channelUrl))
+            fetchChannel(channelUrl).takeIf { currentCoroutineContext().isActive }?.let {
+                onFetchFinished(it)
+            }
+        }
+    }
+
+    private inline fun launchFetch(crossinline block: suspend () -> Unit) {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            block()
         }
     }
 

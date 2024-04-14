@@ -117,7 +117,7 @@ fun RssFeedScreen(
         if (!uiState.isRefreshing &&
             uiState.rssChannel?.link != screen.channelUrl
         ) {
-            screenViewModel.loadChannel(screen.channelUrl)
+            screenViewModel.setChannel(screen.channelUrl)
         }
     }
 }

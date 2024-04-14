@@ -33,6 +33,8 @@ import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 internal const val MAIN_VIEW_TAG = "MainView"
+internal const val RSS_SCREEN_TAG = "RssScreen"
+
 internal const val BASE_URL = "https://retrodrom.games/"
 
 internal const val RSS_FEED_NAV_CHANNEL_ID = "rss_feed_channel_id"
