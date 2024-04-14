@@ -70,7 +70,7 @@ fun RssFeedItem(
 
         Row(
             modifier = Modifier.height(55.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (imageUrl != null) {
@@ -117,7 +117,7 @@ fun RssFeedItem(
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalAlignment = Alignment.Top,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 modifier = Modifier.size(12.dp),
