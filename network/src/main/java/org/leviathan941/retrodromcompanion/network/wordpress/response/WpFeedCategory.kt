@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.network.wordpress.response
 
 import com.google.gson.annotations.SerializedName
 

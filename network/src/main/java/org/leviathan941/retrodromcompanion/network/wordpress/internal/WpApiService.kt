@@ -18,7 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress.internal
 
-import org.leviathan941.retrodromcompanion.network.wordpress.WpFeedCategory
+import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import retrofit2.Response
 import retrofit2.http.GET
 

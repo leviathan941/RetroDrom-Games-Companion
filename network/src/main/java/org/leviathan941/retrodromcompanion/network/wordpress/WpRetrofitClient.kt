@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.WP_TAG
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpApiService
+import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
