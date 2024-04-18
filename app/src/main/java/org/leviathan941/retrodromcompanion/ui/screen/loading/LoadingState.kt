@@ -22,7 +22,6 @@ sealed interface LoadingState {
     data object InProgress : LoadingState
     data object Success : LoadingState
     data class Failure(
-        val code: Int,
         val message: String,
     ) : LoadingState
 }

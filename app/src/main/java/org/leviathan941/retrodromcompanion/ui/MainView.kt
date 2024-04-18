@@ -34,6 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -75,6 +76,7 @@ fun MainView(
     }
     val coroutineScope = rememberCoroutineScope()
     val uriHandler = LocalUriHandler.current
+    val clipboardManager = LocalClipboardManager.current
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
 
     ModalNavigationDrawer(
@@ -133,7 +135,15 @@ fun MainView(
                 startDestination = MainDestination.LOADING.route,
             ) {
                 composable(MainDestination.LOADING.route) {
-                    LoadingScreen(uiState.loadingData.state)
+                    LoadingScreen(
+                        loadingState = uiState.loadingData.state,
+                        onErrorLongPress = { message ->
+                            clipboardManager.setText(message)
+                        },
+                        onRetryClick = {
+                            mainViewModel.fetchRssData()
+                        }
+                    )
                     SideEffect {
                         topBarPrefsState.value = uiState.loadingData.topBarPrefs
                     }

@@ -29,11 +29,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.leviathan941.retrodromcompanion.ui.model.RssFeedContentType
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
@@ -51,23 +50,18 @@ fun RssFeedScreen(
         key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
     )
     val uiState by screenViewModel.uiState.collectAsState()
+    val clipboardManager = LocalClipboardManager.current
 
     val pullToRefreshState = rememberPullToRefreshState(
         positionalThreshold = 96.dp,
     )
 
-    val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsState()
-
     Box(
         modifier = Modifier
             .nestedScroll(pullToRefreshState.nestedScrollConnection),
     ) {
-        when (uiState.contentType) {
-            RssFeedContentType.LOADING -> {
-                LoadingScreen(LoadingState.InProgress)
-            }
-
-            RssFeedContentType.SHOW -> {
+        when (val loadingState = uiState.loadingState) {
+            LoadingState.Success -> {
                 val channel = uiState.rssChannel
                 require(channel != null) {
                     "RssChannel must not be null to be shown"
@@ -78,11 +72,22 @@ fun RssFeedScreen(
                 )
             }
 
-            RssFeedContentType.ERROR -> {
-                // TODO: Show error screen
+            LoadingState.InProgress -> {
+                LoadingScreen(LoadingState.InProgress)
+            }
+
+            is LoadingState.Failure -> {
+                LoadingScreen(
+                    loadingState = loadingState,
+                    onErrorLongPress = {
+                        clipboardManager.setText(it)
+                    },
+                    onRetryClick = {
+                        screenViewModel.loadChannel(screen.channelUrl)
+                    }
+                )
             }
         }
-
 
         LaunchedEffect(key1 = pullToRefreshState.isRefreshing) {
             if (pullToRefreshState.isRefreshing) {
@@ -104,12 +109,14 @@ fun RssFeedScreen(
         )
     }
 
-    LaunchedEffect(key1 = lifecycleState) {
-        if (lifecycleState == Lifecycle.State.RESUMED &&
-            uiState.contentType != RssFeedContentType.LOADING &&
+    LifecycleResumeEffect {
+        if (uiState.loadingState != LoadingState.InProgress &&
             !uiState.isRefreshing
         ) {
             screenViewModel.refreshChannel(screen.channelUrl, showIsRefreshing = false)
+        }
+        onPauseOrDispose {
+            // Do nothing
         }
     }
 
@@ -117,7 +124,7 @@ fun RssFeedScreen(
         if (!uiState.isRefreshing &&
             uiState.rssChannel?.link != screen.channelUrl
         ) {
-            screenViewModel.setChannel(screen.channelUrl)
+            screenViewModel.loadChannel(screen.channelUrl)
         }
     }
 }

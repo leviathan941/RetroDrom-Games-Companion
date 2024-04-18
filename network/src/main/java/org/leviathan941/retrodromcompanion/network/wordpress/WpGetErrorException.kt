@@ -19,6 +19,5 @@
 package org.leviathan941.retrodromcompanion.network.wordpress
 
 class WpGetErrorException(
-    val code: Int,
     message: String,
 ) : Exception(message)

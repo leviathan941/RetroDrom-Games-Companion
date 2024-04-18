@@ -30,3 +30,5 @@ val Pink40 = Color(0xFF7D5260)
 
 val DrawerLogoGradientStartColor = Color(0xFF28073E)
 val DrawerLogoGradientEndColor = Color(0xFF550A69)
+
+val RefreshClickableTextColor = Color(0xFF35A3DB)

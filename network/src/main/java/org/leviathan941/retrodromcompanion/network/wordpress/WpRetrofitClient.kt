@@ -40,7 +40,14 @@ class WpRetrofitClient(
 
     @Throws(WpGetErrorException::class)
     suspend fun fetchCategories(): List<WpFeedCategory> = withContext(Dispatchers.IO) {
-        wpApiService.fetchCategories().handleResponse() ?: emptyList()
+        try {
+            wpApiService.fetchCategories().handleResponse() ?: emptyList()
+        } catch (e: Exception) {
+            Log.e(WP_TAG, "fetchCategories: ${e.message}", e)
+            throw WpGetErrorException(
+                message = e.message ?: "Unknown error",
+            )
+        }
     }
 
     private fun <T> Response<T>.handleResponse(): T? {
@@ -49,8 +56,7 @@ class WpRetrofitClient(
             body()
         } else {
             throw WpGetErrorException(
-                code = code(),
-                message = message(),
+                message = "Code: ${code()}, Message: ${message()}",
             )
         }
     }

@@ -2,6 +2,10 @@
     <string name="app_name">RetroDrom Games</string>
 
     <string name="loading_screen_title">Loading</string>
+    <string name="loading_screen_in_progress_message">Loading…</string>
+    <string name="loading_screen_failure_title">An error occurred.\nTry again later.</string>
+    <string name="loading_screen_failure_retry_button">Refresh</string>
+
     <string name="rss_feed_item_publication_icon_desc">Post was published at</string>
 
     <string name="top_bar_navigation_icon_desc_back">Back</string>

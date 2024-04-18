@@ -22,7 +22,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +29,8 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
+import kotlin.coroutines.coroutineContext
 
 class RssFeedViewModel : ViewModel() {
     private val loadedChannels = mutableSetOf<String>()
@@ -39,18 +40,18 @@ class RssFeedViewModel : ViewModel() {
 
     private var fetchJob: Job? = null
 
-    fun setChannel(channelUrl: String) {
+    fun loadChannel(channelUrl: String) {
         val useCache = channelUrl in loadedChannels
         Log.d(RSS_SCREEN_TAG, "Load RSS channel: $channelUrl, useCache: $useCache")
         launchFetch {
             _uiState.value = _uiState.value.copy(
-                contentType = RssFeedContentType.LOADING,
+                loadingState = LoadingState.InProgress,
                 rssChannel = null,
+                isRefreshing = false,
             )
-            fetchChannel(channelUrl, useCache)
-                .takeIf { currentCoroutineContext().isActive }?.let {
-                    onFetchFinished(it)
-                }
+            catchFetchResult {
+                fetchChannel(channelUrl, useCache)
+            }
         }
     }
 
@@ -63,8 +64,8 @@ class RssFeedViewModel : ViewModel() {
             if (showIsRefreshing) {
                 _uiState.value = _uiState.value.copy(isRefreshing = true)
             }
-            fetchChannel(channelUrl).takeIf { currentCoroutineContext().isActive }?.let {
-                onFetchFinished(it)
+            catchFetchResult {
+                fetchChannel(channelUrl)
             }
         }
     }
@@ -76,22 +77,42 @@ class RssFeedViewModel : ViewModel() {
         }
     }
 
-    private fun onFetchFinished(channel: RssChannel?) {
-        if (channel == null) {
-            _uiState.value = _uiState.value.copy(
-                contentType = RssFeedContentType.ERROR,
-                isRefreshing = false,
-            )
-        } else {
-            loadedChannels.add(channel.link)
-            _uiState.value = _uiState.value.copy(
-                rssChannel = channel,
-                contentType = RssFeedContentType.SHOW,
-                isRefreshing = false,
-            )
+    private suspend fun catchFetchResult(fetcher: suspend () -> RssChannel?) {
+        try {
+            fetcher()?.let { onFetched(it) }
+                ?: onFetchFailed("Failed to fetch RSS channel by unknown reason")
+        } catch (e: RssFeedProvider.FetchException) {
+            if (coroutineContext.isActive) {
+                onFetchException(e)
+            }
         }
     }
 
+    private fun onFetched(channel: RssChannel) {
+        loadedChannels.add(channel.link)
+        _uiState.value = _uiState.value.copy(
+            rssChannel = channel,
+            loadingState = LoadingState.Success,
+            isRefreshing = false,
+        )
+    }
+
+    private fun onFetchException(e: RssFeedProvider.FetchException) {
+        onFetchFailed(e.message ?: "Unknown error: $e")
+    }
+
+    private fun onFetchFailed(message: String) {
+        Log.e(RSS_SCREEN_TAG, "Exception during RSS channel fetch: $message")
+        _uiState.value = _uiState.value.copy(
+            rssChannel = null,
+            loadingState = LoadingState.Failure(
+                message = message,
+            ),
+            isRefreshing = false,
+        )
+    }
+
+    @Throws(RssFeedProvider.FetchException::class)
     private suspend fun fetchChannel(
         channelUrl: String,
         useCache: Boolean = false
@@ -103,7 +124,7 @@ class RssFeedViewModel : ViewModel() {
                 // If fetching failed, try to use cache.
                 fetchChannel(channelUrl, useCache = true)
             } else {
-                null
+                throw e
             }
         }
     }

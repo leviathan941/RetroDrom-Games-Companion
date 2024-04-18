@@ -19,16 +19,10 @@
 package org.leviathan941.retrodromcompanion.ui.model
 
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 data class RssFeedViewState(
     val rssChannel: RssChannel? = null,
-    val contentType: RssFeedContentType = RssFeedContentType.LOADING,
+    val loadingState: LoadingState = LoadingState.InProgress,
     val isRefreshing: Boolean = false,
 )
-
-enum class RssFeedContentType {
-    LOADING,
-    ERROR,
-    SHOW,
-    ;
-}

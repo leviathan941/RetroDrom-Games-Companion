@@ -51,19 +51,28 @@ class MainViewModel(
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
 
     init {
+        fetchRssData()
+    }
+
+    fun fetchRssData() {
         viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                loadingData = _uiState.value.loadingData.copy(
+                    state = LoadingState.InProgress,
+                ),
+            )
             _uiState.value = try {
                 _uiState.value.copy(
                     loadingData = _uiState.value.loadingData.copy(
                         state = LoadingState.Success,
                     ),
-                    rssFeedData = fetchRssScreens(),
+                    rssFeedData = fetchAllRssScreens(),
                 )
             } catch (e: WpGetErrorException) {
                 Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS categories", e)
                 _uiState.value.copy(
                     loadingData = _uiState.value.loadingData.copy(
-                        state = LoadingState.Failure(e.code, e.message.orEmpty())
+                        state = LoadingState.Failure(e.message.orEmpty())
                     )
                 )
             }
@@ -79,7 +88,7 @@ class MainViewModel(
     }
 
     @Throws(WpGetErrorException::class)
-    private suspend fun fetchRssScreens(): Map<Int, MainNavScreen.RssFeed> {
+    private suspend fun fetchAllRssScreens(): Map<Int, MainNavScreen.RssFeed> {
         val rssCategoryScreens = wpRetrofitClient.fetchCategories()
             .filter { it.postsCount > 0 }
             .map {
