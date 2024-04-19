@@ -19,30 +19,48 @@
 package org.leviathan941.retrodromcompanion.ui.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.kevinnzou.web.LoadingState
 import com.kevinnzou.web.WebView
 import com.kevinnzou.web.rememberWebViewState
+import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun WebViewScreen(url: String) {
     val state = rememberWebViewState(url)
+    val loadingState = state.loadingState
 
-    // Workaround to make WebView scroll working is to put it inside LazyColumn
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
-        item {
-            WebView(
-                state = state,
-                onCreated = { webView ->
-                    webView.settings.javaScriptEnabled = true
-                },
+    Column {
+        if (loadingState is LoadingState.Loading) {
+            Log.d(MAIN_VIEW_TAG, "WebView progress: ${loadingState.progress}")
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth(),
+                progress = { loadingState.progress },
             )
+        }
+
+        // Workaround to make WebView scroll working is to put it inside LazyColumn
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            item {
+                WebView(
+                    state = state,
+                    onCreated = { webView ->
+                        webView.settings.run {
+                            javaScriptEnabled = true
+                        }
+                    },
+                )
+            }
         }
     }
 }
