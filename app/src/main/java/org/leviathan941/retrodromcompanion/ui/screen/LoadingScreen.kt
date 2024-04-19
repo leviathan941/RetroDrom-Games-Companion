@@ -106,7 +106,7 @@ private fun FailureScreen(
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.titleMedium,
         overflow = TextOverflow.Ellipsis,
-        maxLines = 2,
+        maxLines = 4,
     )
     ClickableText(
         text = AnnotatedString(

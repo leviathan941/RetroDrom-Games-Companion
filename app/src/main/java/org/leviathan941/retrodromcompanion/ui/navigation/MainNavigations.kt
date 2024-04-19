@@ -26,6 +26,7 @@ enum class MainDestination(val route: String) {
     LOADING("Loading"),
     RSS_FEED("RssFeed"),
     WEB_VIEW("WebView"),
+    SOMETHING_WENT_WRONG("SomethingWentWrong"),
     ;
 }
 
@@ -70,6 +71,16 @@ class MainNavActions(
     fun navigateToWebView() {
         Log.d(MAIN_VIEW_TAG, "Navigate to web view screen")
         navController.navigate(MainDestination.WEB_VIEW.route) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToSomethingWrong() {
+        Log.d(MAIN_VIEW_TAG, "Navigate to something went wrong screen")
+        navController.navigate(MainDestination.SOMETHING_WENT_WRONG.route) {
+            popUpTo(MainDestination.LOADING.route) {
+                inclusive = true
+            }
             launchSingleTop = true
         }
     }

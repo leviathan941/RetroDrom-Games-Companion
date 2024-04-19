@@ -46,6 +46,9 @@ class MainViewModel(
             loadingData = MainNavScreen.Loading(
                 title = application.getString(R.string.loading_screen_title)
             ),
+            somethingWrongData = MainNavScreen.SomethingWrong(
+                title = application.getString(R.string.something_wrong_screen_title),
+            )
         )
     )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()

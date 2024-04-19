@@ -50,6 +50,7 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
+import org.leviathan941.retrodromcompanion.ui.screen.SomethingWrongScreen
 import org.leviathan941.retrodromcompanion.ui.screen.WebViewScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
@@ -173,12 +174,24 @@ fun MainView(
 
                 composable(MainDestination.WEB_VIEW.route) {
                     val screen = uiState.webViewData ?: run {
-                        // TODO: Navigate to something goes wrong screen
+                        navigationActions.navigateToSomethingWrong()
                         return@composable
                     }
                     WebViewScreen(url = screen.url)
                     SideEffect {
                         topBarPrefsState.value = screen.topBarPrefs
+                    }
+                }
+
+                composable(MainDestination.SOMETHING_WENT_WRONG.route) {
+                    SomethingWrongScreen(
+                        onRestartButtonClick = {
+                            mainViewModel.fetchRssData()
+                            navigationActions.navigateToLoading()
+                        }
+                    )
+                    SideEffect {
+                        topBarPrefsState.value = uiState.somethingWrongData.topBarPrefs
                     }
                 }
             }

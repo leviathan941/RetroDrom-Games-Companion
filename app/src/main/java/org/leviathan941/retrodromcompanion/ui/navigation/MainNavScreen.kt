@@ -67,4 +67,15 @@ sealed interface MainNavScreen {
                 ),
             )
     }
+
+    data class SomethingWrong(
+        val title: String = "",
+    ) : MainNavScreen {
+        override val destination: MainDestination = MainDestination.SOMETHING_WENT_WRONG
+        override val topBarPrefs: TopBarPrefs
+            get() = TopBarPrefs(
+                title = title,
+                navButton = TopBarNavButton.NONE,
+            )
+    }
 }
