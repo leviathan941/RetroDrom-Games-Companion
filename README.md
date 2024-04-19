@@ -9,3 +9,6 @@ native way.
 This project is governed by [GPL v3.0](https://www.gnu.org/licenses/gpl-3.0.html) licence unless
 otherwise noticed. For details see the file
 titled LICENSE in the project root folder.
+
+All drawables having prefix `google_material_*` are destributed under [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
+See its [Github page](https://github.com/google/material-design-icons).
