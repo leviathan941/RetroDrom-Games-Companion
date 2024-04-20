@@ -41,17 +41,14 @@ class RssFeedViewModel : ViewModel() {
     private var fetchJob: Job? = null
 
     fun loadChannel(channelUrl: String) {
-        val useCache = channelUrl in loadedChannels
-        Log.d(RSS_SCREEN_TAG, "Load RSS channel: $channelUrl, useCache: $useCache")
-        launchFetch {
+        Log.d(RSS_SCREEN_TAG, "Load RSS channel: $channelUrl")
+        launchFetchJob {
             _uiState.value = _uiState.value.copy(
                 loadingState = LoadingState.InProgress,
                 rssChannel = null,
                 isRefreshing = false,
             )
-            catchFetchResult {
-                fetchChannel(channelUrl, useCache)
-            }
+            runFetch(channelUrl, useCache = true)
         }
     }
 
@@ -60,27 +57,26 @@ class RssFeedViewModel : ViewModel() {
         showIsRefreshing: Boolean = false
     ) {
         Log.d(RSS_SCREEN_TAG, "Refresh RSS channel: $channelUrl")
-        launchFetch {
+        launchFetchJob {
             if (showIsRefreshing) {
                 _uiState.value = _uiState.value.copy(isRefreshing = true)
             }
-            catchFetchResult {
-                fetchChannel(channelUrl)
-            }
+            runFetch(channelUrl, useCache = false)
         }
     }
 
-    private inline fun launchFetch(crossinline block: suspend () -> Unit) {
+    private inline fun launchFetchJob(crossinline block: suspend () -> Unit) {
         fetchJob?.cancel()
         fetchJob = viewModelScope.launch {
             block()
         }
     }
 
-    private suspend fun catchFetchResult(fetcher: suspend () -> RssChannel?) {
+    private suspend fun runFetch(channelUrl: String, useCache: Boolean) {
         try {
-            fetcher()?.let { onFetched(it) }
-                ?: onFetchFailed("Failed to fetch RSS channel by unknown reason")
+            fetchChannel(channelUrl, useCache)?.let {
+                onFetched(it, fromCache = useCache)
+            } ?: onFetchFailed("Failed to fetch RSS channel by unknown reason")
         } catch (e: RssFeedProvider.FetchException) {
             if (coroutineContext.isActive) {
                 onFetchException(e)
@@ -88,12 +84,16 @@ class RssFeedViewModel : ViewModel() {
         }
     }
 
-    private fun onFetched(channel: RssChannel) {
+    private fun onFetched(
+        channel: RssChannel,
+        fromCache: Boolean,
+    ) {
+        val shouldRefresh = fromCache && channel.link !in loadedChannels
         loadedChannels.add(channel.link)
         _uiState.value = _uiState.value.copy(
             rssChannel = channel,
             loadingState = LoadingState.Success,
-            isRefreshing = false,
+            isRefreshing = shouldRefresh,
         )
     }
 
@@ -115,14 +115,13 @@ class RssFeedViewModel : ViewModel() {
     @Throws(RssFeedProvider.FetchException::class)
     private suspend fun fetchChannel(
         channelUrl: String,
-        useCache: Boolean = false
+        useCache: Boolean,
     ): RssChannel? {
         return try {
             RssFeedProvider(channelUrl).fetch(useCache)
         } catch (e: RssFeedProvider.FetchException) {
-            if (!useCache) {
-                // If fetching failed, try to use cache.
-                fetchChannel(channelUrl, useCache = true)
+            if (useCache) {
+                fetchChannel(channelUrl, useCache = false)
             } else {
                 throw e
             }

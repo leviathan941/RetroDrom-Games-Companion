@@ -18,7 +18,10 @@
 
 package org.leviathan941.retrodromcompanion.rssreader
 
+import java.util.concurrent.TimeUnit
+
 internal const val FEED_URL_SUFFIX = "feed"
+internal val EXPIRED_TIME_MILLIS = TimeUnit.HOURS.toMillis(4L)
 
 internal object Rss {
     const val CHANNEL_TAG = "channel"

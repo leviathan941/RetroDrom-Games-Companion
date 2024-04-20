@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 import org.leviathan941.retrodromcompanion.rssreader.internal.toPublic
 import tw.ktrssreader.config.readerGlobalConfig
 import tw.ktrssreader.generated.ParsedRssChannelReader
+import kotlin.time.ExperimentalTime
 
 object RssFetcher {
     init {
@@ -40,6 +41,7 @@ object RssFetcher {
         coRead(channelUrl, useCache, flushCache)
     }
 
+    @OptIn(ExperimentalTime::class)
     private suspend fun coRead(
         channelUrl: String,
         useCache: Boolean,
@@ -53,6 +55,7 @@ object RssFetcher {
             config = {
                 this.useCache = useCache
                 this.flushCache = flushCache
+                this.expiredTimeMillis = EXPIRED_TIME_MILLIS
             }
         ).toPublic()
     }

@@ -31,7 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -43,10 +43,12 @@ import org.leviathan941.retrodromcompanion.ui.screen.webview.WebViewOpener
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RssFeedScreen(
+    viewModelStoreOwner: ViewModelStoreOwner,
     screen: MainNavScreen.RssFeed,
     webViewOpener: WebViewOpener,
 ) {
     val screenViewModel: RssFeedViewModel = viewModel(
+        viewModelStoreOwner = viewModelStoreOwner,
         key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
     )
     val uiState by screenViewModel.uiState.collectAsState()
@@ -107,17 +109,6 @@ fun RssFeedScreen(
                 .align(Alignment.TopCenter),
             state = pullToRefreshState,
         )
-    }
-
-    LifecycleResumeEffect(uiState) {
-        if (uiState.loadingState != LoadingState.InProgress &&
-            !uiState.isRefreshing
-        ) {
-            screenViewModel.refreshChannel(screen.channelUrl, showIsRefreshing = false)
-        }
-        onPauseOrDispose {
-            // Do nothing
-        }
     }
 
     LaunchedEffect(key1 = screen) {

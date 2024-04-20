@@ -36,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -66,7 +67,9 @@ fun MainView(
         MainNavActions(navController)
     }
 
+    val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current)
     val mainViewModel: MainViewModel = viewModel(
+        viewModelStoreOwner = viewModelStoreOwner,
         factory = MainViewModelFactory(activity.application),
     )
 
@@ -160,6 +163,7 @@ fun MainView(
                             route = "$id",
                         ) {
                             RssFeedScreen(
+                                viewModelStoreOwner = viewModelStoreOwner,
                                 screen = screen,
                                 webViewOpener = {
                                     mainViewModel.setWebViewData(it)

@@ -22,21 +22,11 @@ import android.util.Log
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
 import org.leviathan941.retrodromcompanion.rssreader.RssFetcher
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
-import java.io.InvalidClassException
-import java.net.SocketTimeoutException
 
 class RssFeedProvider(
     private val channelUrl: String,
 ) {
-    enum class FetchError {
-        UNKNOWN_ERROR,
-        INVALID_CACHE,
-        TIMEOUT,
-        ;
-    }
-
     class FetchException(
-        val fetchError: FetchError,
         throwable: Throwable,
     ) : Exception(throwable)
 
@@ -44,13 +34,8 @@ class RssFeedProvider(
     suspend fun fetch(useCache: Boolean): RssChannel? {
         return try {
             fetchRssChannel(useCache)
-        } catch (e: InvalidClassException) {
-            val error = if (useCache) FetchError.INVALID_CACHE else FetchError.UNKNOWN_ERROR
-            throw FetchException(error, e)
-        } catch (e: SocketTimeoutException) {
-            throw FetchException(FetchError.TIMEOUT, e)
         } catch (e: Exception) {
-            throw FetchException(FetchError.UNKNOWN_ERROR, e)
+            throw FetchException(e)
         }
     }
 
