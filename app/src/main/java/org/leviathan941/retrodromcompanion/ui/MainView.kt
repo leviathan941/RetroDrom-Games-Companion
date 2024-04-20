@@ -83,6 +83,7 @@ fun MainView(
     ModalNavigationDrawer(
         drawerContent = {
             DrawerView(
+                drawerState = drawerState,
                 closeDrawer = closeDrawer,
                 onHeaderClick = {
                     navigationActions.navigateToRssFeed()

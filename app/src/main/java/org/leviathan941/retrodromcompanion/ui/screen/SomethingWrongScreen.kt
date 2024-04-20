@@ -18,10 +18,10 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,7 +59,9 @@ fun SomethingWrongScreen(
             overflow = TextOverflow.Ellipsis,
             maxLines = 4,
         )
-        ClickableText(
+        Text(
+            modifier = Modifier
+                .clickable { onRestartButtonClick() },
             text = AnnotatedString(
                 text = stringResource(
                     id = R.string.something_wrong_screen_retry_button
@@ -68,7 +70,6 @@ fun SomethingWrongScreen(
                     color = RefreshClickableTextColor,
                 ),
             ),
-            onClick = { onRestartButtonClick() },
             style = MaterialTheme.typography.titleMedium,
         )
     }

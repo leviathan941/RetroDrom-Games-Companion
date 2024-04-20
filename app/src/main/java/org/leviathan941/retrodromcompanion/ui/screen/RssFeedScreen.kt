@@ -109,7 +109,7 @@ fun RssFeedScreen(
         )
     }
 
-    LifecycleResumeEffect {
+    LifecycleResumeEffect(uiState) {
         if (uiState.loadingState != LoadingState.InProgress &&
             !uiState.isRefreshing
         ) {

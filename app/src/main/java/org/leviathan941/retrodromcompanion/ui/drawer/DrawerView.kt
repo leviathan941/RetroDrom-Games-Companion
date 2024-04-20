@@ -22,14 +22,22 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -44,37 +52,46 @@ import org.leviathan941.retrodromcompanion.ui.theme.DrawerLogoGradientStartColor
 
 @Composable
 fun DrawerView(
+    drawerState: DrawerState,
     closeDrawer: () -> Unit,
     onHeaderClick: () -> Unit,
     navigationContent: @Composable ColumnScope.() -> Unit,
 ) {
     ModalDrawerSheet(
         modifier = Modifier
-            .fillMaxWidth(fraction = 0.7f),
+            .width(300.dp),
+        drawerState = drawerState,
     ) {
-        DrawerHeader(
-            onClick = {
-                closeDrawer()
-                onHeaderClick()
-            }
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxHeight()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            DrawerHeader(
+                onClick = {
+                    closeDrawer()
+                    onHeaderClick()
+                }
+            )
 
-        HorizontalDivider(
-            modifier = Modifier.padding(bottom = 4.dp),
-            thickness = 1.dp,
-        )
+            HorizontalDivider(
+                modifier = Modifier.padding(bottom = 4.dp),
+                thickness = 1.dp,
+            )
 
-        navigationContent()
+            navigationContent()
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
-        DrawerFooter()
+            DrawerFooter()
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun DrawerViewPreview() = DrawerView(
+    drawerState = rememberDrawerState(DrawerValue.Open),
     closeDrawer = {},
     onHeaderClick = {},
     navigationContent = {},

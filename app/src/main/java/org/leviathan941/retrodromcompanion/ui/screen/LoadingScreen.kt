@@ -19,12 +19,12 @@
 package org.leviathan941.retrodromcompanion.ui.screen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -108,7 +108,9 @@ private fun FailureScreen(
         overflow = TextOverflow.Ellipsis,
         maxLines = 4,
     )
-    ClickableText(
+    Text(
+        modifier = Modifier
+            .clickable { onRetryClick() },
         text = AnnotatedString(
             text = stringResource(
                 id = R.string.loading_screen_failure_retry_button
@@ -117,7 +119,6 @@ private fun FailureScreen(
                 color = RefreshClickableTextColor,
             ),
         ),
-        onClick = { onRetryClick() },
         style = MaterialTheme.typography.titleMedium,
     )
 }
