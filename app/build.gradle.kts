@@ -86,6 +86,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
 
+    implementation(libs.androidx.browser)
+
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
@@ -101,8 +103,6 @@ dependencies {
     implementation(libs.navigation.compose)
 
     implementation(libs.coil.compose)
-
-    implementation(libs.webview.compose)
 
     debugImplementation(libs.compose.ui.tooling)
 }

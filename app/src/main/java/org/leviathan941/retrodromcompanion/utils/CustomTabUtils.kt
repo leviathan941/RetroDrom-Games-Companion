@@ -16,10 +16,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.screen.webview
+package org.leviathan941.retrodromcompanion.utils
 
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import android.content.Context
+import android.net.Uri
+import androidx.annotation.ColorInt
+import androidx.browser.customtabs.CustomTabColorSchemeParams
+import androidx.browser.customtabs.CustomTabsIntent
 
-fun interface WebViewOpener {
-    fun open(screen: MainNavScreen.WebView)
+fun openUrlInCustomTab(
+    context: Context,
+    url: String,
+    @ColorInt toolbarColor: Int,
+) {
+    CustomTabsIntent.Builder().apply {
+        setShowTitle(true)
+        setDefaultColorSchemeParams(
+            CustomTabColorSchemeParams.Builder()
+                .setToolbarColor(toolbarColor)
+                .build()
+        )
+    }.build().launchUrl(context, Uri.parse(url))
 }

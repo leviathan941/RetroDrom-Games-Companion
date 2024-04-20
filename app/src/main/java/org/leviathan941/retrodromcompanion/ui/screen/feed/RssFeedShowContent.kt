@@ -26,28 +26,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.leviathan941.retrodromcompanion.rssreader.RssChannel
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
-import org.leviathan941.retrodromcompanion.ui.screen.webview.WebViewOpener
 
 @Composable
 fun RssFeedShowContent(
     channel: RssChannel,
-    webViewOpener: WebViewOpener,
+    urlOpener: (url: String) -> Unit,
 ) {
     LazyColumn {
         channel.items.forEach { rssFeedItem ->
             item {
                 RssFeedItem(
                     modifier = Modifier.clickable {
-                        rssFeedItem.run {
-                            webViewOpener.open(
-                                MainNavScreen.WebView(
-                                    title = title,
-                                    subtitle = channel.title,
-                                    url = link,
-                                )
-                            )
-                        }
+                        urlOpener(rssFeedItem.link)
                     },
                     title = rssFeedItem.title,
                     categories = rssFeedItem.categories,

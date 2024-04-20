@@ -38,14 +38,13 @@ import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedShowContent
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
-import org.leviathan941.retrodromcompanion.ui.screen.webview.WebViewOpener
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RssFeedScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
     screen: MainNavScreen.RssFeed,
-    webViewOpener: WebViewOpener,
+    urlOpener: (url: String) -> Unit,
 ) {
     val screenViewModel: RssFeedViewModel = viewModel(
         viewModelStoreOwner = viewModelStoreOwner,
@@ -70,7 +69,7 @@ fun RssFeedScreen(
                 }
                 RssFeedShowContent(
                     channel = channel,
-                    webViewOpener = webViewOpener,
+                    urlOpener = urlOpener,
                 )
             }
 

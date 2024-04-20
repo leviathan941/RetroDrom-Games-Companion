@@ -82,14 +82,6 @@ class MainViewModel(
         }
     }
 
-    fun setWebViewData(screen: MainNavScreen.WebView) {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                webViewData = screen,
-            )
-        }
-    }
-
     @Throws(WpGetErrorException::class)
     private suspend fun fetchAllRssScreens(): Map<Int, MainNavScreen.RssFeed> {
         val rssCategoryScreens = wpRetrofitClient.fetchCategories()

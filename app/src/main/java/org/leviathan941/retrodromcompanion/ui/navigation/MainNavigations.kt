@@ -25,7 +25,6 @@ import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 enum class MainDestination(val route: String) {
     LOADING("Loading"),
     RSS_FEED("RssFeed"),
-    WEB_VIEW("WebView"),
     SOMETHING_WENT_WRONG("SomethingWentWrong"),
     ;
 }
@@ -64,13 +63,6 @@ class MainNavActions(
             popUpTo(MainDestination.LOADING.route) {
                 inclusive = true
             }
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToWebView() {
-        Log.d(MAIN_VIEW_TAG, "Navigate to web view screen")
-        navController.navigate(MainDestination.WEB_VIEW.route) {
             launchSingleTop = true
         }
     }

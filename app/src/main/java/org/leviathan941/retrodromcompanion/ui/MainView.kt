@@ -22,6 +22,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
@@ -34,6 +35,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -52,11 +54,11 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.SomethingWrongScreen
-import org.leviathan941.retrodromcompanion.ui.screen.WebViewScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
+import org.leviathan941.retrodromcompanion.utils.openUrlInCustomTab
 
 @Composable
 fun MainView(
@@ -162,29 +164,23 @@ fun MainView(
                         composable(
                             route = "$id",
                         ) {
+                            val toolbarColorInt = MaterialTheme.colorScheme.primaryContainer
+                                .toArgb()
                             RssFeedScreen(
                                 viewModelStoreOwner = viewModelStoreOwner,
                                 screen = screen,
-                                webViewOpener = {
-                                    mainViewModel.setWebViewData(it)
-                                    navigationActions.navigateToWebView()
+                                urlOpener = { url ->
+                                    openUrlInCustomTab(
+                                        activity,
+                                        url,
+                                        toolbarColor = toolbarColorInt,
+                                    )
                                 }
                             )
                             SideEffect {
                                 topBarPrefsState.value = screen.topBarPrefs
                             }
                         }
-                    }
-                }
-
-                composable(MainDestination.WEB_VIEW.route) {
-                    val screen = uiState.webViewData ?: run {
-                        navigationActions.navigateToSomethingWrong()
-                        return@composable
-                    }
-                    WebViewScreen(url = screen.url)
-                    SideEffect {
-                        topBarPrefsState.value = screen.topBarPrefs
                     }
                 }
 
