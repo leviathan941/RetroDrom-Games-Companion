@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ RetroDrom Games Companion
+  ~ Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="loading_screen_title">Загрузка</string>
+    <string name="loading_screen_in_progress_message">Идет загрузка…</string>
+    <string name="loading_screen_failure_title">Произошла ошибка\\nПопробуйте позже.</string>
+    <string name="loading_screen_failure_retry_button">Обновить</string>
+    <string name="rss_feed_item_publication_icon_desc">Было опубликовано</string>
+    <string name="top_bar_navigation_icon_desc_back">Назад</string>
+    <string name="top_bar_navigation_icon_desc_close">Закрыть</string>
+    <string name="top_bar_navigation_icon_desc_drawer">Открыть меню</string>
+    <string name="top_bar_action_icon_desc_open_in_browser">Открыть в браузере</string>
+    <string name="something_wrong_screen_title">Упс</string>
+    <string name="something_wrong_screen_message">Что-то пошло не так</string>
+    <string name="something_wrong_screen_retry_button">Перезапустить</string>
+    <string name="rss_feed_item_publication_time_just_now">только что</string>
+    <plurals name="rss_feed_item_publication_time_minutes">
+        <item quantity="one">%d минута назад</item>
+        <item quantity="few">%d минуты назад</item>
+        <item quantity="many">%d минут назад</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_hours">
+        <item quantity="one">%d час назад</item>
+        <item quantity="few">%d часа назад</item>
+        <item quantity="many">%d часов назад</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_days">
+        <item quantity="one">%d день назад</item>
+        <item quantity="few">%d дня назад</item>
+        <item quantity="many">%d дней назад</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_weeks">
+        <item quantity="one">%d неделя назад</item>
+        <item quantity="few">%d недели назад</item>
+        <item quantity="many">%d недель назад</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_months">
+        <item quantity="one">%d месяц назад</item>
+        <item quantity="few">%d месяца назад</item>
+        <item quantity="many">%d месяцев назад</item>
+    </plurals>
+    <plurals name="rss_feed_item_publication_time_years">
+        <item quantity="one">%d год назад</item>
+        <item quantity="few">%d года назад</item>
+        <item quantity="many">%d лет назад</item>
+    </plurals>
+</resources>
