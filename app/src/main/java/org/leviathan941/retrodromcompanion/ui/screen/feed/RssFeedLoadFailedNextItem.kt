@@ -58,20 +58,6 @@ fun RssFeedLoadFailedNextItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(5.dp),
     ) {
-        Text(
-            modifier = Modifier
-                .combinedClickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onLongClick = { onErrorLongPress(AnnotatedString(text = errorMessage)) },
-                    onClick = {},
-                ),
-            text = stringResource(id = R.string.rss_feed_item_load_failure_title),
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 2,
-        )
-
         OutlinedButton(
             modifier = Modifier.size(45.dp),
             onClick = onRetry,
@@ -87,6 +73,20 @@ fun RssFeedLoadFailedNextItem(
                 )
             }
         }
+
+        Text(
+            modifier = Modifier
+                .combinedClickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    onLongClick = { onErrorLongPress(AnnotatedString(text = errorMessage)) },
+                    onClick = {},
+                ),
+            text = stringResource(id = R.string.rss_feed_item_load_failure_title),
+            color = MaterialTheme.colorScheme.error,
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 2,
+        )
     }
 }
 
