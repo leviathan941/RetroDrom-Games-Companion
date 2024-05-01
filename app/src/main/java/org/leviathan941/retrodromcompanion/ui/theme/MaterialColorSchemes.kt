@@ -16,24 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion
+package org.leviathan941.retrodromcompanion.ui.theme
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import org.leviathan941.retrodromcompanion.ui.MainView
-import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
-import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
+import androidx.compose.material3.ColorScheme
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MainTheme(
-                materialColorSchemes = SecondThemeColorScheme,
-            ) {
-                MainView(this)
-            }
-        }
-    }
-}
+data class MaterialColorSchemes(
+    val lightScheme: ColorScheme,
+    val darkScheme: ColorScheme,
+)
