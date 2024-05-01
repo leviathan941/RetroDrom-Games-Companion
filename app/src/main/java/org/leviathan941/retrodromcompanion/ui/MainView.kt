@@ -20,6 +20,7 @@ package org.leviathan941.retrodromcompanion.ui
 
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
@@ -143,6 +144,7 @@ fun MainView(
             ) {
                 composable(MainDestination.LOADING.route) {
                     LoadingScreen(
+                        modifier = Modifier.fillMaxSize(),
                         loadingState = uiState.loadingData.state,
                         onErrorLongPress = { message ->
                             clipboardManager.setText(message)
@@ -167,7 +169,6 @@ fun MainView(
                             val toolbarColorInt = MaterialTheme.colorScheme.primaryContainer
                                 .toArgb()
                             RssFeedScreen(
-                                viewModelStoreOwner = viewModelStoreOwner,
                                 screen = screen,
                                 urlOpener = { url ->
                                     openUrlInCustomTab(

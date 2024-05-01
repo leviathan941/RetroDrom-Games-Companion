@@ -47,7 +47,10 @@ android {
 }
 
 dependencies {
+    api(libs.paging.compose)
+
     implementation(libs.kotlinx.coroutines.android)
+
     implementation(libs.ktrssreader.android)
     implementation(libs.ktrssreader.annotation)
     ksp(libs.ktrssreader.processor)

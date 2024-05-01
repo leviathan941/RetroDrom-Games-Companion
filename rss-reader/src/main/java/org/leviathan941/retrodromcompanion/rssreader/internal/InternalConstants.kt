@@ -16,12 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.rssreader
+package org.leviathan941.retrodromcompanion.rssreader.internal
 
 import java.util.concurrent.TimeUnit
 
 internal const val FEED_URL_SUFFIX = "feed"
-internal val EXPIRED_TIME_MILLIS = TimeUnit.HOURS.toMillis(4L)
+internal const val PAGE_QUERY_PARAM = "paged"
+internal val EXPIRED_TIME_MILLIS = TimeUnit.HOURS.toMillis(1L)
+internal const val RSS_READER_TAG = "RssReader"
 
 internal object Rss {
     const val CHANNEL_TAG = "channel"

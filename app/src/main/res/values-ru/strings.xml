@@ -19,7 +19,7 @@
 <resources>
     <string name="loading_screen_title">Загрузка</string>
     <string name="loading_screen_in_progress_message">Идет загрузка…</string>
-    <string name="loading_screen_failure_title">Произошла ошибка\\nПопробуйте позже.</string>
+    <string name="loading_screen_failure_title">Произошла ошибка.\nПопробуйте позже.</string>
     <string name="loading_screen_failure_retry_button">Обновить</string>
     <string name="rss_feed_item_publication_icon_desc">Было опубликовано</string>
     <string name="top_bar_navigation_icon_desc_back">Назад</string>
@@ -60,4 +60,6 @@
         <item quantity="few">%d года назад</item>
         <item quantity="many">%d лет назад</item>
     </plurals>
+    <string name="rss_feed_item_load_retry_button_desc">Повторить</string>
+    <string name="rss_feed_item_load_failure_title">Произошла ошибка. Попробуйте позже.</string>
 </resources>

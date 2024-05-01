@@ -16,13 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.model
+package org.leviathan941.retrodromcompanion.ui.screen.feed
 
-import org.leviathan941.retrodromcompanion.rssreader.RssChannel
-import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.unit.dp
 
-data class RssFeedViewState(
-    val rssChannel: RssChannel? = null,
-    val loadingState: LoadingState = LoadingState.InProgress,
-    val isRefreshing: Boolean = false,
-)
+val RssFeedItemPaddings = PaddingValues(start = 15.dp, top = 10.dp, end = 15.dp, bottom = 10.dp)

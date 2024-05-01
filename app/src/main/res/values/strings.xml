@@ -7,6 +7,8 @@
     <string name="loading_screen_failure_retry_button">Refresh</string>
 
     <string name="rss_feed_item_publication_icon_desc">Post was published at</string>
+    <string name="rss_feed_item_load_failure_title">An error occurred. Try again later.</string>
+    <string name="rss_feed_item_load_retry_button_desc">Retry</string>
 
     <string name="top_bar_navigation_icon_desc_back">Back</string>
     <string name="top_bar_navigation_icon_desc_close">Close</string>

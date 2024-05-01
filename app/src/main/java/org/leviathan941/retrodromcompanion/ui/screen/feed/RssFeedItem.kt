@@ -63,7 +63,7 @@ fun RssFeedItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 15.dp, top = 8.dp, end = 15.dp, bottom = 10.dp),
+            .padding(RssFeedItemPaddings),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         val nonImportantColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)

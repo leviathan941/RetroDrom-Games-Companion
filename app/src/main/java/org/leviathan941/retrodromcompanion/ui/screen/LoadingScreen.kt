@@ -24,7 +24,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,13 +44,13 @@ import org.leviathan941.retrodromcompanion.ui.theme.RefreshClickableTextColor
 
 @Composable
 fun LoadingScreen(
+    modifier: Modifier = Modifier,
     loadingState: LoadingState,
     onErrorLongPress: (text: AnnotatedString) -> Unit = {},
     onRetryClick: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(
             space = 20.dp,
             alignment = Alignment.CenterVertically,

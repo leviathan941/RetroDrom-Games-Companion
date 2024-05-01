@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import org.leviathan941.retrodromcompanion.rssreader.Rss
 import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
 import java.io.Serializable

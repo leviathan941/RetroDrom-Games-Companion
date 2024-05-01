@@ -18,19 +18,24 @@
 
 package org.leviathan941.retrodromcompanion.rssreader
 
-data class RssChannelItem(
-    val title: String,
-    val link: String,
-    val pubDate: RssPublicationDate,
-    val categories: List<String>,
-    val description: RssDescription?,
-)
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import kotlinx.coroutines.flow.Flow
+import org.leviathan941.retrodromcompanion.rssreader.internal.PAGING_INITIAL_PAGE_NUMBER
+import org.leviathan941.retrodromcompanion.rssreader.internal.RssFeedItemsSource
 
-data class RssPublicationDate(
-    val value: String,
-)
-
-data class RssDescription(
-    val imageUrl: String?,
-    val paragraphs: List<String>,
-)
+class RssFeedProvider(
+    private val channelUrl: String,
+) {
+    val rssChannelItems: Flow<PagingData<RssChannelItem>> = Pager(
+        config = PagingConfig(
+            pageSize = 10,
+            initialLoadSize = 20,
+        ),
+        pagingSourceFactory = {
+            RssFeedItemsSource(channelUrl)
+        },
+        initialKey = PAGING_INITIAL_PAGE_NUMBER,
+    ).flow
+}

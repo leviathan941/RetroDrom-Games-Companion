@@ -16,6 +16,7 @@ ksp = "1.9.23-1.0.20"
 ktRssReader = "2.2.2"
 lifecycle = "2.7.0"
 navigation = "2.7.7"
+pagingCompose = "3.2.1"
 retrofit = "2.11.0"
 
 [libraries]
@@ -38,6 +39,7 @@ ktrssreader-android = { group = "com.github.ivanisidrowu.KtRssReader", name = "a
 ktrssreader-annotation = { group = "com.github.ivanisidrowu.KtRssReader", name = "annotation", version.ref = "ktRssReader" }
 ktrssreader-processor = { group = "com.github.ivanisidrowu.KtRssReader", name = "processor", version.ref = "ktRssReader" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingCompose" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 

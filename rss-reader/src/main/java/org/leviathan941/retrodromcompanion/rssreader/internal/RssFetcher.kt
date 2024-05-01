@@ -16,17 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.rssreader
+package org.leviathan941.retrodromcompanion.rssreader.internal
 
 import android.net.Uri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.leviathan941.retrodromcompanion.rssreader.internal.toPublic
+import org.leviathan941.retrodromcompanion.rssreader.BuildConfig
+import tw.ktrssreader.Reader
 import tw.ktrssreader.config.readerGlobalConfig
 import tw.ktrssreader.generated.ParsedRssChannelReader
 import kotlin.time.ExperimentalTime
 
-object RssFetcher {
+internal object RssFetcher {
     init {
         readerGlobalConfig {
             enableLog = BuildConfig.DEBUG
@@ -35,21 +36,24 @@ object RssFetcher {
 
     suspend fun fetchFeed(
         channelUrl: String,
+        pageNumber: Int,
         useCache: Boolean = true,
         flushCache: Boolean = false,
-    ): RssChannel? = withContext(Dispatchers.IO) {
-        coRead(channelUrl, useCache, flushCache)
+    ): ParsedRssChannel = withContext(Dispatchers.IO) {
+        coRead(channelUrl, pageNumber, useCache, flushCache)
     }
 
     @OptIn(ExperimentalTime::class)
     private suspend fun coRead(
         channelUrl: String,
+        pageNumber: Int,
         useCache: Boolean,
         flushCache: Boolean,
-    ): RssChannel? {
+    ): ParsedRssChannel {
         return ParsedRssChannelReader.coRead(
             url = Uri.parse(channelUrl).buildUpon()
                 .appendPath(FEED_URL_SUFFIX)
+                .appendQueryParameter(PAGE_QUERY_PARAM, pageNumber.toString())
                 .build()
                 .toString(),
             config = {
@@ -57,6 +61,10 @@ object RssFetcher {
                 this.flushCache = flushCache
                 this.expiredTimeMillis = EXPIRED_TIME_MILLIS
             }
-        ).toPublic()
+        )
+    }
+
+    fun clearCache() {
+        Reader.clearCache()
     }
 }
