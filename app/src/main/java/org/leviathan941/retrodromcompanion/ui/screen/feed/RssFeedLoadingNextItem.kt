@@ -18,9 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.feed
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,10 +33,14 @@ import androidx.compose.ui.unit.dp
 @Preview(showBackground = true)
 @Composable
 fun RssFeedLoadingNextItem() {
-    CircularProgressIndicator(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .wrapContentWidth(align = Alignment.CenterHorizontally),
-    )
+            .padding(RssFeedItemPaddings)
+            .height(75.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        CircularProgressIndicator()
+    }
 }
