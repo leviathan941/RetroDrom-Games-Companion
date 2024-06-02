@@ -20,17 +20,18 @@ package org.leviathan941.retrodromcompanion.ui.screen
 
 import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,13 +61,16 @@ fun RssFeedScreen(
     val rssChannelItems = screenViewModel.rssChannelItems.collectAsLazyPagingItems()
     val clipboardManager = LocalClipboardManager.current
 
-    val pullToRefreshState = rememberPullToRefreshState(
-        positionalThreshold = 96.dp,
-    )
+    var isRefreshing by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier
-            .nestedScroll(pullToRefreshState.nestedScrollConnection),
+    PullToRefreshBox(
+        state = rememberPullToRefreshState(),
+        onRefresh = {
+            Log.d(RSS_SCREEN_TAG, "Refresh RSS channel: ${screen.channelUrl}")
+            isRefreshing = true
+            rssChannelItems.refresh()
+        },
+        isRefreshing = isRefreshing,
     ) {
         LazyColumn {
             items(rssChannelItems.itemCount) { index ->
@@ -134,28 +138,15 @@ fun RssFeedScreen(
             }
         }
 
-        LaunchedEffect(key1 = pullToRefreshState.isRefreshing) {
-            if (pullToRefreshState.isRefreshing) {
-                Log.d(RSS_SCREEN_TAG, "Refresh RSS channel: ${screen.channelUrl}")
-                rssChannelItems.refresh()
-            }
-        }
-
         LaunchedEffect(key1 = rssChannelItems.loadState) {
             when (rssChannelItems.loadState.refresh) {
                 is LoadState.Error,
                 is LoadState.NotLoading -> {
-                    pullToRefreshState.endRefresh()
+                    isRefreshing = false
                 }
 
                 is LoadState.Loading -> Unit
             }
         }
-
-        PullToRefreshContainer(
-            modifier = Modifier
-                .align(Alignment.TopCenter),
-            state = pullToRefreshState,
-        )
     }
 }
