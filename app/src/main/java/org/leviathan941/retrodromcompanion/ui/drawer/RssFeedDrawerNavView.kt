@@ -18,16 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.ui.drawer
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 @Composable
@@ -36,35 +31,21 @@ fun RssFeedDrawerNavView(
     isSelected: (MainNavScreen.RssFeed) -> Boolean = { false },
     onClick: (MainNavScreen.RssFeed) -> Unit = {},
 ) {
-    rssScreens.sortedBy { it.id }.forEach { rssScreen ->
-        NavigationDrawerItem(
-            modifier = Modifier
-                .height(50.dp),
-            label = {
-                Text(
-                    text = rssScreen.title,
-                    style = MaterialTheme.typography.titleMedium,
-                )
-            },
-            selected = isSelected(rssScreen),
-            onClick = { onClick(rssScreen) },
-            shape = RectangleShape,
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun RssFeedDrawerNavPreview() {
-    Column {
-        RssFeedDrawerNavView(
-            rssScreens = List(5) { i ->
-                MainNavScreen.RssFeed(
-                    id = i,
-                    title = "Category ${i + 1}",
-                    channelUrl = "",
-                )
-            },
-        )
+    DrawerSubMenuView(
+        title = stringResource(id = R.string.drawer_rss_feeds_submenu_title),
+        icon = {
+            Icon(
+                painter = painterResource(id = R.drawable.google_material_news),
+                contentDescription = null,
+            )
+        }
+    ) {
+        rssScreens.sortedBy { it.id }.forEach { rssScreen ->
+            DrawerMenuItemView(
+                title = rssScreen.title,
+                isSelected = isSelected(rssScreen),
+                onClick = { onClick(rssScreen) },
+            )
+        }
     }
 }

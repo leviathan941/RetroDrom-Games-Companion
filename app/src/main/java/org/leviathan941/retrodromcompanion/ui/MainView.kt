@@ -41,8 +41,10 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import kotlinx.coroutines.launch
@@ -69,6 +71,7 @@ fun MainView(
     val navigationActions = remember(navController) {
         MainNavActions(navController)
     }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current)
     val mainViewModel: MainViewModel = viewModel(
@@ -99,11 +102,13 @@ fun MainView(
                         RssFeedDrawerNavView(
                             rssScreens = rssScreens.values.toList(),
                             isSelected = { screen ->
-                                navController.currentDestination?.route == "${screen.id}"
+                                navBackStackEntry?.destination?.hierarchy?.any {
+                                    it.route == screen.id.toString()
+                                } == true
                             },
                             onClick = { screen ->
-                                closeDrawer()
                                 navigationActions.navigateInsideRssFeed(screen)
+                                closeDrawer()
                             }
                         )
                     }
