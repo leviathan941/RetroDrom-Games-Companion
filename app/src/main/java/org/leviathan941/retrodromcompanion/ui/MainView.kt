@@ -21,46 +21,38 @@ package org.leviathan941.retrodromcompanion.ui
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
-import org.leviathan941.retrodromcompanion.ui.drawer.RssFeedDrawerNavView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
+import org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen
 import org.leviathan941.retrodromcompanion.ui.screen.SomethingWrongScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
-import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
-import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
-import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 import org.leviathan941.retrodromcompanion.utils.openUrlInCustomTab
 
 @Composable
@@ -81,11 +73,7 @@ fun MainView(
 
     val uiState by mainViewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val topBarPrefsState = remember {
-        mutableStateOf(uiState.loadingData.topBarPrefs)
-    }
     val coroutineScope = rememberCoroutineScope()
-    val uriHandler = LocalUriHandler.current
     val clipboardManager = LocalClipboardManager.current
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
 
@@ -98,109 +86,72 @@ fun MainView(
                     navigationActions.navigateToRssFeed()
                 },
                 navigationContent = {
-                    uiState.rssFeedData.takeUnless { it.isEmpty() }?.let { rssScreens ->
-                        RssFeedDrawerNavView(
-                            rssScreens = rssScreens.values.toList(),
-                            isSelected = { screen ->
-                                navBackStackEntry?.destination?.hierarchy?.any {
-                                    it.route == screen.id.toString()
-                                } == true
-                            },
-                            onClick = { screen ->
-                                navigationActions.navigateInsideRssFeed(screen)
-                                closeDrawer()
-                            }
-                        )
-                    }
+                    DrawerNavigationContent(
+                        uiState = uiState,
+                        navigationActions = navigationActions,
+                        navBackStackEntry = navBackStackEntry,
+                        drawerState = drawerState,
+                        coroutineScope = coroutineScope,
+                    )
                 }
             )
         },
         drawerState = drawerState,
     ) {
-        Scaffold(
-            topBar = {
-                TopBarView(
-                    prefs = topBarPrefsState.value,
-                    onNavButtonCLick = { button ->
-                        when (button) {
-                            TopBarNavButton.BACK -> navigationActions.navigateBack()
-                            TopBarNavButton.CLOSE -> navigationActions.navigateUp()
-                            TopBarNavButton.DRAWER -> coroutineScope.launch {
-                                drawerState.open()
-                            }
-
-                            TopBarNavButton.NONE -> Unit
-                        }
+        NavHost(
+            navController = navController,
+            startDestination = MainDestination.LOADING.route,
+        ) {
+            composable(MainDestination.LOADING.route) {
+                LoadingScreen(
+                    loadingData = uiState.loadingData,
+                    modifier = Modifier.fillMaxSize(),
+                    onErrorLongPress = { message ->
+                        clipboardManager.setText(message)
                     },
-                    onActionClick = { action ->
-                        when (action) {
-                            is TopBarAction.Browse -> {
-                                uriHandler.openUri(action.url)
-                            }
-                        }
+                    onRetryClick = {
+                        mainViewModel.fetchRssData()
                     }
                 )
             }
-        ) { paddings ->
-            NavHost(
-                modifier = Modifier.padding(paddings),
-                navController = navController,
-                startDestination = MainDestination.LOADING.route,
+
+            navigation(
+                route = MainDestination.RSS_FEED.route,
+                startDestination = "$MAIN_RSS_FEED_ID",
             ) {
-                composable(MainDestination.LOADING.route) {
-                    LoadingScreen(
-                        modifier = Modifier.fillMaxSize(),
-                        loadingState = uiState.loadingData.state,
-                        onErrorLongPress = { message ->
-                            clipboardManager.setText(message)
-                        },
-                        onRetryClick = {
-                            mainViewModel.fetchRssData()
-                        }
-                    )
-                    SideEffect {
-                        topBarPrefsState.value = uiState.loadingData.topBarPrefs
-                    }
-                }
-
-                navigation(
-                    route = MainDestination.RSS_FEED.route,
-                    startDestination = "$MAIN_RSS_FEED_ID",
-                ) {
-                    uiState.rssFeedData.forEach { (id, screen) ->
-                        composable(
-                            route = "$id",
-                        ) {
-                            val toolbarColorInt = MaterialTheme.colorScheme.primaryContainer
-                                .toArgb()
-                            RssFeedScreen(
-                                screen = screen,
-                                urlOpener = { url ->
-                                    openUrlInCustomTab(
-                                        activity,
-                                        url,
-                                        toolbarColor = toolbarColorInt,
-                                    )
-                                }
-                            )
-                            SideEffect {
-                                topBarPrefsState.value = screen.topBarPrefs
+                uiState.rssFeedData.forEach { (id, screen) ->
+                    composable(
+                        route = "$id",
+                    ) {
+                        val toolbarColorInt = MaterialTheme.colorScheme.primaryContainer
+                            .toArgb()
+                        RssFeedScreen(
+                            screen = screen,
+                            drawerState = drawerState,
+                            urlOpener = { url ->
+                                openUrlInCustomTab(
+                                    activity,
+                                    url,
+                                    toolbarColor = toolbarColorInt,
+                                )
                             }
-                        }
+                        )
                     }
                 }
+            }
 
-                composable(MainDestination.SOMETHING_WENT_WRONG.route) {
-                    SomethingWrongScreen(
-                        onRestartButtonClick = {
-                            mainViewModel.fetchRssData()
-                            navigationActions.navigateToLoading()
-                        }
-                    )
-                    SideEffect {
-                        topBarPrefsState.value = uiState.somethingWrongData.topBarPrefs
+            composable(MainDestination.SOMETHING_WENT_WRONG.route) {
+                SomethingWrongScreen(
+                    data = uiState.somethingWrongData,
+                    onRestartButtonClick = {
+                        mainViewModel.fetchRssData()
+                        navigationActions.navigateToLoading()
                     }
-                }
+                )
+            }
+
+            composable(MainDestination.SETTINGS.route) {
+                SettingsScreen()
             }
         }
     }

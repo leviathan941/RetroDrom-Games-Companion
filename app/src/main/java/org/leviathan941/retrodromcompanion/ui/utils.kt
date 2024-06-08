@@ -20,6 +20,8 @@ package org.leviathan941.retrodromcompanion.ui
 
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavDestination.Companion.hierarchy
 import org.leviathan941.retrodromcompanion.R
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -32,7 +34,6 @@ internal const val RSS_SCREEN_TAG = "RssScreen"
 
 internal const val BASE_URL = "https://retrodrom.games/"
 
-//internal const val RSS_FEED_NAV_CHANNEL_ID = "rss_feed_channel_id"
 internal const val MAIN_RSS_FEED_ID = 0
 
 fun ZonedDateTime.toRssFeedPublicationTime(
@@ -93,3 +94,8 @@ private fun Resources.getTimeQuantityString(
 ): String = duration.toInt(durationUnit).let { quantity ->
     getQuantityString(id, quantity, quantity)
 }
+
+fun NavBackStackEntry.isRouteActive(route: String): Boolean =
+    destination.hierarchy.any {
+        it.route == route
+    }

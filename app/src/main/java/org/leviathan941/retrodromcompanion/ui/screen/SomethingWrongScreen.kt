@@ -22,7 +22,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,42 +37,60 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.theme.RefreshClickableTextColor
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
+
+@Composable
+fun SomethingWrongScreen(
+    data: MainNavScreen.SomethingWrong,
+    onRestartButtonClick: () -> Unit = {},
+) {
+    Scaffold(
+        topBar = {
+            TopBarView(prefs = data.topBarPrefs)
+        }
+    ) { paddings ->
+        Column(
+            modifier = Modifier
+                .padding(paddings)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(
+                space = 20.dp,
+                alignment = Alignment.CenterVertically,
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                modifier = Modifier,
+                text = stringResource(R.string.something_wrong_screen_message),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 4,
+            )
+            Text(
+                modifier = Modifier
+                    .clickable { onRestartButtonClick() },
+                text = AnnotatedString(
+                    text = stringResource(
+                        id = R.string.something_wrong_screen_retry_button
+                    ).uppercase(),
+                    spanStyle = SpanStyle(
+                        color = RefreshClickableTextColor,
+                    ),
+                ),
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
-fun SomethingWrongScreen(
-    onRestartButtonClick: () -> Unit = {},
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(
-            space = 20.dp,
-            alignment = Alignment.CenterVertically,
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(
-            modifier = Modifier,
-            text = stringResource(R.string.something_wrong_screen_message),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 4,
+fun SomethingWrongScreenPreview() =
+    SomethingWrongScreen(
+        data = MainNavScreen.SomethingWrong(
+            title = "Something went wrong",
         )
-        Text(
-            modifier = Modifier
-                .clickable { onRestartButtonClick() },
-            text = AnnotatedString(
-                text = stringResource(
-                    id = R.string.something_wrong_screen_retry_button
-                ).uppercase(),
-                spanStyle = SpanStyle(
-                    color = RefreshClickableTextColor,
-                ),
-            ),
-            style = MaterialTheme.typography.titleMedium,
-        )
-    }
-}
+    )

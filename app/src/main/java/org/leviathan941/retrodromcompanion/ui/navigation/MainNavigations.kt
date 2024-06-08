@@ -26,6 +26,7 @@ enum class MainDestination(val route: String) {
     LOADING("Loading"),
     RSS_FEED("RssFeed"),
     SOMETHING_WENT_WRONG("SomethingWentWrong"),
+    SETTINGS("Settings")
     ;
 }
 
@@ -73,6 +74,13 @@ class MainNavActions(
             popUpTo(MainDestination.LOADING.route) {
                 inclusive = true
             }
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToSettings() {
+        Log.d(MAIN_VIEW_TAG, "Navigate to settings screen")
+        navController.navigate(MainDestination.SETTINGS.route) {
             launchSingleTop = true
         }
     }

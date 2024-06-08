@@ -16,13 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.model
+package org.leviathan941.retrodromcompanion.ui.screen
 
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import androidx.compose.runtime.Composable
 
-data class MainViewState(
-    val loadingData: MainNavScreen.Loading = MainNavScreen.Loading(),
-    val rssFeedData: Map<Int, MainNavScreen.RssFeed> = emptyMap(),
-    val somethingWrongData: MainNavScreen.SomethingWrong = MainNavScreen.SomethingWrong(),
-    val settingsData: MainNavScreen.Settings = MainNavScreen.Settings(),
-)
+@Composable
+fun SettingsScreen() {
+
+}

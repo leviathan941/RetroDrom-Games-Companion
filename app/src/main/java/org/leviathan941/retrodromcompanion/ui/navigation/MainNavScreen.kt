@@ -23,14 +23,12 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
 
 sealed interface MainNavScreen {
-    val destination: MainDestination
     val topBarPrefs: TopBarPrefs
 
     data class Loading(
         val title: String = "",
         val state: LoadingState = LoadingState.InProgress,
     ) : MainNavScreen {
-        override val destination: MainDestination = MainDestination.LOADING
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
                 title,
@@ -42,7 +40,6 @@ sealed interface MainNavScreen {
         val title: String,
         val channelUrl: String,
     ) : MainNavScreen {
-        override val destination: MainDestination = MainDestination.RSS_FEED
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
                 title = title,
@@ -53,11 +50,20 @@ sealed interface MainNavScreen {
     data class SomethingWrong(
         val title: String = "",
     ) : MainNavScreen {
-        override val destination: MainDestination = MainDestination.SOMETHING_WENT_WRONG
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
                 title = title,
                 navButton = TopBarNavButton.NONE,
+            )
+    }
+
+    data class Settings(
+        val title: String = "",
+    ) : MainNavScreen {
+        override val topBarPrefs: TopBarPrefs
+            get() = TopBarPrefs(
+                title = title,
+                navButton = TopBarNavButton.DRAWER,
             )
     }
 }
