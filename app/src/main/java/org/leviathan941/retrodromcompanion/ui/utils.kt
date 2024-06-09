@@ -19,10 +19,12 @@
 package org.leviathan941.retrodromcompanion.ui
 
 import android.content.res.Resources
+import android.os.Build
 import androidx.annotation.PluralsRes
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hierarchy
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration
@@ -35,6 +37,12 @@ internal const val RSS_SCREEN_TAG = "RssScreen"
 internal const val BASE_URL = "https://retrodrom.games/"
 
 internal const val MAIN_RSS_FEED_ID = 0
+
+internal val APP_THEME_DEFAULT = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    ThemeType.DYNAMIC
+} else {
+    ThemeType.SYSTEM
+}
 
 fun ZonedDateTime.toRssFeedPublicationTime(
     resources: Resources,

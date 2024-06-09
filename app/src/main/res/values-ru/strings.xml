@@ -66,4 +66,10 @@
     <string name="drawer_submenu_item_collapsed_desc">Подменю скрыто</string>
     <string name="drawer_rss_feeds_submenu_title">Категории новостей</string>
     <string name="settings_screen_title">Настройки</string>
+    <string name="settings_group_name_interface">Интерфейс</string>
+    <string name="settings_interface_item_theme_title">Тема</string>
+    <string name="theme_name_light">Светлая</string>
+    <string name="theme_name_dark">Тёмная</string>
+    <string name="theme_name_system">Системная</string>
+    <string name="theme_name_dynamic">Адаптивная</string>
 </resources>

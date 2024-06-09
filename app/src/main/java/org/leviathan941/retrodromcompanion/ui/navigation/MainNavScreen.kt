@@ -63,7 +63,7 @@ sealed interface MainNavScreen {
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
                 title = title,
-                navButton = TopBarNavButton.DRAWER,
+                navButton = TopBarNavButton.BACK,
             )
     }
 }

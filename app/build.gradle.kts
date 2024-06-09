@@ -107,5 +107,7 @@ dependencies {
 
     implementation(libs.coil.compose)
 
+    implementation(libs.datastore.preferences)
+
     debugImplementation(libs.compose.ui.tooling)
 }

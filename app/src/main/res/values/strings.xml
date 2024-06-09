@@ -50,4 +50,10 @@
     <string name="drawer_submenu_item_collapsed_desc">Submenu is collapsed</string>
     <string name="drawer_rss_feeds_submenu_title">News categories</string>
     <string name="settings_screen_title">Settings</string>
+    <string name="settings_group_name_interface">Interface</string>
+    <string name="settings_interface_item_theme_title">Theme</string>
+    <string name="theme_name_light">Light</string>
+    <string name="theme_name_dark">Dark</string>
+    <string name="theme_name_system">System</string>
+    <string name="theme_name_dynamic">Dynamic</string>
 </resources>

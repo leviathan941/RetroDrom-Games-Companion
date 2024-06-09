@@ -16,11 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.model
+package org.leviathan941.retrodromcompanion.app
 
-object ViewModelKeys {
-    const val MAIN_VIEW_MODEL = "main_view_model"
-    const val RSS_FEED_VIEW_MODEL = "rss_feed_view_model"
-    const val SETTINGS_VIEW_MODEL = "settings_view_model"
-    const val THEME_VIEW_MODEL = "theme_view_model"
+import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+
+object Singletons {
+    private val Context.mainDataStore: DataStore<Preferences> by
+    preferencesDataStore(name = "main_preferences")
+
+    lateinit var preferencesRepository: PreferencesRepository
+
+    fun init(application: Application) {
+        preferencesRepository = PreferencesRepository(application.mainDataStore)
+    }
 }

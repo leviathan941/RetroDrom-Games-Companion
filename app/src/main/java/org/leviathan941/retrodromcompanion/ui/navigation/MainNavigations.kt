@@ -22,12 +22,20 @@ import android.util.Log
 import androidx.navigation.NavController
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 
-enum class MainDestination(val route: String) {
+sealed interface AppDestination {
+    val route: String
+}
+
+enum class MainDestination(override val route: String) : AppDestination {
     LOADING("Loading"),
     RSS_FEED("RssFeed"),
     SOMETHING_WENT_WRONG("SomethingWentWrong"),
-    SETTINGS("Settings")
-    ;
+    SETTINGS("Settings"),
+}
+
+enum class SettingsDestination(override val route: String) : AppDestination {
+    MAIN("Main"),
+    APP_THEME("AppTheme"),
 }
 
 class MainNavActions(
@@ -81,6 +89,13 @@ class MainNavActions(
     fun navigateToSettings() {
         Log.d(MAIN_VIEW_TAG, "Navigate to settings screen")
         navController.navigate(MainDestination.SETTINGS.route) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateToAppTheme() {
+        Log.d(MAIN_VIEW_TAG, "Navigate to app theme settings screen")
+        navController.navigate(SettingsDestination.APP_THEME.route) {
             launchSingleTop = true
         }
     }

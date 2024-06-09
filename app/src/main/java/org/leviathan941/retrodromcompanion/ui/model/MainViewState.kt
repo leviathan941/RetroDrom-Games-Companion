@@ -24,5 +24,4 @@ data class MainViewState(
     val loadingData: MainNavScreen.Loading = MainNavScreen.Loading(),
     val rssFeedData: Map<Int, MainNavScreen.RssFeed> = emptyMap(),
     val somethingWrongData: MainNavScreen.SomethingWrong = MainNavScreen.SomethingWrong(),
-    val settingsData: MainNavScreen.Settings = MainNavScreen.Settings(),
 )

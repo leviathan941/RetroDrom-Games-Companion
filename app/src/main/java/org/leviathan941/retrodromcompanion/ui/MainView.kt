@@ -48,9 +48,10 @@ import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
+import org.leviathan941.retrodromcompanion.ui.navigation.SettingsDestination
+import org.leviathan941.retrodromcompanion.ui.navigation.settingsNavHost
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
-import org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen
 import org.leviathan941.retrodromcompanion.ui.screen.SomethingWrongScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.utils.openUrlInCustomTab
@@ -97,6 +98,7 @@ fun MainView(
             )
         },
         drawerState = drawerState,
+        gesturesEnabled = drawerState.isOpen,
     ) {
         NavHost(
             navController = navController,
@@ -150,8 +152,13 @@ fun MainView(
                 )
             }
 
-            composable(MainDestination.SETTINGS.route) {
-                SettingsScreen()
+            navigation(
+                route = MainDestination.SETTINGS.route,
+                startDestination = SettingsDestination.MAIN.route,
+            ) {
+                settingsNavHost(
+                    navigationActions = navigationActions,
+                )
             }
         }
     }

@@ -49,9 +49,6 @@ class MainViewModel(
             somethingWrongData = MainNavScreen.SomethingWrong(
                 title = application.getString(R.string.something_wrong_screen_title),
             ),
-            settingsData = MainNavScreen.Settings(
-                title = application.getString(R.string.settings_screen_title),
-            ),
         )
     )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()

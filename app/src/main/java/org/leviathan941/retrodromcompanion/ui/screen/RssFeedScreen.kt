@@ -82,7 +82,7 @@ fun RssFeedScreen(
                             drawerState.open()
                         }
 
-                        else -> Unit
+                        else -> throw IllegalArgumentException("Unknown top bar button: $button")
                     }
                 }
             )

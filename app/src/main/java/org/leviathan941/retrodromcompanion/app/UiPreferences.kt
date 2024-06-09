@@ -16,11 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.model
+package org.leviathan941.retrodromcompanion.app
 
-object ViewModelKeys {
-    const val MAIN_VIEW_MODEL = "main_view_model"
-    const val RSS_FEED_VIEW_MODEL = "rss_feed_view_model"
-    const val SETTINGS_VIEW_MODEL = "settings_view_model"
-    const val THEME_VIEW_MODEL = "theme_view_model"
-}
+import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
+
+data class UiPreferences(
+    val appTheme: ThemeType,
+)

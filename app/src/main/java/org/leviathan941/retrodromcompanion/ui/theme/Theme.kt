@@ -34,19 +34,30 @@ import androidx.core.view.WindowCompat
 @Composable
 fun MainTheme(
     materialColorSchemes: MaterialColorSchemes,
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    useDynamicColor: Boolean = true,
+    selectedTheme: ThemeType,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        useDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+    val (colorScheme, isDarkTheme) = when {
+        selectedTheme == ThemeType.DYNAMIC && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (isSystemInDarkTheme()) {
+                dynamicDarkColorScheme(context) to true
+            } else {
+                dynamicLightColorScheme(context) to false
+            }
         }
 
-        useDarkTheme -> materialColorSchemes.darkScheme
-        else -> materialColorSchemes.lightScheme
+        selectedTheme == ThemeType.SYSTEM -> if (isSystemInDarkTheme()) {
+            materialColorSchemes.darkScheme to true
+        } else {
+            materialColorSchemes.lightScheme to false
+        }
+
+        selectedTheme == ThemeType.DARK -> materialColorSchemes.darkScheme to true
+
+        selectedTheme == ThemeType.LIGHT -> materialColorSchemes.lightScheme to false
+
+        else -> materialColorSchemes.lightScheme to false
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -54,7 +65,7 @@ fun MainTheme(
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
-                useDarkTheme
+                isDarkTheme
         }
     }
 
