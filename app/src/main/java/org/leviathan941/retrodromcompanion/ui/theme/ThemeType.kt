@@ -45,10 +45,12 @@ enum class ThemeType(val value: String) {
         }
 
         fun supportedEntries(): List<ThemeType> {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                entries
-            } else {
-                listOf(LIGHT, DARK, SYSTEM)
+            return when {
+                // Dynamic theme is supported from Android 12
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> entries
+                // System theme is supported from Android 10
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> listOf(LIGHT, DARK, SYSTEM)
+                else -> listOf(LIGHT, DARK)
             }
         }
     }

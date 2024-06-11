@@ -38,10 +38,10 @@ internal const val BASE_URL = "https://retrodrom.games/"
 
 internal const val MAIN_RSS_FEED_ID = 0
 
-internal val APP_THEME_DEFAULT = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-    ThemeType.DYNAMIC
-} else {
-    ThemeType.SYSTEM
+internal val APP_THEME_DEFAULT = when {
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> ThemeType.DYNAMIC
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> ThemeType.SYSTEM
+    else -> ThemeType.LIGHT
 }
 
 fun ZonedDateTime.toRssFeedPublicationTime(

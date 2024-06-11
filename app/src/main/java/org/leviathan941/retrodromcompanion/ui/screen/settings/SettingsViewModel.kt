@@ -23,6 +23,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.app.Singletons
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
@@ -34,9 +35,11 @@ class SettingsViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            Singletons.preferencesRepository.uiPreferences.collect { uiPreferences ->
-                _appTheme.value = uiPreferences.appTheme
-            }
+            Singletons.preferencesRepository.uiPreferences
+                .cancellable()
+                .collect { uiPreferences ->
+                    _appTheme.value = uiPreferences.appTheme
+                }
         }
     }
 
