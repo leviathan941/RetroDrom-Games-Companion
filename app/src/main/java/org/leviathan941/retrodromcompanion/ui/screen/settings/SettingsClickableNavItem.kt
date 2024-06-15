@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -44,19 +43,20 @@ import androidx.compose.ui.unit.dp
 fun SettingsClickableNavItem(
     title: String,
     subtitle: String? = null,
-    onClick: () -> Unit = {},
+    onClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(all = 16.dp)
-            .clickable { onClick() }
+            .clickable(enabled = onClick != null) { onClick?.invoke() }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
+                modifier = Modifier
+                    .padding(all = 16.dp),
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.Start,
             ) {
@@ -90,12 +90,6 @@ fun SettingsClickableNavItem(
                 contentDescription = null,
             )
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        HorizontalDivider(
-            color = MaterialTheme.colorScheme.onSurface,
-        )
     }
 }
 

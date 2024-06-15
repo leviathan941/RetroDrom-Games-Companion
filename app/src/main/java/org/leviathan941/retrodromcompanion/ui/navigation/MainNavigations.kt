@@ -36,6 +36,7 @@ enum class MainDestination(override val route: String) : AppDestination {
 enum class SettingsDestination(override val route: String) : AppDestination {
     MAIN("Main"),
     APP_THEME("AppTheme"),
+    FEEDBACK("Feedback"),
 }
 
 class MainNavActions(
@@ -93,9 +94,9 @@ class MainNavActions(
         }
     }
 
-    fun navigateToAppTheme() {
-        Log.d(MAIN_VIEW_TAG, "Navigate to app theme settings screen")
-        navController.navigate(SettingsDestination.APP_THEME.route) {
+    fun navigateToSettingsItem(destination: SettingsDestination) {
+        Log.d(MAIN_VIEW_TAG, "Navigate to $destination settings screen")
+        navController.navigate(destination.route) {
             launchSingleTop = true
         }
     }

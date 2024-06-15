@@ -72,4 +72,9 @@
     <string name="theme_name_dark">Тёмная</string>
     <string name="theme_name_system">Системная</string>
     <string name="theme_name_dynamic">Адаптивная</string>
+    <string name="settings_group_name_about">О нас</string>
+    <string name="settings_about_item_feedback_title">Обратная связь</string>
+    <string name="settings_about_item_app_version_title">Версия приложения</string>
+    <string name="settings_about_feedback_screen_application">"Если у Вас есть вопросы по поводу приложения, пожалуйста, пишите на почту "</string>
+    <string name="settings_about_feedback_screen_site">"По вопросам размещения рекламы, ошибок в публикациях и прочим вопросам: "</string>
 </resources>

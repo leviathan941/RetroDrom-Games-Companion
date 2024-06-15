@@ -35,6 +35,7 @@ internal const val MAIN_VIEW_TAG = "MainView"
 internal const val RSS_SCREEN_TAG = "RssScreen"
 
 internal const val BASE_URL = "https://retrodrom.games/"
+internal const val FEEDBACK_URL = "https://retrodrom.games/feedback/"
 
 internal const val MAIN_RSS_FEED_ID = 0
 
