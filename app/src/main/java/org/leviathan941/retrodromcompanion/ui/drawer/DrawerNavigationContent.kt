@@ -63,4 +63,6 @@ fun DrawerNavigationContent(
             }
         )
     }
+
+    HorizontalDivider()
 }

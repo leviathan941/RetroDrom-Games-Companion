@@ -38,7 +38,7 @@ fun DrawerMenuItemView(
 ) {
     NavigationDrawerItem(
         modifier = Modifier
-            .height(50.dp),
+            .height(60.dp),
         label = {
             Text(
                 text = title,
