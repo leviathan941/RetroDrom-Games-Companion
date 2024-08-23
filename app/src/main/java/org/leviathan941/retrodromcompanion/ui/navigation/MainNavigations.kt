@@ -20,23 +20,53 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 
 import android.util.Log
 import androidx.navigation.NavController
+import kotlinx.serialization.Serializable
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 
-sealed interface AppDestination {
-    val route: String
+sealed interface AppDestination
+
+sealed interface MainDestination : AppDestination {
+    @Serializable
+    data object Loading : MainDestination
+
+    @Serializable
+    data object RssFeed : MainDestination
+
+    @Serializable
+    data object SomethingWentWrong : MainDestination
+
+    @Serializable
+    data object Settings : MainDestination
 }
 
-enum class MainDestination(override val route: String) : AppDestination {
-    LOADING("Loading"),
-    RSS_FEED("RssFeed"),
-    SOMETHING_WENT_WRONG("SomethingWentWrong"),
-    SETTINGS("Settings"),
+sealed interface SettingsDestination : AppDestination {
+    @Serializable
+    data object Main : SettingsDestination
+
+    @Serializable
+    data object AppTheme : SettingsDestination
+
+    @Serializable
+    data object Feedback : SettingsDestination
 }
 
-enum class SettingsDestination(override val route: String) : AppDestination {
-    MAIN("Main"),
-    APP_THEME("AppTheme"),
-    FEEDBACK("Feedback"),
+sealed interface RssFeedDestination : AppDestination {
+    @Serializable
+    data class Feed(
+        val id: Int,
+        val title: String,
+        val channelUrl: String,
+    )
+
+    @Serializable
+    data class ItemDescription(
+        val title: String,
+        val link: String,
+        val pubDate: String,
+        val categories: List<String>,
+        val imageUrl: String?,
+        val paragraphs: List<String>,
+    ) : RssFeedDestination
 }
 
 class MainNavActions(
@@ -50,17 +80,15 @@ class MainNavActions(
         navController.navigateUp()
     }
 
-    fun navigateInsideRssFeed(screen: MainNavScreen.RssFeed) {
-        Log.d(MAIN_VIEW_TAG, "Navigate inside RSS feed to screen: $screen")
-        navController.navigate(route = "${screen.id}") {
-            launchSingleTop = true
-        }
+    fun navigateInsideRssFeed(destination: RssFeedDestination.Feed) {
+        Log.d(MAIN_VIEW_TAG, "Navigate inside RSS feed to screen: $destination")
+        navController.navigate(destination)
     }
 
     fun navigateToLoading() {
         Log.d(MAIN_VIEW_TAG, "Navigate to loading screen")
-        navController.navigate(MainDestination.LOADING.route) {
-            popUpTo(MainDestination.LOADING.route) {
+        navController.navigate(MainDestination.Loading) {
+            popUpTo(MainDestination.Loading) {
                 inclusive = true
             }
             launchSingleTop = true
@@ -69,18 +97,27 @@ class MainNavActions(
 
     fun navigateToRssFeed() {
         Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen")
-        navController.navigate(MainDestination.RSS_FEED.route) {
-            popUpTo(MainDestination.LOADING.route) {
+        navController.navigate(MainDestination.RssFeed) {
+            popUpTo(MainDestination.Loading) {
                 inclusive = true
             }
             launchSingleTop = true
         }
     }
 
+    fun navigateToRssItemDescription(
+        destination: RssFeedDestination.ItemDescription,
+    ) {
+        Log.d(MAIN_VIEW_TAG, "Navigate to RSS item description screen")
+        navController.navigate(destination) {
+            launchSingleTop = true
+        }
+    }
+
     fun navigateToSomethingWrong() {
         Log.d(MAIN_VIEW_TAG, "Navigate to something went wrong screen")
-        navController.navigate(MainDestination.SOMETHING_WENT_WRONG.route) {
-            popUpTo(MainDestination.LOADING.route) {
+        navController.navigate(MainDestination.SomethingWentWrong) {
+            popUpTo(MainDestination.Loading) {
                 inclusive = true
             }
             launchSingleTop = true
@@ -89,14 +126,14 @@ class MainNavActions(
 
     fun navigateToSettings() {
         Log.d(MAIN_VIEW_TAG, "Navigate to settings screen")
-        navController.navigate(MainDestination.SETTINGS.route) {
+        navController.navigate(MainDestination.Settings) {
             launchSingleTop = true
         }
     }
 
     fun navigateToSettingsItem(destination: SettingsDestination) {
         Log.d(MAIN_VIEW_TAG, "Navigate to $destination settings screen")
-        navController.navigate(destination.route) {
+        navController.navigate(destination) {
             launchSingleTop = true
         }
     }

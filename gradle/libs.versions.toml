@@ -12,10 +12,11 @@ googleMaterial = "1.12.0"
 gson = "2.11.0"
 kotlinPlugin = "1.9.24"
 kotlinXCoroutines = "1.8.1"
+kotlinXSerialization = "1.6.3"
 ksp = "1.9.24-1.0.20"
 ktRssReader = "2.2.2"
 lifecycle = "2.8.3"
-navigation = "2.7.7"
+navigation = "2.8.0-beta06"
 pagingCompose = "3.3.0"
 retrofit = "2.11.0"
 datastore = "1.1.1"
@@ -36,6 +37,7 @@ compose-compiler = { group = "androidx.compose.compiler", name = "compiler", ver
 google-material = { group = "com.google.android.material", name = "material", version.ref = "googleMaterial" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinXCoroutines" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinXSerialization" }
 ktrssreader-android = { group = "com.github.ivanisidrowu.KtRssReader", name = "android", version.ref = "ktRssReader" }
 ktrssreader-annotation = { group = "com.github.ivanisidrowu.KtRssReader", name = "annotation", version.ref = "ktRssReader" }
 ktrssreader-processor = { group = "com.github.ivanisidrowu.KtRssReader", name = "processor", version.ref = "ktRssReader" }
@@ -51,3 +53,4 @@ android-library = { id = "com.android.library", version.ref = "androidPlugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinPlugin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }

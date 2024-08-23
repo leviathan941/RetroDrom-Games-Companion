@@ -20,9 +20,7 @@ package org.leviathan941.retrodromcompanion.ui
 
 import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -31,16 +29,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
@@ -48,13 +41,8 @@ import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
-import org.leviathan941.retrodromcompanion.ui.navigation.SettingsDestination
-import org.leviathan941.retrodromcompanion.ui.navigation.settingsNavHost
-import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
-import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
-import org.leviathan941.retrodromcompanion.ui.screen.SomethingWrongScreen
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
-import org.leviathan941.retrodromcompanion.utils.openUrlInCustomTab
 
 @Composable
 fun MainView(
@@ -75,7 +63,6 @@ fun MainView(
     val uiState by mainViewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
-    val clipboardManager = LocalClipboardManager.current
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
 
     ModalNavigationDrawer(
@@ -100,71 +87,17 @@ fun MainView(
         drawerState = drawerState,
         gesturesEnabled = drawerState.isOpen,
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = MainDestination.LOADING.route,
-        ) {
-            composable(MainDestination.LOADING.route) {
-                LoadingScreen(
-                    loadingData = uiState.loadingData,
-                    modifier = Modifier.fillMaxSize(),
-                    onErrorLongPress = { message ->
-                        clipboardManager.setText(message)
-                    },
-                    onRetryClick = {
-                        mainViewModel.fetchRssData()
-                    }
-                )
-            }
-
-            navigation(
-                route = MainDestination.RSS_FEED.route,
-                startDestination = "$MAIN_RSS_FEED_ID",
-            ) {
-                uiState.rssFeedData.forEach { (id, screen) ->
-                    composable(
-                        route = "$id",
-                    ) {
-                        val toolbarColorInt = MaterialTheme.colorScheme.primaryContainer
-                            .toArgb()
-                        RssFeedScreen(
-                            screen = screen,
-                            drawerState = drawerState,
-                            urlOpener = { url ->
-                                openUrlInCustomTab(
-                                    activity,
-                                    url,
-                                    toolbarColor = toolbarColorInt,
-                                )
-                            }
-                        )
-                    }
-                }
-            }
-
-            composable(MainDestination.SOMETHING_WENT_WRONG.route) {
-                SomethingWrongScreen(
-                    data = uiState.somethingWrongData,
-                    onRestartButtonClick = {
-                        mainViewModel.fetchRssData()
-                        navigationActions.navigateToLoading()
-                    }
-                )
-            }
-
-            navigation(
-                route = MainDestination.SETTINGS.route,
-                startDestination = SettingsDestination.MAIN.route,
-            ) {
-                settingsNavHost(
-                    navigationActions = navigationActions,
-                )
-            }
-        }
+        MainNavHost(
+            navHostController = navController,
+            navigationActions = navigationActions,
+            uiState = uiState,
+            mainViewModel = mainViewModel,
+            drawerState = drawerState,
+        )
     }
 
     LaunchedEffect(key1 = uiState) {
-        if (navController.currentDestination?.route == MainDestination.LOADING.route &&
+        if (navController.currentDestination?.hasRoute<MainDestination.Loading>() == true &&
             uiState.loadingData.state is LoadingState.Success
         ) {
             Log.d(MAIN_VIEW_TAG, "Navigate after success loading")

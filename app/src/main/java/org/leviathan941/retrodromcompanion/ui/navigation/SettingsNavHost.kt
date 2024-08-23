@@ -54,7 +54,7 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toString
 fun NavGraphBuilder.settingsNavHost(
     navigationActions: MainNavActions,
 ) {
-    composable(SettingsDestination.MAIN.route) {
+    composable<SettingsDestination.Main> {
         val screenViewModel = viewModel<SettingsViewModel>(
             key = ViewModelKeys.SETTINGS_VIEW_MODEL,
         )
@@ -72,7 +72,7 @@ fun NavGraphBuilder.settingsNavHost(
                     title = stringResource(id = R.string.settings_interface_item_theme_title),
                     subtitle = stringResource(id = appTheme.toStringResource())
                 ) {
-                    navigationActions.navigateToSettingsItem(SettingsDestination.APP_THEME)
+                    navigationActions.navigateToSettingsItem(SettingsDestination.AppTheme)
                 }
             }
 
@@ -82,7 +82,7 @@ fun NavGraphBuilder.settingsNavHost(
                 SettingsClickableNavItem(
                     title = stringResource(id = R.string.settings_about_item_feedback_title)
                 ) {
-                    navigationActions.navigateToSettingsItem(SettingsDestination.FEEDBACK)
+                    navigationActions.navigateToSettingsItem(SettingsDestination.Feedback)
                 }
 
                 HorizontalDivider()
@@ -95,7 +95,7 @@ fun NavGraphBuilder.settingsNavHost(
         }
     }
 
-    composable(SettingsDestination.APP_THEME.route) {
+    composable<SettingsDestination.AppTheme> {
         val screenViewModel = viewModel<SettingsViewModel>(
             key = ViewModelKeys.SETTINGS_VIEW_MODEL,
         )
@@ -122,7 +122,7 @@ fun NavGraphBuilder.settingsNavHost(
         }
     }
 
-    composable(SettingsDestination.FEEDBACK.route) {
+    composable<SettingsDestination.Feedback> {
         val clipboardManager = LocalClipboardManager.current
         SettingsScreen(
             data = MainNavScreen.Settings(

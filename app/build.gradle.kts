@@ -21,6 +21,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -108,6 +109,8 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.datastore.preferences)
+
+    implementation(libs.kotlinx.serialization.json)
 
     debugImplementation(libs.compose.ui.tooling)
 }

@@ -36,5 +36,6 @@ fun openUrlInCustomTab(
                 .setToolbarColor(toolbarColor)
                 .build()
         )
+        setUrlBarHidingEnabled(true)
     }.build().launchUrl(context, Uri.parse(url))
 }

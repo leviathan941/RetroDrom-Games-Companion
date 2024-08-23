@@ -22,12 +22,15 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.ui.isRouteActive
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
+import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
+import org.leviathan941.retrodromcompanion.ui.toDestination
 
 @Composable
 fun DrawerNavigationContent(
@@ -41,7 +44,7 @@ fun DrawerNavigationContent(
 
     SettingsDrawerNavView(
         isSelected = {
-            navBackStackEntry?.isRouteActive(MainDestination.SETTINGS.route) == true
+            navBackStackEntry?.isRouteActive<MainDestination.Settings>() == true
         },
         onClick = {
             navigationActions.navigateToSettings()
@@ -55,10 +58,13 @@ fun DrawerNavigationContent(
         RssFeedDrawerNavView(
             rssScreens = rssScreens.values.toList(),
             isSelected = { screen ->
-                navBackStackEntry?.isRouteActive(screen.id.toString()) == true
+                navBackStackEntry?.run {
+                    isRouteActive<RssFeedDestination.Feed>() &&
+                            toRoute<RssFeedDestination.Feed>() == screen.toDestination()
+                } == true
             },
             onClick = { screen ->
-                navigationActions.navigateInsideRssFeed(screen)
+                navigationActions.navigateInsideRssFeed(screen.toDestination())
                 closeDrawer()
             }
         )

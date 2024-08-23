@@ -33,4 +33,5 @@ data class RssPublicationDate(
 data class RssDescription(
     val imageUrl: String?,
     val paragraphs: List<String>,
+    val html: String,
 )

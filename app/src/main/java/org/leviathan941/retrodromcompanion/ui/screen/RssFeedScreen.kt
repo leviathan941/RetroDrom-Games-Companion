@@ -42,6 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
@@ -60,7 +61,7 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 fun RssFeedScreen(
     screen: MainNavScreen.RssFeed,
     drawerState: DrawerState,
-    urlOpener: (url: String) -> Unit,
+    itemClicked: (item: RssChannelItem) -> Unit,
 ) {
     val screenViewModel: RssFeedViewModel = viewModel<RssFeedViewModel>(
         key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
@@ -103,7 +104,7 @@ fun RssFeedScreen(
                     val rssFeedItem = rssChannelItems[index]!!
                     RssFeedItem(
                         modifier = Modifier.clickable {
-                            urlOpener(rssFeedItem.link)
+                            itemClicked(rssFeedItem)
                         },
                         title = rssFeedItem.title,
                         categories = rssFeedItem.categories,

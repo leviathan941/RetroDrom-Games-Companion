@@ -22,8 +22,11 @@ import android.content.res.Resources
 import android.os.Build
 import androidx.annotation.PluralsRes
 import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavDestination.Companion.hasRoute
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -104,7 +107,23 @@ private fun Resources.getTimeQuantityString(
     getQuantityString(id, quantity, quantity)
 }
 
-fun NavBackStackEntry.isRouteActive(route: String): Boolean =
-    destination.hierarchy.any {
-        it.route == route
+inline fun <reified T : Any> NavBackStackEntry.isRouteActive(): Boolean =
+    destination.hasRoute<T>()
+
+fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? =
+    description?.let { desc ->
+        RssFeedDestination.ItemDescription(
+            title = title,
+            link = link,
+            pubDate = pubDate.toString(),
+            categories = categories,
+            imageUrl = desc.imageUrl,
+            paragraphs = desc.paragraphs,
+        )
     }
+
+fun MainNavScreen.RssFeed.toDestination(): RssFeedDestination.Feed =
+    RssFeedDestination.Feed(id, title, channelUrl)
+
+fun RssFeedDestination.Feed.toScreen(): MainNavScreen.RssFeed =
+    MainNavScreen.RssFeed(id, title, channelUrl)

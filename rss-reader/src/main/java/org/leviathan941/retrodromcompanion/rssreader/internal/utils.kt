@@ -46,6 +46,7 @@ private fun parseRssDescription(description: String): RssDescription {
         RssDescription(
             imageUrl = it.images.firstOrNull(),
             paragraphs = it.paragraphs,
+            html = description,
         )
     }
 }
