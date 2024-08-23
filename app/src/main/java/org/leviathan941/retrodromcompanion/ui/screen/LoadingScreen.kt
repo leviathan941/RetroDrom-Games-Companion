@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
-import org.leviathan941.retrodromcompanion.ui.theme.RefreshClickableTextColor
+import org.leviathan941.retrodromcompanion.ui.theme.ClickableTextColor
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @Composable
@@ -146,7 +146,7 @@ private fun FailureScreen(
                 id = R.string.loading_screen_failure_retry_button
             ).uppercase(),
             spanStyle = SpanStyle(
-                color = RefreshClickableTextColor,
+                color = ClickableTextColor,
             ),
         ),
         style = MaterialTheme.typography.titleMedium,

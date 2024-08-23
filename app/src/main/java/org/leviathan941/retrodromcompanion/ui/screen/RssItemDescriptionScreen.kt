@@ -18,6 +18,8 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -81,14 +83,36 @@ fun RssItemDescriptionScreen(
             )
         }
     ) { paddings ->
-        Column(
+        Box(
             modifier = Modifier.padding(paddings),
         ) {
-            itemDescription.paragraphs.forEach { paragraph ->
+            Column(
+                modifier = Modifier.padding(all = 10.dp),
+            ) {
                 Text(
-                    modifier = Modifier.padding(vertical = 10.dp),
-                    text = paragraph,
+                    modifier = Modifier
+                        .padding(
+                            bottom = 10.dp
+                        ),
+                    text = itemDescription.title,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+
+                val actionParagraph = itemDescription.paragraphs.last()
+                itemDescription.paragraphs.dropLast(1).forEach { paragraph ->
+                    Text(
+                        modifier = Modifier.padding(vertical = 5.dp),
+                        text = paragraph,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+                Text(
+                    modifier = Modifier
+                        .padding(top = 15.dp)
+                        .clickable { openUrl(itemDescription.link) },
+                    text = actionParagraph,
                     style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary,
                 )
             }
         }

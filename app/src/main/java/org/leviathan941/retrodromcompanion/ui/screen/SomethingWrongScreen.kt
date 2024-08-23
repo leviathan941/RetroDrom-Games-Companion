@@ -38,7 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
-import org.leviathan941.retrodromcompanion.ui.theme.RefreshClickableTextColor
+import org.leviathan941.retrodromcompanion.ui.theme.ClickableTextColor
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @Composable
@@ -77,7 +77,7 @@ fun SomethingWrongScreen(
                         id = R.string.something_wrong_screen_retry_button
                     ).uppercase(),
                     spanStyle = SpanStyle(
-                        color = RefreshClickableTextColor,
+                        color = ClickableTextColor,
                     ),
                 ),
                 style = MaterialTheme.typography.titleMedium,

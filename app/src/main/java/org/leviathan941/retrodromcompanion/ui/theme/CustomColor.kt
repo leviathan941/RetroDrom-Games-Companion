@@ -23,4 +23,4 @@ import androidx.compose.ui.graphics.Color
 val DrawerLogoGradientStartColor = Color(0xFF28073E)
 val DrawerLogoGradientEndColor = Color(0xFF550A69)
 
-val RefreshClickableTextColor = Color(0xFF35A3DB)
+val ClickableTextColor = Color(0xFF35A3DB)
