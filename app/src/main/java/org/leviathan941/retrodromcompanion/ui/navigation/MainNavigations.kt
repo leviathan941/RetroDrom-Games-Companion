@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.navigation
 
 import android.util.Log
+import androidx.annotation.Keep
 import androidx.navigation.NavController
 import kotlinx.serialization.Serializable
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
@@ -26,31 +27,39 @@ import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 sealed interface AppDestination
 
 sealed interface MainDestination : AppDestination {
+    @Keep
     @Serializable
     data object Loading : MainDestination
 
+    @Keep
     @Serializable
     data object RssFeed : MainDestination
 
+    @Keep
     @Serializable
     data object SomethingWentWrong : MainDestination
 
+    @Keep
     @Serializable
     data object Settings : MainDestination
 }
 
 sealed interface SettingsDestination : AppDestination {
+    @Keep
     @Serializable
     data object Main : SettingsDestination
 
+    @Keep
     @Serializable
     data object AppTheme : SettingsDestination
 
+    @Keep
     @Serializable
     data object Feedback : SettingsDestination
 }
 
 sealed interface RssFeedDestination : AppDestination {
+    @Keep
     @Serializable
     data class Feed(
         val id: Int,
@@ -58,6 +67,7 @@ sealed interface RssFeedDestination : AppDestination {
         val channelUrl: String,
     )
 
+    @Keep
     @Serializable
     data class ItemDescription(
         val title: String,
