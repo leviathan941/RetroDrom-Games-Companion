@@ -40,21 +40,43 @@ class RssFeedItemsSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RssChannelItem> {
+        return loadInternal(params, useCache = true)
+    }
+
+    private suspend fun loadInternal(
+        params: LoadParams<Int>,
+        useCache: Boolean,
+    ): LoadResult<Int, RssChannelItem> {
         val pageNumber = params.key ?: PAGING_INITIAL_PAGE_NUMBER
         return try {
-            Log.d(RSS_READER_TAG, "Loading RSS feed items for page $pageNumber")
-            val channelItems = RssFetcher.fetchFeed(
-                channelUrl,
-                pageNumber,
-                useCache = true,
-            ).items ?: emptyList()
+            Log.d(RSS_READER_TAG, "Loading RSS feed items for page $pageNumber, useCache=$useCache")
+            val channelItems = fetchFeed(pageNumber, useCache)
             LoadResult.Page(
                 data = channelItems.mapNotNull { it.toPublic() },
                 prevKey = pageNumber.takeIf { it > 1 }?.let { it - 1 },
                 nextKey = pageNumber.takeUnless { channelItems.isEmpty() }?.let { it + 1 },
             )
         } catch (e: Exception) {
-            LoadResult.Error(e)
+            Log.e(
+                RSS_READER_TAG,
+                "Failed to load RSS feed items for page $pageNumber, useCache=$useCache", e
+            )
+            if (useCache) {
+                loadInternal(params, useCache = false)
+            } else {
+                LoadResult.Error(e)
+            }
         }
+    }
+
+    private suspend fun fetchFeed(
+        pageNumber: Int,
+        useCache: Boolean,
+    ): List<ParsedRssItem> {
+        return RssFetcher.fetchFeed(
+            channelUrl,
+            pageNumber,
+            useCache,
+        ).items ?: emptyList()
     }
 }
