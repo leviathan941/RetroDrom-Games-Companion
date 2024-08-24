@@ -115,7 +115,7 @@ fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? =
         RssFeedDestination.ItemDescription(
             title = title,
             link = link,
-            pubDate = pubDate.toString(),
+            pubDate = pubDate.value,
             categories = categories,
             imageUrl = desc.imageUrl,
             paragraphs = desc.paragraphs,
