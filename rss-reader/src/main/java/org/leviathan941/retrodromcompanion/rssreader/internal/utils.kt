@@ -38,6 +38,7 @@ internal fun ParsedRssItem.toPublic(): RssChannelItem? =
             pubDate = RssPublicationDate(pubDate),
             categories = categories ?: emptyList(),
             description = parseRssDescription(description),
+            creator = creator,
         )
     }
 

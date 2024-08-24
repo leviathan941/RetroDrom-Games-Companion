@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -52,15 +53,27 @@ fun RssFeedItemDescription(
             ),
         horizontalAlignment = Alignment.Start,
     ) {
+        val nonImportantColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+
         Text(
             modifier = Modifier
-                .padding(vertical = 10.dp),
+                .padding(top = 10.dp),
             text = itemDescription.pubDate
                 .asDateTime()
                 .toRssFeedPublicationTime(LocalContext.current.resources),
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+            color = nonImportantColor,
             style = MaterialTheme.typography.labelMedium,
         )
+
+        itemDescription.creator?.let { creator ->
+            Text(
+                modifier = Modifier
+                    .padding(bottom = 10.dp),
+                text = stringResource(id = R.string.rss_feed_item_description_from_author, creator),
+                color = nonImportantColor,
+                style = MaterialTheme.typography.labelMedium,
+            )
+        }
 
         Text(
             modifier = Modifier
@@ -134,6 +147,7 @@ fun RssFeedItemDescriptionPreview() {
                         "discovered the undoubtable source.",
                 "Continue reading...",
             ),
+            creator = "Alex Mercer",
         ),
         openUrl = {},
     )
