@@ -18,7 +18,7 @@ package org.leviathan941.retrodromcompanion
 
 object Application {
     @Suppress("MemberVisibilityCanBePrivate")
-    const val BASE_NAME = "retrodromcompanion"
-    const val ID = "org.leviathan941.$BASE_NAME"
+    const val BASE_NAME = "retrodromgames"
+    const val ID = "org.segowski.$BASE_NAME"
     val version = AppVersion()
 }
