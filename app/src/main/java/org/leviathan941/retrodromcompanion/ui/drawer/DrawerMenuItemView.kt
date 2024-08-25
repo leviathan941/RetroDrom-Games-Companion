@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.drawer
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
@@ -34,6 +35,7 @@ fun DrawerMenuItemView(
     icon: @Composable (() -> Unit)? = null,
     badge: @Composable (() -> Unit)? = null,
     isSelected: Boolean = false,
+    nestingLevel: Int = 0,
     onClick: () -> Unit = {},
 ) {
     NavigationDrawerItem(
@@ -41,6 +43,8 @@ fun DrawerMenuItemView(
             .height(60.dp),
         label = {
             Text(
+                modifier = Modifier
+                    .padding(start = 10.dp * nestingLevel),
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
             )

@@ -44,6 +44,7 @@ fun RssFeedDrawerNavView(
             DrawerMenuItemView(
                 title = rssScreen.title,
                 isSelected = isSelected(rssScreen),
+                nestingLevel = 1,
                 onClick = { onClick(rssScreen) },
             )
         }
