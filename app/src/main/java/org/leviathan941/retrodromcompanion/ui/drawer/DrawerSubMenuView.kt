@@ -38,7 +38,7 @@ import org.leviathan941.retrodromcompanion.R
 fun DrawerSubMenuView(
     title: String,
     icon: @Composable (() -> Unit)? = null,
-    isExpandedInitially: Boolean = false,
+    isExpandedInitially: Boolean = true,
     subMenuContent: @Composable ColumnScope.() -> Unit,
 ) {
     var isExpanded by remember { mutableStateOf(isExpandedInitially) }
