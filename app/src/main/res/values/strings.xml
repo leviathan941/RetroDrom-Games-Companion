@@ -64,4 +64,5 @@
     <string name="my_email" translatable="false">pslevel4@gmail.com</string>
     <string name="rss_feed_item_description_screen_title">News</string>
     <string name="rss_feed_item_description_from_author">from %s</string>
+    <string name="push_notification_news_channel_name">News</string>
 </resources>
