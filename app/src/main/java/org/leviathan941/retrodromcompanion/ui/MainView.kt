@@ -29,12 +29,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
@@ -42,6 +44,8 @@ import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavPredefinedDestinations
+import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 @Composable
@@ -49,8 +53,18 @@ fun MainView(
     activity: ComponentActivity,
 ) {
     val navController = rememberNavController()
+    val predefinedDestinations = MainNavPredefinedDestinations(
+        rssFeedStart = RssFeedDestination.Feed(
+            id = MAIN_RSS_FEED_ID,
+            title = stringResource(id = R.string.main_rss_feed_title),
+            channelUrl = BASE_URL,
+        ),
+    )
     val navigationActions = remember(navController) {
-        MainNavActions(navController)
+        MainNavActions(
+            navController,
+            predefinedDestinations,
+        )
     }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -90,6 +104,7 @@ fun MainView(
         MainNavHost(
             navHostController = navController,
             navigationActions = navigationActions,
+            predefinedDestinations = predefinedDestinations,
             uiState = uiState,
             mainViewModel = mainViewModel,
             drawerState = drawerState,

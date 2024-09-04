@@ -23,14 +23,10 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.ui.BASE_URL
-import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
@@ -40,16 +36,12 @@ import org.leviathan941.retrodromcompanion.ui.screen.SomethingWrongScreen
 fun MainNavHost(
     navHostController: NavHostController,
     navigationActions: MainNavActions,
+    predefinedDestinations: MainNavPredefinedDestinations,
     uiState: MainViewState,
     mainViewModel: MainViewModel,
     drawerState: DrawerState,
 ) {
     val clipboardManager = LocalClipboardManager.current
-    val mainRssFeed = RssFeedDestination.Feed(
-        id = MAIN_RSS_FEED_ID,
-        title = stringResource(id = R.string.main_rss_feed_title),
-        channelUrl = BASE_URL,
-    )
 
     NavHost(
         navController = navHostController,
@@ -69,7 +61,7 @@ fun MainNavHost(
         }
 
         navigation<MainDestination.RssFeed>(
-            startDestination = mainRssFeed,
+            startDestination = predefinedDestinations.rssFeedStart,
         ) {
             rssFeedNavHost(
                 navigationActions = navigationActions,

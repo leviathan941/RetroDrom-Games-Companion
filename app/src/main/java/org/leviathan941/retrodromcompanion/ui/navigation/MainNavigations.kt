@@ -65,7 +65,7 @@ sealed interface RssFeedDestination : AppDestination {
         val id: Int,
         val title: String,
         val channelUrl: String,
-    )
+    ) : RssFeedDestination
 
     @Keep
     @Serializable
@@ -80,8 +80,13 @@ sealed interface RssFeedDestination : AppDestination {
     ) : RssFeedDestination
 }
 
+data class MainNavPredefinedDestinations(
+    val rssFeedStart: RssFeedDestination,
+)
+
 class MainNavActions(
     private val navController: NavController,
+    private val predefinedDestinations: MainNavPredefinedDestinations,
 ) {
     fun navigateBack() {
         navController.popBackStack()
@@ -108,7 +113,7 @@ class MainNavActions(
 
     fun navigateToRssFeed() {
         Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen")
-        navController.navigate(MainDestination.RssFeed) {
+        navController.navigate(predefinedDestinations.rssFeedStart) {
             popUpTo(MainDestination.Loading) {
                 inclusive = true
             }
