@@ -76,6 +76,7 @@ sealed interface RssFeedDestination : AppDestination {
         val categories: List<String>,
         val imageUrl: String?,
         val paragraphs: List<String>,
+        val html: String,
         val creator: String?,
     ) : RssFeedDestination
 }

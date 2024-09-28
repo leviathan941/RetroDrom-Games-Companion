@@ -119,6 +119,7 @@ fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? =
             categories = categories,
             imageUrl = desc.imageUrl,
             paragraphs = desc.paragraphs,
+            html = desc.html,
             creator = creator,
         )
     }
