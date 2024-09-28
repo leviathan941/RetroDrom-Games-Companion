@@ -20,6 +20,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -70,9 +71,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.compose.compiler.get().version
-    }
     packaging {
         resources {
             excludes += setOf(
@@ -97,7 +95,6 @@ dependencies {
 
     implementation(libs.google.material)
 
-    implementation(libs.compose.compiler)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
