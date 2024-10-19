@@ -18,6 +18,7 @@
 
 package org.leviathan941.compose.htmltext
 
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,6 +37,7 @@ fun HtmlText(
     html: String,
     linkColor: Color,
     modifier: Modifier = Modifier,
+    textColor: Color = LocalContentColor.current,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     placeholder: Painter? = null,
     error: Painter? = null,
@@ -50,6 +52,7 @@ fun HtmlText(
 
     AnnotatedText(
         text = text,
+        color = textColor,
         modifier = modifier,
         onURLClick = onLinkClick,
         // Workaround for https://issuetracker.google.com/issues/297002108
