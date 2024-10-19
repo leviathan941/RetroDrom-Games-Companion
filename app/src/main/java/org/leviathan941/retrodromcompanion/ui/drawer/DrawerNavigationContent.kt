@@ -64,7 +64,7 @@ fun DrawerNavigationContent(
                 } == true
             },
             onClick = { screen ->
-                navigationActions.navigateInsideRssFeed(screen.toDestination())
+                navigationActions.navigateToRssFeed(screen.toDestination())
                 closeDrawer()
             }
         )

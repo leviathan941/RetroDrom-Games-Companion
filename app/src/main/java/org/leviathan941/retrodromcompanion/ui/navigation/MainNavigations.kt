@@ -21,6 +21,8 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import android.util.Log
 import androidx.annotation.Keep
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 
@@ -82,7 +84,7 @@ sealed interface RssFeedDestination : AppDestination {
 }
 
 data class MainNavPredefinedDestinations(
-    val rssFeedStart: RssFeedDestination,
+    val rssFeedStart: RssFeedDestination.Feed,
 )
 
 class MainNavActions(
@@ -91,15 +93,6 @@ class MainNavActions(
 ) {
     fun navigateBack() {
         navController.popBackStack()
-    }
-
-    fun navigateUp() {
-        navController.navigateUp()
-    }
-
-    fun navigateInsideRssFeed(destination: RssFeedDestination.Feed) {
-        Log.d(MAIN_VIEW_TAG, "Navigate inside RSS feed to screen: $destination")
-        navController.navigate(destination)
     }
 
     fun navigateToLoading() {
@@ -112,13 +105,24 @@ class MainNavActions(
         }
     }
 
-    fun navigateToRssFeed() {
-        Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen")
-        navController.navigate(predefinedDestinations.rssFeedStart) {
-            popUpTo(MainDestination.Loading) {
-                inclusive = true
+    fun navigateToRssFeed(
+        destination: RssFeedDestination.Feed = predefinedDestinations.rssFeedStart
+    ) {
+        Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen: $destination")
+        val isInsideRssFeed = navController.currentDestination
+            ?.hasRoute<RssFeedDestination.Feed>() == true
+        val toSameFeed = navController.currentBackStackEntry?.takeIf { isInsideRssFeed }
+            ?.toRoute<RssFeedDestination.Feed>() == destination
+        if (toSameFeed) {
+            Log.d(MAIN_VIEW_TAG, "Already on the same RSS feed screen")
+            return
+        }
+        navController.navigate(destination) {
+            if (!isInsideRssFeed) {
+                popUpTo(MainDestination.Loading) {
+                    inclusive = true
+                }
             }
-            launchSingleTop = true
         }
     }
 
