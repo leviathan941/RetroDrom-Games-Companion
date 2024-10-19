@@ -44,7 +44,9 @@ android {
 
 dependencies {
     implementation(libs.androidx.appcompat)
+    implementation(libs.annotatedtext)
     implementation(libs.compose.material3)
     implementation(libs.compose.ui)
     implementation(libs.coil.compose)
+    implementation(libs.ksoup.html)
 }

@@ -18,93 +18,49 @@
 
 package org.leviathan941.compose.htmltext
 
-import android.text.style.URLSpan
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
-
-private const val URL_TAG = "URL"
+import com.aghajari.compose.text.AnnotatedText
+import com.aghajari.compose.text.fromHtml
 
 @Composable
 fun HtmlText(
     html: String,
     linkColor: Color,
     modifier: Modifier = Modifier,
-    commonTextStyle: TextStyle? = null,
+    textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
+    placeholder: Painter? = null,
+    error: Painter? = null,
+    defaultWidth: TextUnit = 200.sp,
+    defaultHeight: TextUnit = 234.sp,
     onLinkClick: (String) -> Unit = {},
 ) {
-    val annotatedText = remember(html) {
-        val spanned = HtmlCompat.fromHtml(
-            html,
-            HtmlCompat.FROM_HTML_MODE_LEGACY,
-        )
-        buildAnnotatedString {
-            val spanStyle = commonTextStyle?.toSpanStyle()
-
-            spanStyle?.let {
-                addStyle(
-                    style = it,
-                    start = 0,
-                    end = spanned.length,
-                )
-            }
-
-            append(spanned.toString())
-
-            spanned.getSpans(0, spanned.length, URLSpan::class.java).forEach { span ->
-                val start = spanned.getSpanStart(span)
-                val end = spanned.getSpanEnd(span)
-                addUrlSpanLink(
-                    span = span,
-                    start = start,
-                    end = end,
-                    spanStyle = spanStyle,
-                    linkColor = linkColor,
-                    onLinkClick = onLinkClick,
-                )
-            }
-        }
-    }
-
-    Text(
-        text = annotatedText,
-        modifier = modifier,
+    val text = html.fromHtml(
+        flags = HtmlCompat.FROM_HTML_MODE_LEGACY,
+        linkColor = linkColor,
     )
-}
 
-private fun AnnotatedString.Builder.addUrlSpanLink(
-    span: URLSpan,
-    start: Int,
-    end: Int,
-    spanStyle: SpanStyle?,
-    linkColor: Color,
-    onLinkClick: (String) -> Unit,
-) {
-    addLink(
-        clickable = LinkAnnotation.Clickable(
-            tag = URL_TAG,
-            styles = spanStyle?.let {
-                TextLinkStyles(
-                    it.copy(
-                        color = linkColor,
-                        textDecoration = TextDecoration.Underline,
-                    )
-                )
-            },
-        ) {
-            onLinkClick(span.url)
-        },
-        start = start,
-        end = end,
+    AnnotatedText(
+        text = text,
+        modifier = modifier,
+        onURLClick = onLinkClick,
+        // Workaround for https://issuetracker.google.com/issues/297002108
+        style = textStyle.copy(lineHeight = TextUnit.Unspecified),
+        inlineContent = text.coilInlineContent(
+            localDensity = LocalDensity.current,
+            imgTags = extractImgTags(html),
+            defaultWidth = defaultWidth,
+            defaultHeight = defaultHeight,
+            placeholder = placeholder,
+            error = error,
+        ),
     )
 }

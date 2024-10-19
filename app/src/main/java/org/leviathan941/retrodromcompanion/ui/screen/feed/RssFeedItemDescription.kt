@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.screen.feed
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -27,13 +28,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import org.leviathan941.compose.htmltext.HtmlText
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
@@ -45,9 +46,11 @@ fun RssFeedItemDescription(
     itemDescription: RssFeedDestination.ItemDescription,
     openUrl: (String) -> Unit,
 ) {
+    val horizontalPaddingDp = 10.dp
     Column(
         modifier = Modifier
-            .padding(horizontal = 10.dp)
+            .padding(horizontal = horizontalPaddingDp)
+            .fillMaxSize()
             .verticalScroll(
                 state = rememberScrollState(),
             ),
@@ -82,27 +85,24 @@ fun RssFeedItemDescription(
             style = MaterialTheme.typography.titleLarge,
         )
 
-        itemDescription.imageUrl?.let { imageUrl ->
-            AsyncImage(
-                modifier = Modifier
-                    .padding(bottom = 20.dp),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl)
-                    .build(),
-                contentDescription = null,
-                error = painterResource(
-                    id = R.drawable.google_material_broken_image
-                ),
-            )
+        val defaultImageWidth = with(LocalConfiguration.current) {
+            with(LocalDensity.current) {
+                (screenWidthDp.dp - horizontalPaddingDp * 2).toSp()
+            }
         }
-
+        val defaultImageHeight = defaultImageWidth * 0.75f
         HtmlText(
             html = itemDescription.html,
-            commonTextStyle = MaterialTheme.typography.bodyLarge,
+            textStyle = MaterialTheme.typography.bodyLarge,
             linkColor = MaterialTheme.colorScheme.primary,
-        ) { url ->
-            openUrl(url)
-        }
+            placeholder = painterResource(R.drawable.google_material_image_placeholder),
+            error = painterResource(R.drawable.google_material_broken_image),
+            defaultWidth = defaultImageWidth,
+            defaultHeight = defaultImageHeight,
+            onLinkClick = { url ->
+                openUrl(url)
+            }
+        )
     }
 }
 

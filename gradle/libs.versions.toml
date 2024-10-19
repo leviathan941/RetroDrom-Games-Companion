@@ -1,5 +1,6 @@
 [versions]
 androidPlugin = "8.6.1"
+annotatedText = "1.0.3"
 appcompat = "1.7.0"
 browser = "1.8.0"
 coil = "2.6.0"
@@ -12,6 +13,7 @@ gson = "2.11.0"
 kotlinPlugin = "2.0.20"
 kotlinXCoroutines = "1.9.0"
 kotlinXSerialization = "1.7.3"
+ksoup = "0.4.0"
 ksp = "2.0.20-1.0.25"
 ktRssReader = "2.2.2"
 lifecycle = "2.8.6"
@@ -27,6 +29,7 @@ androidx-browser = { group = "androidx.browser", name = "browser", version.ref =
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+annotatedtext = { group = "io.github.aghajari", name = "AnnotatedText", version.ref = "annotatedText" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
@@ -36,6 +39,7 @@ google-material = { group = "com.google.android.material", name = "material", ve
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinXCoroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinXSerialization" }
+ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "ksoup" }
 ktrssreader-android = { group = "com.github.ivanisidrowu.KtRssReader", name = "android", version.ref = "ktRssReader" }
 ktrssreader-annotation = { group = "com.github.ivanisidrowu.KtRssReader", name = "annotation", version.ref = "ktRssReader" }
 ktrssreader-processor = { group = "com.github.ivanisidrowu.KtRssReader", name = "processor", version.ref = "ktRssReader" }
