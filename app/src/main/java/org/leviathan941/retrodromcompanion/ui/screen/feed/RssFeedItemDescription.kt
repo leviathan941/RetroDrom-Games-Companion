@@ -19,7 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.screen.feed
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -50,7 +50,7 @@ fun RssFeedItemDescription(
     Column(
         modifier = Modifier
             .padding(horizontal = horizontalPaddingDp)
-            .fillMaxSize()
+            .fillMaxHeight()
             .verticalScroll(
                 state = rememberScrollState(),
             ),

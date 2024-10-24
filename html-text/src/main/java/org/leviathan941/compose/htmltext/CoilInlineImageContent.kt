@@ -22,8 +22,9 @@ import android.os.Build
 import android.text.style.DynamicDrawableSpan
 import android.text.style.ImageSpan
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.Placeholder
@@ -107,7 +108,7 @@ private fun coilImageInlineContentCreator(
         AsyncImage(
             model = span.source,
             contentDescription = desc,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.wrapContentSize(align = Alignment.TopStart),
             placeholder = placeholder,
             error = error,
         )
