@@ -63,9 +63,10 @@ fun MainTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            @Suppress("DEPRECATION")
+            window.statusBarColor = colorScheme.primaryContainer.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
-                isDarkTheme
+                !isDarkTheme
         }
     }
 
