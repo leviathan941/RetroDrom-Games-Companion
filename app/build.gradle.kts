@@ -83,6 +83,7 @@ android {
 
 dependencies {
     implementation(project(":html-text"))
+    implementation(project(":html-text:imagecontent"))
     implementation(project(":network"))
     implementation(project(":rss-reader"))
 

@@ -16,19 +16,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.compose.htmltext
+package org.leviathan941.compose.htmltext.internal
 
+import androidx.compose.foundation.text.InlineTextContent
+import com.aghajari.compose.text.ContentAnnotatedString
 import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlHandler
 import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlParser
+import org.leviathan941.compose.htmltext.api.HtmlTag
+import org.leviathan941.compose.htmltext.api.InlineContentCreator
 
-internal data class ImgTag(
-    val src: String,
-    val width: Int,
-    val height: Int,
-)
+internal fun ContentAnnotatedString.createInlineContent(
+    creators: List<InlineContentCreator>,
+    tags: List<HtmlTag>,
+): Map<String, InlineTextContent> {
+    return inlineContents.mapNotNull { content ->
+        creators.firstNotNullOfOrNull { mapper ->
+            mapper.create(
+                id = content.id,
+                span = content.span,
+                start = content.start,
+                end = content.end,
+                tags = tags,
+            )
+        }?.let {
+            content.id to it
+        }
+    }.toMap()
+}
 
-internal fun extractImgTags(html: String): Map<String, ImgTag> {
-    return buildMap {
+internal fun extractTags(html: String): List<HtmlTag> {
+    return buildList {
         KsoupHtmlParser(
             handler = object : KsoupHtmlHandler {
                 override fun onOpenTag(
@@ -36,12 +53,7 @@ internal fun extractImgTags(html: String): Map<String, ImgTag> {
                     attributes: Map<String, String>,
                     isImplied: Boolean
                 ) {
-                    if (name == "img") {
-                        val src = attributes["src"] ?: return
-                        val width = attributes["width"]?.toIntOrNull() ?: return
-                        val height = attributes["height"]?.toIntOrNull() ?: return
-                        put(src, ImgTag(src, width, height))
-                    }
+                    add(HtmlTag(name, attributes, isImplied))
                 }
             }
         ).apply {

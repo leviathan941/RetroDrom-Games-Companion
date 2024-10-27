@@ -16,6 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.compose.htmltext
+package org.leviathan941.compose.htmltext.imagecontent.internal
 
-internal const val LOG_TAG = "HtmlText"
+import org.leviathan941.compose.htmltext.api.HtmlTag
+
+internal data class ImgTag(
+    val src: String,
+    val width: Int,
+    val height: Int,
+)
+
+internal fun Iterable<HtmlTag>.findImgTag(source: String): ImgTag? {
+    return firstOrNull { it.name == "img" && it.attributes["src"] == source }?.toImgTag()
+}
+
+internal fun HtmlTag.toImgTag(): ImgTag? {
+    require(name == "img") { "The tag must be 'img'" }
+    val src = attributes["src"] ?: return null
+    val width = attributes["width"]?.toIntOrNull() ?: return null
+    val height = attributes["height"]?.toIntOrNull() ?: return null
+    return ImgTag(src, width, height)
+}

@@ -43,5 +43,7 @@ dependencyResolutionManagement {
 rootProject.name = "Retrodrom Companion"
 include(":app")
 include(":html-text")
+include(":html-text:api")
+include(":html-text:imagecontent")
 include(":network")
 include(":rss-reader")

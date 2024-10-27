@@ -27,7 +27,7 @@ plugins {
 }
 
 android {
-    namespace = "org.leviathan941.compose.htmltext"
+    namespace = "org.leviathan941.compose.htmltext.imagecontent"
     compileSdk = AndroidSdk.COMPILE_SDK_VERSION
 
     defaultConfig {
@@ -47,9 +47,7 @@ android {
 dependencies {
     api(project(":html-text:api"))
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.annotatedtext)
-    implementation(libs.compose.material3)
+    implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
-    implementation(libs.ksoup.html)
+    implementation(libs.coil.compose)
 }

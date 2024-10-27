@@ -22,12 +22,11 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "org.leviathan941.compose.htmltext"
+    namespace = "org.leviathan941.compose.htmltext.api"
     compileSdk = AndroidSdk.COMPILE_SDK_VERSION
 
     defaultConfig {
@@ -45,11 +44,5 @@ android {
 }
 
 dependencies {
-    api(project(":html-text:api"))
-
-    implementation(libs.androidx.appcompat)
-    implementation(libs.annotatedtext)
-    implementation(libs.compose.material3)
-    implementation(libs.compose.ui)
-    implementation(libs.ksoup.html)
+    implementation(libs.compose.foundation)
 }

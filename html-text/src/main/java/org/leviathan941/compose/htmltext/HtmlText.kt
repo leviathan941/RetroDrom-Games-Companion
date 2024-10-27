@@ -23,32 +23,30 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
 import com.aghajari.compose.text.AnnotatedText
 import com.aghajari.compose.text.fromHtml
+import org.leviathan941.compose.htmltext.api.InlineContentCreator
+import org.leviathan941.compose.htmltext.internal.createInlineContent
+import org.leviathan941.compose.htmltext.internal.extractTags
 
 @Composable
-fun HtmlText(
+public fun HtmlText(
     html: String,
     linkColor: Color,
     modifier: Modifier = Modifier,
     textColor: Color = LocalContentColor.current,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    placeholder: Painter? = null,
-    error: Painter? = null,
-    defaultWidth: TextUnit = 200.sp,
-    defaultHeight: TextUnit = 234.sp,
+    inlineContentCreators: List<InlineContentCreator>,
     onLinkClick: (String) -> Unit = {},
 ) {
     val text = html.fromHtml(
         flags = HtmlCompat.FROM_HTML_MODE_LEGACY,
         linkColor = linkColor,
     )
+    val htmlTags = extractTags(html)
 
     AnnotatedText(
         text = text,
@@ -57,13 +55,9 @@ fun HtmlText(
         onURLClick = onLinkClick,
         // Workaround for https://issuetracker.google.com/issues/297002108
         style = textStyle.copy(lineHeight = TextUnit.Unspecified),
-        inlineContent = text.coilInlineContent(
-            localDensity = LocalDensity.current,
-            imgTags = extractImgTags(html),
-            defaultWidth = defaultWidth,
-            defaultHeight = defaultHeight,
-            placeholder = placeholder,
-            error = error,
+        inlineContent = text.createInlineContent(
+            creators = inlineContentCreators,
+            tags = htmlTags,
         ),
     )
 }

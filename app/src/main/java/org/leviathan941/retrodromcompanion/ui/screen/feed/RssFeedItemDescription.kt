@@ -21,6 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.screen.feed
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.leviathan941.compose.htmltext.HtmlText
+import org.leviathan941.compose.htmltext.imagecontent.ImageContentCreator
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
@@ -95,10 +97,16 @@ fun RssFeedItemDescription(
             html = itemDescription.html,
             textStyle = MaterialTheme.typography.bodyLarge,
             linkColor = MaterialTheme.colorScheme.primary,
-            placeholder = painterResource(R.drawable.google_material_image_placeholder),
-            error = painterResource(R.drawable.google_material_broken_image),
-            defaultWidth = defaultImageWidth,
-            defaultHeight = defaultImageHeight,
+            inlineContentCreators = listOf(
+                ImageContentCreator(
+                    localDensity = LocalDensity.current,
+                    modifier = Modifier.wrapContentSize(align = Alignment.TopStart),
+                    placeholder = painterResource(R.drawable.google_material_image_placeholder),
+                    error = painterResource(R.drawable.google_material_broken_image),
+                    defaultWidth = defaultImageWidth,
+                    defaultHeight = defaultImageHeight,
+                )
+            ),
             onLinkClick = { url ->
                 openUrl(url)
             }
