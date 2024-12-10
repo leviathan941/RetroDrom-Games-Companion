@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app
+package org.leviathan941.retrodromcompanion.app.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -29,18 +29,25 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 class PreferencesRepository(
     private val dataStore: DataStore<Preferences>,
 ) {
-    val uiPreferences: Flow<UiPreferences> = dataStore.data
+    val ui: Flow<UiPreferences> = dataStore.data
         .map { preferences ->
             UiPreferences(
                 appTheme = preferences[APP_THEME_PREFERENCE_KEY]?.let {
                     ThemeType.fromValue(it)
                 } ?: APP_THEME_DEFAULT,
+                newsPushEnabled = preferences[NEWS_PUSH_ENABLED_PREFERENCE_KEY] == true,
             )
         }
 
     suspend fun setAppTheme(appTheme: ThemeType) {
         dataStore.edit { preferences ->
             preferences[APP_THEME_PREFERENCE_KEY] = appTheme.value
+        }
+    }
+
+    suspend fun setNewsPushEnabled(enabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[NEWS_PUSH_ENABLED_PREFERENCE_KEY] = enabled
         }
     }
 }

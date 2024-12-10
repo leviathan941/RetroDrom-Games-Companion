@@ -61,7 +61,7 @@ fun RssItemDescriptionScreen(
                         TopBarAction.Browse(itemDescription.link)
                     ),
                 ),
-                onNavButtonCLick = { navButton ->
+                onNavButtonClick = { navButton ->
                     when (navButton) {
                         TopBarNavButton.BACK -> {
                             navigationActions.navigateBack()

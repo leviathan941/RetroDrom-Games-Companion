@@ -33,12 +33,16 @@ class SettingsViewModel : ViewModel() {
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
     val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
 
+    private val _newsPushEnabled = MutableStateFlow(false)
+    val newsPushEnabled: StateFlow<Boolean> = _newsPushEnabled.asStateFlow()
+
     init {
         viewModelScope.launch {
-            Singletons.preferencesRepository.uiPreferences
+            Singletons.preferencesRepository.ui
                 .cancellable()
                 .collect { uiPreferences ->
                     _appTheme.value = uiPreferences.appTheme
+                    _newsPushEnabled.value = uiPreferences.newsPushEnabled
                 }
         }
     }
@@ -46,6 +50,12 @@ class SettingsViewModel : ViewModel() {
     fun setAppTheme(appTheme: ThemeType) {
         viewModelScope.launch {
             Singletons.preferencesRepository.setAppTheme(appTheme)
+        }
+    }
+
+    fun setNewsPushEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            Singletons.preferencesRepository.setNewsPushEnabled(enabled)
         }
     }
 }

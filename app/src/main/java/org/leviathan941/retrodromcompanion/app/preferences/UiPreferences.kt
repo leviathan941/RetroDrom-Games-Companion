@@ -16,22 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app
+package org.leviathan941.retrodromcompanion.app.preferences
 
-import android.app.Application
-import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import org.leviathan941.retrodromcompanion.app.preferences.PreferencesRepository
+import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 
-object Singletons {
-    private val Context.mainDataStore: DataStore<Preferences> by
-    preferencesDataStore(name = "main_preferences")
-
-    lateinit var preferencesRepository: PreferencesRepository
-
-    fun init(application: Application) {
-        preferencesRepository = PreferencesRepository(application.mainDataStore)
-    }
-}
+data class UiPreferences(
+    val appTheme: ThemeType,
+    val newsPushEnabled: Boolean,
+)

@@ -65,4 +65,10 @@
     <string name="rss_feed_item_description_screen_title">News</string>
     <string name="rss_feed_item_description_from_author">from %s</string>
     <string name="push_notification_news_channel_name">News</string>
+    <string name="notification_permission_dialog_title">Stay updated with push notifications</string>
+    <string name="notification_permission_dialog_text">To keep you informed with the latest updates and news, we would like to send you notifications. Please grant the permission to enhance your experience.</string>
+    <string name="permission_dialog_confirm_button">Allow</string>
+    <string name="permission_dialog_deny_button">Deny</string>
+    <string name="settings_interface_item_notifications_title">Notifications</string>
+    <string name="settings_notifications_item_push_title">News pushes</string>
 </resources>

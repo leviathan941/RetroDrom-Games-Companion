@@ -110,5 +110,7 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.accompanist.permissions)
+
     debugImplementation(libs.compose.ui.tooling)
 }

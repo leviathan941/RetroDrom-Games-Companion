@@ -41,6 +41,7 @@ import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
+import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost
@@ -70,6 +71,7 @@ fun MainView(
 
     val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current)
     val mainViewModel: MainViewModel = viewModel(
+        key = ViewModelKeys.MAIN_VIEW_MODEL,
         viewModelStoreOwner = viewModelStoreOwner,
         factory = MainViewModelFactory(activity.application),
     )

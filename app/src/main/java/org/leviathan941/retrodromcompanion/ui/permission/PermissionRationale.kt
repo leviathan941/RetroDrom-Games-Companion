@@ -16,8 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app
+package org.leviathan941.retrodromcompanion.ui.permission
 
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.compose.ui.graphics.painter.Painter
 
-val APP_THEME_PREFERENCE_KEY = stringPreferencesKey("app_theme")
+data class PermissionRationale(
+    val title: String,
+    val description: String,
+    val icon: Painter,
+    val onDismiss: () -> Unit,
+)

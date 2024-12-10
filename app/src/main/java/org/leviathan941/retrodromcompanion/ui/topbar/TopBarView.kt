@@ -45,7 +45,7 @@ import org.leviathan941.retrodromcompanion.R
 @Composable
 fun TopBarView(
     prefs: TopBarPrefs,
-    onNavButtonCLick: (TopBarNavButton) -> Unit = {},
+    onNavButtonClick: (TopBarNavButton) -> Unit = {},
     onActionClick: (TopBarAction) -> Unit = {},
 ) {
     TopAppBar(
@@ -63,7 +63,7 @@ fun TopBarView(
         navigationIcon = {
             NavigationIconView(
                 button = prefs.navButton,
-                onButtonClick = onNavButtonCLick,
+                onButtonClick = onNavButtonClick,
             )
         },
         actions = {

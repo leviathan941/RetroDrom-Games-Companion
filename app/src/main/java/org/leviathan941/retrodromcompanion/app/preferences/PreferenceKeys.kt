@@ -16,10 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app
+package org.leviathan941.retrodromcompanion.app.preferences
 
-import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 
-data class UiPreferences(
-    val appTheme: ThemeType,
-)
+val APP_THEME_PREFERENCE_KEY = stringPreferencesKey("app_theme")
+val NEWS_PUSH_ENABLED_PREFERENCE_KEY = booleanPreferencesKey("news_push_enabled")

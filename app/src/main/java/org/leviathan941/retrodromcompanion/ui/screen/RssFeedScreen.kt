@@ -77,7 +77,7 @@ fun RssFeedScreen(
         topBar = {
             TopBarView(
                 prefs = screen.topBarPrefs,
-                onNavButtonCLick = { button ->
+                onNavButtonClick = { button ->
                     when (button) {
                         TopBarNavButton.DRAWER -> coroutineScope.launch {
                             drawerState.open()

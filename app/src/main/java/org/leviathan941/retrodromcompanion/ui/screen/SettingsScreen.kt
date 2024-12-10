@@ -39,7 +39,7 @@ fun SettingsScreen(
         topBar = {
             TopBarView(
                 prefs = data.topBarPrefs,
-                onNavButtonCLick = {
+                onNavButtonClick = {
                     when (it) {
                         TopBarNavButton.BACK -> {
                             navigationActions.navigateBack()

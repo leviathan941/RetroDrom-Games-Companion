@@ -57,6 +57,10 @@ sealed interface SettingsDestination : AppDestination {
 
     @Keep
     @Serializable
+    data object Notifications : SettingsDestination
+
+    @Keep
+    @Serializable
     data object Feedback : SettingsDestination
 }
 

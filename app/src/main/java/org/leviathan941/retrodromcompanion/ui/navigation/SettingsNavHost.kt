@@ -18,11 +18,15 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
@@ -48,6 +52,7 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTextItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTitleItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsViewModel
+import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.NotificationSettingsSubScreen
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource
 
@@ -70,9 +75,19 @@ fun NavGraphBuilder.settingsNavHost(
             ) {
                 SettingsClickableNavItem(
                     title = stringResource(id = R.string.settings_interface_item_theme_title),
-                    subtitle = stringResource(id = appTheme.toStringResource())
+                    subtitle = stringResource(id = appTheme.toStringResource()),
+                    leadingIcon = painterResource(id = R.drawable.google_material_contrast),
                 ) {
                     navigationActions.navigateToSettingsItem(SettingsDestination.AppTheme)
+                }
+
+                HorizontalDivider()
+
+                SettingsClickableNavItem(
+                    title = stringResource(id = R.string.settings_interface_item_notifications_title),
+                    leadingIcon = rememberVectorPainter(Icons.Default.Notifications),
+                ) {
+                    navigationActions.navigateToSettingsItem(SettingsDestination.Notifications)
                 }
             }
 
@@ -80,7 +95,8 @@ fun NavGraphBuilder.settingsNavHost(
                 name = stringResource(id = R.string.settings_group_name_about)
             ) {
                 SettingsClickableNavItem(
-                    title = stringResource(id = R.string.settings_about_item_feedback_title)
+                    title = stringResource(id = R.string.settings_about_item_feedback_title),
+                    leadingIcon = painterResource(id = R.drawable.google_material_feedback),
                 ) {
                     navigationActions.navigateToSettingsItem(SettingsDestination.Feedback)
                 }
@@ -89,9 +105,21 @@ fun NavGraphBuilder.settingsNavHost(
 
                 SettingsTitleItem(
                     title = stringResource(id = R.string.settings_about_item_app_version_title),
-                    subtitle = BuildConfig.VERSION_NAME
+                    subtitle = BuildConfig.VERSION_NAME,
+                    leadingIcon = painterResource(id = R.drawable.google_material_info),
                 )
             }
+        }
+    }
+
+    composable<SettingsDestination.Notifications> {
+        SettingsScreen(
+            data = MainNavScreen.Settings(
+                title = stringResource(id = R.string.settings_interface_item_notifications_title),
+            ),
+            navigationActions = navigationActions,
+        ) {
+            NotificationSettingsSubScreen()
         }
     }
 

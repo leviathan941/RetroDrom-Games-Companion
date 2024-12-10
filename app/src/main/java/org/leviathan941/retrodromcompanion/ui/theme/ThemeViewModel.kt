@@ -35,7 +35,7 @@ class ThemeViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            Singletons.preferencesRepository.uiPreferences.map { it.appTheme }
+            Singletons.preferencesRepository.ui.map { it.appTheme }
                 .cancellable()
                 .collect { theme ->
                     _appTheme.value = theme
