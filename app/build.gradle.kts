@@ -83,9 +83,11 @@ android {
 }
 
 dependencies {
+    implementation(project(":firebase"))
     implementation(project(":html-text"))
     implementation(project(":html-text:imagecontent"))
     implementation(project(":network"))
+    implementation(project(":permission"))
     implementation(project(":rss-reader"))
 
     implementation(libs.androidx.core.ktx)

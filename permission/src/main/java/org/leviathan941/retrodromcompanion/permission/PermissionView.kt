@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.permission
+package org.leviathan941.retrodromcompanion.permission
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,12 +35,10 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.ui.openNotificationSettings
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun PermissionView(
+public fun PermissionView(
     permission: String,
     grantedState: MutableState<Boolean>,
     rationale: PermissionRationale,
@@ -71,7 +68,6 @@ fun PermissionView(
 private fun PermissionRationaleDialog(
     data: PermissionRationale,
 ) {
-    val context = LocalContext.current
     AlertDialog(
         onDismissRequest = {
             data.onDismiss()
@@ -96,7 +92,7 @@ private fun PermissionRationaleDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    openNotificationSettings(context)
+                    data.onConfirm()
                     data.onDismiss()
                 }
             ) {
@@ -130,6 +126,7 @@ private fun PermissionRationaleDialogPreview() {
                     "middle of text.",
             icon = rememberVectorPainter(Icons.Default.Notifications),
             onDismiss = {},
+            onConfirm = {},
         ),
     )
 }

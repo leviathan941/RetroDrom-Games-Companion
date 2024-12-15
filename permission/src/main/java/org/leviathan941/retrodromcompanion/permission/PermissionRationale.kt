@@ -16,13 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.permission
+package org.leviathan941.retrodromcompanion.permission
 
 import androidx.compose.ui.graphics.painter.Painter
 
-data class PermissionRationale(
+public data class PermissionRationale(
     val title: String,
     val description: String,
     val icon: Painter,
     val onDismiss: () -> Unit,
+    val onConfirm: () -> Unit,
 )
