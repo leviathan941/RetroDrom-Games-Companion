@@ -16,9 +16,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.push
+package org.leviathan941.retrodromcompanion.firebase.push
 
 import com.google.firebase.messaging.FirebaseMessagingService
 
-class MessagingService : FirebaseMessagingService() {
+internal class MessagingService : FirebaseMessagingService() {
 }

@@ -17,5 +17,5 @@
   -->
 
 <resources>
-    <color name="default_push_notification_color">0xFF4F86C6</color>
+    <color name="default_push_notification_color">#FF4F86C6</color>
 </resources>
