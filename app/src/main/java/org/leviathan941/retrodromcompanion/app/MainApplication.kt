@@ -23,6 +23,7 @@ import android.app.Application
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        Singletons.init(this)
+        Singletons.init(application = this)
+        Notifications.createNotificationChannels(context = this)
     }
 }

@@ -70,5 +70,7 @@
     <string name="permission_dialog_confirm_button">Allow</string>
     <string name="permission_dialog_deny_button">Deny</string>
     <string name="settings_interface_item_notifications_title">Notifications</string>
-    <string name="settings_notifications_item_push_title">News pushes</string>
+    <string name="settings_notifications_item_push_title">New posts</string>
+    <string name="rss_news_notification_channel_description">Notifications about new posts from the RetroDrom Games site</string>
+    <string name="rss_news_notification_channel_name">New posts</string>
 </resources>
