@@ -21,10 +21,16 @@ package org.leviathan941.retrodromcompanion.notification.internal
 import android.content.Context
 import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
 import org.leviathan941.retrodromcompanion.notification.R
+import java.util.UUID
+import kotlin.math.absoluteValue
 
+// Channel IDs:
 internal const val NEW_POSTS_CHANNEL_ID = "retrodrom_rss_posts"
 // It must be the same as "push_notification_default_channel_id"
 internal const val MISC_CHANNEL_ID = "misc"
+
+// Group channel notification IDs:
+private const val NEW_POSTS_NOTIFICATION_ID = 1_000
 
 internal fun notificationChannelId(
     value: String?
@@ -49,3 +55,14 @@ internal fun NotificationChannelId.visibility(): Int =
         NotificationChannelId.MISC ->
             android.app.Notification.VISIBILITY_PRIVATE
     }
+
+internal fun NotificationChannelId.notificationId(): Int =
+    when (this) {
+        NotificationChannelId.RETRODROM_RSS_POSTS ->
+            NEW_POSTS_NOTIFICATION_ID
+        NotificationChannelId.MISC ->
+            uniqueNotificationId()
+    }
+
+private fun uniqueNotificationId(): Int =
+    UUID.randomUUID().hashCode().absoluteValue

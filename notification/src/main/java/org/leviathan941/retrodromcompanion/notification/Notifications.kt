@@ -31,6 +31,7 @@ import androidx.core.app.NotificationManagerCompat
 import org.leviathan941.retrodromcompanion.common.RequestCode
 import org.leviathan941.retrodromcompanion.notification.internal.channelName
 import org.leviathan941.retrodromcompanion.notification.internal.notificationChannelId
+import org.leviathan941.retrodromcompanion.notification.internal.notificationId
 import org.leviathan941.retrodromcompanion.notification.internal.visibility
 
 public object Notifications {
@@ -87,6 +88,7 @@ public object Notifications {
         val title = data.title ?: channelId.channelName(context)
         val smallIcon = R.drawable.google_material_news
         val visibility = channelId.visibility()
+        val notificationId = channelId.notificationId()
         NotificationCompat.Builder(context, channelId.value)
             .setContentTitle(title)
             .setContentText(data.message)
@@ -98,8 +100,7 @@ public object Notifications {
             .setVisibility(visibility)
             .build()
             .let {
-                // TODO: Do we need a unique notification id here?
-                NotificationManagerCompat.from(context).notify(0, it)
+                NotificationManagerCompat.from(context).notify(notificationId, it)
             }
     }
 
