@@ -18,7 +18,45 @@
 
 package org.leviathan941.retrodromcompanion.firebase.push
 
+import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import org.leviathan941.retrodromcompanion.notification.NotificationData
+import org.leviathan941.retrodromcompanion.notification.Notifications
+
+private const val TAG = "MessagingService"
 
 internal class MessagingService : FirebaseMessagingService() {
+
+    override fun onNewToken(token: String) {
+        Log.d(TAG, "Refreshed token: $token")
+        // TODO: send token to server when necessary.
+    }
+
+    override fun onMessageReceived(message: RemoteMessage) {
+        Log.d(TAG, "Received message from: ${message.from}")
+
+        if (message.data.isNotEmpty()) {
+            Log.d(TAG, "Message data payload: ${message.data}")
+        }
+
+        message.notification?.toNotificationData()?.let {
+            Log.d(TAG, "Message notification data: $it")
+            Notifications.sendPushNotification(
+                context = this,
+                data = it,
+            )
+        }
+    }
+
+    private fun RemoteMessage.Notification.toNotificationData(): NotificationData? {
+        return body?.let { body ->
+            NotificationData(
+                message = body,
+                title = title,
+                deeplink = link,
+                channelId = channelId,
+            )
+        }
+    }
 }

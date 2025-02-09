@@ -19,11 +19,32 @@
 package org.leviathan941.retrodromcompanion.app
 
 import android.app.Application
+import android.util.Log
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.BuildConfig
+import org.leviathan941.retrodromcompanion.MainActivity
+import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.notification.Notifications
 
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Singletons.init(application = this)
-        Notifications.createNotificationChannels(context = this)
+        Notifications.initialize(
+            context = this,
+            pushActivityClass = MainActivity::class.java,
+        )
+
+        if (BuildConfig.DEBUG) {
+            ProcessLifecycleOwner.get().lifecycleScope.launch {
+                Log.d(TAG, "Messaging token: ${Messaging.registrationToken()}")
+            }
+        }
+    }
+
+    private companion object {
+        private const val TAG = "MainApplication"
     }
 }

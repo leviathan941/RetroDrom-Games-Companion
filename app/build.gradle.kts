@@ -87,12 +87,14 @@ dependencies {
     implementation(project(":html-text"))
     implementation(project(":html-text:imagecontent"))
     implementation(project(":network"))
+    implementation(project(":notification"))
     implementation(project(":permission"))
     implementation(project(":rss-reader"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 

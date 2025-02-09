@@ -56,6 +56,7 @@ class SettingsViewModel : ViewModel() {
     fun setNewsPushEnabled(enabled: Boolean) {
         viewModelScope.launch {
             Singletons.preferencesRepository.setNewsPushEnabled(enabled)
+            // TODO: Subscribe to the firebase topic here
         }
     }
 }

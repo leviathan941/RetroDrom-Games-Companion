@@ -79,7 +79,6 @@
     <string name="settings_about_feedback_screen_site">"По вопросам размещения рекламы, ошибок в публикациях и прочим вопросам: "</string>
     <string name="rss_feed_item_description_screen_title">Новость</string>
     <string name="rss_feed_item_description_from_author">от %s</string>
-    <string name="push_notification_news_channel_name">Новости</string>
     <string name="notification_permission_dialog_title">Получайте уведомления о новых публикациях</string>
     <string name="notification_permission_dialog_text">Мы хотим чтобы Вы всегда были в курсе новостей. Для этого разрешите нам показывать уведомления о новых публикациях.</string>
     <string name="permission_dialog_confirm_button">Разрешить</string>
@@ -88,4 +87,6 @@
     <string name="settings_notifications_item_push_title">Новые публикации</string>
     <string name="rss_news_notification_channel_description">Уведомления о новых публикациях на сайте RetroDrom Games</string>
     <string name="rss_news_notification_channel_name">Новые публикации</string>
+    <string name="misc_notification_channel_name">Остальное</string>
+    <string name="misc_notification_channel_description">Уведомления, для которых не определен канал</string>
 </resources>

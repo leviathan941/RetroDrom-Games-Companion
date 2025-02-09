@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ RetroDrom Games Companion
   ~ Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
   ~
@@ -18,6 +17,10 @@
   -->
 
 <resources>
-    <string name="push_notification_default_channel_id">misc</string>
+    <string name="rss_news_notification_channel_description"/>
+    <string name="rss_news_notification_channel_name"/>
+    <string name="misc_notification_channel_description"/>
+    <string name="misc_notification_channel_name"/>
+
     <drawable name="google_material_news"/>
 </resources>

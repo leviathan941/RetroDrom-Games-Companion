@@ -1,10 +1,6 @@
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
-import org.leviathan941.retrodromcompanion.AndroidSdk
-import org.leviathan941.retrodromcompanion.JvmVersions
-
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,13 +16,17 @@ import org.leviathan941.retrodromcompanion.JvmVersions
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
+import org.leviathan941.retrodromcompanion.AndroidSdk
+import org.leviathan941.retrodromcompanion.JvmVersions
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "org.leviathan941.retrodromcompanion.firebase"
+    namespace = "org.leviathan941.retrodromcompanion.notification"
     compileSdk = AndroidSdk.COMPILE_SDK_VERSION
 
     defaultConfig {
@@ -44,8 +44,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":notification"))
+    implementation(project(":common"))
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
+    implementation(libs.androidx.core.ktx)
 }
