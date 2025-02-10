@@ -35,7 +35,7 @@ class PreferencesRepository(
                 appTheme = preferences[APP_THEME_PREFERENCE_KEY]?.let {
                     ThemeType.fromValue(it)
                 } ?: APP_THEME_DEFAULT,
-                newsPushEnabled = preferences[NEWS_PUSH_ENABLED_PREFERENCE_KEY] == true,
+                subscribedPushTopics = preferences[SUBSCRIBED_PUSH_TOPICS] ?: emptySet(),
             )
         }
 
@@ -45,9 +45,18 @@ class PreferencesRepository(
         }
     }
 
-    suspend fun setNewsPushEnabled(enabled: Boolean) {
+    suspend fun addPushTopicSubscription(topicName: String) {
         dataStore.edit { preferences ->
-            preferences[NEWS_PUSH_ENABLED_PREFERENCE_KEY] = enabled
+            preferences[SUBSCRIBED_PUSH_TOPICS] =
+                preferences[SUBSCRIBED_PUSH_TOPICS].orEmpty() + topicName
+        }
+    }
+
+    suspend fun removePushTopicSubscription(topicName: String) {
+        dataStore.edit { preferences ->
+            preferences[SUBSCRIBED_PUSH_TOPICS]?.let { currentTopics ->
+                preferences[SUBSCRIBED_PUSH_TOPICS] = currentTopics - topicName
+            }
         }
     }
 }

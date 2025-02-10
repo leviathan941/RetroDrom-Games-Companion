@@ -23,11 +23,19 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import org.leviathan941.retrodromcompanion.app.preferences.Preference0To1Migration
 import org.leviathan941.retrodromcompanion.app.preferences.PreferencesRepository
 
 object Singletons {
     private val Context.mainDataStore: DataStore<Preferences> by
-    preferencesDataStore(name = "main_preferences")
+    preferencesDataStore(
+        name = "main_preferences",
+        produceMigrations = { _ ->
+            listOf(
+                Preference0To1Migration(),
+            )
+        }
+    )
 
     lateinit var preferencesRepository: PreferencesRepository
 

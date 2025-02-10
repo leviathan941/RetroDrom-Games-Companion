@@ -74,4 +74,6 @@
     <string name="rss_news_notification_channel_name">New posts</string>
     <string name="misc_notification_channel_name">Misc</string>
     <string name="misc_notification_channel_description">Non-identified notifications</string>
+    <string name="push_topic_subscription_failed_toast_text">Could not subscribe to topic \'%s\'</string>
+    <string name="push_topic_unsubscription_failed_toast_text">Could not unsubscribe from topic \'%s\'</string>
 </resources>

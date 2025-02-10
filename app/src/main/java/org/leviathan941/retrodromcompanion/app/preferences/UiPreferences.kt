@@ -22,5 +22,5 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 
 data class UiPreferences(
     val appTheme: ThemeType,
-    val newsPushEnabled: Boolean,
+    val subscribedPushTopics: Set<String>,
 )

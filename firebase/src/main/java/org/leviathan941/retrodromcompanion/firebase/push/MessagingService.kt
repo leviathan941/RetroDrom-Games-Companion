@@ -30,7 +30,7 @@ internal class MessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
-        // TODO: send token to server when necessary.
+        // TODO: Re-subscribe to all subscribed topics
     }
 
     override fun onMessageReceived(message: RemoteMessage) {

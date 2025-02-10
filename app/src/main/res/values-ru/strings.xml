@@ -89,4 +89,6 @@
     <string name="rss_news_notification_channel_name">Новые публикации</string>
     <string name="misc_notification_channel_name">Остальное</string>
     <string name="misc_notification_channel_description">Уведомления, для которых не определен канал</string>
+    <string name="push_topic_subscription_failed_toast_text">Не получилось подписаться на топик \'%s\'</string>
+    <string name="push_topic_unsubscription_failed_toast_text">Не получилось отписаться от топика \'%s\'</string>
 </resources>

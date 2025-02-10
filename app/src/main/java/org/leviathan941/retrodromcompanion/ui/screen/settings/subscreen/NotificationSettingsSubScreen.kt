@@ -25,10 +25,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsSwitchItem
@@ -39,9 +41,10 @@ fun NotificationSettingsSubScreen() {
     val screenViewModel = viewModel<SettingsViewModel>(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
     )
-    val newsPushEnabled by screenViewModel.newsPushEnabled.collectAsState()
+    val subscribedPushTopics by screenViewModel.subscribedPushTopics.collectAsState()
     val permissionGranted = remember { mutableStateOf(false) }
     val showRationale = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     NotificationPermissionView(
         grantedState = permissionGranted,
@@ -59,9 +62,20 @@ fun NotificationSettingsSubScreen() {
             uncheckedIcon = painterResource(
                 id = R.drawable.google_material_notifications_bell_off
             ),
-            checked = newsPushEnabled && permissionGranted.value,
+            checked = subscribedPushTopics.contains(Messaging.Topic.NEW_RETRODROM_POSTS) &&
+                    permissionGranted.value,
             onCheckedChange = { isChecked ->
-                screenViewModel.setNewsPushEnabled(isChecked)
+                if (isChecked) {
+                    screenViewModel.subscribeToTopic(
+                        context = context,
+                        topic = Messaging.Topic.NEW_RETRODROM_POSTS,
+                    )
+                } else {
+                    screenViewModel.unsubscribeFromTopic(
+                        context = context,
+                        topic = Messaging.Topic.NEW_RETRODROM_POSTS,
+                    )
+                }
                 if (!permissionGranted.value) {
                     showRationale.value = true
                 }

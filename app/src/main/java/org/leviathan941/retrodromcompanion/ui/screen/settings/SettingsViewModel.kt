@@ -18,6 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.settings
 
+import android.content.Context
+import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,7 +28,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.app.Singletons
+import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 
@@ -33,8 +38,8 @@ class SettingsViewModel : ViewModel() {
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
     val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
 
-    private val _newsPushEnabled = MutableStateFlow(false)
-    val newsPushEnabled: StateFlow<Boolean> = _newsPushEnabled.asStateFlow()
+    private val _subscribedPushTopics = MutableStateFlow(emptySet<Messaging.Topic>())
+    val subscribedPushTopics: StateFlow<Set<Messaging.Topic>> = _subscribedPushTopics.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -42,7 +47,10 @@ class SettingsViewModel : ViewModel() {
                 .cancellable()
                 .collect { uiPreferences ->
                     _appTheme.value = uiPreferences.appTheme
-                    _newsPushEnabled.value = uiPreferences.newsPushEnabled
+                    _subscribedPushTopics.value = uiPreferences.subscribedPushTopics
+                        .mapNotNull { topicName ->
+                            Messaging.topicFromValue(topicName)
+                        }.toSet()
                 }
         }
     }
@@ -53,10 +61,52 @@ class SettingsViewModel : ViewModel() {
         }
     }
 
-    fun setNewsPushEnabled(enabled: Boolean) {
+    fun subscribeToTopic(
+        context: Context,
+        topic: Messaging.Topic,
+    ) {
         viewModelScope.launch {
-            Singletons.preferencesRepository.setNewsPushEnabled(enabled)
-            // TODO: Subscribe to the firebase topic here
+            if (Messaging.subscribeToTopic(topic)) {
+                Singletons.preferencesRepository.addPushTopicSubscription(topic.value)
+            } else {
+                showTopicSubscriptionFailedToast(
+                    context = context,
+                    textRes = R.string.push_topic_subscription_failed_toast_text,
+                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value
+                )
+            }
         }
+    }
+
+    fun unsubscribeFromTopic(
+        context: Context,
+        topic: Messaging.Topic,
+    ) {
+        viewModelScope.launch {
+            if (Messaging.unsubscribeFromTopic(Messaging.Topic.NEW_RETRODROM_POSTS)) {
+                Singletons.preferencesRepository.removePushTopicSubscription(topic.value)
+            } else {
+                showTopicSubscriptionFailedToast(
+                    context = context,
+                    textRes = R.string.push_topic_unsubscription_failed_toast_text,
+                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value
+                )
+            }
+        }
+    }
+
+    private fun showTopicSubscriptionFailedToast(
+        context: Context,
+        @StringRes textRes: Int,
+        topicName: String,
+    ) {
+        Toast.makeText(
+            context,
+            context.getString(
+                textRes,
+                topicName
+            ),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
