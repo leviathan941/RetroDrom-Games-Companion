@@ -46,7 +46,7 @@ class SettingsViewModel : ViewModel() {
             Singletons.preferencesRepository.ui
                 .cancellable()
                 .collect { uiPreferences ->
-                    _appTheme.value = uiPreferences.appTheme
+                    _appTheme.value = ThemeType.fromValue(uiPreferences.appTheme)
                     _subscribedPushTopics.value = uiPreferences.subscribedPushTopics
                         .mapNotNull { topicName ->
                             Messaging.topicFromValue(topicName)
@@ -57,7 +57,7 @@ class SettingsViewModel : ViewModel() {
 
     fun setAppTheme(appTheme: ThemeType) {
         viewModelScope.launch {
-            Singletons.preferencesRepository.setAppTheme(appTheme)
+            Singletons.preferencesRepository.setAppTheme(appTheme.value)
         }
     }
 

@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app.preferences
+package org.leviathan941.retrodromcompanion.preferences
 
-import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
+import org.leviathan941.retrodromcompanion.preferences.internal.Preference0To1Migration
 
-data class UiPreferences(
-    val appTheme: ThemeType,
-    val subscribedPushTopics: Set<String>,
-)
+public object Preferences {
+    public val Context.mainDataStore: DataStore<Preferences> by preferencesDataStore(
+        name = "main_preferences",
+        produceMigrations = { _ ->
+            listOf(
+                Preference0To1Migration(),
+            )
+        }
+    )
+}

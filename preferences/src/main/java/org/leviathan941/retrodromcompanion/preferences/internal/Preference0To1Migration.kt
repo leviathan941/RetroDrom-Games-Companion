@@ -16,14 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app.preferences
+package org.leviathan941.retrodromcompanion.preferences.internal
 
 import androidx.datastore.core.DataMigration
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 
-class Preference0To1Migration : DataMigration<Preferences> {
+internal class Preference0To1Migration : DataMigration<Preferences> {
     private val newsPushEnabledPreferenceKey = booleanPreferencesKey("news_push_enabled")
 
     override suspend fun cleanUp() = Unit
@@ -35,7 +34,7 @@ class Preference0To1Migration : DataMigration<Preferences> {
     override suspend fun migrate(currentData: Preferences): Preferences {
         return currentData.toMutablePreferences().also { prefs ->
             if (newsPushEnabledPreferenceKey in prefs) {
-                prefs[SUBSCRIBED_PUSH_TOPICS] = setOf(Messaging.Topic.NEW_RETRODROM_POSTS.value)
+                prefs[SUBSCRIBED_PUSH_TOPICS] = setOf("new_retrodrom_posts")
                 prefs.remove(newsPushEnabledPreferenceKey)
             }
         }

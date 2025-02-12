@@ -16,16 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app
+package org.leviathan941.retrodromcompanion.preferences.internal
 
-import android.app.Application
-import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
-import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 
-object Singletons {
-    lateinit var preferencesRepository: PreferencesRepository
-
-    fun init(application: Application) {
-        preferencesRepository = PreferencesRepository(application.mainDataStore)
-    }
-}
+internal val APP_THEME_PREFERENCE_KEY = stringPreferencesKey("app_theme")
+internal val SUBSCRIBED_PUSH_TOPICS = stringSetPreferencesKey("subscribed_push_topics")

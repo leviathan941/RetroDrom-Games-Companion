@@ -21,6 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.theme
 import android.os.Build
 import androidx.annotation.StringRes
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 
 enum class ThemeType(val value: String) {
     LIGHT("light"),
@@ -30,8 +31,8 @@ enum class ThemeType(val value: String) {
     ;
 
     companion object {
-        fun fromValue(value: String): ThemeType? {
-            return supportedEntries().firstOrNull { it.value == value }
+        fun fromValue(value: String?): ThemeType {
+            return supportedEntries().firstOrNull { it.value == value } ?: APP_THEME_DEFAULT
         }
 
         @StringRes

@@ -89,6 +89,7 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":notification"))
     implementation(project(":permission"))
+    implementation(project(":preferences"))
     implementation(project(":rss-reader"))
 
     implementation(libs.androidx.core.ktx)
