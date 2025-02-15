@@ -45,7 +45,9 @@ android {
 
 dependencies {
     implementation(project(":notification"))
+    implementation(project(":preferences"))
 
+    implementation(libs.androidx.lifecycle.process)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
 }

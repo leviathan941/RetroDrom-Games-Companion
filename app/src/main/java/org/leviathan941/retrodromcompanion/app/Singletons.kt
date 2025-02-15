@@ -26,6 +26,6 @@ object Singletons {
     lateinit var preferencesRepository: PreferencesRepository
 
     fun init(application: Application) {
-        preferencesRepository = PreferencesRepository(application.mainDataStore)
+        preferencesRepository = PreferencesRepository(application.applicationContext.mainDataStore)
     }
 }

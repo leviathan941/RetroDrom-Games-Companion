@@ -19,10 +19,16 @@
 package org.leviathan941.retrodromcompanion.firebase.push
 
 import android.util.Log
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.notification.NotificationData
 import org.leviathan941.retrodromcompanion.notification.Notifications
+import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 private const val TAG = "MessagingService"
 
@@ -30,7 +36,15 @@ internal class MessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
-        // TODO: Re-subscribe to all subscribed topics
+        ProcessLifecycleOwner.get().lifecycleScope.launch {
+            PreferencesRepository(applicationContext.mainDataStore).ui.first().let { prefs ->
+                prefs.subscribedPushTopics.mapNotNull { 
+                    Messaging.topicFromValue(it)
+                }.forEach {
+                    Messaging.subscribeToTopic(it)
+                }
+            }
+        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
