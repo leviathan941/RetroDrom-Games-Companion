@@ -42,6 +42,12 @@ android {
         jvmToolchain(JvmVersions.KOTLIN_JVM)
         explicitApi = ExplicitApiMode.Strict
     }
+
+    sourceSets {
+        getByName("debug") {
+            java.srcDir("src/debug/java")
+        }
+    }
 }
 
 dependencies {

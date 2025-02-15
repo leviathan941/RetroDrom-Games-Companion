@@ -18,8 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.permission
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -27,10 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -65,7 +61,7 @@ public fun PermissionView(
 }
 
 @Composable
-private fun PermissionRationaleDialog(
+internal fun PermissionRationaleDialog(
     data: PermissionRationale,
 ) {
     AlertDialog(
@@ -112,21 +108,5 @@ private fun PermissionRationaleDialog(
                 )
             }
         }
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PermissionRationaleDialogPreview() {
-    PermissionRationaleDialog(
-        data = PermissionRationale(
-            title = "Big enough title to be shown",
-            description = "If you are going to use a passage of Lorem Ipsum, " +
-                    "you need to be sure there isn't anything embarrassing hidden in the " +
-                    "middle of text.",
-            icon = rememberVectorPainter(Icons.Default.Notifications),
-            onDismiss = {},
-            onConfirm = {},
-        ),
     )
 }
