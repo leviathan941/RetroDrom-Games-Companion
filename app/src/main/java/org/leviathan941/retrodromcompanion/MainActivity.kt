@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                 selectedTheme = appTheme,
                 materialColorSchemes = SecondThemeColorScheme,
             ) {
-                MainView(this)
+                MainView(activity = this)
             }
         }
     }

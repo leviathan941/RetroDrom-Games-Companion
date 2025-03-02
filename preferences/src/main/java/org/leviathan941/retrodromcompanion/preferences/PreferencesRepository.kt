@@ -20,14 +20,15 @@ package org.leviathan941.retrodromcompanion.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.leviathan941.retrodromcompanion.preferences.internal.APP_THEME_PREFERENCE_KEY
+import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW
+import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW_DEFAULT
 import org.leviathan941.retrodromcompanion.preferences.internal.SUBSCRIBED_PUSH_TOPICS
 
 public class PreferencesRepository(
-    private val dataStore: DataStore<Preferences>,
+    dataStore: DataStore<Preferences>,
 ) {
     public val ui: Flow<UiPreferences> = dataStore.data
         .map { preferences ->
@@ -36,25 +37,17 @@ public class PreferencesRepository(
                 subscribedPushTopics = preferences[SUBSCRIBED_PUSH_TOPICS] ?: emptySet(),
             )
         }
+    public val uiEditor: UiPreferencesEditor = UiPreferencesEditor(dataStore)
 
-    public suspend fun setAppTheme(appTheme: String) {
-        dataStore.edit { preferences ->
-            preferences[APP_THEME_PREFERENCE_KEY] = appTheme
+    public val promo: Flow<PromoPreferences> = dataStore.data
+        .map { preferences ->
+            val pushPostsPromoPreferences = PushPostsPromoPreferences(
+                startsUntilShow = preferences[PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW]
+                    ?: PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW_DEFAULT,
+            )
+            PromoPreferences(
+                pushPosts = pushPostsPromoPreferences,
+            )
         }
-    }
-
-    public suspend fun addPushTopicSubscription(topicName: String) {
-        dataStore.edit { preferences ->
-            preferences[SUBSCRIBED_PUSH_TOPICS] =
-                preferences[SUBSCRIBED_PUSH_TOPICS].orEmpty() + topicName
-        }
-    }
-
-    public suspend fun removePushTopicSubscription(topicName: String) {
-        dataStore.edit { preferences ->
-            preferences[SUBSCRIBED_PUSH_TOPICS]?.let { currentTopics ->
-                preferences[SUBSCRIBED_PUSH_TOPICS] = currentTopics - topicName
-            }
-        }
-    }
+    public val promoEditor: PromoPreferencesEditor = PromoPreferencesEditor(dataStore)
 }

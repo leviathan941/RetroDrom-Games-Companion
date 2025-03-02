@@ -22,33 +22,29 @@ import android.Manifest
 import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.permission.PermissionRationale
 import org.leviathan941.retrodromcompanion.permission.PermissionView
-import org.leviathan941.retrodromcompanion.ui.openNotificationSettings
 
 @Composable
 fun NotificationPermissionView(
     grantedState: MutableState<Boolean>,
     allowRationale: Boolean,
     onRationaleDismiss: () -> Unit,
+    onRationaleConfirm: () -> Unit,
 ) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        val context = LocalContext.current
         PermissionView(
             permission = Manifest.permission.POST_NOTIFICATIONS,
             grantedState = grantedState,
-            rationale = PermissionRationale(
+            rationaleData = PermissionRationale.Data(
                 title = stringResource(id = R.string.notification_permission_dialog_title),
                 description = stringResource(id = R.string.notification_permission_dialog_text),
                 icon = painterResource(id = R.drawable.google_material_notifications_bell_on),
                 onDismiss = onRationaleDismiss,
-                onConfirm = {
-                    openNotificationSettings(context)
-                }
+                onConfirm = onRationaleConfirm,
             ),
             allowRationale = allowRationale,
         )

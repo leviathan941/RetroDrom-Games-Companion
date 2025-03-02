@@ -38,9 +38,13 @@ class MainApplication : Application() {
         )
 
         if (BuildConfig.DEBUG) {
-            ProcessLifecycleOwner.get().lifecycleScope.launch {
-                Log.d(TAG, "Messaging token: ${Messaging.registrationToken()}")
-            }
+            onCreateDebug()
+        }
+    }
+
+    private fun onCreateDebug() {
+        ProcessLifecycleOwner.get().lifecycleScope.launch {
+            Log.d(TAG, "Messaging token: ${Messaging.registrationToken()}")
         }
     }
 

@@ -19,13 +19,22 @@
 package org.leviathan941.retrodromcompanion.app
 
 import android.app.Application
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
 import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 object Singletons {
     lateinit var preferencesRepository: PreferencesRepository
+    lateinit var pushNotificationModel: PushNotificationModel
 
     fun init(application: Application) {
         preferencesRepository = PreferencesRepository(application.applicationContext.mainDataStore)
+        pushNotificationModel = PushNotificationModel(
+            application = application,
+            scope = ProcessLifecycleOwner.get().lifecycleScope,
+            preferencesRepository = preferencesRepository,
+        )
     }
 }

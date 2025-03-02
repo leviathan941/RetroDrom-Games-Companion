@@ -18,95 +18,43 @@
 
 package org.leviathan941.retrodromcompanion.permission
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import org.leviathan941.retrodromcompanion.permission.internal.PermissionRationaleDialog
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 public fun PermissionView(
     permission: String,
     grantedState: MutableState<Boolean>,
-    rationale: PermissionRationale,
+    rationaleData: PermissionRationale.Data,
     allowRationale: Boolean = true,
 ) {
     val permissionState = rememberPermissionState(permission)
     grantedState.value = permissionState.status.isGranted
 
-    if (permissionState.status.isGranted) {
-        return
-    } else {
-        if (permissionState.status.shouldShowRationale) {
+    when {
+        permissionState.status.isGranted -> {
+            return
+        }
+
+        permissionState.status.shouldShowRationale -> {
             if (allowRationale) {
                 PermissionRationaleDialog(
-                    data = rationale,
+                    data = rationaleData,
                 )
             }
-        } else {
+        }
+
+        else -> {
             SideEffect {
                 permissionState.launchPermissionRequest()
             }
         }
     }
-}
-
-@Composable
-internal fun PermissionRationaleDialog(
-    data: PermissionRationale,
-) {
-    AlertDialog(
-        onDismissRequest = {
-            data.onDismiss()
-        },
-        title = {
-            Text(
-                text = data.title,
-                textAlign = TextAlign.Center,
-            )
-        },
-        text = {
-            Text(
-                text = data.description,
-            )
-        },
-        icon = {
-            Icon(
-                painter = data.icon,
-                contentDescription = null,
-            )
-        },
-        confirmButton = {
-            Button(
-                onClick = {
-                    data.onConfirm()
-                    data.onDismiss()
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.permission_dialog_confirm_button),
-                )
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = {
-                    data.onDismiss()
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.permission_dialog_deny_button),
-                )
-            }
-        }
-    )
 }

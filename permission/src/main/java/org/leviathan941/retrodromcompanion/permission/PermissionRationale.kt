@@ -20,10 +20,12 @@ package org.leviathan941.retrodromcompanion.permission
 
 import androidx.compose.ui.graphics.painter.Painter
 
-public data class PermissionRationale(
-    val title: String,
-    val description: String,
-    val icon: Painter,
-    val onDismiss: () -> Unit,
-    val onConfirm: () -> Unit,
-)
+public object PermissionRationale {
+    public data class Data(
+        val title: String,
+        val description: String,
+        val icon: Painter,
+        val onDismiss: () -> Unit,
+        val onConfirm: () -> Unit,
+    )
+}

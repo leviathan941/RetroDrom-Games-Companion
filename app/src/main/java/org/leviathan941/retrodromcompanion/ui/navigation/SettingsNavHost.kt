@@ -51,7 +51,7 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroupItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTextItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTitleItem
-import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsViewModel
+import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.NotificationSettingsSubScreen
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource

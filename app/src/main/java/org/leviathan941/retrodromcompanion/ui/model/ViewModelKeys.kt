@@ -23,4 +23,5 @@ object ViewModelKeys {
     const val RSS_FEED_VIEW_MODEL = "rss_feed_view_model"
     const val SETTINGS_VIEW_MODEL = "settings_view_model"
     const val THEME_VIEW_MODEL = "theme_view_model"
+    const val MAIN_VIEW_PROMO_MODEL = "main_view_promo_model"
 }

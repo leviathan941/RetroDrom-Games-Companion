@@ -22,6 +22,7 @@ import androidx.compose.material3.DrawerState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromo
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssItemDescriptionScreen
 import org.leviathan941.retrodromcompanion.ui.toDestination
@@ -42,6 +43,8 @@ fun NavGraphBuilder.rssFeedNavHost(
                 }
             }
         )
+
+        RssFeedPromo()
     }
 
     composable<RssFeedDestination.ItemDescription> { backStackEntry ->

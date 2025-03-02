@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,13 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.screen.settings
+package org.leviathan941.retrodromcompanion.app.model
 
-import android.content.Context
+import android.app.Application
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,46 +30,42 @@ import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.app.Singletons
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
-import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
-import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
-class SettingsViewModel : ViewModel() {
-    private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
-    val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
-
+class PushNotificationModel(
+    private val application: Application,
+    private val scope: CoroutineScope,
+    private val preferencesRepository: PreferencesRepository,
+) {
     private val _subscribedPushTopics = MutableStateFlow(emptySet<Messaging.Topic>())
     val subscribedPushTopics: StateFlow<Set<Messaging.Topic>> = _subscribedPushTopics.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            Singletons.preferencesRepository.ui
+        scope.launch {
+            preferencesRepository.ui
                 .cancellable()
                 .collect { uiPreferences ->
-                    _appTheme.value = ThemeType.fromValue(uiPreferences.appTheme)
                     _subscribedPushTopics.value = uiPreferences.subscribedPushTopics
                         .mapNotNull { topicName ->
                             Messaging.topicFromValue(topicName)
                         }.toSet()
                 }
         }
-    }
 
-    fun setAppTheme(appTheme: ThemeType) {
-        viewModelScope.launch {
-            Singletons.preferencesRepository.setAppTheme(appTheme.value)
+        scope.launch {
+            Singletons.preferencesRepository.promoEditor.decrementPushPostsPromoStartsUntilShow()
         }
     }
 
     fun subscribeToTopic(
-        context: Context,
         topic: Messaging.Topic,
+        showToastOnFailed: Boolean = true,
     ) {
-        viewModelScope.launch {
+        scope.launch {
             if (Messaging.subscribeToTopic(topic)) {
-                Singletons.preferencesRepository.addPushTopicSubscription(topic.value)
-            } else {
+                preferencesRepository.uiEditor.addPushTopicSubscription(topic.value)
+            } else if (showToastOnFailed) {
                 showTopicSubscriptionFailedToast(
-                    context = context,
                     textRes = R.string.push_topic_subscription_failed_toast_text,
                     topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value
                 )
@@ -79,15 +74,14 @@ class SettingsViewModel : ViewModel() {
     }
 
     fun unsubscribeFromTopic(
-        context: Context,
         topic: Messaging.Topic,
+        showToastOnFailed: Boolean = true,
     ) {
-        viewModelScope.launch {
+        scope.launch {
             if (Messaging.unsubscribeFromTopic(Messaging.Topic.NEW_RETRODROM_POSTS)) {
-                Singletons.preferencesRepository.removePushTopicSubscription(topic.value)
-            } else {
+                preferencesRepository.uiEditor.removePushTopicSubscription(topic.value)
+            } else if (showToastOnFailed) {
                 showTopicSubscriptionFailedToast(
-                    context = context,
                     textRes = R.string.push_topic_unsubscription_failed_toast_text,
                     topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value
                 )
@@ -96,13 +90,12 @@ class SettingsViewModel : ViewModel() {
     }
 
     private fun showTopicSubscriptionFailedToast(
-        context: Context,
         @StringRes textRes: Int,
         topicName: String,
     ) {
         Toast.makeText(
-            context,
-            context.getString(
+            application,
+            application.getString(
                 textRes,
                 topicName
             ),

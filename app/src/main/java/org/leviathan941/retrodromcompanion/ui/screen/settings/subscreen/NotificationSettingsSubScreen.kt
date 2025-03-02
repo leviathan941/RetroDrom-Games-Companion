@@ -31,10 +31,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
+import org.leviathan941.retrodromcompanion.ui.openNotificationSettings
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsSwitchItem
-import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsViewModel
 
 @Composable
 fun NotificationSettingsSubScreen() {
@@ -49,9 +50,13 @@ fun NotificationSettingsSubScreen() {
     NotificationPermissionView(
         grantedState = permissionGranted,
         allowRationale = showRationale.value,
-    ) {
-        showRationale.value = false
-    }
+        onRationaleDismiss = {
+            showRationale.value = false
+        },
+        onRationaleConfirm = {
+            openNotificationSettings(context)
+        }
+    )
 
     Column {
         SettingsSwitchItem(
@@ -67,12 +72,10 @@ fun NotificationSettingsSubScreen() {
             onCheckedChange = { isChecked ->
                 if (isChecked) {
                     screenViewModel.subscribeToTopic(
-                        context = context,
                         topic = Messaging.Topic.NEW_RETRODROM_POSTS,
                     )
                 } else {
                     screenViewModel.unsubscribeFromTopic(
-                        context = context,
                         topic = Messaging.Topic.NEW_RETRODROM_POSTS,
                     )
                 }

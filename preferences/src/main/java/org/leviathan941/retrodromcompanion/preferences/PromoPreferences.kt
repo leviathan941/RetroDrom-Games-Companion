@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,17 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.preferences.internal
+package org.leviathan941.retrodromcompanion.preferences
 
-import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.core.stringSetPreferencesKey
+public data class PromoPreferences(
+    val pushPosts: PushPostsPromoPreferences,
+)
 
-// UiPreferences
-internal val APP_THEME_PREFERENCE_KEY = stringPreferencesKey("app_theme")
-internal val SUBSCRIBED_PUSH_TOPICS = stringSetPreferencesKey("subscribed_push_topics")
-
-// PromoPreferences
-internal val PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW = intPreferencesKey(
-    "push_posts_promo_starts_until_show"
+public data class PushPostsPromoPreferences(
+    val startsUntilShow: Int,
 )
