@@ -29,9 +29,6 @@ internal const val NEW_POSTS_CHANNEL_ID = "retrodrom_rss_posts"
 // It must be the same as "push_notification_default_channel_id"
 internal const val MISC_CHANNEL_ID = "misc"
 
-// Group channel notification IDs:
-private const val NEW_POSTS_NOTIFICATION_ID = 1_000
-
 internal fun notificationChannelId(
     value: String?
 ): NotificationChannelId =
@@ -58,8 +55,7 @@ internal fun NotificationChannelId.visibility(): Int =
 
 internal fun NotificationChannelId.notificationId(): Int =
     when (this) {
-        NotificationChannelId.RETRODROM_RSS_POSTS ->
-            NEW_POSTS_NOTIFICATION_ID
+        NotificationChannelId.RETRODROM_RSS_POSTS,
         NotificationChannelId.MISC ->
             uniqueNotificationId()
     }
