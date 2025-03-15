@@ -44,7 +44,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     api(libs.datastore.preferences)
 
+    implementation(libs.dagger.hilt.android)
     implementation(libs.kotlinx.coroutines.android)
 }

@@ -22,12 +22,18 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.preferences.internal.APP_THEME_PREFERENCE_KEY
 import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW
 import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW_DEFAULT
 import org.leviathan941.retrodromcompanion.preferences.internal.SUBSCRIBED_PUSH_TOPICS
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 
-public class PreferencesRepository(
+@Singleton
+public class PreferencesRepository @Inject constructor(
+    @Named(DiKeys.MAIN_DATASTORE)
     dataStore: DataStore<Preferences>,
 ) {
     public val ui: Flow<UiPreferences> = dataStore.data

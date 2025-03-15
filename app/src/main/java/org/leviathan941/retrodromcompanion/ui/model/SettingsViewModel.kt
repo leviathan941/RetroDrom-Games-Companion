@@ -20,20 +20,24 @@ package org.leviathan941.retrodromcompanion.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.app.Singletons
 import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
+import javax.inject.Inject
 
-class SettingsViewModel : ViewModel() {
-    private val pushNotificationModel: PushNotificationModel
-        get() = Singletons.pushNotificationModel
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val pushNotificationModel: PushNotificationModel,
+    private val preferencesRepository: PreferencesRepository,
+) : ViewModel() {
 
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
     val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
@@ -43,7 +47,7 @@ class SettingsViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            Singletons.preferencesRepository.ui
+            preferencesRepository.ui
                 .cancellable()
                 .collect { uiPreferences ->
                     _appTheme.value = ThemeType.fromValue(uiPreferences.appTheme)
@@ -53,7 +57,7 @@ class SettingsViewModel : ViewModel() {
 
     fun setAppTheme(appTheme: ThemeType) {
         viewModelScope.launch {
-            Singletons.preferencesRepository.uiEditor.setAppTheme(appTheme.value)
+            preferencesRepository.uiEditor.setAppTheme(appTheme.value)
         }
     }
 

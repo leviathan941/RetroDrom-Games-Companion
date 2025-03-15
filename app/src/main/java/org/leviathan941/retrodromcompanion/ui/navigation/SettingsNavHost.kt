@@ -37,12 +37,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_URL
+import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableNavItem
@@ -51,7 +52,6 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroupItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTextItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTitleItem
-import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.NotificationSettingsSubScreen
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource
@@ -60,7 +60,7 @@ fun NavGraphBuilder.settingsNavHost(
     navigationActions: MainNavActions,
 ) {
     composable<SettingsDestination.Main> {
-        val screenViewModel = viewModel<SettingsViewModel>(
+        val screenViewModel = hiltViewModel<SettingsViewModel>(
             key = ViewModelKeys.SETTINGS_VIEW_MODEL,
         )
         val appTheme by screenViewModel.appTheme.collectAsState()
@@ -124,7 +124,7 @@ fun NavGraphBuilder.settingsNavHost(
     }
 
     composable<SettingsDestination.AppTheme> {
-        val screenViewModel = viewModel<SettingsViewModel>(
+        val screenViewModel = hiltViewModel<SettingsViewModel>(
             key = ViewModelKeys.SETTINGS_VIEW_MODEL,
         )
         val appTheme by screenViewModel.appTheme.collectAsState()

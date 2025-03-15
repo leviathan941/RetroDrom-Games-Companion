@@ -23,16 +23,20 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.notification.NotificationData
 import org.leviathan941.retrodromcompanion.notification.Notifications
 import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
+import javax.inject.Inject
 
 private const val TAG = "MessagingService"
 
+@AndroidEntryPoint
 internal class MessagingService : FirebaseMessagingService() {
+    @Inject lateinit var notifications: Notifications
 
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
@@ -56,7 +60,7 @@ internal class MessagingService : FirebaseMessagingService() {
 
         message.notification?.toNotificationData()?.let {
             Log.d(TAG, "Message notification data: $it")
-            Notifications.sendPushNotification(
+            notifications.sendPushNotification(
                 context = this,
                 data = it,
             )

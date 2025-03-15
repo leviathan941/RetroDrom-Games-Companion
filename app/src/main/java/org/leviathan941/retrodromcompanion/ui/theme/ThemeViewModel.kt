@@ -20,22 +20,27 @@ package org.leviathan941.retrodromcompanion.ui.theme
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.app.Singletons
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
+import javax.inject.Inject
 
-class ThemeViewModel : ViewModel() {
+@HiltViewModel
+class ThemeViewModel @Inject constructor(
+    private val preferencesRepository: PreferencesRepository,
+) : ViewModel() {
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
     val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
 
     init {
         viewModelScope.launch {
-            Singletons.preferencesRepository.ui.map { ThemeType.fromValue(it.appTheme) }
+            preferencesRepository.ui.map { ThemeType.fromValue(it.appTheme) }
                 .cancellable()
                 .collect { theme ->
                     _appTheme.value = theme

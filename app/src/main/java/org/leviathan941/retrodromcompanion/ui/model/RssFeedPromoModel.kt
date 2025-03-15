@@ -21,24 +21,28 @@ package org.leviathan941.retrodromcompanion.ui.model
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.leviathan941.retrodromcompanion.app.Singletons
 import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
+import javax.inject.Inject
 
 private const val TAG = "MainViewPromoModel"
 
-class RssFeedPromoModel : ViewModel() {
-    private val pushNotificationModel: PushNotificationModel
-        get() = Singletons.pushNotificationModel
+@HiltViewModel
+class RssFeedPromoModel @Inject constructor(
+    private val preferencesRepository: PreferencesRepository,
+    private val pushNotificationModel: PushNotificationModel,
+) : ViewModel() {
 
     val promoState: StateFlow<RssFeedPromoState> = run {
-        val isPushPostsPromoAllowed = Singletons.preferencesRepository.promo
+        val isPushPostsPromoAllowed = preferencesRepository.promo
             .cancellable()
             .map { prefs ->
                 prefs.pushPosts.run {

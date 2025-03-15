@@ -23,18 +23,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import org.leviathan941.retrodromcompanion.ui.MainView
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
 import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeViewModel
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val themeViewModel = viewModel<ThemeViewModel>(
+            val themeViewModel = hiltViewModel<ThemeViewModel>(
                 key = ViewModelKeys.THEME_VIEW_MODEL,
             )
             val appTheme by themeViewModel.appTheme.collectAsState()
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 selectedTheme = appTheme,
                 materialColorSchemes = SecondThemeColorScheme,
             ) {
-                MainView(activity = this)
+                MainView()
             }
         }
     }

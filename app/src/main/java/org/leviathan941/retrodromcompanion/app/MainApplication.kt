@@ -22,20 +22,21 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.BuildConfig
-import org.leviathan941.retrodromcompanion.MainActivity
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.notification.Notifications
+import javax.inject.Inject
 
+@HiltAndroidApp
 class MainApplication : Application() {
+    @Inject lateinit var notifications: Notifications
+
     override fun onCreate() {
         super.onCreate()
-        Singletons.init(application = this)
-        Notifications.initialize(
-            context = this,
-            pushActivityClass = MainActivity::class.java,
-        )
+        // Call to initialize
+        notifications
 
         if (BuildConfig.DEBUG) {
             onCreateDebug()

@@ -28,12 +28,17 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.app.Singletons
+import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 
-class PushNotificationModel(
+@Singleton
+class PushNotificationModel @Inject constructor(
     private val application: Application,
+    @Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
     private val scope: CoroutineScope,
     private val preferencesRepository: PreferencesRepository,
 ) {
@@ -53,7 +58,7 @@ class PushNotificationModel(
         }
 
         scope.launch {
-            Singletons.preferencesRepository.promoEditor.decrementPushPostsPromoStartsUntilShow()
+            preferencesRepository.promoEditor.decrementPushPostsPromoStartsUntilShow()
         }
     }
 

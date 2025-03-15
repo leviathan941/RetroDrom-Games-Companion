@@ -20,10 +20,13 @@ package org.leviathan941.retrodromcompanion.ui.model
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,8 +35,9 @@ import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 
-class RssFeedViewModel(
-    channelUrl: String,
+@HiltViewModel(assistedFactory = RssFeedViewModel.Factory::class)
+class RssFeedViewModel @AssistedInject constructor(
+    @Assisted channelUrl: String,
 ) : ViewModel() {
     private val rssFeedProvider = RssFeedProvider(channelUrl)
 
@@ -50,13 +54,10 @@ class RssFeedViewModel(
                 }
         }
     }
-}
 
-class RssFeedViewModelFactory(
-    private val channelUrl: String,
-) : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return RssFeedViewModel(channelUrl) as T
+    @AssistedFactory
+    interface Factory {
+        fun create(channelUrl: String): RssFeedViewModel
     }
 }
+

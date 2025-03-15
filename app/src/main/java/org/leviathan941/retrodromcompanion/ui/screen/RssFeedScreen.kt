@@ -38,7 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
@@ -46,7 +46,6 @@ import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
-import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem
@@ -63,10 +62,13 @@ fun RssFeedScreen(
     drawerState: DrawerState,
     itemClicked: (item: RssChannelItem) -> Unit,
 ) {
-    val screenViewModel: RssFeedViewModel = viewModel<RssFeedViewModel>(
-        key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
-        factory = RssFeedViewModelFactory(screen.channelUrl),
-    )
+    val screenViewModel: RssFeedViewModel =
+        hiltViewModel<RssFeedViewModel, RssFeedViewModel.Factory>(
+            key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
+            creationCallback = { factory ->
+                factory.create(screen.channelUrl)
+            }
+        )
     val rssChannelItems = screenViewModel.rssChannelItems.collectAsLazyPagingItems()
     val clipboardManager = LocalClipboardManager.current
     val coroutineScope = rememberCoroutineScope()

@@ -19,7 +19,6 @@
 package org.leviathan941.retrodromcompanion.ui
 
 import android.util.Log
-import androidx.activity.ComponentActivity
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
@@ -30,8 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -40,7 +38,6 @@ import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
-import org.leviathan941.retrodromcompanion.ui.model.MainViewModelFactory
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
@@ -50,9 +47,7 @@ import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 @Composable
-fun MainView(
-    activity: ComponentActivity,
-) {
+fun MainView() {
     val navController = rememberNavController()
     val predefinedDestinations = MainNavPredefinedDestinations(
         rssFeedStart = RssFeedDestination.Feed(
@@ -69,11 +64,8 @@ fun MainView(
     }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val viewModelStoreOwner = requireNotNull(LocalViewModelStoreOwner.current)
-    val mainViewModel: MainViewModel = viewModel(
+    val mainViewModel: MainViewModel = hiltViewModel(
         key = ViewModelKeys.MAIN_VIEW_MODEL,
-        viewModelStoreOwner = viewModelStoreOwner,
-        factory = MainViewModelFactory(activity.application),
     )
 
     val uiState by mainViewModel.uiState.collectAsState()

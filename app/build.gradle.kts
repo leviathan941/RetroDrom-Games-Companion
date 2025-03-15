@@ -21,8 +21,10 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -83,6 +85,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":firebase"))
     implementation(project(":html-text"))
     implementation(project(":html-text:imagecontent"))
@@ -116,6 +119,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.accompanist.permissions)
+
+    implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.dagger.hilt.compiler)
 
     debugImplementation(libs.compose.ui.tooling)
 }

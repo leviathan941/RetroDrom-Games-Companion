@@ -1,6 +1,7 @@
 [versions]
 accompanist = "0.36.0"
 androidPlugin = "8.8.2"
+androidxHilt = "1.2.0"
 annotatedText = "1.0.3"
 appcompat = "1.7.0"
 browser = "1.8.0"
@@ -13,6 +14,7 @@ firebaseBom = "33.10.0"
 googleMaterial = "1.12.0"
 googleServicesPlugin = "4.4.2"
 gson = "2.11.0"
+hilt = "2.51.1"
 kotlinPlugin = "2.0.21"
 kotlinXCoroutines = "1.9.0"
 kotlinXSerialization = "1.7.3"
@@ -20,7 +22,7 @@ ksoup = "0.4.0"
 ksp = "2.0.21-1.0.28"
 ktRssReader = "2.2.2"
 lifecycle = "2.8.7"
-navigation = "2.8.8"
+navigation = "2.8.9"
 pagingCompose = "3.3.6"
 retrofit = "2.11.0"
 datastore = "1.1.3"
@@ -31,6 +33,7 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -41,6 +44,8 @@ compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compos
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "composeMaterial3" }
+dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "googleMaterial" }
@@ -62,6 +67,7 @@ android-application = { id = "com.android.application", version.ref = "androidPl
 android-library = { id = "com.android.library", version.ref = "androidPlugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinPlugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServicesPlugin" }
+dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinPlugin" }

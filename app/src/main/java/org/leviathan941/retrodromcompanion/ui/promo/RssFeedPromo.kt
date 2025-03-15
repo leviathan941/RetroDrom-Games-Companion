@@ -23,14 +23,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
 
 @Composable
 fun RssFeedPromo() {
-    val viewModel = viewModel<RssFeedPromoModel>(
+    val viewModel = hiltViewModel<RssFeedPromoModel>(
         key = ViewModelKeys.MAIN_VIEW_PROMO_MODEL,
     )
     val promoState by viewModel.promoState.collectAsState()

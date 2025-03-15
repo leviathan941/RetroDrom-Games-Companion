@@ -28,25 +28,26 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.leviathan941.retrodromcompanion.common.RequestCode
+import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.notification.internal.channelName
 import org.leviathan941.retrodromcompanion.notification.internal.notificationChannelId
 import org.leviathan941.retrodromcompanion.notification.internal.notificationId
 import org.leviathan941.retrodromcompanion.notification.internal.visibility
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 
-public object Notifications {
-    private var isInitialized: Boolean = false
-    private var pushActivityClass: Class<*>? = null
+@Singleton
+public class Notifications @Inject constructor(
+    @ApplicationContext
+    private val context: Context,
+    @Named(DiKeys.MAIN_ACTIVITY_CLASS)
+    private val pushActivityClass: Class<*>,
+) {
 
-    public fun initialize(
-        context: Context,
-        pushActivityClass: Class<*>,
-    ) {
-        if (isInitialized) {
-            return
-        }
-
-        this.pushActivityClass = pushActivityClass
+    init {
         NotificationManagerCompat.from(context)
             .createNotificationChannelsCompat(
                 listOf(
@@ -54,17 +55,12 @@ public object Notifications {
                     defaultChannel(context),
                 )
             )
-        isInitialized = true
     }
 
     public fun sendPushNotification(
         context: Context,
         data: NotificationData,
     ) {
-        require(pushActivityClass != null) {
-            "Notifications not initialized"
-        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ActivityCompat.checkSelfPermission(
                 context,

@@ -28,7 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
@@ -39,7 +39,7 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsSwitchItem
 
 @Composable
 fun NotificationSettingsSubScreen() {
-    val screenViewModel = viewModel<SettingsViewModel>(
+    val screenViewModel = hiltViewModel<SettingsViewModel>(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
     )
     val subscribedPushTopics by screenViewModel.subscribedPushTopics.collectAsState()

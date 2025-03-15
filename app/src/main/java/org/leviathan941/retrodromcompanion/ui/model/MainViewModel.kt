@@ -18,11 +18,12 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-import android.app.Application
+import android.content.Context
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,19 +36,22 @@ import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
+import javax.inject.Inject
 
-class MainViewModel(
-    application: Application,
-) : AndroidViewModel(application) {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    @ApplicationContext
+    private val context: Context,
+) : ViewModel() {
     private val wpRetrofitClient = WpRetrofitClient(BASE_URL)
 
     private val _uiState = MutableStateFlow(
         MainViewState(
             loadingData = MainNavScreen.Loading(
-                title = application.getString(R.string.loading_screen_title)
+                title = context.getString(R.string.loading_screen_title)
             ),
             somethingWrongData = MainNavScreen.SomethingWrong(
-                title = application.getString(R.string.something_wrong_screen_title),
+                title = context.getString(R.string.something_wrong_screen_title),
             ),
         )
     )
@@ -95,7 +99,7 @@ class MainViewModel(
             }
         val mainCategoryScreen = MainNavScreen.RssFeed(
             id = MAIN_RSS_FEED_ID,
-            title = getApplication<Application>().getString(R.string.main_rss_feed_title),
+            title = context.getString(R.string.main_rss_feed_title),
             channelUrl = BASE_URL,
         )
         val allScreens = sequenceOf(mainCategoryScreen)
@@ -106,7 +110,3 @@ class MainViewModel(
         return allScreens
     }
 }
-
-class MainViewModelFactory(
-    application: Application,
-) : ViewModelProvider.AndroidViewModelFactory(application)
