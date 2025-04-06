@@ -18,11 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.notification
 
-import android.net.Uri
-
 public data class NotificationData(
     val message: String,
     val title: String?,
-    val deeplink: Uri?,
     val channelId: String?,
+    val payloadData: Map<String, String>,
 )

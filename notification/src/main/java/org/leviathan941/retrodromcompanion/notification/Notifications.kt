@@ -28,10 +28,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.TaskStackBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.leviathan941.retrodromcompanion.common.RequestCode
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.notification.internal.channelName
+import org.leviathan941.retrodromcompanion.notification.internal.deeplink
 import org.leviathan941.retrodromcompanion.notification.internal.notificationChannelId
 import org.leviathan941.retrodromcompanion.notification.internal.notificationId
 import org.leviathan941.retrodromcompanion.notification.internal.visibility
@@ -69,22 +71,21 @@ public class Notifications @Inject constructor(
             return
         }
 
-        val intent = Intent(context, pushActivityClass).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            setData(data.deeplink)
-        }
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            RequestCode.PUSH_NOTIFICATION,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
         val channelId = notificationChannelId(data.channelId)
         val title = data.title ?: channelId.channelName(context)
         val smallIcon = R.drawable.google_material_news
         val visibility = channelId.visibility()
         val notificationId = channelId.notificationId()
+
+        val intent = Intent(context, pushActivityClass).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            setData(channelId.deeplink(data.payloadData))
+        }
+        val pendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(RequestCode.PUSH_NOTIFICATION, PendingIntent.FLAG_IMMUTABLE)
+        }
+
         NotificationCompat.Builder(context, channelId.value)
             .setContentTitle(title)
             .setContentText(data.message)
@@ -92,7 +93,7 @@ public class Notifications @Inject constructor(
             .setCategory(NotificationCompat.CATEGORY_SOCIAL)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSmallIcon(smallIcon)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .setVisibility(visibility)
             .build()
             .let {

@@ -31,10 +31,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.common.Constants
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
@@ -47,16 +48,15 @@ import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 @Composable
-fun MainView() {
-    val navController = rememberNavController()
+fun MainView(navController: NavHostController) {
     val predefinedDestinations = MainNavPredefinedDestinations(
         rssFeedStart = RssFeedDestination.Feed(
             id = MAIN_RSS_FEED_ID,
             title = stringResource(id = R.string.main_rss_feed_title),
-            channelUrl = BASE_URL,
+            channelUrl = Constants.RETRODROM_BASE_URL,
         ),
     )
-    val navigationActions = remember(navController) {
+    val navigationActions = remember(navController, predefinedDestinations) {
         MainNavActions(
             navController,
             predefinedDestinations,

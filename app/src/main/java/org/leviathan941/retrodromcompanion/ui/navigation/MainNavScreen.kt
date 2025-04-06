@@ -28,10 +28,12 @@ sealed interface MainNavScreen {
     data class Loading(
         val title: String = "",
         val state: LoadingState = LoadingState.InProgress,
+        val navButton: TopBarNavButton = TopBarNavButton.NONE,
     ) : MainNavScreen {
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
-                title,
+                title = title,
+                navButton = navButton,
             )
     }
 

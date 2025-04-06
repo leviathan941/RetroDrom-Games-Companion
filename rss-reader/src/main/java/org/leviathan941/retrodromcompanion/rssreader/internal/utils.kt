@@ -39,6 +39,7 @@ internal fun ParsedRssItem.toPublic(): RssChannelItem? =
             categories = categories ?: emptyList(),
             description = parseRssDescription(description),
             creator = creator,
+            postId = postId,
         )
     }
 

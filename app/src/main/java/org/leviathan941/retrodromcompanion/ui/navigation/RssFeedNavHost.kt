@@ -21,21 +21,22 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import androidx.compose.material3.DrawerState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import androidx.navigation.toRoute
+import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_BASE_PATH
 import org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromo
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssItemDescriptionScreen
+import org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemScreen
 import org.leviathan941.retrodromcompanion.ui.toDestination
-import org.leviathan941.retrodromcompanion.ui.toScreen
 
 fun NavGraphBuilder.rssFeedNavHost(
     navigationActions: MainNavActions,
     drawerState: DrawerState,
 ) {
     composable<RssFeedDestination.Feed> { backStackEntry ->
-        val destination = backStackEntry.toRoute<RssFeedDestination.Feed>()
         RssFeedScreen(
-            screen = destination.toScreen(),
+            backStackEntry = backStackEntry,
             drawerState = drawerState,
             itemClicked = { item ->
                 item.toDestination()?.let {
@@ -44,13 +45,26 @@ fun NavGraphBuilder.rssFeedNavHost(
             }
         )
 
-        RssFeedPromo()
+        RssFeedPromo(backStackEntry)
     }
 
     composable<RssFeedDestination.ItemDescription> { backStackEntry ->
         RssItemDescriptionScreen(
             itemDescription = backStackEntry.toRoute(),
             navigationActions = navigationActions
+        )
+    }
+
+    composable<RssFeedDestination.LoadingItem>(
+        deepLinks = listOf(
+            navDeepLink<RssFeedDestination.LoadingItem>(
+                basePath = RETRODROM_FEED_ITEM_BASE_PATH,
+            ),
+        ),
+    ) { backStackEntry ->
+        RssLoadingItemScreen(
+            backStackEntry = backStackEntry,
+            navActions = navigationActions,
         )
     }
 }

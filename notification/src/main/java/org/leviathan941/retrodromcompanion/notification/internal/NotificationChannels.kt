@@ -19,8 +19,10 @@
 package org.leviathan941.retrodromcompanion.notification.internal
 
 import android.content.Context
+import android.net.Uri
 import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
 import org.leviathan941.retrodromcompanion.notification.R
+import org.leviathan941.retrodromcompanion.notification.createFeedItemDeeplink
 import java.util.UUID
 import kotlin.math.absoluteValue
 
@@ -62,3 +64,12 @@ internal fun NotificationChannelId.notificationId(): Int =
 
 private fun uniqueNotificationId(): Int =
     UUID.randomUUID().hashCode().absoluteValue
+
+internal fun NotificationChannelId.deeplink(data: Map<String, String>): Uri? {
+    return when (this) {
+        NotificationChannelId.RETRODROM_RSS_POSTS ->
+            data["post_id"]?.let { createFeedItemDeeplink(it) }
+        NotificationChannelId.MISC ->
+            null
+    }
+}

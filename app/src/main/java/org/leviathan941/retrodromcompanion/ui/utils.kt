@@ -40,7 +40,6 @@ import kotlin.time.toDuration
 internal const val MAIN_VIEW_TAG = "MainView"
 internal const val RSS_SCREEN_TAG = "RssScreen"
 
-internal const val BASE_URL = "https://retrodrom.games/"
 internal const val FEEDBACK_URL = "https://retrodrom.games/feedback/"
 
 internal const val MAIN_RSS_FEED_ID = 0
@@ -119,9 +118,6 @@ fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? =
             title = title,
             link = link,
             pubDate = pubDate.value,
-            categories = categories,
-            imageUrl = desc.imageUrl,
-            paragraphs = desc.paragraphs,
             html = desc.html,
             creator = creator,
         )

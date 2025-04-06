@@ -29,9 +29,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.common.Constants
 import org.leviathan941.retrodromcompanion.network.wordpress.WpGetErrorException
 import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
-import org.leviathan941.retrodromcompanion.ui.BASE_URL
 import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(
     @ApplicationContext
     private val context: Context,
 ) : ViewModel() {
-    private val wpRetrofitClient = WpRetrofitClient(BASE_URL)
+    private val wpRetrofitClient = WpRetrofitClient(Constants.RETRODROM_BASE_URL)
 
     private val _uiState = MutableStateFlow(
         MainViewState(
@@ -56,10 +56,6 @@ class MainViewModel @Inject constructor(
         )
     )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
-
-    init {
-        fetchRssData()
-    }
 
     fun fetchRssData() {
         viewModelScope.launch {
@@ -100,7 +96,7 @@ class MainViewModel @Inject constructor(
         val mainCategoryScreen = MainNavScreen.RssFeed(
             id = MAIN_RSS_FEED_ID,
             title = context.getString(R.string.main_rss_feed_title),
-            channelUrl = BASE_URL,
+            channelUrl = Constants.RETRODROM_BASE_URL,
         )
         val allScreens = sequenceOf(mainCategoryScreen)
             .plus(rssCategoryScreens)

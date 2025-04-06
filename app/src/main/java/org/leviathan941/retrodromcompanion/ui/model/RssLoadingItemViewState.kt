@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.rssreader
+package org.leviathan941.retrodromcompanion.ui.model
 
-data class RssChannelItem(
-    val title: String,
-    val link: String,
-    val pubDate: RssPublicationDate,
-    val categories: List<String>,
-    val description: RssDescription?,
-    val creator: String?,
-    val postId: String?,
-)
+import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 
-data class RssPublicationDate(
-    val value: String,
-)
+sealed interface RssLoadingItemViewState {
+    data object Loading : RssLoadingItemViewState
 
-data class RssDescription(
-    val imageUrl: String?,
-    val paragraphs: List<String>,
-    val html: String,
-)
+    data object Error: RssLoadingItemViewState
+
+    data class Success(
+        val item: RssChannelItem,
+    ) : RssLoadingItemViewState
+}

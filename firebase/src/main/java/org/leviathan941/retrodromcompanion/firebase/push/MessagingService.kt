@@ -58,7 +58,7 @@ internal class MessagingService : FirebaseMessagingService() {
             Log.d(TAG, "Message data payload: ${message.data}")
         }
 
-        message.notification?.toNotificationData()?.let {
+        message.toNotificationData()?.let {
             Log.d(TAG, "Message notification data: $it")
             notifications.sendPushNotification(
                 context = this,
@@ -67,13 +67,14 @@ internal class MessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun RemoteMessage.Notification.toNotificationData(): NotificationData? {
-        return body?.let { body ->
+    private fun RemoteMessage.toNotificationData(): NotificationData? {
+        val notification = notification ?: return null
+        return notification.body?.let { body ->
             NotificationData(
                 message = body,
-                title = title,
-                deeplink = link,
-                channelId = channelId,
+                title = notification.title,
+                channelId = notification.channelId,
+                payloadData = data,
             )
         }
     }

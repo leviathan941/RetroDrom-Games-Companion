@@ -31,4 +31,5 @@ internal object Rss {
     const val DC_CREATOR_TAG = "dc:creator"
     const val CATEGORY_TAG = "category"
     const val PUBLICATION_DATE_TAG = "pubDate"
+    const val POST_ID_TAG = "post_id"
 }

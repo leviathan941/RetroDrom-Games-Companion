@@ -61,7 +61,7 @@ class RssFeedItemsSource(
                 RSS_READER_TAG,
                 "Failed to load RSS feed items for page $pageNumber, useCache=$useCache", e
             )
-            if (useCache) {
+            if (useCache && params is LoadParams.Refresh) {
                 loadInternal(params, useCache = false)
             } else {
                 LoadResult.Error(e)
@@ -73,7 +73,7 @@ class RssFeedItemsSource(
         pageNumber: Int,
         useCache: Boolean,
     ): List<ParsedRssItem> {
-        return RssFetcher.fetchFeed(
+        return RssFetcher.fetchFeedPage(
             channelUrl,
             pageNumber,
             useCache,

@@ -18,7 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import android.net.Uri
+import androidx.core.net.toUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.leviathan941.retrodromcompanion.rssreader.BuildConfig
@@ -34,28 +34,31 @@ internal object RssFetcher {
         }
     }
 
-    suspend fun fetchFeed(
+    suspend fun fetchFeedPage(
         channelUrl: String,
         pageNumber: Int,
         useCache: Boolean = true,
         flushCache: Boolean = false,
     ): ParsedRssChannel = withContext(Dispatchers.IO) {
-        coRead(channelUrl, pageNumber, useCache, flushCache)
-    }
-
-    @OptIn(ExperimentalTime::class)
-    private suspend fun coRead(
-        channelUrl: String,
-        pageNumber: Int,
-        useCache: Boolean,
-        flushCache: Boolean,
-    ): ParsedRssChannel {
-        return ParsedRssChannelReader.coRead(
-            url = Uri.parse(channelUrl).buildUpon()
+        coRead(
+            url = channelUrl.toUri().buildUpon()
                 .appendPath(FEED_URL_SUFFIX)
                 .appendQueryParameter(PAGE_QUERY_PARAM, pageNumber.toString())
                 .build()
                 .toString(),
+            useCache = useCache,
+            flushCache = flushCache,
+        )
+    }
+
+    @OptIn(ExperimentalTime::class)
+    private suspend fun coRead(
+        url: String,
+        useCache: Boolean,
+        flushCache: Boolean,
+    ): ParsedRssChannel {
+        return ParsedRssChannelReader.coRead(
+            url = url,
             config = {
                 this.useCache = useCache
                 this.flushCache = flushCache

@@ -23,7 +23,10 @@ import androidx.annotation.Keep
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.toRoute
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.leviathan941.retrodromcompanion.common.Constants
+import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 
 sealed interface AppDestination
@@ -79,11 +82,16 @@ sealed interface RssFeedDestination : AppDestination {
         val title: String,
         val link: String,
         val pubDate: String,
-        val categories: List<String>,
-        val imageUrl: String?,
-        val paragraphs: List<String>,
         val html: String,
         val creator: String?,
+    ) : RssFeedDestination
+
+    @Keep
+    @Serializable
+    data class LoadingItem(
+        val postId: String,
+        @SerialName(RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL)
+        val channelUrl: String = Constants.RETRODROM_BASE_URL,
     ) : RssFeedDestination
 }
 
@@ -135,16 +143,6 @@ class MainNavActions(
     ) {
         Log.d(MAIN_VIEW_TAG, "Navigate to RSS item description screen")
         navController.navigate(destination) {
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToSomethingWrong() {
-        Log.d(MAIN_VIEW_TAG, "Navigate to something went wrong screen")
-        navController.navigate(MainDestination.SomethingWentWrong) {
-            popUpTo(MainDestination.Loading) {
-                inclusive = true
-            }
             launchSingleTop = true
         }
     }

@@ -76,4 +76,5 @@
     <string name="misc_notification_channel_description">Non-identified notifications</string>
     <string name="push_topic_subscription_failed_toast_text">Could not subscribe to topic \'%s\'</string>
     <string name="push_topic_unsubscription_failed_toast_text">Could not unsubscribe from topic \'%s\'</string>
+    <string name="rss_feed_post_loading_item_title">Loading post</string>
 </resources>

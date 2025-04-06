@@ -24,6 +24,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import org.leviathan941.retrodromcompanion.ui.MainView
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -40,11 +41,13 @@ class MainActivity : ComponentActivity() {
                 key = ViewModelKeys.THEME_VIEW_MODEL,
             )
             val appTheme by themeViewModel.appTheme.collectAsState()
+            val navController = rememberNavController()
+
             MainTheme(
                 selectedTheme = appTheme,
                 materialColorSchemes = SecondThemeColorScheme,
             ) {
-                MainView()
+                MainView(navController)
             }
         }
     }

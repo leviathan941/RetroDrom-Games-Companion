@@ -122,9 +122,6 @@ fun RssFeedItemDescriptionPreview() {
             title = "What is Lorem Ipsum?",
             link = "https://example.com",
             pubDate = "Mon, 30 Jun 2008 11:05:30 GMT",
-            categories = listOf("Category"),
-            imageUrl = null,
-            paragraphs = emptyList(),
             html = """
                 <h2>What is Lorem Ipsum?</h2>
                 <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and 

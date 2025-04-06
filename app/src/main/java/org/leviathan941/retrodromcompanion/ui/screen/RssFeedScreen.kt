@@ -39,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
@@ -47,23 +49,26 @@ import org.leviathan941.retrodromcompanion.rssreader.asDateTime
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadFailedNextItem
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadingNextItem
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
+import org.leviathan941.retrodromcompanion.ui.toScreen
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RssFeedScreen(
-    screen: MainNavScreen.RssFeed,
+    backStackEntry: NavBackStackEntry,
     drawerState: DrawerState,
     itemClicked: (item: RssChannelItem) -> Unit,
 ) {
+    val screen = remember { backStackEntry.toRoute<RssFeedDestination.Feed>().toScreen() }
     val screenViewModel: RssFeedViewModel =
         hiltViewModel<RssFeedViewModel, RssFeedViewModel.Factory>(
+            viewModelStoreOwner = backStackEntry,
             key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
             creationCallback = { factory ->
                 factory.create(screen.channelUrl)

@@ -21,6 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.navigation.NavHostController
@@ -48,6 +49,9 @@ fun MainNavHost(
         startDestination = MainDestination.Loading
     ) {
         composable<MainDestination.Loading> {
+            LaunchedEffect(key1 = Unit) {
+                mainViewModel.fetchRssData()
+            }
             LoadingScreen(
                 loadingData = uiState.loadingData,
                 modifier = Modifier.fillMaxSize(),
@@ -73,7 +77,6 @@ fun MainNavHost(
             SomethingWrongScreen(
                 data = uiState.somethingWrongData,
                 onRestartButtonClick = {
-                    mainViewModel.fetchRssData()
                     navigationActions.navigateToLoading()
                 }
             )

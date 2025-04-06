@@ -41,4 +41,6 @@ data class ParsedRssItem(
     @RssRawData(rawTags = [Rss.DC_CREATOR_TAG])
     val creator: String?,
     val description: String?,
+    @RssTag(name = Rss.POST_ID_TAG)
+    val postId: String?
 ) : Serializable

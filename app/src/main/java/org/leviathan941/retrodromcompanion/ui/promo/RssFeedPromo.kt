@@ -24,13 +24,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
 
 @Composable
-fun RssFeedPromo() {
+fun RssFeedPromo(
+    backStackEntry: NavBackStackEntry,
+) {
     val viewModel = hiltViewModel<RssFeedPromoModel>(
+        viewModelStoreOwner = backStackEntry,
         key = ViewModelKeys.MAIN_VIEW_PROMO_MODEL,
     )
     val promoState by viewModel.promoState.collectAsState()
