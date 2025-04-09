@@ -18,6 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.notification
 
+import android.content.Intent
 import android.net.Uri
 import org.leviathan941.retrodromcompanion.common.Constants
 
@@ -30,6 +31,8 @@ public const val RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL: String = "channelUrl"
 public const val RETRODROM_FEED_ITEM_BASE_PATH: String =
     "$RETRODROM_DEEPLINK_SCHEME://$RETRODROM_FEED_HOST/$RETRODROM_FEED_ITEM_PATH"
 
+public const val POST_ID_PAYLOAD_DATA_KEY: String = "post_id"
+
 public fun createFeedItemDeeplink(postId: String): Uri? {
     if (postId.isEmpty()) return null
 
@@ -40,4 +43,18 @@ public fun createFeedItemDeeplink(postId: String): Uri? {
         .appendPath(postId)
         .appendQueryParameter(RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL, Constants.RETRODROM_BASE_URL)
         .build()
+}
+
+public fun extractDeeplink(intent: Intent): Uri? {
+    return with(intent) {
+        data ?: extras?.let { bundle ->
+            bundle.getString(POST_ID_PAYLOAD_DATA_KEY)?.let { postId ->
+                createFeedItemDeeplink(postId)
+            }
+        }
+    }?.takeIf { it.isSupportedDeeplink() }
+}
+
+private fun Uri.isSupportedDeeplink(): Boolean {
+    return scheme == RETRODROM_DEEPLINK_SCHEME
 }

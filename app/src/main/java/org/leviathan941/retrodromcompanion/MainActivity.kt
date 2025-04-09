@@ -19,18 +19,23 @@
 package org.leviathan941.retrodromcompanion
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.leviathan941.retrodromcompanion.notification.extractDeeplink
 import org.leviathan941.retrodromcompanion.ui.MainView
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
 import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeViewModel
+
+private const val TAG = "MainActivity"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -48,6 +53,13 @@ class MainActivity : ComponentActivity() {
                 materialColorSchemes = SecondThemeColorScheme,
             ) {
                 MainView(navController)
+            }
+
+            LaunchedEffect(Unit) {
+                extractDeeplink(intent)?.let {
+                    Log.d(TAG, "Handle deeplink: $it")
+                    navController.navigate(it)
+                }
             }
         }
     }

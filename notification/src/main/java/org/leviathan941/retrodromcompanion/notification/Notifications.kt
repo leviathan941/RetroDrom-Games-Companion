@@ -93,7 +93,7 @@ public class Notifications @Inject constructor(
             .setCategory(NotificationCompat.CATEGORY_SOCIAL)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSmallIcon(smallIcon)
-            .setAutoCancel(false)
+            .setAutoCancel(true)
             .setVisibility(visibility)
             .build()
             .let {
