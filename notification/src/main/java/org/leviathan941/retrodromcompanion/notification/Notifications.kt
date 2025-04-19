@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -33,7 +34,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import org.leviathan941.retrodromcompanion.common.RequestCode
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.notification.internal.channelName
-import org.leviathan941.retrodromcompanion.notification.internal.deeplink
 import org.leviathan941.retrodromcompanion.notification.internal.notificationChannelId
 import org.leviathan941.retrodromcompanion.notification.internal.notificationId
 import org.leviathan941.retrodromcompanion.notification.internal.visibility
@@ -77,9 +77,14 @@ public class Notifications @Inject constructor(
         val visibility = channelId.visibility()
         val notificationId = channelId.notificationId()
 
+        val extras = Bundle().apply {
+            data.payloadData.forEach { (key, value) ->
+                putString(key, value)
+            }
+        }
         val intent = Intent(context, pushActivityClass).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            setData(channelId.deeplink(data.payloadData))
+            putExtras(extras)
         }
         val pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(intent)
