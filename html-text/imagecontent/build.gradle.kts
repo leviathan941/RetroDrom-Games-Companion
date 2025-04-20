@@ -26,6 +26,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+java {
+    toolchain {
+        languageVersion.set(JvmVersions.JAVA_LANG)
+    }
+}
+
 android {
     namespace = "org.leviathan941.compose.htmltext.imagecontent"
     compileSdk = AndroidSdk.COMPILE_SDK_VERSION
@@ -34,12 +40,7 @@ android {
         minSdk = AndroidSdk.MIN_SDK_VERSION
     }
 
-    compileOptions {
-        sourceCompatibility = JvmVersions.JAVA_SRC_COMPAT
-        targetCompatibility = JvmVersions.JAVA_TARGET_COMPAT
-    }
     kotlin {
-        jvmToolchain(JvmVersions.KOTLIN_JVM)
         explicitApi = ExplicitApiMode.Strict
     }
 }

@@ -16,10 +16,8 @@
 
 package org.leviathan941.retrodromcompanion
 
-import org.gradle.api.JavaVersion
+import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 object JvmVersions {
-    val JAVA_SRC_COMPAT = JavaVersion.VERSION_11
-    val JAVA_TARGET_COMPAT = JavaVersion.VERSION_11
-    const val KOTLIN_JVM = 11
+    val JAVA_LANG = JavaLanguageVersion.of(11)
 }

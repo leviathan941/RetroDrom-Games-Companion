@@ -28,6 +28,12 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
+java {
+    toolchain {
+        languageVersion.set(JvmVersions.JAVA_LANG)
+    }
+}
+
 android {
     namespace = "org.leviathan941.retrodromcompanion"
     compileSdk = AndroidSdk.COMPILE_SDK_VERSION
@@ -62,13 +68,6 @@ android {
         getByName("debug") {
             versionNameSuffix = "-SNAPSHOT"
         }
-    }
-    compileOptions {
-        sourceCompatibility = JvmVersions.JAVA_SRC_COMPAT
-        targetCompatibility = JvmVersions.JAVA_TARGET_COMPAT
-    }
-    kotlin {
-        jvmToolchain(JvmVersions.KOTLIN_JVM)
     }
     buildFeatures {
         compose = true
