@@ -19,5 +19,5 @@ package org.leviathan941.retrodromcompanion
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 
 object JvmVersions {
-    val JAVA_LANG = JavaLanguageVersion.of(11)
+    val JAVA_LANG = JavaLanguageVersion.of(17)
 }
