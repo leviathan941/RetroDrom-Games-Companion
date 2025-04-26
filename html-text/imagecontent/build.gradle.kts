@@ -50,5 +50,5 @@ dependencies {
 
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
-    implementation(libs.coil.compose)
+    implementation(libs.coil3.compose)
 }

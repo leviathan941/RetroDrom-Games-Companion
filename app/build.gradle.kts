@@ -111,7 +111,8 @@ dependencies {
 
     implementation(libs.navigation.compose)
 
-    implementation(libs.coil.compose)
+    implementation(libs.coil3.compose)
+    implementation(libs.coil3.network.okhttp)
 
     implementation(libs.datastore.preferences)
 

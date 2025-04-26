@@ -21,6 +21,7 @@ package org.leviathan941.compose.htmltext.imagecontent
 import android.os.Build
 import android.text.style.DynamicDrawableSpan
 import android.text.style.ImageSpan
+import android.util.Log
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -29,9 +30,10 @@ import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import org.leviathan941.compose.htmltext.api.HtmlTag
 import org.leviathan941.compose.htmltext.api.InlineContentCreator
+import org.leviathan941.compose.htmltext.imagecontent.internal.TAG
 import org.leviathan941.compose.htmltext.imagecontent.internal.findImgTag
 
 public class ImageContentCreator(
@@ -89,6 +91,9 @@ public class ImageContentCreator(
                 modifier = modifier,
                 placeholder = placeholder,
                 error = error,
+                onError = { error ->
+                    Log.e(TAG, "Error while loading image", error.result.throwable)
+                }
             )
         }
     }
