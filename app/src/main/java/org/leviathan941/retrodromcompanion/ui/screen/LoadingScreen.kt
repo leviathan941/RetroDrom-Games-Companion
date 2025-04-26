@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -50,7 +49,7 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 fun LoadingScreen(
     loadingData: MainNavScreen.Loading,
     modifier: Modifier = Modifier,
-    onErrorLongPress: (text: AnnotatedString) -> Unit = {},
+    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = {_, _ -> },
     onRetryClick: () -> Unit = {},
 ) {
     Scaffold(
@@ -74,7 +73,7 @@ fun LoadingScreen(
 fun LoadingView(
     modifier: Modifier = Modifier,
     state: LoadingState,
-    onErrorLongPress: (text: AnnotatedString) -> Unit = {},
+    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = {_, _ -> },
     onRetryClick: () -> Unit = {},
 ) {
     Column(
@@ -88,7 +87,7 @@ fun LoadingView(
         when (state) {
             LoadingState.InProgress -> InProgressScreen()
             is LoadingState.Failure -> FailureScreen(
-                message = state.message,
+                failureState = state,
                 onErrorLongPress = onErrorLongPress,
                 onRetryClick = onRetryClick,
             )
@@ -116,11 +115,10 @@ private fun InProgressLoadingScreen() = LoadingScreen(
     ),
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun FailureScreen(
-    message: String,
-    onErrorLongPress: (text: AnnotatedString) -> Unit,
+    failureState: LoadingState.Failure,
+    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit,
     onRetryClick: () -> Unit,
 ) {
     Text(
@@ -129,7 +127,12 @@ private fun FailureScreen(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 enabled = true,
-                onLongClick = { onErrorLongPress(AnnotatedString(text = message)) },
+                onLongClick = {
+                    onErrorLongPress(
+                        failureState.clipboardLabel,
+                        failureState.message,
+                    )
+                },
                 onClick = {},
             ),
         text = stringResource(R.string.loading_screen_failure_title),
@@ -160,6 +163,7 @@ private fun FailureLoadingScreen() = LoadingScreen(
         title = "Loading screen",
         state = LoadingState.Failure(
             message = "Error message",
+            clipboardLabel = "Error message copied to clipboard",
         ),
     ),
 )

@@ -18,16 +18,20 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
+import android.content.ClipData
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
@@ -42,7 +46,8 @@ fun MainNavHost(
     mainViewModel: MainViewModel,
     drawerState: DrawerState,
 ) {
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
+    val coroutineScope = rememberCoroutineScope()
 
     NavHost(
         navController = navHostController,
@@ -55,8 +60,15 @@ fun MainNavHost(
             LoadingScreen(
                 loadingData = uiState.loadingData,
                 modifier = Modifier.fillMaxSize(),
-                onErrorLongPress = { message ->
-                    clipboardManager.setText(message)
+                onErrorLongPress = { label, message ->
+                    coroutineScope.launch {
+                        clipboard.setClipEntry(
+                            ClipEntry(ClipData.newPlainText(
+                                label,
+                                message
+                            ))
+                        )
+                    }
                 },
                 onRetryClick = {
                     mainViewModel.fetchRssData()

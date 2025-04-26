@@ -75,7 +75,12 @@ class MainViewModel @Inject constructor(
                 Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS categories", e)
                 _uiState.value.copy(
                     loadingData = _uiState.value.loadingData.copy(
-                        state = LoadingState.Failure(e.message.orEmpty())
+                        state = LoadingState.Failure(
+                            message = e.message.orEmpty(),
+                            clipboardLabel = context.getString(
+                                R.string.error_copied_clipboard_label
+                            ),
+                        )
                     )
                 )
             }

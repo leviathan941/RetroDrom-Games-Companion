@@ -18,6 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen
 
+import android.content.ClipData
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -36,7 +37,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
@@ -44,6 +47,7 @@ import androidx.navigation.toRoute
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
@@ -75,10 +79,11 @@ fun RssFeedScreen(
             }
         )
     val rssChannelItems = screenViewModel.rssChannelItems.collectAsLazyPagingItems()
-    val clipboardManager = LocalClipboardManager.current
+    val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
 
     var isRefreshing by remember { mutableStateOf(false) }
+    val errorClipboardLabel = stringResource(R.string.error_copied_clipboard_label)
 
     Scaffold(
         topBar = {
@@ -142,9 +147,17 @@ fun RssFeedScreen(
                                     modifier = Modifier.fillParentMaxSize(),
                                     state = LoadingState.Failure(
                                         message = error.error.message.orEmpty(),
+                                        clipboardLabel = errorClipboardLabel,
                                     ),
-                                    onErrorLongPress = {
-                                        clipboardManager.setText(it)
+                                    onErrorLongPress = { label, message ->
+                                        coroutineScope.launch {
+                                            clipboard.setClipEntry(ClipEntry(
+                                                ClipData.newPlainText(
+                                                    label,
+                                                    message
+                                                )
+                                            ))
+                                        }
                                     },
                                     onRetryClick = { retry() }
                                 )
@@ -162,8 +175,15 @@ fun RssFeedScreen(
                                     errorMessage = error.error.message
                                         ?: "Error during Rss feed loading",
                                     onRetry = { retry() },
-                                    onErrorLongPress = {
-                                        clipboardManager.setText(it)
+                                    onErrorLongPress = { message ->
+                                        coroutineScope.launch {
+                                            clipboard.setClipEntry(ClipEntry(
+                                                ClipData.newPlainText(
+                                                    errorClipboardLabel,
+                                                    message
+                                                )
+                                            ))
+                                        }
                                     },
                                 )
                             }

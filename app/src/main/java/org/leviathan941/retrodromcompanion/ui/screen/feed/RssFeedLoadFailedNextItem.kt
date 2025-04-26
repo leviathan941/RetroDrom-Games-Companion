@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.feed
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -39,17 +38,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.leviathan941.retrodromcompanion.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun RssFeedLoadFailedNextItem(
     errorMessage: String,
     onRetry: () -> Unit,
-    onErrorLongPress: (message: AnnotatedString) -> Unit,
+    onErrorLongPress: (message: String) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -79,7 +76,9 @@ fun RssFeedLoadFailedNextItem(
                 .combinedClickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
-                    onLongClick = { onErrorLongPress(AnnotatedString(text = errorMessage)) },
+                    onLongClick = {
+                        onErrorLongPress(errorMessage)
+                    },
                     onClick = {},
                 ),
             text = stringResource(id = R.string.rss_feed_item_load_failure_title),

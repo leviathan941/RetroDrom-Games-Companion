@@ -77,4 +77,5 @@
     <string name="push_topic_subscription_failed_toast_text">Could not subscribe to topic \'%s\'</string>
     <string name="push_topic_unsubscription_failed_toast_text">Could not unsubscribe from topic \'%s\'</string>
     <string name="rss_feed_post_loading_item_title">Loading post</string>
+    <string name="error_copied_clipboard_label">The error text copied into clipboard</string>
 </resources>

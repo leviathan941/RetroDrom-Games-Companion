@@ -23,5 +23,6 @@ sealed interface LoadingState {
     data object Success : LoadingState
     data class Failure(
         val message: String,
+        val clipboardLabel: String,
     ) : LoadingState
 }
