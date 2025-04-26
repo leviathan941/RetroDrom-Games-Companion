@@ -75,7 +75,6 @@
     <string name="settings_group_name_about">О нас</string>
     <string name="settings_about_item_feedback_title">Обратная связь</string>
     <string name="settings_about_item_app_version_title">Версия приложения</string>
-    <string name="settings_about_feedback_screen_application">"Если у Вас есть вопросы по поводу приложения, пожалуйста, пишите на почту "</string>
     <string name="settings_about_feedback_screen_site">"По вопросам размещения рекламы, ошибок в публикациях и прочим вопросам: "</string>
     <string name="rss_feed_item_description_screen_title">Новость</string>
     <string name="rss_feed_item_description_from_author">от %s</string>

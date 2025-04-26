@@ -59,9 +59,7 @@
     <string name="settings_group_name_about">About</string>
     <string name="settings_about_item_feedback_title">Feedback</string>
     <string name="settings_about_item_app_version_title">Application version</string>
-    <string name="settings_about_feedback_screen_application">"If you have any questions regarding the application please feel free to write to "</string>
-    <string name="settings_about_feedback_screen_site">"For questions regarding advertising, errors in the content and other issues: "</string>
-    <string name="my_email" translatable="false">pslevel4@gmail.com</string>
+    <string name="settings_about_feedback_screen_site">"For questions regarding advertising, errors in the content and other issues please follow the link: "</string>
     <string name="rss_feed_item_description_screen_title">News</string>
     <string name="rss_feed_item_description_from_author">from %s</string>
     <string name="notification_permission_dialog_title">Stay updated with push notifications</string>
