@@ -92,4 +92,5 @@
     <string name="push_topic_unsubscription_failed_toast_text">Не получилось отписаться от топика \'%s\'</string>
     <string name="rss_feed_post_loading_item_title">Загрузка статьи</string>
     <string name="error_copied_clipboard_label">Текст ошибки скопирован в буфер</string>
+    <string name="settings_about_item_licenses_title">Лицензии</string>
 </resources>

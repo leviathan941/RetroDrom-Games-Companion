@@ -18,28 +18,20 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen
-import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableNavItem
-import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroupItem
-import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTitleItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.FeedbackSettingsSubScreen
+import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.MainSettingsSubScreen
 import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.NotificationSettingsSubScreen
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource
@@ -48,56 +40,7 @@ fun NavGraphBuilder.settingsNavHost(
     navigationActions: MainNavActions,
 ) {
     composable<SettingsDestination.Main> {
-        val screenViewModel = hiltViewModel<SettingsViewModel>(
-            key = ViewModelKeys.SETTINGS_VIEW_MODEL,
-        )
-        val appTheme by screenViewModel.appTheme.collectAsState()
-        SettingsScreen(
-            data = MainNavScreen.Settings(
-                title = stringResource(id = R.string.settings_screen_title),
-            ),
-            navigationActions = navigationActions,
-        ) {
-            SettingsGroup(
-                name = stringResource(id = R.string.settings_group_name_interface),
-            ) {
-                SettingsClickableNavItem(
-                    title = stringResource(id = R.string.settings_interface_item_theme_title),
-                    subtitle = stringResource(id = appTheme.toStringResource()),
-                    leadingIcon = painterResource(id = R.drawable.google_material_contrast),
-                ) {
-                    navigationActions.navigateToSettingsItem(SettingsDestination.AppTheme)
-                }
-
-                HorizontalDivider()
-
-                SettingsClickableNavItem(
-                    title = stringResource(id = R.string.settings_interface_item_notifications_title),
-                    leadingIcon = rememberVectorPainter(Icons.Default.Notifications),
-                ) {
-                    navigationActions.navigateToSettingsItem(SettingsDestination.Notifications)
-                }
-            }
-
-            SettingsGroup(
-                name = stringResource(id = R.string.settings_group_name_about)
-            ) {
-                SettingsClickableNavItem(
-                    title = stringResource(id = R.string.settings_about_item_feedback_title),
-                    leadingIcon = painterResource(id = R.drawable.google_material_feedback),
-                ) {
-                    navigationActions.navigateToSettingsItem(SettingsDestination.Feedback)
-                }
-
-                HorizontalDivider()
-
-                SettingsTitleItem(
-                    title = stringResource(id = R.string.settings_about_item_app_version_title),
-                    subtitle = BuildConfig.VERSION_NAME,
-                    leadingIcon = painterResource(id = R.drawable.google_material_info),
-                )
-            }
-        }
+        MainSettingsSubScreen(navigationActions)
     }
 
     composable<SettingsDestination.Notifications> {
