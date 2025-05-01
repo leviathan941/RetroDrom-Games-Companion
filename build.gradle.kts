@@ -30,3 +30,11 @@ plugins {
 tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
 }
+
+subprojects {
+    // These third-party dependencies generate cycle and breaks the OSS Licenses plugin
+    configurations.all {
+        exclude(group = "com.google.errorprone", module = "error_prone_annotations")
+        exclude(group = "com.google.errorprone", module = "error_prone_type_annotations")
+    }
+}
