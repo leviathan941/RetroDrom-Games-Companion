@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Theme.AndroidProjectTemplate" parent="android:Theme.Material.Light.NoActionBar" />
-
-    <style name="Theme.RetroDromGames.OssLicenses" parent="Theme.AppCompat">
-        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
-    </style>
 </resources>

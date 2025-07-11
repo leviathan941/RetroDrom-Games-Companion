@@ -23,18 +23,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.google.services) apply false
-    alias(libs.plugins.google.oss.licences) apply false
     alias(libs.plugins.dagger.hilt.android) apply false
 }
 
 tasks.register("clean", Delete::class) {
     delete(rootProject.layout.buildDirectory)
-}
-
-subprojects {
-    // These third-party dependencies generate cycle and breaks the OSS Licenses plugin
-    configurations.all {
-        exclude(group = "com.google.errorprone", module = "error_prone_annotations")
-        exclude(group = "com.google.errorprone", module = "error_prone_type_annotations")
-    }
 }

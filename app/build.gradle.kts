@@ -26,7 +26,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.google.oss.licences)
 }
 
 java {
@@ -120,8 +119,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.accompanist.permissions)
-
-    implementation(libs.google.play.oss.licences)
 
     implementation(libs.dagger.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

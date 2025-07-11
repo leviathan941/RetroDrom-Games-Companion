@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen
 
-import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.HorizontalDivider
@@ -30,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
@@ -93,16 +91,16 @@ fun MainSettingsSubScreen(
 
             HorizontalDivider()
 
-            SettingsClickableNavItem(
-                title = stringResource(id = R.string.settings_about_item_licenses_title),
-                leadingIcon = painterResource(id = R.drawable.google_material_license),
-            ) {
-                context.startActivity(
-                    Intent(context, OssLicensesMenuActivity::class.java)
-                )
-            }
-
-            HorizontalDivider()
+//            SettingsClickableNavItem(
+//                title = stringResource(id = R.string.settings_about_item_licenses_title),
+//                leadingIcon = painterResource(id = R.drawable.google_material_license),
+//            ) {
+//                context.startActivity(
+//                    Intent(context, OssLicensesMenuActivity::class.java)
+//                )
+//            }
+//
+//            HorizontalDivider()
 
             SettingsTitleItem(
                 title = stringResource(id = R.string.settings_about_item_app_version_title),
