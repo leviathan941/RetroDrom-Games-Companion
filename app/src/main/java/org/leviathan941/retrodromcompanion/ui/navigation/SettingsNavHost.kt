@@ -18,12 +18,16 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.mikepenz.aboutlibraries.ui.compose.android.rememberLibraries
+import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -89,6 +93,21 @@ fun NavGraphBuilder.settingsNavHost(
             navigationActions = navigationActions,
         ) {
             FeedbackSettingsSubScreen()
+        }
+    }
+
+    composable<SettingsDestination.Licenses> {
+        SettingsScreen(
+            data = MainNavScreen.Settings(
+                title = stringResource(id = R.string.settings_about_item_licenses_title)
+            ),
+            navigationActions = navigationActions,
+        ) {
+            val libraries by rememberLibraries(R.raw.aboutlibraries)
+            LibrariesContainer(
+                libraries = libraries,
+                modifier = Modifier.safeDrawingPadding(),
+            )
         }
     }
 }

@@ -25,7 +25,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,7 +49,6 @@ fun MainSettingsSubScreen(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
     )
     val appTheme by screenViewModel.appTheme.collectAsState()
-    val context = LocalContext.current
 
     SettingsScreen(
         data = MainNavScreen.Settings(
@@ -91,16 +89,14 @@ fun MainSettingsSubScreen(
 
             HorizontalDivider()
 
-//            SettingsClickableNavItem(
-//                title = stringResource(id = R.string.settings_about_item_licenses_title),
-//                leadingIcon = painterResource(id = R.drawable.google_material_license),
-//            ) {
-//                context.startActivity(
-//                    Intent(context, OssLicensesMenuActivity::class.java)
-//                )
-//            }
-//
-//            HorizontalDivider()
+            SettingsClickableNavItem(
+                title = stringResource(id = R.string.settings_about_item_licenses_title),
+                leadingIcon = painterResource(id = R.drawable.google_material_license),
+            ) {
+                navigationActions.navigateToSettingsItem(SettingsDestination.Licenses)
+            }
+
+            HorizontalDivider()
 
             SettingsTitleItem(
                 title = stringResource(id = R.string.settings_about_item_app_version_title),

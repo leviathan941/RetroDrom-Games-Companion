@@ -65,6 +65,10 @@ sealed interface SettingsDestination : AppDestination {
     @Keep
     @Serializable
     data object Feedback : SettingsDestination
+
+    @Keep
+    @Serializable
+    data object Licenses : SettingsDestination
 }
 
 sealed interface RssFeedDestination : AppDestination {

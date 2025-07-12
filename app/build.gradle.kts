@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.aboutlibraries)
 }
 
 java {
@@ -93,6 +94,8 @@ dependencies {
     implementation(project(":permission"))
     implementation(project(":preferences"))
     implementation(project(":rss-reader"))
+
+    implementation(libs.aboutlibraries.compose.m3)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
