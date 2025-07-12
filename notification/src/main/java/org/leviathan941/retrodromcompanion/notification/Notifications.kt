@@ -43,9 +43,9 @@ import javax.inject.Singleton
 
 @Singleton
 public class Notifications @Inject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
-    @Named(DiKeys.MAIN_ACTIVITY_CLASS)
+    @param:Named(DiKeys.MAIN_ACTIVITY_CLASS)
     private val pushActivityClass: Class<*>,
 ) {
 

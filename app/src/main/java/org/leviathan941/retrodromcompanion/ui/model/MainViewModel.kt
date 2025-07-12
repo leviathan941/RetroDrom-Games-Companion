@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    @ApplicationContext
+    @param:ApplicationContext
     private val context: Context,
 ) : ViewModel() {
     private val wpRetrofitClient = WpRetrofitClient(Constants.RETRODROM_BASE_URL)

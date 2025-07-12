@@ -38,7 +38,7 @@ import javax.inject.Singleton
 @Singleton
 class PushNotificationModel @Inject constructor(
     private val application: Application,
-    @Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
+    @param:Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
     private val scope: CoroutineScope,
     private val preferencesRepository: PreferencesRepository,
 ) {
