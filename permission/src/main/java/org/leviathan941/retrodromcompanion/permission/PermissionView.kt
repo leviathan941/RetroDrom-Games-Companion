@@ -19,7 +19,6 @@
 package org.leviathan941.retrodromcompanion.permission
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -31,16 +30,17 @@ import org.leviathan941.retrodromcompanion.permission.internal.PermissionRationa
 @Composable
 public fun PermissionView(
     permission: String,
-    grantedState: MutableState<Boolean>,
+    onPermissionResult: (isGranted: Boolean) -> Unit,
     rationaleData: PermissionRationale.Data,
     allowRationale: Boolean = true,
 ) {
-    val permissionState = rememberPermissionState(permission)
-    grantedState.value = permissionState.status.isGranted
+    val permissionState = rememberPermissionState(permission, onPermissionResult)
 
     when {
         permissionState.status.isGranted -> {
-            return
+            SideEffect {
+                onPermissionResult(true)
+            }
         }
 
         permissionState.status.shouldShowRationale -> {

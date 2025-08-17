@@ -21,7 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.permission
 import android.Manifest
 import android.os.Build
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.leviathan941.retrodromcompanion.R
@@ -30,7 +30,7 @@ import org.leviathan941.retrodromcompanion.permission.PermissionView
 
 @Composable
 fun NotificationPermissionView(
-    grantedState: MutableState<Boolean>,
+    onPermissionResult: (isGranted: Boolean) -> Unit,
     allowRationale: Boolean,
     onRationaleDismiss: () -> Unit,
     onRationaleConfirm: () -> Unit,
@@ -38,7 +38,7 @@ fun NotificationPermissionView(
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         PermissionView(
             permission = Manifest.permission.POST_NOTIFICATIONS,
-            grantedState = grantedState,
+            onPermissionResult = onPermissionResult,
             rationaleData = PermissionRationale.Data(
                 title = stringResource(id = R.string.notification_permission_dialog_title),
                 description = stringResource(id = R.string.notification_permission_dialog_text),
@@ -49,6 +49,8 @@ fun NotificationPermissionView(
             allowRationale = allowRationale,
         )
     } else {
-        grantedState.value = true
+        SideEffect {
+            onPermissionResult(true)
+        }
     }
 }

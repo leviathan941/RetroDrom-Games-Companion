@@ -21,8 +21,6 @@ package org.leviathan941.retrodromcompanion.ui.promo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel
@@ -32,24 +30,21 @@ import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionV
 @Composable
 fun RssFeedPromo(
     backStackEntry: NavBackStackEntry,
-) {
-    val viewModel = hiltViewModel<RssFeedPromoModel>(
+    viewModel: RssFeedPromoModel = hiltViewModel(
         viewModelStoreOwner = backStackEntry,
         key = ViewModelKeys.MAIN_VIEW_PROMO_MODEL,
-    )
+    ),
+) {
     val promoState by viewModel.promoState.collectAsState()
-    val permissionGranted = remember { mutableStateOf(false) }
 
     if (promoState.shouldApplyPushPostsPromo) {
         NotificationPermissionView(
-            grantedState = permissionGranted,
+            onPermissionResult = { isGranted ->
+                viewModel.subscribePushPostsTopic()
+            },
             allowRationale = false,
             onRationaleDismiss = {},
             onRationaleConfirm = {},
         )
-
-        if (permissionGranted.value) {
-            viewModel.subscribePushPostsTopic()
-        }
     }
 }

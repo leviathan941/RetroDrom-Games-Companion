@@ -33,9 +33,7 @@ import org.leviathan941.retrodromcompanion.permission.PermissionRationale
 import org.leviathan941.retrodromcompanion.permission.R
 
 @Composable
-internal fun PermissionRationaleDialog(
-    data: PermissionRationale.Data,
-) {
+internal fun PermissionRationaleDialog(data: PermissionRationale.Data) {
     AlertDialog(
         onDismissRequest = {
             data.onDismiss()
@@ -62,7 +60,7 @@ internal fun PermissionRationaleDialog(
                 onClick = {
                     data.onConfirm()
                     data.onDismiss()
-                }
+                },
             ) {
                 Text(
                     text = stringResource(id = R.string.permission_dialog_confirm_button),
@@ -73,13 +71,13 @@ internal fun PermissionRationaleDialog(
             Button(
                 onClick = {
                     data.onDismiss()
-                }
+                },
             ) {
                 Text(
                     text = stringResource(id = R.string.permission_dialog_deny_button),
                 )
             }
-        }
+        },
     )
 }
 
@@ -90,8 +88,8 @@ private fun PermissionRationaleDialogPreview() {
         data = PermissionRationale.Data(
             title = "Big enough title to be shown",
             description = "If you are going to use a passage of Lorem Ipsum, " +
-                    "you need to be sure there isn't anything embarrassing hidden in the " +
-                    "middle of text.",
+                "you need to be sure there isn't anything embarrassing hidden in the " +
+                "middle of text.",
             icon = rememberVectorPainter(Icons.Default.Notifications),
             onDismiss = {},
             onConfirm = {},
