@@ -24,13 +24,13 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.notification.NotificationData
 import org.leviathan941.retrodromcompanion.notification.Notifications
 import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
-import javax.inject.Inject
 
 private const val TAG = "MessagingService"
 
@@ -42,7 +42,7 @@ internal class MessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Refreshed token: $token")
         ProcessLifecycleOwner.get().lifecycleScope.launch {
             PreferencesRepository(applicationContext.mainDataStore).ui.first().let { prefs ->
-                prefs.subscribedPushTopics.mapNotNull { 
+                prefs.subscribedPushTopics.mapNotNull {
                     Messaging.topicFromValue(it)
                 }.forEach {
                     Messaging.subscribeToTopic(it)

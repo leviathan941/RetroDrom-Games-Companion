@@ -33,35 +33,31 @@ public object Messaging {
         NEW_RETRODROM_POSTS("new_retrodrom_posts"),
     }
 
-    public suspend fun registrationToken(): String {
-        return suspendCoroutine { continuation ->
-            FirebaseMessaging.getInstance().token
-                .addOnSuccessListener { token ->
-                    continuation.resume(token)
-                }
-                .addOnFailureListener { ex ->
-                    Log.e(TAG, "Failed to get registration token", ex)
-                    continuation.resumeWithException(ex)
-                }
-        }
+    public suspend fun registrationToken(): String = suspendCoroutine { continuation ->
+        FirebaseMessaging.getInstance().token
+            .addOnSuccessListener { token ->
+                continuation.resume(token)
+            }
+            .addOnFailureListener { ex ->
+                Log.e(TAG, "Failed to get registration token", ex)
+                continuation.resumeWithException(ex)
+            }
     }
 
-    public suspend fun subscribeToTopic(topic: Topic): Boolean {
-        return suspendCoroutine { continuation ->
-            FirebaseMessaging.getInstance().subscribeToTopic(topic.value)
-                .addOnSuccessListener {
-                    Log.d(TAG, "Subscribed to topic $topic")
-                    continuation.resume(true)
-                }
-                .addOnFailureListener { ex ->
-                    Log.e(TAG, "Failed to subscribe to topic $topic", ex)
-                    continuation.resume(false)
-                }
-        }
+    public suspend fun subscribeToTopic(topic: Topic): Boolean = suspendCoroutine { continuation ->
+        FirebaseMessaging.getInstance().subscribeToTopic(topic.value)
+            .addOnSuccessListener {
+                Log.d(TAG, "Subscribed to topic $topic")
+                continuation.resume(true)
+            }
+            .addOnFailureListener { ex ->
+                Log.e(TAG, "Failed to subscribe to topic $topic", ex)
+                continuation.resume(false)
+            }
     }
 
-    public suspend fun unsubscribeFromTopic(topic: Topic): Boolean {
-        return suspendCoroutine { continuation ->
+    public suspend fun unsubscribeFromTopic(topic: Topic): Boolean =
+        suspendCoroutine { continuation ->
             FirebaseMessaging.getInstance().unsubscribeFromTopic(topic.value)
                 .addOnSuccessListener {
                     Log.d(TAG, "Unsubscribed from topic $topic")
@@ -72,9 +68,6 @@ public object Messaging {
                     continuation.resume(false)
                 }
         }
-    }
 
-    public fun topicFromValue(value: String): Topic? {
-        return Topic.entries.find { it.value == value }
-    }
+    public fun topicFromValue(value: String): Topic? = Topic.entries.find { it.value == value }
 }
