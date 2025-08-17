@@ -31,15 +31,15 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 import org.leviathan941.retrodromcompanion.common.RequestCode
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.notification.internal.channelName
 import org.leviathan941.retrodromcompanion.notification.internal.notificationChannelId
 import org.leviathan941.retrodromcompanion.notification.internal.notificationId
 import org.leviathan941.retrodromcompanion.notification.internal.visibility
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Singleton
 public class Notifications @Inject constructor(
@@ -55,7 +55,7 @@ public class Notifications @Inject constructor(
                 listOf(
                     newsChannel(context),
                     defaultChannel(context),
-                )
+                ),
             )
     }
 
@@ -66,8 +66,9 @@ public class Notifications @Inject constructor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ActivityCompat.checkSelfPermission(
                 context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.POST_NOTIFICATIONS,
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             return
         }
 
@@ -124,13 +125,12 @@ public class Notifications @Inject constructor(
         channelId: NotificationChannelId,
         name: String,
         description: String,
-    ): NotificationChannelCompat =
-        NotificationChannelCompat.Builder(
-            channelId.value,
-            NotificationManagerCompat.IMPORTANCE_DEFAULT
-        ).setDescription(description)
-            .setName(name)
-            .setShowBadge(true)
-            .setVibrationEnabled(true)
-            .build()
+    ): NotificationChannelCompat = NotificationChannelCompat.Builder(
+        channelId.value,
+        NotificationManagerCompat.IMPORTANCE_DEFAULT,
+    ).setDescription(description)
+        .setName(name)
+        .setShowBadge(true)
+        .setVibrationEnabled(true)
+        .build()
 }

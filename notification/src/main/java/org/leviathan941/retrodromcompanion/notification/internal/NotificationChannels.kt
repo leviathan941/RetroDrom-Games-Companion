@@ -19,58 +19,40 @@
 package org.leviathan941.retrodromcompanion.notification.internal
 
 import android.content.Context
-import android.net.Uri
-import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
-import org.leviathan941.retrodromcompanion.notification.POST_ID_PAYLOAD_DATA_KEY
-import org.leviathan941.retrodromcompanion.notification.R
-import org.leviathan941.retrodromcompanion.notification.createFeedItemDeeplink
 import java.util.UUID
 import kotlin.math.absoluteValue
+import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
+import org.leviathan941.retrodromcompanion.notification.R
 
 // Channel IDs:
 internal const val NEW_POSTS_CHANNEL_ID = "retrodrom_rss_posts"
+
 // It must be the same as "push_notification_default_channel_id"
 internal const val MISC_CHANNEL_ID = "misc"
 
-internal fun notificationChannelId(
-    value: String?
-): NotificationChannelId =
+internal fun notificationChannelId(value: String?): NotificationChannelId =
     NotificationChannelId.entries.find { it.value == value }
         ?: NotificationChannelId.MISC
 
-internal fun NotificationChannelId.channelName(
-    context: Context
-): String =
-    when (this) {
-        NotificationChannelId.RETRODROM_RSS_POSTS ->
-            context.getString(R.string.rss_news_notification_channel_name)
-        NotificationChannelId.MISC ->
-            context.getString(R.string.misc_notification_channel_name)
-    }
-
-internal fun NotificationChannelId.visibility(): Int =
-    when (this) {
-        NotificationChannelId.RETRODROM_RSS_POSTS ->
-            android.app.Notification.VISIBILITY_PUBLIC
-        NotificationChannelId.MISC ->
-            android.app.Notification.VISIBILITY_PRIVATE
-    }
-
-internal fun NotificationChannelId.notificationId(): Int =
-    when (this) {
-        NotificationChannelId.RETRODROM_RSS_POSTS,
-        NotificationChannelId.MISC ->
-            uniqueNotificationId()
-    }
-
-private fun uniqueNotificationId(): Int =
-    UUID.randomUUID().hashCode().absoluteValue
-
-internal fun NotificationChannelId.deeplink(data: Map<String, String>): Uri? {
-    return when (this) {
-        NotificationChannelId.RETRODROM_RSS_POSTS ->
-            data[POST_ID_PAYLOAD_DATA_KEY]?.let { createFeedItemDeeplink(it) }
-        NotificationChannelId.MISC ->
-            null
-    }
+internal fun NotificationChannelId.channelName(context: Context): String = when (this) {
+    NotificationChannelId.RETRODROM_RSS_POSTS ->
+        context.getString(R.string.rss_news_notification_channel_name)
+    NotificationChannelId.MISC ->
+        context.getString(R.string.misc_notification_channel_name)
 }
+
+internal fun NotificationChannelId.visibility(): Int = when (this) {
+    NotificationChannelId.RETRODROM_RSS_POSTS ->
+        android.app.Notification.VISIBILITY_PUBLIC
+    NotificationChannelId.MISC ->
+        android.app.Notification.VISIBILITY_PRIVATE
+}
+
+internal fun NotificationChannelId.notificationId(): Int = when (this) {
+    NotificationChannelId.RETRODROM_RSS_POSTS,
+    NotificationChannelId.MISC,
+    ->
+        uniqueNotificationId()
+}
+
+private fun uniqueNotificationId(): Int = UUID.randomUUID().hashCode().absoluteValue

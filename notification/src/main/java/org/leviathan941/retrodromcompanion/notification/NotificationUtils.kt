@@ -45,16 +45,12 @@ public fun createFeedItemDeeplink(postId: String): Uri? {
         .build()
 }
 
-public fun extractDeeplink(intent: Intent): Uri? {
-    return with(intent) {
-        data ?: extras?.let { bundle ->
-            bundle.getString(POST_ID_PAYLOAD_DATA_KEY)?.let { postId ->
-                createFeedItemDeeplink(postId)
-            }
+public fun extractDeeplink(intent: Intent): Uri? = with(intent) {
+    data ?: extras?.let { bundle ->
+        bundle.getString(POST_ID_PAYLOAD_DATA_KEY)?.let { postId ->
+            createFeedItemDeeplink(postId)
         }
-    }?.takeIf { it.isSupportedDeeplink() }
-}
+    }
+}?.takeIf { it.isSupportedDeeplink() }
 
-private fun Uri.isSupportedDeeplink(): Boolean {
-    return scheme == RETRODROM_DEEPLINK_SCHEME
-}
+private fun Uri.isSupportedDeeplink(): Boolean = scheme == RETRODROM_DEEPLINK_SCHEME

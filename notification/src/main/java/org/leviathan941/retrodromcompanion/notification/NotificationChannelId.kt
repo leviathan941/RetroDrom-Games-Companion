@@ -22,7 +22,7 @@ import org.leviathan941.retrodromcompanion.notification.internal.MISC_CHANNEL_ID
 import org.leviathan941.retrodromcompanion.notification.internal.NEW_POSTS_CHANNEL_ID
 
 public enum class NotificationChannelId(
-    public val value: String
+    public val value: String,
 ) {
     RETRODROM_RSS_POSTS(NEW_POSTS_CHANNEL_ID),
     MISC(MISC_CHANNEL_ID),
