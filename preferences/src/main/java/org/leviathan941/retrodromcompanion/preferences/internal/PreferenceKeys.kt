@@ -27,6 +27,5 @@ internal val APP_THEME_PREFERENCE_KEY = stringPreferencesKey("app_theme")
 internal val SUBSCRIBED_PUSH_TOPICS = stringSetPreferencesKey("subscribed_push_topics")
 
 // PromoPreferences
-internal val PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW = intPreferencesKey(
-    "push_posts_promo_starts_until_show"
-)
+internal val PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW =
+    intPreferencesKey("push_posts_promo_starts_until_show")

@@ -31,6 +31,6 @@ public object Preferences {
             listOf(
                 Preference0To1Migration(),
             )
-        }
+        },
     )
 }

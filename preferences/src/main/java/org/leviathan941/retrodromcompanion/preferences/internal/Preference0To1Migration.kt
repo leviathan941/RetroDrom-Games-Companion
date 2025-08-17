@@ -27,16 +27,14 @@ internal class Preference0To1Migration : DataMigration<Preferences> {
 
     override suspend fun cleanUp() = Unit
 
-    override suspend fun shouldMigrate(currentData: Preferences): Boolean {
-        return currentData.contains(newsPushEnabledPreferenceKey)
-    }
+    override suspend fun shouldMigrate(currentData: Preferences): Boolean =
+        currentData.contains(newsPushEnabledPreferenceKey)
 
-    override suspend fun migrate(currentData: Preferences): Preferences {
-        return currentData.toMutablePreferences().also { prefs ->
+    override suspend fun migrate(currentData: Preferences): Preferences =
+        currentData.toMutablePreferences().also { prefs ->
             if (newsPushEnabledPreferenceKey in prefs) {
                 prefs[SUBSCRIBED_PUSH_TOPICS] = setOf("new_retrodrom_posts")
                 prefs.remove(newsPushEnabledPreferenceKey)
             }
         }
-    }
 }

@@ -20,6 +20,9 @@ package org.leviathan941.retrodromcompanion.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
@@ -27,9 +30,6 @@ import org.leviathan941.retrodromcompanion.preferences.internal.APP_THEME_PREFER
 import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW
 import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW_DEFAULT
 import org.leviathan941.retrodromcompanion.preferences.internal.SUBSCRIBED_PUSH_TOPICS
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Singleton
 public class PreferencesRepository @Inject constructor(
