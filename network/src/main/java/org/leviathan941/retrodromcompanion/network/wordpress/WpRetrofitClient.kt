@@ -40,12 +40,14 @@ class WpRetrofitClient(
 
     @Throws(WpGetErrorException::class)
     suspend fun fetchCategories(): List<WpFeedCategory> = withContext(Dispatchers.IO) {
+        @SuppressWarnings("TooGenericExceptionCaught")
         try {
             wpApiService.fetchCategories().handleResponse() ?: emptyList()
         } catch (e: Exception) {
             Log.e(WP_TAG, "fetchCategories: ${e.message}", e)
             throw WpGetErrorException(
                 message = e.message ?: "Unknown error",
+                cause = e,
             )
         }
     }
@@ -63,13 +65,15 @@ class WpRetrofitClient(
 
     private fun <T> Response<T>.logResponse() {
         Log.d(
-            WP_TAG, """fetchCategories: {
-            isSuccessful=${isSuccessful},
+            WP_TAG,
+            """fetchCategories: {
+            isSuccessful=$isSuccessful,
             code=${code()},
             message=${message()},
             errorBody=${errorBody()},
             body=${body()}
-        }""".trimIndent()
+        }
+            """.trimIndent(),
         )
     }
 }
