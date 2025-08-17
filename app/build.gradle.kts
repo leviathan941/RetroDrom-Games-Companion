@@ -51,7 +51,7 @@ android {
             useSupportLibrary = true
         }
 
-        setProperty("archivesBaseName", "${Application.BASE_NAME}-${Application.version.name}")
+        base.archivesName.set("${Application.BASE_NAME}-${Application.version.name}")
     }
 
     buildTypes {
@@ -60,7 +60,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             ndk {
                 debugSymbolLevel = "FULL"
