@@ -48,6 +48,7 @@ android {
 dependencies {
     api(project(":html-text:api"))
 
+    implementation(platform(libs.compose.bom))
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.coil3.compose)
