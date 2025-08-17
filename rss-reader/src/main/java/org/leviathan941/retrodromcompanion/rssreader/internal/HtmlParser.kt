@@ -21,7 +21,7 @@ package org.leviathan941.retrodromcompanion.rssreader.internal
 import android.text.Html
 
 internal class HtmlParser(
-    private val html: String
+    private val html: String,
 ) {
     var images: List<String> = emptyList()
         private set
@@ -39,7 +39,7 @@ internal class HtmlParser(
             html,
             Html.FROM_HTML_MODE_COMPACT,
             imageHandler,
-            tagHandler
+            tagHandler,
         ).split("\n")
             .filterNot { it.isBlank() || it == "\ufffc" }
             .let { paragraphs = it }

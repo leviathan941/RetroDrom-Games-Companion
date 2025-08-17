@@ -19,13 +19,13 @@
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
 import androidx.core.net.toUri
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.leviathan941.retrodromcompanion.rssreader.BuildConfig
 import tw.ktrssreader.Reader
 import tw.ktrssreader.config.readerGlobalConfig
 import tw.ktrssreader.generated.ParsedRssChannelReader
-import kotlin.time.ExperimentalTime
 
 internal object RssFetcher {
     init {
@@ -56,16 +56,14 @@ internal object RssFetcher {
         url: String,
         useCache: Boolean,
         flushCache: Boolean,
-    ): ParsedRssChannel {
-        return ParsedRssChannelReader.coRead(
-            url = url,
-            config = {
-                this.useCache = useCache
-                this.flushCache = flushCache
-                this.expiredTimeMillis = EXPIRED_TIME_MILLIS
-            }
-        )
-    }
+    ): ParsedRssChannel = ParsedRssChannelReader.coRead(
+        url = url,
+        config = {
+            this.useCache = useCache
+            this.flushCache = flushCache
+            this.expiredTimeMillis = EXPIRED_TIME_MILLIS
+        },
+    )
 
     fun clearCache() {
         Reader.clearCache()

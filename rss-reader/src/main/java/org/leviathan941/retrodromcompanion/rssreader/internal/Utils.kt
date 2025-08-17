@@ -27,8 +27,9 @@ internal const val TAG = "RssReader"
 
 internal const val PAGING_INITIAL_PAGE_NUMBER = 1
 
-internal fun ParsedRssItem.toPublic(): RssChannelItem? =
-    if (title == null || link == null || pubDate == null || description == null) {
+internal fun ParsedRssItem.toPublic(): RssChannelItem? {
+    val isItemInvalid = title == null || link == null || pubDate == null || description == null
+    return if (isItemInvalid) {
         Log.e(TAG, "Invalid RSS channel item: $this")
         null
     } else {
@@ -42,13 +43,13 @@ internal fun ParsedRssItem.toPublic(): RssChannelItem? =
             postId = postId,
         )
     }
+}
 
-private fun parseRssDescription(description: String): RssDescription {
-    return HtmlParser(description).parse().let {
+private fun parseRssDescription(description: String): RssDescription =
+    HtmlParser(description).parse().let {
         RssDescription(
             imageUrl = it.images.firstOrNull(),
             paragraphs = it.paragraphs,
             html = description,
         )
     }
-}

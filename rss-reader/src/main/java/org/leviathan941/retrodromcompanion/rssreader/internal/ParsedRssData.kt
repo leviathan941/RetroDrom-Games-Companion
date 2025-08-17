@@ -18,9 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
+import java.io.Serializable
 import tw.ktrssreader.annotation.RssRawData
 import tw.ktrssreader.annotation.RssTag
-import java.io.Serializable
 
 @RssTag(name = Rss.CHANNEL_TAG)
 data class ParsedRssChannel(
@@ -28,7 +28,12 @@ data class ParsedRssChannel(
     val link: String?,
     @RssTag(name = Rss.ITEM_TAG)
     val items: List<ParsedRssItem>?,
-) : Serializable
+) : Serializable {
+    companion object {
+        @SuppressWarnings("unused")
+        private const val serialVersionUID: Long = 1L
+    }
+}
 
 @RssTag(name = Rss.ITEM_TAG)
 data class ParsedRssItem(
@@ -42,5 +47,10 @@ data class ParsedRssItem(
     val creator: String?,
     val description: String?,
     @RssTag(name = Rss.POST_ID_TAG)
-    val postId: String?
-) : Serializable
+    val postId: String?,
+) : Serializable {
+    companion object {
+        @SuppressWarnings("unused")
+        private const val serialVersionUID: Long = 1L
+    }
+}

@@ -34,20 +34,19 @@ class RssFeedItemsSource(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<Int, RssChannelItem>): Int {
-        return ((state.anchorPosition ?: 0) - state.config.initialLoadSize / 2)
+    override fun getRefreshKey(state: PagingState<Int, RssChannelItem>): Int =
+        ((state.anchorPosition ?: 0) - state.config.initialLoadSize / 2)
             .coerceAtLeast(PAGING_INITIAL_PAGE_NUMBER)
-    }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RssChannelItem> {
-        return loadInternal(params, useCache = true)
-    }
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, RssChannelItem> =
+        loadInternal(params, useCache = true)
 
     private suspend fun loadInternal(
         params: LoadParams<Int>,
         useCache: Boolean,
     ): LoadResult<Int, RssChannelItem> {
         val pageNumber = params.key ?: PAGING_INITIAL_PAGE_NUMBER
+        @SuppressWarnings("TooGenericExceptionCaught")
         return try {
             Log.d(RSS_READER_TAG, "Loading RSS feed items for page $pageNumber, useCache=$useCache")
             val channelItems = fetchFeed(pageNumber, useCache)
@@ -59,7 +58,8 @@ class RssFeedItemsSource(
         } catch (e: Exception) {
             Log.e(
                 RSS_READER_TAG,
-                "Failed to load RSS feed items for page $pageNumber, useCache=$useCache", e
+                "Failed to load RSS feed items for page $pageNumber, useCache=$useCache",
+                e,
             )
             if (useCache && params is LoadParams.Refresh) {
                 loadInternal(params, useCache = false)
@@ -72,11 +72,9 @@ class RssFeedItemsSource(
     private suspend fun fetchFeed(
         pageNumber: Int,
         useCache: Boolean,
-    ): List<ParsedRssItem> {
-        return RssFetcher.fetchFeedPage(
-            channelUrl,
-            pageNumber,
-            useCache,
-        ).items ?: emptyList()
-    }
+    ): List<ParsedRssItem> = RssFetcher.fetchFeedPage(
+        channelUrl,
+        pageNumber,
+        useCache,
+    ).items ?: emptyList()
 }

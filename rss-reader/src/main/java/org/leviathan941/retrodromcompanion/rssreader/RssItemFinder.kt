@@ -24,9 +24,7 @@ import org.leviathan941.retrodromcompanion.rssreader.internal.toPublic
 class RssItemFinder(
     private val channelUrl: String,
 ) {
-    suspend fun findByPostId(
-        postId: String,
-    ): RssChannelItem? {
+    suspend fun findByPostId(postId: String): RssChannelItem? {
         var pageNumber = 0
         do {
             val items = fetchChannelPageItems(++pageNumber)
@@ -37,13 +35,10 @@ class RssItemFinder(
         return null
     }
 
-    private suspend fun fetchChannelPageItems(
-        pageNumber: Int,
-    ): List<RssChannelItem> {
-        return RssFetcher.fetchFeedPage(
+    private suspend fun fetchChannelPageItems(pageNumber: Int): List<RssChannelItem> =
+        RssFetcher.fetchFeedPage(
             channelUrl = channelUrl,
             pageNumber = pageNumber,
             useCache = false,
         ).items?.mapNotNull { it.toPublic() } ?: emptyList()
-    }
 }
