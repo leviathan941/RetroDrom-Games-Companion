@@ -28,37 +28,33 @@ import org.leviathan941.compose.htmltext.api.InlineContentCreator
 internal fun ContentAnnotatedString.createInlineContent(
     creators: List<InlineContentCreator>,
     tags: List<HtmlTag>,
-): Map<String, InlineTextContent> {
-    return inlineContents.mapNotNull { content ->
-        creators.firstNotNullOfOrNull { mapper ->
-            mapper.create(
-                id = content.id,
-                span = content.span,
-                start = content.start,
-                end = content.end,
-                tags = tags,
-            )
-        }?.let {
-            content.id to it
-        }
-    }.toMap()
-}
+): Map<String, InlineTextContent> = inlineContents.mapNotNull { content ->
+    creators.firstNotNullOfOrNull { mapper ->
+        mapper.create(
+            id = content.id,
+            span = content.span,
+            start = content.start,
+            end = content.end,
+            tags = tags,
+        )
+    }?.let {
+        content.id to it
+    }
+}.toMap()
 
-internal fun extractTags(html: String): List<HtmlTag> {
-    return buildList {
-        KsoupHtmlParser(
-            handler = object : KsoupHtmlHandler {
-                override fun onOpenTag(
-                    name: String,
-                    attributes: Map<String, String>,
-                    isImplied: Boolean
-                ) {
-                    add(HtmlTag(name, attributes, isImplied))
-                }
+internal fun extractTags(html: String): List<HtmlTag> = buildList {
+    KsoupHtmlParser(
+        handler = object : KsoupHtmlHandler {
+            override fun onOpenTag(
+                name: String,
+                attributes: Map<String, String>,
+                isImplied: Boolean,
+            ) {
+                add(HtmlTag(name, attributes, isImplied))
             }
-        ).apply {
-            write(html)
-            end()
-        }
+        },
+    ).apply {
+        write(html)
+        end()
     }
 }

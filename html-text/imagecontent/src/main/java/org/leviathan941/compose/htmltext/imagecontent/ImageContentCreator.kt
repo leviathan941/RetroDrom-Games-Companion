@@ -76,8 +76,8 @@ public class ImageContentCreator(
                     else -> {
                         PlaceholderVerticalAlign.TextTop
                     }
-                }
-            )
+                },
+            ),
         ) {
             val desc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 imageSpan.contentDescription?.toString()
@@ -93,14 +93,17 @@ public class ImageContentCreator(
                 error = error,
                 onError = { error ->
                     Log.e(TAG, "Error while loading image", error.result.throwable)
-                }
+                },
             )
         }
     }
 }
 
-private fun Int?.toSpOrElse(density: Density, default: TextUnit): TextUnit {
-    return this?.takeIf { it >= 0 }?.let {
-        with(density) { it.toSp() }
-    } ?: default
-}
+private fun Int?.toSpOrElse(
+    density: Density,
+    default: TextUnit,
+): TextUnit = this?.takeIf {
+    it >= 0
+}?.let {
+    with(density) { it.toSp() }
+} ?: default

@@ -26,10 +26,11 @@ internal data class ImgTag(
     val height: Int,
 )
 
-internal fun Iterable<HtmlTag>.findImgTag(source: String): ImgTag? {
-    return firstOrNull { it.name == "img" && it.attributes["src"] == source }?.toImgTag()
-}
+internal fun Iterable<HtmlTag>.findImgTag(source: String): ImgTag? = firstOrNull {
+    it.name == "img" && it.attributes["src"] == source
+}?.toImgTag()
 
+@SuppressWarnings("ReturnCount")
 internal fun HtmlTag.toImgTag(): ImgTag? {
     require(name == "img") { "The tag must be 'img'" }
     val src = attributes["src"] ?: return null

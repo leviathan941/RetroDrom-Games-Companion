@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.core.text.HtmlCompat
 import com.aghajari.compose.text.AnnotatedText
 import com.aghajari.compose.text.fromHtml
+import com.aghajari.compose.text.getInlineContentMap
 import org.leviathan941.compose.htmltext.api.InlineContentCreator
 import org.leviathan941.compose.htmltext.internal.createInlineContent
 import org.leviathan941.compose.htmltext.internal.extractTags
@@ -39,7 +40,7 @@ public fun HtmlText(
     modifier: Modifier = Modifier,
     textColor: Color = LocalContentColor.current,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    inlineContentCreators: List<InlineContentCreator>,
+    inlineContentCreators: List<InlineContentCreator> = emptyList(),
     onLinkClick: (String) -> Unit = {},
 ) {
     val text = html.fromHtml(
@@ -47,6 +48,12 @@ public fun HtmlText(
         linkColor = linkColor,
     )
     val htmlTags = extractTags(html)
+    val inlineContent = inlineContentCreators.takeUnless { it.isEmpty() }?.let {
+        text.createInlineContent(
+            creators = it,
+            tags = htmlTags,
+        )
+    } ?: text.getInlineContentMap()
 
     AnnotatedText(
         text = text,
@@ -55,9 +62,6 @@ public fun HtmlText(
         onURLClick = onLinkClick,
         // Workaround for https://issuetracker.google.com/issues/297002108
         style = textStyle.copy(lineHeight = TextUnit.Unspecified),
-        inlineContent = text.createInlineContent(
-            creators = inlineContentCreators,
-            tags = htmlTags,
-        ),
+        inlineContent = inlineContent,
     )
 }
