@@ -22,15 +22,6 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
-
-    resolutionStrategy {
-        eachPlugin {
-            // Workaround for oss-licenses-plugin
-            if (requested.id.id == "com.google.android.gms.oss-licenses-plugin") {
-                useModule("com.google.android.gms:oss-licenses-plugin:${requested.version}")
-            }
-        }
-    }
 }
 
 buildscript {
