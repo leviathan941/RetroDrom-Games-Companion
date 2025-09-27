@@ -101,8 +101,12 @@ class MainNavActions(
     private val predefinedDestinations: MainNavPredefinedDestinations,
 ) {
     fun navigateBack() {
-        Log.d(MAIN_VIEW_TAG, "Navigate back")
-        navController.popBackStack()
+        if (navController.popBackStack()) {
+            Log.d(MAIN_VIEW_TAG, "Navigate back")
+        } else {
+            Log.d(MAIN_VIEW_TAG, "No back stack entry, cannot navigate back")
+            navigateToRssFeed()
+        }
     }
 
     fun navigateToRssFeed(
@@ -118,7 +122,9 @@ class MainNavActions(
             return
         }
         navController.navigate(destination) {
-            popUpTo<RssFeedDestination.Feed>()
+            popUpTo<RssFeedDestination.Feed> {
+                inclusive = isInsideRssFeed
+            }
             launchSingleTop = true
         }
     }
