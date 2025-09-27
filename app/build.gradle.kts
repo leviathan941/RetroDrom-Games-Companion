@@ -125,7 +125,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     implementation(libs.dagger.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
     ksp(libs.dagger.hilt.compiler)
 
     debugImplementation(libs.compose.ui.tooling)

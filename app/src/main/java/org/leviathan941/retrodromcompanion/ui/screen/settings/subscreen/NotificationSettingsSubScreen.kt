@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel

@@ -27,7 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel

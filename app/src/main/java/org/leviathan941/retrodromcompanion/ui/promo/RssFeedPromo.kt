@@ -21,7 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.promo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys

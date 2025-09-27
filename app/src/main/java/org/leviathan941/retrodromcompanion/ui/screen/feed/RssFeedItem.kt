@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -47,10 +48,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 private const val TAG = "RssFeedItem"
 
@@ -136,7 +137,7 @@ fun RssFeedItem(
                 ),
             )
             Text(
-                text = pubDate.toRssFeedPublicationTime(LocalContext.current.resources),
+                text = pubDate.toRssFeedPublicationTime(LocalResources.current),
                 maxLines = 1,
                 style = MaterialTheme.typography.labelMedium,
                 color = nonImportantColor,
