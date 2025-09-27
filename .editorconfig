@@ -9,3 +9,4 @@ ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equa
 ktlint_compose = enabled
 ktlint_function_naming_ignore_when_annotated_with = Composable
 ktlint_compose_multiple-emitters-check = disabled
+ktlint_standard_import-ordering = disabled
