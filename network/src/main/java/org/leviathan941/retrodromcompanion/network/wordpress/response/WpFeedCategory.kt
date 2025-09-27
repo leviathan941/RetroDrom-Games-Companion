@@ -20,7 +20,7 @@ package org.leviathan941.retrodromcompanion.network.wordpress.response
 
 import com.google.gson.annotations.SerializedName
 
-data class WpFeedCategory(
+public data class WpFeedCategory(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")

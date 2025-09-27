@@ -28,7 +28,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class WpRetrofitClient(
+public class WpRetrofitClient(
     baseUrl: String,
 ) {
     private val retrofit = Retrofit.Builder()
@@ -39,7 +39,7 @@ class WpRetrofitClient(
     private val wpApiService: WpApiService by lazy { retrofit.create(WpApiService::class.java) }
 
     @Throws(WpGetErrorException::class)
-    suspend fun fetchCategories(): List<WpFeedCategory> = withContext(Dispatchers.IO) {
+    public suspend fun fetchCategories(): List<WpFeedCategory> = withContext(Dispatchers.IO) {
         @SuppressWarnings("TooGenericExceptionCaught")
         try {
             wpApiService.fetchCategories().handleResponse() ?: emptyList()

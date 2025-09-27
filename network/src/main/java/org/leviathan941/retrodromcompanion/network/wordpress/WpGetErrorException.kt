@@ -18,7 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress
 
-class WpGetErrorException(
+public class WpGetErrorException(
     message: String,
     cause: Throwable? = null,
 ) : Exception(message, cause)

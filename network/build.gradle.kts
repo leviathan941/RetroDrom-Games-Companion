@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.leviathan941.retrodromcompanion.AndroidSdk
 import org.leviathan941.retrodromcompanion.JvmVersions
 
@@ -38,6 +39,10 @@ android {
         minSdk = AndroidSdk.MIN_SDK_VERSION
 
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    kotlin {
+        explicitApi = ExplicitApiMode.Strict
     }
 }
 
