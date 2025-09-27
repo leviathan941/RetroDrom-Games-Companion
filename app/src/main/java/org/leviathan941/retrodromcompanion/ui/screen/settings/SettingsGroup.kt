@@ -37,10 +37,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsGroup(
     name: String,
-    content: @Composable ColumnScope.() -> Unit
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(
                 top = 24.dp,
                 bottom = 16.dp,

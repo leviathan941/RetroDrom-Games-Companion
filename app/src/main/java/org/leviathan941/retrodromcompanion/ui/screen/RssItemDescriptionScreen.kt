@@ -41,6 +41,7 @@ import org.leviathan941.retrodromcompanion.utils.openUrlInCustomTab
 fun RssItemDescriptionScreen(
     itemDescription: RssFeedDestination.ItemDescription,
     navigationActions: MainNavActions,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val toolbarColor = MaterialTheme.colorScheme.primaryContainer.toArgb()
@@ -52,13 +53,14 @@ fun RssItemDescriptionScreen(
         )
     }
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopBarView(
                 prefs = TopBarPrefs(
                     title = stringResource(id = R.string.rss_feed_item_description_screen_title),
                     navButton = TopBarNavButton.BACK,
                     actions = listOf(
-                        TopBarAction.Browse(itemDescription.link)
+                        TopBarAction.Browse(itemDescription.link),
                     ),
                 ),
                 onNavButtonClick = { navButton ->
@@ -78,7 +80,7 @@ fun RssItemDescriptionScreen(
                     }
                 },
             )
-        }
+        },
     ) { paddings ->
         Column(
             modifier = Modifier.padding(paddings),

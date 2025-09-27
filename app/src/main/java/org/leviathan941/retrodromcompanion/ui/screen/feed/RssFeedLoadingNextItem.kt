@@ -30,11 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@Preview(showBackground = true)
 @Composable
-fun RssFeedLoadingNextItem() {
+fun RssFeedLoadingNextItem(modifier: Modifier = Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(RssFeedItemPaddings)
             .height(75.dp),
@@ -43,4 +42,10 @@ fun RssFeedLoadingNextItem() {
     ) {
         CircularProgressIndicator()
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun RssFeedLoadingNextItemPreview() {
+    RssFeedLoadingNextItem()
 }

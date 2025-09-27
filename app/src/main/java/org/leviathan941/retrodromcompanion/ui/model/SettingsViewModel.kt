@@ -21,6 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,7 +32,6 @@ import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
-import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -61,18 +61,14 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun subscribeToTopic(
-        topic: Messaging.Topic,
-    ) {
+    fun subscribeToTopic(topic: Messaging.Topic) {
         pushNotificationModel.subscribeToTopic(
             topic = topic,
             showToastOnFailed = true,
         )
     }
 
-    fun unsubscribeFromTopic(
-        topic: Messaging.Topic,
-    ) {
+    fun unsubscribeFromTopic(topic: Messaging.Topic) {
         pushNotificationModel.unsubscribeFromTopic(
             topic = topic,
             showToastOnFailed = true,

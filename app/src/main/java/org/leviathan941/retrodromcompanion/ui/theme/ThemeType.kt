@@ -23,7 +23,9 @@ import androidx.annotation.StringRes
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 
-enum class ThemeType(val value: String) {
+enum class ThemeType(
+    val value: String,
+) {
     LIGHT("light"),
     DARK("dark"),
     SYSTEM("system"),
@@ -31,28 +33,23 @@ enum class ThemeType(val value: String) {
     ;
 
     companion object {
-        fun fromValue(value: String?): ThemeType {
-            return supportedEntries().firstOrNull { it.value == value } ?: APP_THEME_DEFAULT
-        }
+        fun fromValue(value: String?): ThemeType =
+            supportedEntries().firstOrNull { it.value == value } ?: APP_THEME_DEFAULT
 
         @StringRes
-        fun ThemeType.toStringResource(): Int {
-            return when (this) {
-                LIGHT -> R.string.theme_name_light
-                DARK -> R.string.theme_name_dark
-                SYSTEM -> R.string.theme_name_system
-                DYNAMIC -> R.string.theme_name_dynamic
-            }
+        fun ThemeType.toStringResource(): Int = when (this) {
+            LIGHT -> R.string.theme_name_light
+            DARK -> R.string.theme_name_dark
+            SYSTEM -> R.string.theme_name_system
+            DYNAMIC -> R.string.theme_name_dynamic
         }
 
-        fun supportedEntries(): List<ThemeType> {
-            return when {
-                // Dynamic theme is supported from Android 12
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> entries
-                // System theme is supported from Android 10
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> listOf(LIGHT, DARK, SYSTEM)
-                else -> listOf(LIGHT, DARK)
-            }
+        fun supportedEntries(): List<ThemeType> = when {
+            // Dynamic theme is supported from Android 12
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> entries
+            // System theme is supported from Android 10
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> listOf(LIGHT, DARK, SYSTEM)
+            else -> listOf(LIGHT, DARK)
         }
     }
 }

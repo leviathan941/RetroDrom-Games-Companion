@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.leviathan941.retrodromcompanion.R
@@ -37,13 +38,16 @@ import org.leviathan941.retrodromcompanion.R
 @Composable
 fun DrawerSubMenuView(
     title: String,
+    modifier: Modifier = Modifier,
     icon: @Composable (() -> Unit)? = null,
     isExpandedInitially: Boolean = true,
     subMenuContent: @Composable ColumnScope.() -> Unit,
 ) {
     var isExpanded by remember { mutableStateOf(isExpandedInitially) }
 
-    Column {
+    Column(
+        modifier = modifier,
+    ) {
         DrawerMenuItemView(
             title = title,
             isSelected = false,
@@ -67,12 +71,12 @@ private fun ExpandIcon(isExpanded: Boolean) {
     if (isExpanded) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowDown,
-            contentDescription = stringResource(id = R.string.drawer_submenu_item_expanded_desc)
+            contentDescription = stringResource(id = R.string.drawer_submenu_item_expanded_desc),
         )
     } else {
         Icon(
             imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-            contentDescription = stringResource(id = R.string.drawer_submenu_item_collapsed_desc)
+            contentDescription = stringResource(id = R.string.drawer_submenu_item_collapsed_desc),
         )
     }
 }
@@ -83,10 +87,10 @@ private fun DrawerSubMenuPreview() = DrawerSubMenuView(
     title = "Sub Menu",
     isExpandedInitially = true,
     subMenuContent = {
-        IntRange(1, 5).forEach {
+        for (it in 1..5) {
             DrawerMenuItemView(
                 title = "Item $it",
             )
         }
-    }
+    },
 )

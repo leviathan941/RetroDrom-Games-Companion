@@ -45,11 +45,12 @@ import org.leviathan941.retrodromcompanion.R
 @Composable
 fun TopBarView(
     prefs: TopBarPrefs,
+    modifier: Modifier = Modifier,
     onNavButtonClick: (TopBarNavButton) -> Unit = {},
     onActionClick: (TopBarAction) -> Unit = {},
 ) {
     TopAppBar(
-        modifier = Modifier,
+        modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -71,7 +72,7 @@ fun TopBarView(
                 actions = prefs.actions,
                 onActionClick,
             )
-        }
+        },
     )
 }
 
@@ -150,9 +151,7 @@ private fun ButtonView(
     ) {
         Icon(
             painter = painter,
-            contentDescription = stringResource(
-                id = contentDescRes
-            ),
+            contentDescription = stringResource(id = contentDescRes),
             tint = MaterialTheme.colorScheme.onPrimaryContainer,
         )
     }
@@ -181,7 +180,7 @@ private fun ActionsView(
     showBackground = true,
 )
 @Composable
-fun TopBarViewOneLineTitlePreview() = TopBarView(
+private fun TopBarViewOneLineTitlePreview() = TopBarView(
     prefs = TopBarPrefs(
         title = "Title",
         subtitle = "",
@@ -193,7 +192,7 @@ fun TopBarViewOneLineTitlePreview() = TopBarView(
     showBackground = true,
 )
 @Composable
-fun TopBarViewTwoLineTitlePreview() = TopBarView(
+private fun TopBarViewTwoLineTitlePreview() = TopBarView(
     prefs = TopBarPrefs(
         title = "Title",
         subtitle = "Subtitle",

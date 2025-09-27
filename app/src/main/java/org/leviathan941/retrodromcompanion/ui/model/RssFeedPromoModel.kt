@@ -22,6 +22,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.cancellable
@@ -31,7 +32,6 @@ import kotlinx.coroutines.flow.stateIn
 import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
-import javax.inject.Inject
 
 private const val TAG = "MainViewPromoModel"
 
@@ -55,18 +55,17 @@ class RssFeedPromoModel @Inject constructor(
             Messaging.Topic.NEW_RETRODROM_POSTS in it
         }
 
-        combine(isPushPostsPromoAllowed, isPushPostsTopicSubscribed) {
-            isAllowed, isSubscribed ->
+        combine(isPushPostsPromoAllowed, isPushPostsTopicSubscribed) { isAllowed, isSubscribed ->
             Log.d(TAG, "Set promo state: isAllowed: $isAllowed, isSubscribed: $isSubscribed")
             RssFeedPromoState(
-                shouldApplyPushPostsPromo = isAllowed && !isSubscribed
+                shouldApplyPushPostsPromo = isAllowed && !isSubscribed,
             )
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
             initialValue = RssFeedPromoState(
-                shouldApplyPushPostsPromo = false
-            )
+                shouldApplyPushPostsPromo = false,
+            ),
         )
     }
 

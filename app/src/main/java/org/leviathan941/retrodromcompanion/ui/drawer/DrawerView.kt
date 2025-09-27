@@ -49,12 +49,13 @@ import org.leviathan941.retrodromcompanion.ui.theme.DrawerLogoGradientStartColor
 @Composable
 fun DrawerView(
     drawerState: DrawerState,
-    closeDrawer: () -> Unit,
-    onHeaderClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    closeDrawer: () -> Unit = {},
+    onHeaderClick: () -> Unit = {},
     navigationContent: @Composable ColumnScope.() -> Unit,
 ) {
     ModalDrawerSheet(
-        modifier = Modifier
+        modifier = modifier
             .width(300.dp),
         drawerState = drawerState,
     ) {
@@ -67,7 +68,7 @@ fun DrawerView(
                 onClick = {
                     closeDrawer()
                     onHeaderClick()
-                }
+                },
             )
 
             HorizontalDivider(
@@ -90,9 +91,7 @@ private fun DrawerViewPreview() = DrawerView(
 )
 
 @Composable
-private fun DrawerHeader(
-    onClick: () -> Unit = {},
-) {
+private fun DrawerHeader(onClick: () -> Unit = {}) {
     val backgroundGradient = Brush.verticalGradient(
         colors = listOf(
             DrawerLogoGradientStartColor,

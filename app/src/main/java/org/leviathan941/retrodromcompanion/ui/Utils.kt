@@ -1,3 +1,4 @@
+@file:Suppress("MagicNumber")
 /*
  * RetroDrom Games Companion
  * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
@@ -26,16 +27,16 @@ import android.provider.Settings
 import androidx.annotation.PluralsRes
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
-import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
-import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
-import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
+import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
+import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 
 internal const val MAIN_VIEW_TAG = "MainView"
 internal const val RSS_SCREEN_TAG = "RssScreen"
@@ -50,9 +51,7 @@ internal val APP_THEME_DEFAULT = when {
     else -> ThemeType.LIGHT
 }
 
-fun ZonedDateTime.toRssFeedPublicationTime(
-    resources: Resources,
-): String {
+fun ZonedDateTime.toRssFeedPublicationTime(resources: Resources): String {
     val now = ZonedDateTime.now(zone)
     val diffMinutes = ChronoUnit.MINUTES.between(this, now)
         .toDuration(DurationUnit.MINUTES)
@@ -64,21 +63,21 @@ fun ZonedDateTime.toRssFeedPublicationTime(
             resources.getTimeQuantityString(
                 R.plurals.rss_feed_item_publication_time_minutes,
                 diffMinutes,
-                DurationUnit.MINUTES
+                DurationUnit.MINUTES,
             )
 
         diffMinutes.inWholeDays < 1L ->
             resources.getTimeQuantityString(
                 R.plurals.rss_feed_item_publication_time_hours,
                 diffMinutes,
-                DurationUnit.HOURS
+                DurationUnit.HOURS,
             )
 
         diffMinutes.inWholeDays < 30L ->
             resources.getTimeQuantityString(
                 R.plurals.rss_feed_item_publication_time_days,
                 diffMinutes,
-                DurationUnit.DAYS
+                DurationUnit.DAYS,
             )
 
         diffMinutes.inWholeDays < 365L ->
@@ -86,7 +85,7 @@ fun ZonedDateTime.toRssFeedPublicationTime(
                 resources.getQuantityString(
                     R.plurals.rss_feed_item_publication_time_months,
                     diffMonths.toInt(),
-                    diffMonths
+                    diffMonths,
                 )
             }
 
@@ -95,7 +94,7 @@ fun ZonedDateTime.toRssFeedPublicationTime(
                 resources.getQuantityString(
                     R.plurals.rss_feed_item_publication_time_years,
                     diffYears.toInt(),
-                    diffYears
+                    diffYears,
                 )
             }
     }
@@ -109,19 +108,17 @@ private fun Resources.getTimeQuantityString(
     getQuantityString(id, quantity, quantity)
 }
 
-inline fun <reified T : Any> NavBackStackEntry.isRouteActive(): Boolean =
-    destination.hasRoute<T>()
+inline fun <reified T : Any> NavBackStackEntry.isRouteActive(): Boolean = destination.hasRoute<T>()
 
-fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? =
-    description?.let { desc ->
-        RssFeedDestination.ItemDescription(
-            title = title,
-            link = link,
-            pubDate = pubDate.value,
-            html = desc.html,
-            creator = creator,
-        )
-    }
+fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? = description?.let { desc ->
+    RssFeedDestination.ItemDescription(
+        title = title,
+        link = link,
+        pubDate = pubDate.value,
+        html = desc.html,
+        creator = creator,
+    )
+}
 
 fun MainNavScreen.RssFeed.toDestination(): RssFeedDestination.Feed =
     RssFeedDestination.Feed(id, title, channelUrl)
@@ -133,6 +130,6 @@ fun openNotificationSettings(context: Context) {
     context.startActivity(
         Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
             putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-        }
+        },
     )
 }

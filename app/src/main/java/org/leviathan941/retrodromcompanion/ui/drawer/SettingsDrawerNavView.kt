@@ -22,20 +22,23 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import org.leviathan941.retrodromcompanion.R
 
 @Composable
 fun SettingsDrawerNavView(
+    modifier: Modifier = Modifier,
     isSelected: () -> Boolean = { false },
     onClick: () -> Unit = {},
 ) {
     DrawerMenuItemView(
         title = stringResource(id = R.string.settings_screen_title),
+        modifier = modifier,
         icon = {
             Icon(
                 imageVector = Icons.Default.Settings,
-                contentDescription = null
+                contentDescription = null,
             )
         },
         isSelected = isSelected(),

@@ -42,11 +42,12 @@ import org.leviathan941.retrodromcompanion.R
 @Composable
 fun SettingsTitleItem(
     title: String,
+    modifier: Modifier = Modifier,
     subtitle: String? = null,
     leadingIcon: Painter? = null,
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -75,7 +76,7 @@ fun SettingsTitleItem(
 
             if (subtitle != null) {
                 Spacer(
-                    modifier = Modifier.height(4.dp)
+                    modifier = Modifier.height(4.dp),
                 )
 
                 Text(

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsTextItem(
     text: AnnotatedString,
+    modifier: Modifier = Modifier,
     onAnnotationClick: (tag: String, annotation: String) -> Unit = { _, _ -> },
 ) {
     val onClick = { offset: Int ->
@@ -55,7 +56,7 @@ fun SettingsTextItem(
     }
 
     Text(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(all = 16.dp)
             .then(pressIndicator),
@@ -69,15 +70,15 @@ fun SettingsTextItem(
 
 @Preview(showBackground = true)
 @Composable
-fun SettingsTextItemPreview() {
+private fun SettingsTextItemPreview() {
     SettingsTextItem(
         text = buildAnnotatedString {
             append("This is a text item for ")
 
             pushStyle(
                 SpanStyle(
-                    MaterialTheme.colorScheme.primary
-                )
+                    MaterialTheme.colorScheme.primary,
+                ),
             )
             append("checking the preview")
             pop()

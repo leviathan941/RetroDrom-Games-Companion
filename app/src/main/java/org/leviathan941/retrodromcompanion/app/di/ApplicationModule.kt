@@ -27,12 +27,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import org.leviathan941.retrodromcompanion.MainActivity
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -41,23 +41,17 @@ interface ApplicationModule {
 
         @Provides
         @Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
-        fun provideApplicationCoroutineScope(): CoroutineScope {
-            return ProcessLifecycleOwner.get().lifecycleScope
-        }
+        fun provideApplicationCoroutineScope(): CoroutineScope =
+            ProcessLifecycleOwner.get().lifecycleScope
 
         @Provides
         @Named(DiKeys.MAIN_DATASTORE)
         @Singleton
-        fun provideMainDataStore(
-            application: Application
-        ): DataStore<Preferences> {
-            return application.applicationContext.mainDataStore
-        }
+        fun provideMainDataStore(application: Application): DataStore<Preferences> =
+            application.applicationContext.mainDataStore
 
         @Provides
         @Named(DiKeys.MAIN_ACTIVITY_CLASS)
-        fun provideMainActivityClass(): Class<*> {
-            return MainActivity::class.java
-        }
+        fun provideMainActivityClass(): Class<*> = MainActivity::class.java
     }
 }

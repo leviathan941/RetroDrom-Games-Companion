@@ -23,6 +23,7 @@ import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -42,10 +43,10 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
@@ -53,39 +54,38 @@ import org.leviathan941.retrodromcompanion.rssreader.asDateTime
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
-import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadFailedNextItem
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadingNextItem
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
-import org.leviathan941.retrodromcompanion.ui.toScreen
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RssFeedScreen(
-    backStackEntry: NavBackStackEntry,
+    screen: MainNavScreen.RssFeed,
+    viewModelStoreOwner: ViewModelStoreOwner,
     drawerState: DrawerState,
-    itemClicked: (item: RssChannelItem) -> Unit,
-) {
-    val screen = remember { backStackEntry.toRoute<RssFeedDestination.Feed>().toScreen() }
-    val screenViewModel: RssFeedViewModel =
+    modifier: Modifier = Modifier,
+    screenViewModel: RssFeedViewModel =
         hiltViewModel<RssFeedViewModel, RssFeedViewModel.Factory>(
-            viewModelStoreOwner = backStackEntry,
+            viewModelStoreOwner = viewModelStoreOwner,
             key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
             creationCallback = { factory ->
                 factory.create(screen.channelUrl)
-            }
-        )
+            },
+        ),
+    itemClicked: (item: RssChannelItem) -> Unit,
+) {
     val rssChannelItems = screenViewModel.rssChannelItems.collectAsLazyPagingItems()
-    val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
 
     var isRefreshing by remember { mutableStateOf(false) }
-    val errorClipboardLabel = stringResource(R.string.error_copied_clipboard_label)
 
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopBarView(
                 prefs = screen.topBarPrefs,
@@ -97,7 +97,7 @@ fun RssFeedScreen(
 
                         else -> throw IllegalArgumentException("Unknown top bar button: $button")
                     }
-                }
+                },
             )
         },
     ) { paddings ->
@@ -129,64 +129,35 @@ fun RssFeedScreen(
                     )
                 }
 
-                rssChannelItems.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            item {
-                                LoadingView(
-                                    modifier = Modifier.fillParentMaxSize(),
-                                    state = LoadingState.InProgress,
-                                )
-                            }
-                        }
+                val loadState = rssChannelItems.loadState
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item { LoadingRefreshView() }
+                    }
 
-                        loadState.refresh is LoadState.Error -> {
-                            val error = loadState.refresh as LoadState.Error
-                            item {
-                                LoadingView(
-                                    modifier = Modifier.fillParentMaxSize(),
-                                    state = LoadingState.Failure(
-                                        message = error.error.message.orEmpty(),
-                                        clipboardLabel = errorClipboardLabel,
-                                    ),
-                                    onErrorLongPress = { label, message ->
-                                        coroutineScope.launch {
-                                            clipboard.setClipEntry(ClipEntry(
-                                                ClipData.newPlainText(
-                                                    label,
-                                                    message
-                                                )
-                                            ))
-                                        }
-                                    },
-                                    onRetryClick = { retry() }
-                                )
-                            }
+                    loadState.refresh is LoadState.Error -> {
+                        val error = loadState.refresh as LoadState.Error
+                        item {
+                            LoadingRefreshErrorView(
+                                error = error,
+                                coroutineScope = coroutineScope,
+                                retry = { rssChannelItems.retry() },
+                            )
                         }
+                    }
 
-                        loadState.append is LoadState.Loading -> {
-                            item { RssFeedLoadingNextItem() }
-                        }
+                    loadState.append is LoadState.Loading -> {
+                        item { RssFeedLoadingNextItem() }
+                    }
 
-                        loadState.append is LoadState.Error -> {
-                            val error = loadState.append as LoadState.Error
-                            item {
-                                RssFeedLoadFailedNextItem(
-                                    errorMessage = error.error.message
-                                        ?: "Error during Rss feed loading",
-                                    onRetry = { retry() },
-                                    onErrorLongPress = { message ->
-                                        coroutineScope.launch {
-                                            clipboard.setClipEntry(ClipEntry(
-                                                ClipData.newPlainText(
-                                                    errorClipboardLabel,
-                                                    message
-                                                )
-                                            ))
-                                        }
-                                    },
-                                )
-                            }
+                    loadState.append is LoadState.Error -> {
+                        val error = loadState.append as LoadState.Error
+                        item {
+                            LoadingAppendErrorView(
+                                error = error,
+                                coroutineScope = coroutineScope,
+                                retry = { rssChannelItems.retry() },
+                            )
                         }
                     }
                 }
@@ -195,7 +166,8 @@ fun RssFeedScreen(
             LaunchedEffect(key1 = rssChannelItems.loadState) {
                 when (rssChannelItems.loadState.refresh) {
                     is LoadState.Error,
-                    is LoadState.NotLoading -> {
+                    is LoadState.NotLoading,
+                    -> {
                         isRefreshing = false
                     }
 
@@ -204,4 +176,68 @@ fun RssFeedScreen(
             }
         }
     }
+}
+
+@Composable
+private fun LazyItemScope.LoadingRefreshView() {
+    LoadingView(
+        modifier = Modifier.fillParentMaxSize(),
+        state = LoadingState.InProgress,
+    )
+}
+
+@Composable
+private fun LazyItemScope.LoadingRefreshErrorView(
+    error: LoadState.Error,
+    coroutineScope: CoroutineScope,
+    retry: () -> Unit,
+) {
+    val clipboard = LocalClipboard.current
+    LoadingView(
+        modifier = Modifier.fillParentMaxSize(),
+        state = LoadingState.Failure(
+            message = error.error.message.orEmpty(),
+            clipboardLabel = stringResource(R.string.error_copied_clipboard_label),
+        ),
+        onErrorLongPress = { label, message ->
+            coroutineScope.launch {
+                clipboard.setClipEntry(
+                    ClipEntry(
+                        ClipData.newPlainText(
+                            label,
+                            message,
+                        ),
+                    ),
+                )
+            }
+        },
+        onRetryClick = { retry() },
+    )
+}
+
+@Composable
+private fun LoadingAppendErrorView(
+    error: LoadState.Error,
+    coroutineScope: CoroutineScope,
+    retry: () -> Unit,
+) {
+    val clipboard = LocalClipboard.current
+    val errorClipboardLabel = stringResource(R.string.error_copied_clipboard_label)
+    RssFeedLoadFailedNextItem(
+        errorMessage = error.error.message
+            ?: "Error during Rss feed loading",
+        onRetry = { retry() },
+        onErrorLongPress = { message ->
+            coroutineScope.launch {
+                clipboard.setClipEntry(
+                    ClipEntry(
+                        ClipData.newPlainText(
+                            errorClipboardLabel,
+                            message,
+                        ),
+                    ),
+                )
+            }
+        },
+    )
 }

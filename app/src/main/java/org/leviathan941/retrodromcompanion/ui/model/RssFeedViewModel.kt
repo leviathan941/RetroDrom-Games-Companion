@@ -60,4 +60,3 @@ class RssFeedViewModel @AssistedInject constructor(
         fun create(channelUrl: String): RssFeedViewModel
     }
 }
-

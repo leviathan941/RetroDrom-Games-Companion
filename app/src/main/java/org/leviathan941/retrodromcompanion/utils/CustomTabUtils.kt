@@ -19,10 +19,10 @@
 package org.leviathan941.retrodromcompanion.utils
 
 import android.content.Context
-import android.net.Uri
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.net.toUri
 
 fun openUrlInCustomTab(
     context: Context,
@@ -34,8 +34,8 @@ fun openUrlInCustomTab(
         setDefaultColorSchemeParams(
             CustomTabColorSchemeParams.Builder()
                 .setToolbarColor(toolbarColor)
-                .build()
+                .build(),
         )
         setUrlBarHidingEnabled(true)
-    }.build().launchUrl(context, Uri.parse(url))
+    }.build().launchUrl(context, url.toUri())
 }

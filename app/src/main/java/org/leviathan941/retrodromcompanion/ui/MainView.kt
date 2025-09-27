@@ -48,7 +48,12 @@ import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 @Composable
-fun MainView(navController: NavHostController) {
+fun MainView(
+    navController: NavHostController,
+    mainViewModel: MainViewModel = hiltViewModel(
+        key = ViewModelKeys.MAIN_VIEW_MODEL,
+    ),
+) {
     val predefinedDestinations = MainNavPredefinedDestinations(
         rssFeedStart = RssFeedDestination.Feed(
             id = MAIN_RSS_FEED_ID,
@@ -63,10 +68,6 @@ fun MainView(navController: NavHostController) {
         )
     }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-    val mainViewModel: MainViewModel = hiltViewModel(
-        key = ViewModelKeys.MAIN_VIEW_MODEL,
-    )
 
     val uiState by mainViewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -89,7 +90,7 @@ fun MainView(navController: NavHostController) {
                         drawerState = drawerState,
                         coroutineScope = coroutineScope,
                     )
-                }
+                },
             )
         },
         drawerState = drawerState,
@@ -100,8 +101,8 @@ fun MainView(navController: NavHostController) {
             navigationActions = navigationActions,
             predefinedDestinations = predefinedDestinations,
             uiState = uiState,
-            mainViewModel = mainViewModel,
             drawerState = drawerState,
+            fetchRssData = { mainViewModel.fetchRssData() },
         )
     }
 

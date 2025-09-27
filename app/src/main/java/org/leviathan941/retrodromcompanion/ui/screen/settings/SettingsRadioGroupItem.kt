@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.settings
 
-import androidx.compose.ui.unit.dp
-
-val SETTINGS_LEADING_ICON_SIZE = 26.dp
+data class SettingsRadioGroupItem<T>(
+    val value: T,
+    val title: String,
+)

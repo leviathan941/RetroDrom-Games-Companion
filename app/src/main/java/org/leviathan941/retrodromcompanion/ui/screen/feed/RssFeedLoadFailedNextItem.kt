@@ -47,9 +47,10 @@ fun RssFeedLoadFailedNextItem(
     errorMessage: String,
     onRetry: () -> Unit,
     onErrorLongPress: (message: String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(RssFeedItemPaddings),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -65,7 +66,7 @@ fun RssFeedLoadFailedNextItem(
                 Icon(
                     painter = painterResource(id = R.drawable.google_material_refresh),
                     contentDescription = stringResource(
-                        id = R.string.rss_feed_item_load_retry_button_desc
+                        id = R.string.rss_feed_item_load_retry_button_desc,
                     ),
                 )
             }

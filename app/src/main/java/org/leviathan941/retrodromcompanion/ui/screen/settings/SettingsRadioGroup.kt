@@ -34,29 +34,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-data class SettingsRadioGroupItem<T>(
-    val value: T,
-    val title: String,
-)
-
 @Composable
 fun <T> SettingsRadioGroup(
     selectedItem: SettingsRadioGroupItem<T>,
     items: List<SettingsRadioGroupItem<T>>,
-    onItemChanged: (SettingsRadioGroupItem<T>) -> Unit,
+    onItemChange: (SettingsRadioGroupItem<T>) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     items.forEach { item ->
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
-                .clickable { onItemChanged(item) },
+                .clickable { onItemChange(item) },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
         ) {
             RadioButton(
                 modifier = Modifier.padding(vertical = 8.dp),
                 selected = item == selectedItem,
-                onClick = { onItemChanged(item) }
+                onClick = { onItemChange(item) },
             )
             Text(
                 modifier = Modifier.padding(
@@ -73,7 +69,8 @@ fun <T> SettingsRadioGroup(
 
 @Preview(showBackground = true)
 @Composable
-fun SettingsRadioGroupPreview() {
+@SuppressWarnings("MagicNumber")
+private fun SettingsRadioGroupPreview() {
     val items = listOf(
         SettingsRadioGroupItem(1, "Item 1"),
         SettingsRadioGroupItem(2, "Item 2"),
@@ -85,7 +82,7 @@ fun SettingsRadioGroupPreview() {
         SettingsRadioGroup(
             selectedItem = items.first(),
             items = items,
-            onItemChanged = {}
+            onItemChange = {},
         )
     }
 }

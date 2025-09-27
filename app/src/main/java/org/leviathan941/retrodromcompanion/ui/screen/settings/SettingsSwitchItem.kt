@@ -40,13 +40,14 @@ import org.leviathan941.retrodromcompanion.R
 @Composable
 fun SettingsSwitchItem(
     title: String,
-    checkedIcon:  Painter? = null,
+    modifier: Modifier = Modifier,
+    checkedIcon: Painter? = null,
     uncheckedIcon: Painter? = null,
     checked: Boolean = false,
     onCheckedChange: (Boolean) -> Unit = {},
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,

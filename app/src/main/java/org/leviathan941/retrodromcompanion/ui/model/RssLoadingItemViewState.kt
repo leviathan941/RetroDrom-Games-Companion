@@ -23,7 +23,7 @@ import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 sealed interface RssLoadingItemViewState {
     data object Loading : RssLoadingItemViewState
 
-    data object Error: RssLoadingItemViewState
+    data object Error : RssLoadingItemViewState
 
     data class Success(
         val item: RssChannelItem,

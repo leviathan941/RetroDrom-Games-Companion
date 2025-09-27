@@ -47,10 +47,11 @@ import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
 fun RssFeedItemDescription(
     itemDescription: RssFeedDestination.ItemDescription,
     openUrl: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val horizontalPaddingDp = 10.dp
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = horizontalPaddingDp)
             .fillMaxHeight()
             .verticalScroll(
@@ -92,6 +93,8 @@ fun RssFeedItemDescription(
                 (screenWidthDp.dp - horizontalPaddingDp * 2).toSp()
             }
         }
+
+        @SuppressWarnings("MagicNumber")
         val defaultImageHeight = defaultImageWidth * 0.75f
         HtmlText(
             html = itemDescription.html,
@@ -105,18 +108,18 @@ fun RssFeedItemDescription(
                     error = painterResource(R.drawable.google_material_broken_image),
                     defaultWidth = defaultImageWidth,
                     defaultHeight = defaultImageHeight,
-                )
+                ),
             ),
             onLinkClick = { url ->
                 openUrl(url)
-            }
+            },
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun RssFeedItemDescriptionPreview() {
+private fun RssFeedItemDescriptionPreview() {
     RssFeedItemDescription(
         itemDescription = RssFeedDestination.ItemDescription(
             title = "What is Lorem Ipsum?",

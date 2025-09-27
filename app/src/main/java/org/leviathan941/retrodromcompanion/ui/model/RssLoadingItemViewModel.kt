@@ -42,7 +42,7 @@ class RssLoadingItemViewModel @AssistedInject constructor(
     )
 
     private val _viewState = MutableStateFlow<RssLoadingItemViewState>(
-        RssLoadingItemViewState.Loading
+        RssLoadingItemViewState.Loading,
     )
     val viewState: StateFlow<RssLoadingItemViewState> = _viewState.asStateFlow()
 
@@ -50,7 +50,7 @@ class RssLoadingItemViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _viewState.value = rssItemFinder.findByPostId(rssLoadingItem.postId)?.let {
                 RssLoadingItemViewState.Success(
-                    item = it
+                    item = it,
                 )
             } ?: RssLoadingItemViewState.Error
         }
@@ -62,8 +62,6 @@ class RssLoadingItemViewModel @AssistedInject constructor(
 
     @AssistedFactory
     interface Factory {
-        fun create(
-            rssLoadingItem: RssFeedDestination.LoadingItem,
-        ): RssLoadingItemViewModel
+        fun create(rssLoadingItem: RssFeedDestination.LoadingItem): RssLoadingItemViewModel
     }
 }

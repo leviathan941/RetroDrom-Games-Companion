@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -40,9 +39,7 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.Notifica
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource
 
-fun NavGraphBuilder.settingsNavHost(
-    navigationActions: MainNavActions,
-) {
+fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
     composable<SettingsDestination.Main> {
         MainSettingsSubScreen(navigationActions)
     }
@@ -78,10 +75,11 @@ fun NavGraphBuilder.settingsNavHost(
         ) {
             SettingsRadioGroup(
                 selectedItem = selectedItem,
-                items = themeItems
-            ) {
-                screenViewModel.setAppTheme(it.value)
-            }
+                items = themeItems,
+                onItemChange = {
+                    screenViewModel.setAppTheme(it.value)
+                },
+            )
         }
     }
 
@@ -99,14 +97,14 @@ fun NavGraphBuilder.settingsNavHost(
     composable<SettingsDestination.Licenses> {
         SettingsScreen(
             data = MainNavScreen.Settings(
-                title = stringResource(id = R.string.settings_about_item_licenses_title)
+                title = stringResource(id = R.string.settings_about_item_licenses_title),
             ),
             navigationActions = navigationActions,
         ) {
             val libraries by rememberLibraries(R.raw.aboutlibraries)
             LibrariesContainer(
                 libraries = libraries,
-                modifier = Modifier.safeDrawingPadding(),
+                modifier = Modifier,
             )
         }
     }

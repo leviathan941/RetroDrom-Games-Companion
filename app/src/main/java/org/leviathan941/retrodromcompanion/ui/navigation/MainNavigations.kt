@@ -122,7 +122,7 @@ class MainNavActions(
     }
 
     fun navigateToRssFeed(
-        destination: RssFeedDestination.Feed = predefinedDestinations.rssFeedStart
+        destination: RssFeedDestination.Feed = predefinedDestinations.rssFeedStart,
     ) {
         Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen: $destination")
         val isInsideRssFeed = navController.currentDestination
@@ -142,9 +142,7 @@ class MainNavActions(
         }
     }
 
-    fun navigateToRssItemDescription(
-        destination: RssFeedDestination.ItemDescription,
-    ) {
+    fun navigateToRssItemDescription(destination: RssFeedDestination.ItemDescription) {
         Log.d(MAIN_VIEW_TAG, "Navigate to RSS item description screen")
         navController.navigate(destination) {
             launchSingleTop = true

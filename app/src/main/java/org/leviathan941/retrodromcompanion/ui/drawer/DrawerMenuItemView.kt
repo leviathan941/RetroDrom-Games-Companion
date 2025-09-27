@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun DrawerMenuItemView(
     title: String,
+    modifier: Modifier = Modifier,
     icon: @Composable (() -> Unit)? = null,
     badge: @Composable (() -> Unit)? = null,
     isSelected: Boolean = false,
@@ -39,7 +40,7 @@ fun DrawerMenuItemView(
     onClick: () -> Unit = {},
 ) {
     NavigationDrawerItem(
-        modifier = Modifier
+        modifier = modifier
             .height(60.dp),
         label = {
             Text(

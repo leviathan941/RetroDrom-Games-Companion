@@ -21,6 +21,9 @@ package org.leviathan941.retrodromcompanion.app.model
 import android.app.Application
 import android.widget.Toast
 import androidx.annotation.StringRes
+import javax.inject.Inject
+import javax.inject.Named
+import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,9 +34,6 @@ import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Singleton
 class PushNotificationModel @Inject constructor(
@@ -72,7 +72,7 @@ class PushNotificationModel @Inject constructor(
             } else if (showToastOnFailed) {
                 showTopicSubscriptionFailedToast(
                     textRes = R.string.push_topic_subscription_failed_toast_text,
-                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value
+                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value,
                 )
             }
         }
@@ -88,7 +88,7 @@ class PushNotificationModel @Inject constructor(
             } else if (showToastOnFailed) {
                 showTopicSubscriptionFailedToast(
                     textRes = R.string.push_topic_unsubscription_failed_toast_text,
-                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value
+                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value,
                 )
             }
         }
@@ -102,9 +102,9 @@ class PushNotificationModel @Inject constructor(
             application,
             application.getString(
                 textRes,
-                topicName
+                topicName,
             ),
-            Toast.LENGTH_SHORT
+            Toast.LENGTH_SHORT,
         ).show()
     }
 }

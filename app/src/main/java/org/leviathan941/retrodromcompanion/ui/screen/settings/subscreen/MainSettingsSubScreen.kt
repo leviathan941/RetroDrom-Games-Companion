@@ -44,10 +44,10 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toString
 @Composable
 fun MainSettingsSubScreen(
     navigationActions: MainNavActions,
-) {
-    val screenViewModel = hiltViewModel<SettingsViewModel>(
+    screenViewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
-    )
+    ),
+) {
     val appTheme by screenViewModel.appTheme.collectAsState()
 
     SettingsScreen(
@@ -78,7 +78,7 @@ fun MainSettingsSubScreen(
         }
 
         SettingsGroup(
-            name = stringResource(id = R.string.settings_group_name_about)
+            name = stringResource(id = R.string.settings_group_name_about),
         ) {
             SettingsClickableNavItem(
                 title = stringResource(id = R.string.settings_about_item_feedback_title),

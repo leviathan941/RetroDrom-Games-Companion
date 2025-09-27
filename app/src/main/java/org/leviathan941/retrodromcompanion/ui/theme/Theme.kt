@@ -35,7 +35,7 @@ import androidx.core.view.WindowCompat
 fun MainTheme(
     materialColorSchemes: MaterialColorSchemes,
     selectedTheme: ThemeType,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val (colorScheme, isDarkTheme) = when {
         selectedTheme == ThemeType.DYNAMIC && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -73,6 +73,6 @@ fun MainTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

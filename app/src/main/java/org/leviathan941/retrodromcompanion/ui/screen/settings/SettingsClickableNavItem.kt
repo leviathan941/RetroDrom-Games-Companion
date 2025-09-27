@@ -45,14 +45,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsClickableNavItem(
     title: String,
+    modifier: Modifier = Modifier,
     subtitle: String? = null,
     leadingIcon: Painter? = null,
     onClick: (() -> Unit)? = null,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .clickable(enabled = onClick != null) { onClick?.invoke() }
+            .clickable(enabled = onClick != null) { onClick?.invoke() },
     ) {
         Row(
             modifier = Modifier
@@ -84,7 +85,7 @@ fun SettingsClickableNavItem(
 
                 if (subtitle != null) {
                     Spacer(
-                        modifier = Modifier.height(4.dp)
+                        modifier = Modifier.height(4.dp),
                     )
 
                     Text(

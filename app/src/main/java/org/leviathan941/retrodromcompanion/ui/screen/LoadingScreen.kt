@@ -23,6 +23,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -49,10 +50,11 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 fun LoadingScreen(
     loadingData: MainNavScreen.Loading,
     modifier: Modifier = Modifier,
-    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = {_, _ -> },
+    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = { _, _ -> },
     onRetryClick: () -> Unit = {},
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopBarView(
                 prefs = loadingData.topBarPrefs,
@@ -60,7 +62,8 @@ fun LoadingScreen(
         },
     ) { paddings ->
         LoadingView(
-            modifier = modifier
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(paddings),
             state = loadingData.state,
             onErrorLongPress = onErrorLongPress,
@@ -71,9 +74,9 @@ fun LoadingScreen(
 
 @Composable
 fun LoadingView(
-    modifier: Modifier = Modifier,
     state: LoadingState,
-    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = {_, _ -> },
+    modifier: Modifier = Modifier,
+    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = { _, _ -> },
     onRetryClick: () -> Unit = {},
 ) {
     Column(
@@ -98,6 +101,7 @@ fun LoadingView(
 }
 
 @Composable
+@Suppress("MultipleEmitters")
 private fun InProgressScreen() {
     CircularProgressIndicator()
     Text(
@@ -106,16 +110,8 @@ private fun InProgressScreen() {
     )
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun InProgressLoadingScreen() = LoadingScreen(
-    loadingData = MainNavScreen.Loading(
-        title = "Loading screen",
-        state = LoadingState.InProgress,
-    ),
-)
-
-@Composable
+@Suppress("MultipleEmitters")
 private fun FailureScreen(
     failureState: LoadingState.Failure,
     onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit,
@@ -146,7 +142,7 @@ private fun FailureScreen(
             .clickable { onRetryClick() },
         text = AnnotatedString(
             text = stringResource(
-                id = R.string.loading_screen_failure_retry_button
+                id = R.string.loading_screen_failure_retry_button,
             ).uppercase(),
             spanStyle = SpanStyle(
                 color = ClickableTextColor,
@@ -155,6 +151,15 @@ private fun FailureScreen(
         style = MaterialTheme.typography.titleMedium,
     )
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun InProgressLoadingScreen() = LoadingScreen(
+    loadingData = MainNavScreen.Loading(
+        title = "Loading screen",
+        state = LoadingState.InProgress,
+    ),
+)
 
 @Preview(showBackground = true)
 @Composable

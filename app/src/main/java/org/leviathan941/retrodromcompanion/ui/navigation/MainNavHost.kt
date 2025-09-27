@@ -32,7 +32,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 import org.leviathan941.retrodromcompanion.ui.screen.LoadingScreen
 import org.leviathan941.retrodromcompanion.ui.screen.SomethingWrongScreen
@@ -43,19 +42,21 @@ fun MainNavHost(
     navigationActions: MainNavActions,
     predefinedDestinations: MainNavPredefinedDestinations,
     uiState: MainViewState,
-    mainViewModel: MainViewModel,
     drawerState: DrawerState,
+    modifier: Modifier = Modifier,
+    fetchRssData: () -> Unit,
 ) {
     val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
 
     NavHost(
         navController = navHostController,
-        startDestination = MainDestination.Loading
+        startDestination = MainDestination.Loading,
+        modifier = modifier,
     ) {
         composable<MainDestination.Loading> {
-            LaunchedEffect(key1 = Unit) {
-                mainViewModel.fetchRssData()
+            LaunchedEffect(key1 = fetchRssData) {
+                fetchRssData()
             }
             LoadingScreen(
                 loadingData = uiState.loadingData,
@@ -63,16 +64,18 @@ fun MainNavHost(
                 onErrorLongPress = { label, message ->
                     coroutineScope.launch {
                         clipboard.setClipEntry(
-                            ClipEntry(ClipData.newPlainText(
-                                label,
-                                message
-                            ))
+                            ClipEntry(
+                                ClipData.newPlainText(
+                                    label,
+                                    message,
+                                ),
+                            ),
                         )
                     }
                 },
                 onRetryClick = {
-                    mainViewModel.fetchRssData()
-                }
+                    fetchRssData()
+                },
             )
         }
 
@@ -90,7 +93,7 @@ fun MainNavHost(
                 data = uiState.somethingWrongData,
                 onRestartButtonClick = {
                     navigationActions.navigateToLoading()
-                }
+                },
             )
         }
 

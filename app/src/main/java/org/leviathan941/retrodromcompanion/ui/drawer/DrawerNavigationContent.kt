@@ -49,7 +49,7 @@ fun DrawerNavigationContent(
         onClick = {
             navigationActions.navigateToSettings()
             closeDrawer()
-        }
+        },
     )
 
     HorizontalDivider()
@@ -60,13 +60,13 @@ fun DrawerNavigationContent(
             isSelected = { screen ->
                 navBackStackEntry?.run {
                     isRouteActive<RssFeedDestination.Feed>() &&
-                            toRoute<RssFeedDestination.Feed>() == screen.toDestination()
+                        toRoute<RssFeedDestination.Feed>() == screen.toDestination()
                 } == true
             },
             onClick = { screen ->
                 navigationActions.navigateToRssFeed(screen.toDestination())
                 closeDrawer()
-            }
+            },
         )
     }
 

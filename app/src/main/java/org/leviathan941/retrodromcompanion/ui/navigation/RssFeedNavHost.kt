@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.navigation
 
 import androidx.compose.material3.DrawerState
+import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
@@ -29,20 +30,23 @@ import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssItemDescriptionScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemScreen
 import org.leviathan941.retrodromcompanion.ui.toDestination
+import org.leviathan941.retrodromcompanion.ui.toScreen
 
 fun NavGraphBuilder.rssFeedNavHost(
     navigationActions: MainNavActions,
     drawerState: DrawerState,
 ) {
     composable<RssFeedDestination.Feed> { backStackEntry ->
+        val screen = remember { backStackEntry.toRoute<RssFeedDestination.Feed>().toScreen() }
         RssFeedScreen(
-            backStackEntry = backStackEntry,
+            screen = screen,
+            viewModelStoreOwner = backStackEntry,
             drawerState = drawerState,
             itemClicked = { item ->
                 item.toDestination()?.let {
                     navigationActions.navigateToRssItemDescription(it)
                 }
-            }
+            },
         )
 
         RssFeedPromo(backStackEntry)
@@ -51,7 +55,7 @@ fun NavGraphBuilder.rssFeedNavHost(
     composable<RssFeedDestination.ItemDescription> { backStackEntry ->
         RssItemDescriptionScreen(
             itemDescription = backStackEntry.toRoute(),
-            navigationActions = navigationActions
+            navigationActions = navigationActions,
         )
     }
 
@@ -62,8 +66,10 @@ fun NavGraphBuilder.rssFeedNavHost(
             ),
         ),
     ) { backStackEntry ->
+        val rssLoadingItem = remember { backStackEntry.toRoute<RssFeedDestination.LoadingItem>() }
         RssLoadingItemScreen(
-            backStackEntry = backStackEntry,
+            item = rssLoadingItem,
+            viewModelStoreOwner = backStackEntry,
             navActions = navigationActions,
         )
     }

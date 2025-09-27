@@ -20,6 +20,7 @@ package org.leviathan941.retrodromcompanion.ui.drawer
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.leviathan941.retrodromcompanion.R
@@ -28,17 +29,19 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 @Composable
 fun RssFeedDrawerNavView(
     rssScreens: List<MainNavScreen.RssFeed>,
+    modifier: Modifier = Modifier,
     isSelected: (MainNavScreen.RssFeed) -> Boolean = { false },
     onClick: (MainNavScreen.RssFeed) -> Unit = {},
 ) {
     DrawerSubMenuView(
         title = stringResource(id = R.string.drawer_rss_feeds_submenu_title),
+        modifier = modifier,
         icon = {
             Icon(
                 painter = painterResource(id = R.drawable.google_material_news),
                 contentDescription = null,
             )
-        }
+        },
     ) {
         rssScreens.sortedBy { it.id }.forEach { rssScreen ->
             DrawerMenuItemView(

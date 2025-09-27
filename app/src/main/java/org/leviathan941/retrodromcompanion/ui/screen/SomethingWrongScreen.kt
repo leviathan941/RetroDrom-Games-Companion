@@ -44,12 +44,14 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 @Composable
 fun SomethingWrongScreen(
     data: MainNavScreen.SomethingWrong,
+    modifier: Modifier = Modifier,
     onRestartButtonClick: () -> Unit = {},
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopBarView(prefs = data.topBarPrefs)
-        }
+        },
     ) { paddings ->
         Column(
             modifier = Modifier
@@ -73,9 +75,8 @@ fun SomethingWrongScreen(
                 modifier = Modifier
                     .clickable { onRestartButtonClick() },
                 text = AnnotatedString(
-                    text = stringResource(
-                        id = R.string.something_wrong_screen_retry_button
-                    ).uppercase(),
+                    text = stringResource(id = R.string.something_wrong_screen_retry_button)
+                        .uppercase(),
                     spanStyle = SpanStyle(
                         color = ClickableTextColor,
                     ),
@@ -88,9 +89,8 @@ fun SomethingWrongScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SomethingWrongScreenPreview() =
-    SomethingWrongScreen(
-        data = MainNavScreen.SomethingWrong(
-            title = "Something went wrong",
-        )
-    )
+private fun SomethingWrongScreenPreview() = SomethingWrongScreen(
+    data = MainNavScreen.SomethingWrong(
+        title = "Something went wrong",
+    ),
+)

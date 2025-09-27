@@ -23,12 +23,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
+import androidx.lifecycle.ViewModelStoreOwner
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewModel
 import org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewState
@@ -43,22 +41,27 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
 @Composable
 fun RssLoadingItemScreen(
-    backStackEntry: NavBackStackEntry,
+    item: RssFeedDestination.LoadingItem,
+    viewModelStoreOwner: ViewModelStoreOwner,
     navActions: MainNavActions,
-) {
-    val rssLoadingItem = remember { backStackEntry.toRoute<RssFeedDestination.LoadingItem>() }
-    val viewModel = hiltViewModel<RssLoadingItemViewModel, RssLoadingItemViewModel.Factory>(
-        viewModelStoreOwner = backStackEntry,
+    modifier: Modifier = Modifier,
+    viewModel: RssLoadingItemViewModel = hiltViewModel<
+        RssLoadingItemViewModel,
+        RssLoadingItemViewModel.Factory,
+        >(
+        viewModelStoreOwner = viewModelStoreOwner,
         key = ViewModelKeys.RSS_ITEM_LOADING_MODEL,
         creationCallback = { factory ->
-            factory.create(rssLoadingItem)
-        }
-    )
+            factory.create(item)
+        },
+    ),
+) {
     val viewState = viewModel.viewState.collectAsState()
 
     when (val state = viewState.value) {
         is RssLoadingItemViewState.Loading -> {
             Scaffold(
+                modifier = modifier,
                 topBar = {
                     TopBarView(
                         prefs = TopBarPrefs(

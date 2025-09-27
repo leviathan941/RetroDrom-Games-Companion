@@ -34,7 +34,6 @@ import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_URL
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTextItem
 
-@Preview(showBackground = true)
 @Composable
 fun FeedbackSettingsSubScreen() {
     val siteFeedback = stringResource(id = R.string.settings_about_feedback_screen_site)
@@ -44,7 +43,7 @@ fun FeedbackSettingsSubScreen() {
             withStyle(
                 ParagraphStyle(
                     lineBreak = LineBreak.Heading,
-                )
+                ),
             ) {
                 append(siteFeedback)
                 append("\n")
@@ -59,4 +58,10 @@ fun FeedbackSettingsSubScreen() {
             }
         },
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun FeedbackSettingsSubScreenPreview() {
+    FeedbackSettingsSubScreen()
 }

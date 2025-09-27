@@ -30,7 +30,6 @@ enum class TopBarNavButton {
     BACK,
     CLOSE,
     DRAWER,
-    ;
 }
 
 sealed interface TopBarAction {

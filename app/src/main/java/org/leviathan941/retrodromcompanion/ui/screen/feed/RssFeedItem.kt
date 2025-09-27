@@ -47,19 +47,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
-import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
 
 private const val TAG = "RssFeedItem"
 
 @Composable
 fun RssFeedItem(
-    modifier: Modifier,
     title: String,
     categories: List<String>,
     pubDate: ZonedDateTime,
+    modifier: Modifier = Modifier,
     imageUrl: String? = null,
     description: String? = null,
 ) {
@@ -85,17 +85,17 @@ fun RssFeedItem(
                         .data(imageUrl)
                         .build(),
                     placeholder = painterResource(
-                        id = R.drawable.google_material_image_placeholder
+                        id = R.drawable.google_material_image_placeholder,
                     ),
                     error = painterResource(
-                        id = R.drawable.google_material_broken_image
+                        id = R.drawable.google_material_broken_image,
                     ),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     filterQuality = FilterQuality.Low,
                     onError = { error ->
                         Log.e(TAG, "Error while loading image", error.result.throwable)
-                    }
+                    },
                 )
             }
             Column(
@@ -129,7 +129,7 @@ fun RssFeedItem(
                 modifier = Modifier.size(12.dp),
                 painter = painterResource(id = R.drawable.google_material_schedule),
                 contentDescription = stringResource(
-                    id = R.string.rss_feed_item_publication_icon_desc
+                    id = R.string.rss_feed_item_publication_icon_desc,
                 ),
                 colorFilter = ColorFilter.tint(
                     color = nonImportantColor,
@@ -146,7 +146,7 @@ fun RssFeedItem(
                 Text(
                     text = "\u2014",
                     style = MaterialTheme.typography.labelMedium,
-                    color = nonImportantColor
+                    color = nonImportantColor,
                 )
                 Text(
                     text = categories.joinToString(", "),
@@ -164,7 +164,8 @@ fun RssFeedItem(
     showBackground = true,
 )
 @Composable
-fun RssFeedItemPreview() = RssFeedItem(
+@SuppressWarnings("MagicNumber")
+private fun RssFeedItemPreview() = RssFeedItem(
     modifier = Modifier,
     title = "Very interesting news! Be hurry to read it! Do not miss!",
     categories = listOf(
@@ -173,10 +174,10 @@ fun RssFeedItemPreview() = RssFeedItem(
         "Category 3",
         "Category 4",
         "Category 5",
-        "Category 6"
+        "Category 6",
     ),
     pubDate = ZonedDateTime.of(2024, 3, 1, 12, 0, 0, 0, ZoneId.systemDefault()),
     imageUrl = "https://example.com/image.jpg",
     description = "Clones of the Famicom console, released under local brands, " +
-            "are increasingly appearing in the catalogs of some Japanese retail chains.",
+        "are increasingly appearing in the catalogs of some Japanese retail chains.",
 )

@@ -33,9 +33,11 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 fun SettingsScreen(
     data: MainNavScreen.Settings,
     navigationActions: MainNavActions,
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopBarView(
                 prefs = data.topBarPrefs,
@@ -45,11 +47,11 @@ fun SettingsScreen(
                             navigationActions.navigateBack()
                         }
 
-                        else -> throw IllegalStateException("Unexpected nav button: $it")
+                        else -> error("Unexpected nav button: $it")
                     }
                 },
             )
-        }
+        },
     ) { paddings ->
         Column(
             modifier = Modifier

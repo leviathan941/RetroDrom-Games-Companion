@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,7 +37,6 @@ import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
-import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -48,12 +48,12 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         MainViewState(
             loadingData = MainNavScreen.Loading(
-                title = context.getString(R.string.loading_screen_title)
+                title = context.getString(R.string.loading_screen_title),
             ),
             somethingWrongData = MainNavScreen.SomethingWrong(
                 title = context.getString(R.string.something_wrong_screen_title),
             ),
-        )
+        ),
     )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
 
@@ -78,10 +78,10 @@ class MainViewModel @Inject constructor(
                         state = LoadingState.Failure(
                             message = e.message.orEmpty(),
                             clipboardLabel = context.getString(
-                                R.string.error_copied_clipboard_label
+                                R.string.error_copied_clipboard_label,
                             ),
-                        )
-                    )
+                        ),
+                    ),
                 )
             }
         }
