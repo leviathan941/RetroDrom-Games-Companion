@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.screen.loading
+package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category
 
-sealed interface LoadingState {
-    data object InProgress : LoadingState
-    data class Failure(
-        val message: String,
-        val clipboardLabel: String,
-    ) : LoadingState
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+internal interface RoomFeedCategoryDao {
+    @Query("SELECT * FROM feed_categories")
+    fun allFlow(): Flow<List<RoomFeedCategoryEntity>>
+
+    @Insert
+    fun addAll(entities: List<RoomFeedCategoryEntity>)
+
+    @Query("DELETE FROM feed_categories")
+    fun clear()
 }

@@ -23,11 +23,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,36 +38,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.theme.ClickableTextColor
-import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
-
-@Composable
-fun LoadingScreen(
-    loadingData: MainNavScreen.Loading,
-    modifier: Modifier = Modifier,
-    onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = { _, _ -> },
-    onRetryClick: () -> Unit = {},
-) {
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopBarView(
-                prefs = loadingData.topBarPrefs,
-            )
-        },
-    ) { paddings ->
-        LoadingView(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddings),
-            state = loadingData.state,
-            onErrorLongPress = onErrorLongPress,
-            onRetryClick = onRetryClick,
-        )
-    }
-}
 
 @Composable
 fun LoadingView(
@@ -88,21 +57,19 @@ fun LoadingView(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         when (state) {
-            LoadingState.InProgress -> InProgressScreen()
-            is LoadingState.Failure -> FailureScreen(
+            LoadingState.InProgress -> InProgressView()
+            is LoadingState.Failure -> FailureView(
                 failureState = state,
                 onErrorLongPress = onErrorLongPress,
                 onRetryClick = onRetryClick,
             )
-
-            else -> Unit
         }
     }
 }
 
 @Composable
 @Suppress("MultipleEmitters")
-private fun InProgressScreen() {
+private fun InProgressView() {
     CircularProgressIndicator()
     Text(
         text = stringResource(id = R.string.loading_screen_in_progress_message),
@@ -112,7 +79,7 @@ private fun InProgressScreen() {
 
 @Composable
 @Suppress("MultipleEmitters")
-private fun FailureScreen(
+private fun FailureView(
     failureState: LoadingState.Failure,
     onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit,
     onRetryClick: () -> Unit,
@@ -154,21 +121,15 @@ private fun FailureScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun InProgressLoadingScreen() = LoadingScreen(
-    loadingData = MainNavScreen.Loading(
-        title = "Loading screen",
-        state = LoadingState.InProgress,
-    ),
+private fun InProgressLoadingView() = LoadingView(
+    state = LoadingState.InProgress,
 )
 
 @Preview(showBackground = true)
 @Composable
-private fun FailureLoadingScreen() = LoadingScreen(
-    loadingData = MainNavScreen.Loading(
-        title = "Loading screen",
-        state = LoadingState.Failure(
-            message = "Error message",
-            clipboardLabel = "Error message copied to clipboard",
-        ),
+private fun FailureLoadingView() = LoadingView(
+    state = LoadingState.Failure(
+        message = "Error message",
+        clipboardLabel = "Error message copied to clipboard",
     ),
 )

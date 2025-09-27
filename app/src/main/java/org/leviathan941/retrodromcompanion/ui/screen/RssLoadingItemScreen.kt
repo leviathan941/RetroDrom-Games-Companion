@@ -72,7 +72,7 @@ fun RssLoadingItemScreen(
                             when (navButton) {
                                 TopBarNavButton.BACK -> {
                                     viewModel.cancel()
-                                    navActions.navigateToLoading()
+                                    navActions.navigateToRssFeed()
                                 }
 
                                 else -> Unit
@@ -91,15 +91,14 @@ fun RssLoadingItemScreen(
         }
 
         is RssLoadingItemViewState.Error -> {
-            navActions.navigateToLoading()
+            navActions.navigateToRssFeed()
         }
 
         is RssLoadingItemViewState.Success -> {
             state.item.toDestination()?.let {
-                navActions.navigateToLoading()
                 navActions.navigateToRssItemDescription(it)
             } ?: run {
-                navActions.navigateToLoading()
+                navActions.navigateToRssFeed()
             }
         }
     }

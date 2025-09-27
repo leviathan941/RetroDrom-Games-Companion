@@ -16,11 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.common.di
+package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed
 
-public object DiKeys {
-    public const val APPLICATION_COROUTINE_SCOPE: String = "applicationCoroutineScope"
-    public const val MAIN_DATASTORE: String = "mainDataStore"
-    public const val MAIN_ACTIVITY_CLASS: String = "mainActivityClass"
-    public const val RETRODROM_WP_RETROFIT_CLIENT: String = "retrodromWpRetrofitClient"
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryDao
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryEntity
+
+private const val DB_VERSION = 1
+
+@Database(
+    entities = [
+        RoomFeedCategoryEntity::class,
+    ],
+    version = DB_VERSION,
+    exportSchema = true,
+)
+internal abstract class RoomFeedDatabase : RoomDatabase() {
+    internal abstract fun categoriesDao(): RoomFeedCategoryDao
 }

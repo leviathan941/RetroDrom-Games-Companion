@@ -18,24 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
 
 sealed interface MainNavScreen {
     val topBarPrefs: TopBarPrefs
-
-    data class Loading(
-        val title: String = "",
-        val state: LoadingState = LoadingState.InProgress,
-        val navButton: TopBarNavButton = TopBarNavButton.NONE,
-    ) : MainNavScreen {
-        override val topBarPrefs: TopBarPrefs
-            get() = TopBarPrefs(
-                title = title,
-                navButton = navButton,
-            )
-    }
 
     data class RssFeed(
         val id: Int,
@@ -46,16 +33,6 @@ sealed interface MainNavScreen {
             get() = TopBarPrefs(
                 title = title,
                 navButton = TopBarNavButton.DRAWER,
-            )
-    }
-
-    data class SomethingWrong(
-        val title: String = "",
-    ) : MainNavScreen {
-        override val topBarPrefs: TopBarPrefs
-            get() = TopBarPrefs(
-                title = title,
-                navButton = TopBarNavButton.NONE,
             )
     }
 

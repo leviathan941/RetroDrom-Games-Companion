@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.screen.loading
+package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.di
 
-sealed interface LoadingState {
-    data object InProgress : LoadingState
-    data class Failure(
-        val message: String,
-        val clipboardLabel: String,
-    ) : LoadingState
+import dagger.Binds
+import dagger.Module
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
+import org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.RoomFeedCacheProviderImpl
+
+@Suppress("unused")
+@Module
+public abstract class RoomFeedApplicationModule {
+    @Binds
+    internal abstract fun bindsFeedCacheProvider(
+        impl: RoomFeedCacheProviderImpl,
+    ): FeedCacheProvider
 }

@@ -18,10 +18,16 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
+import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
-data class MainViewState(
-    val loadingData: MainNavScreen.Loading = MainNavScreen.Loading(),
-    val rssFeedData: Map<Int, MainNavScreen.RssFeed> = emptyMap(),
-    val somethingWrongData: MainNavScreen.SomethingWrong = MainNavScreen.SomethingWrong(),
-)
+sealed interface MainViewState {
+    val destination: MainDestination
+
+    data class RssFeed(
+        val screenData: Map<Int, MainNavScreen.RssFeed>,
+    ) : MainViewState {
+        override val destination: MainDestination
+            get() = MainDestination.RssFeed
+    }
+}

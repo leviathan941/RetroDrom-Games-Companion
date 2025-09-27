@@ -18,19 +18,15 @@
 
 package org.leviathan941.retrodromcompanion.ui
 
-import android.util.Log
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import kotlinx.coroutines.launch
@@ -40,12 +36,10 @@ import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
-import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavPredefinedDestinations
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
-import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 
 @Composable
 fun MainView(
@@ -69,7 +63,6 @@ fun MainView(
     }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val uiState by mainViewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
@@ -84,7 +77,7 @@ fun MainView(
                 },
                 navigationContent = {
                     DrawerNavigationContent(
-                        uiState = uiState,
+                        uiState = mainViewModel.uiState,
                         navigationActions = navigationActions,
                         navBackStackEntry = navBackStackEntry,
                         drawerState = drawerState,
@@ -100,18 +93,8 @@ fun MainView(
             navHostController = navController,
             navigationActions = navigationActions,
             predefinedDestinations = predefinedDestinations,
-            uiState = uiState,
+            uiState = mainViewModel.uiState,
             drawerState = drawerState,
-            fetchRssData = { mainViewModel.fetchRssData() },
         )
-    }
-
-    LaunchedEffect(key1 = uiState) {
-        if (navController.currentDestination?.hasRoute<MainDestination.Loading>() == true &&
-            uiState.loadingData.state is LoadingState.Success
-        ) {
-            Log.d(MAIN_VIEW_TAG, "Navigate after success loading")
-            navigationActions.navigateToRssFeed()
-        }
     }
 }

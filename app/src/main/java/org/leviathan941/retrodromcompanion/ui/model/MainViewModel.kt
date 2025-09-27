@@ -24,72 +24,56 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.common.Constants
-import org.leviathan941.retrodromcompanion.network.wordpress.WpGetErrorException
-import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
 import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
-import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
+import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     @param:ApplicationContext
     private val context: Context,
+    private val feedCacheProvider: FeedCacheProvider,
 ) : ViewModel() {
-    private val wpRetrofitClient = WpRetrofitClient(Constants.RETRODROM_BASE_URL)
-
     private val _uiState = MutableStateFlow(
-        MainViewState(
-            loadingData = MainNavScreen.Loading(
-                title = context.getString(R.string.loading_screen_title),
-            ),
-            somethingWrongData = MainNavScreen.SomethingWrong(
-                title = context.getString(R.string.something_wrong_screen_title),
-            ),
+        MainViewState.RssFeed(
+            screenData = emptyMap(),
         ),
     )
     val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
 
-    fun fetchRssData() {
+    init {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                loadingData = _uiState.value.loadingData.copy(
-                    state = LoadingState.InProgress,
-                ),
-            )
-            _uiState.value = try {
-                _uiState.value.copy(
-                    loadingData = _uiState.value.loadingData.copy(
-                        state = LoadingState.Success,
-                    ),
-                    rssFeedData = fetchAllRssScreens(),
-                )
-            } catch (e: WpGetErrorException) {
+            feedCacheProvider.categories.map {
+                convertFeedCategories(it)
+            }.collect { categories ->
+                _uiState.value = MainViewState.RssFeed(categories)
+            }
+        }
+        refreshRssFeedData()
+    }
+
+    fun refreshRssFeedData() {
+        viewModelScope.launch {
+            feedCacheProvider.refresh().onFailure { e ->
                 Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS categories", e)
-                _uiState.value.copy(
-                    loadingData = _uiState.value.loadingData.copy(
-                        state = LoadingState.Failure(
-                            message = e.message.orEmpty(),
-                            clipboardLabel = context.getString(
-                                R.string.error_copied_clipboard_label,
-                            ),
-                        ),
-                    ),
-                )
             }
         }
     }
 
-    @Throws(WpGetErrorException::class)
-    private suspend fun fetchAllRssScreens(): Map<Int, MainNavScreen.RssFeed> {
-        val rssCategoryScreens = wpRetrofitClient.fetchCategories()
+    private fun convertFeedCategories(
+        feedCategories: List<FeedCategory>,
+    ): Map<Int, MainNavScreen.RssFeed> {
+        val rssCategoryScreens = feedCategories
             .filter { it.postsCount > 0 }
             .map {
                 MainNavScreen.RssFeed(

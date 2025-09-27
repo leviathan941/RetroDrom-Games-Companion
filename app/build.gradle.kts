@@ -90,6 +90,7 @@ dependencies {
     implementation(project(":html-text"))
     implementation(project(":html-text:imagecontent"))
     implementation(project(":network"))
+    implementation(project(":network:cache"))
     implementation(project(":notification"))
     implementation(project(":permission"))
     implementation(project(":preferences"))

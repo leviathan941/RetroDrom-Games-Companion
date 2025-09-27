@@ -31,10 +31,17 @@ import javax.inject.Named
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
 import org.leviathan941.retrodromcompanion.MainActivity
+import org.leviathan941.retrodromcompanion.common.Constants
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
+import org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.di.RoomFeedApplicationModule
+import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
 import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
 
-@Module
+@Module(
+    includes = [
+        RoomFeedApplicationModule::class,
+    ],
+)
 @InstallIn(SingletonComponent::class)
 interface ApplicationModule {
     companion object {
@@ -53,5 +60,11 @@ interface ApplicationModule {
         @Provides
         @Named(DiKeys.MAIN_ACTIVITY_CLASS)
         fun provideMainActivityClass(): Class<*> = MainActivity::class.java
+
+        @Provides
+        @Named(DiKeys.RETRODROM_WP_RETROFIT_CLIENT)
+        @Singleton
+        fun provideRetrodromWpRetrofitClient(): WpRetrofitClient =
+            WpRetrofitClient(Constants.RETRODROM_BASE_URL)
     }
 }

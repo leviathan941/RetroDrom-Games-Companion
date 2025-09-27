@@ -32,17 +32,10 @@ import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 sealed interface AppDestination
 
 sealed interface MainDestination : AppDestination {
-    @Keep
-    @Serializable
-    data object Loading : MainDestination
 
     @Keep
     @Serializable
     data object RssFeed : MainDestination
-
-    @Keep
-    @Serializable
-    data object SomethingWentWrong : MainDestination
 
     @Keep
     @Serializable
@@ -108,17 +101,8 @@ class MainNavActions(
     private val predefinedDestinations: MainNavPredefinedDestinations,
 ) {
     fun navigateBack() {
+        Log.d(MAIN_VIEW_TAG, "Navigate back")
         navController.popBackStack()
-    }
-
-    fun navigateToLoading() {
-        Log.d(MAIN_VIEW_TAG, "Navigate to loading screen")
-        navController.navigate(MainDestination.Loading) {
-            popUpTo(MainDestination.Loading) {
-                inclusive = true
-            }
-            launchSingleTop = true
-        }
     }
 
     fun navigateToRssFeed(
@@ -134,17 +118,15 @@ class MainNavActions(
             return
         }
         navController.navigate(destination) {
-            if (!isInsideRssFeed) {
-                popUpTo(MainDestination.Loading) {
-                    inclusive = true
-                }
-            }
+            popUpTo<RssFeedDestination.Feed>()
+            launchSingleTop = true
         }
     }
 
     fun navigateToRssItemDescription(destination: RssFeedDestination.ItemDescription) {
         Log.d(MAIN_VIEW_TAG, "Navigate to RSS item description screen")
         navController.navigate(destination) {
+            popUpTo<RssFeedDestination.Feed>()
             launchSingleTop = true
         }
     }

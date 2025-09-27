@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,12 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.ui.screen.loading
+package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category
 
-sealed interface LoadingState {
-    data object InProgress : LoadingState
-    data class Failure(
-        val message: String,
-        val clipboardLabel: String,
-    ) : LoadingState
+internal object RoomFeedCategoryTable {
+    const val TABLE_NAME: String = "feed_categories"
+
+    const val COLUMN_ID: String = "id"
+    const val COLUMN_NAME: String = "name"
+    const val COLUMN_LINK: String = "link"
+    const val COLUMN_POSTS_COUNT: String = "posts_count"
 }

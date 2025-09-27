@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">RetroDrom Games</string>
 
-    <string name="loading_screen_title">Loading</string>
     <string name="loading_screen_in_progress_message">Loading…</string>
     <string name="loading_screen_failure_title">An error occurred.\nTry again later.</string>
     <string name="loading_screen_failure_retry_button">Refresh</string>
@@ -16,10 +15,6 @@
     <string name="top_bar_action_icon_desc_open_in_browser">Open in browser</string>
 
     <string name="main_rss_feed_title" translatable="false">RetroDrom Games</string>
-
-    <string name="something_wrong_screen_title">Unexpected error</string>
-    <string name="something_wrong_screen_message">Something went wrong</string>
-    <string name="something_wrong_screen_retry_button">Restart</string>
 
     <string name="rss_feed_item_publication_time_just_now">just now</string>
     <plurals name="rss_feed_item_publication_time_minutes">

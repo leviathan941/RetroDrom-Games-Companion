@@ -25,6 +25,7 @@ plugins {
     alias(libs.plugins.google.services) apply false
     alias(libs.plugins.dagger.hilt.android) apply false
     alias(libs.plugins.aboutlibraries) apply false
+    alias(libs.plugins.room) apply false
 }
 
 tasks.register("clean", Delete::class) {
