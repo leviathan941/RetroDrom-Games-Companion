@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.mikepenz.aboutlibraries.ui.compose.android.rememberLibraries
+import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
@@ -101,7 +101,7 @@ fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
             ),
             navigationActions = navigationActions,
         ) {
-            val libraries by rememberLibraries(R.raw.aboutlibraries)
+            val libraries by produceLibraries(R.raw.aboutlibraries)
             LibrariesContainer(
                 libraries = libraries,
                 modifier = Modifier,
