@@ -42,6 +42,7 @@ fun RssFeedDrawerNavView(
                 contentDescription = null,
             )
         },
+        isExpandedInitially = false,
     ) {
         rssScreens.sortedBy { it.id }.forEach { rssScreen ->
             DrawerMenuItemView(

@@ -88,4 +88,6 @@
     <string name="rss_feed_post_loading_item_title">Загрузка статьи</string>
     <string name="error_copied_clipboard_label">Текст ошибки скопирован в буфер</string>
     <string name="settings_about_item_licenses_title">Лицензии</string>
+    <string name="drawer_telegram_external_link_badge_description">Перейти в группу Telegram</string>
+    <string name="open_external_link_application_not_found">Приложение для открытия ссылки не найдено</string>
 </resources>

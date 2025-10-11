@@ -19,24 +19,27 @@
 
 package org.leviathan941.retrodromcompanion.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 import androidx.annotation.PluralsRes
+import androidx.core.net.toUri
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 internal const val MAIN_VIEW_TAG = "MainView"
 internal const val RSS_SCREEN_TAG = "RssScreen"
@@ -132,4 +135,23 @@ fun openNotificationSettings(context: Context) {
             putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
         },
     )
+}
+
+fun openUrlByIntent(
+    context: Context,
+    url: String,
+) {
+    try {
+        context.startActivity(
+            Intent(Intent.ACTION_VIEW).apply {
+                data = url.toUri()
+            },
+        )
+    } catch (_: ActivityNotFoundException) {
+        Toast.makeText(
+            context,
+            R.string.open_external_link_application_not_found,
+            Toast.LENGTH_LONG,
+        ).show()
+    }
 }

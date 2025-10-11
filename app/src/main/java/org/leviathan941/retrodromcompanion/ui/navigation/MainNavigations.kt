@@ -18,16 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import android.util.Log
 import androidx.annotation.Keep
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.toRoute
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.leviathan941.retrodromcompanion.common.Constants
 import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL
-import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
 
 sealed interface AppDestination
 
@@ -90,64 +85,4 @@ sealed interface RssFeedDestination : AppDestination {
         @SerialName(RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL)
         val channelUrl: String = Constants.RETRODROM_BASE_URL,
     ) : RssFeedDestination
-}
-
-data class MainNavPredefinedDestinations(
-    val rssFeedStart: RssFeedDestination.Feed,
-)
-
-class MainNavActions(
-    private val navController: NavController,
-    private val predefinedDestinations: MainNavPredefinedDestinations,
-) {
-    fun navigateBack() {
-        if (navController.popBackStack()) {
-            Log.d(MAIN_VIEW_TAG, "Navigate back")
-        } else {
-            Log.d(MAIN_VIEW_TAG, "No back stack entry, cannot navigate back")
-            navigateToRssFeed()
-        }
-    }
-
-    fun navigateToRssFeed(
-        destination: RssFeedDestination.Feed = predefinedDestinations.rssFeedStart,
-    ) {
-        Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen: $destination")
-        val isInsideRssFeed = navController.currentDestination
-            ?.hasRoute<RssFeedDestination.Feed>() == true
-        val toSameFeed = navController.currentBackStackEntry?.takeIf { isInsideRssFeed }
-            ?.toRoute<RssFeedDestination.Feed>() == destination
-        if (toSameFeed) {
-            Log.d(MAIN_VIEW_TAG, "Already on the same RSS feed screen")
-            return
-        }
-        navController.navigate(destination) {
-            popUpTo<RssFeedDestination.Feed> {
-                inclusive = isInsideRssFeed
-            }
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToRssItemDescription(destination: RssFeedDestination.ItemDescription) {
-        Log.d(MAIN_VIEW_TAG, "Navigate to RSS item description screen")
-        navController.navigate(destination) {
-            popUpTo<RssFeedDestination.Feed>()
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToSettings() {
-        Log.d(MAIN_VIEW_TAG, "Navigate to settings screen")
-        navController.navigate(MainDestination.Settings) {
-            launchSingleTop = true
-        }
-    }
-
-    fun navigateToSettingsItem(destination: SettingsDestination) {
-        Log.d(MAIN_VIEW_TAG, "Navigate to $destination settings screen")
-        navController.navigate(destination) {
-            launchSingleTop = true
-        }
-    }
 }

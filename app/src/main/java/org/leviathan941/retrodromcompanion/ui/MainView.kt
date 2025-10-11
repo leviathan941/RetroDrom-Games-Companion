@@ -36,7 +36,7 @@ import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
-import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActionsImpl
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavPredefinedDestinations
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
@@ -56,7 +56,7 @@ fun MainView(
         ),
     )
     val navigationActions = remember(navController, predefinedDestinations) {
-        MainNavActions(
+        MainNavActionsImpl(
             navController,
             predefinedDestinations,
         )
@@ -73,7 +73,7 @@ fun MainView(
                 drawerState = drawerState,
                 closeDrawer = closeDrawer,
                 onHeaderClick = {
-                    navigationActions.navigateToRssFeed()
+                    navigationActions.navigateToStartedRssFeed()
                 },
                 navigationContent = {
                     DrawerNavigationContent(
