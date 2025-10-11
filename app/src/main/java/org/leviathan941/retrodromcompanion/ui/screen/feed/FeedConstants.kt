@@ -21,4 +21,4 @@ package org.leviathan941.retrodromcompanion.ui.screen.feed
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.unit.dp
 
-val RssFeedItemPaddings = PaddingValues(horizontal = 15.dp, vertical = 10.dp)
+val RssFeedItemPaddings = PaddingValues(all = 15.dp)

@@ -21,13 +21,14 @@ package org.leviathan941.retrodromcompanion.ui.screen.feed
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -62,25 +63,24 @@ fun RssFeedItem(
     pubDate: ZonedDateTime,
     modifier: Modifier = Modifier,
     imageUrl: String? = null,
-    description: String? = null,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(RssFeedItemPaddings),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         val nonImportantColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
 
         Row(
-            modifier = Modifier.height(55.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.height(75.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (imageUrl != null) {
                 AsyncImage(
                     modifier = Modifier
-                        .size(50.dp)
+                        .size(75.dp)
                         .clip(RoundedCornerShape(3.dp)),
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(imageUrl)
@@ -102,60 +102,60 @@ fun RssFeedItem(
             Column(
                 modifier = Modifier
                     .padding(all = 0.dp)
-                    .fillMaxHeight(),
+                    .wrapContentHeight(),
             ) {
-                Text(
-                    text = title,
-                    maxLines = 2,
-                    style = MaterialTheme.typography.titleMedium,
-                    overflow = TextOverflow.Ellipsis,
-                    lineHeight = 18.sp,
-                )
-                if (description != null) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f),
+                    contentAlignment = Alignment.TopCenter,
+                ) {
                     Text(
-                        text = description,
+                        text = title,
                         maxLines = 2,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.titleMedium,
                         overflow = TextOverflow.Ellipsis,
+                        lineHeight = 24.sp,
                     )
                 }
-            }
-        }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Image(
-                modifier = Modifier.size(12.dp),
-                painter = painterResource(id = R.drawable.google_material_schedule),
-                contentDescription = stringResource(
-                    id = R.string.rss_feed_item_publication_icon_desc,
-                ),
-                colorFilter = ColorFilter.tint(
-                    color = nonImportantColor,
-                ),
-            )
-            Text(
-                text = pubDate.toRssFeedPublicationTime(LocalResources.current),
-                maxLines = 1,
-                style = MaterialTheme.typography.labelMedium,
-                color = nonImportantColor,
-            )
+                Row(
+                    modifier = Modifier
+                        .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        modifier = Modifier.size(12.dp),
+                        painter = painterResource(id = R.drawable.google_material_schedule),
+                        contentDescription = stringResource(
+                            id = R.string.rss_feed_item_publication_icon_desc,
+                        ),
+                        colorFilter = ColorFilter.tint(
+                            color = nonImportantColor,
+                        ),
+                    )
+                    Text(
+                        text = pubDate.toRssFeedPublicationTime(LocalResources.current),
+                        maxLines = 1,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = nonImportantColor,
+                    )
 
-            if (categories.isNotEmpty()) {
-                Text(
-                    text = "\u2014",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = nonImportantColor,
-                )
-                Text(
-                    text = categories.joinToString(", "),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = nonImportantColor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+                    if (categories.isNotEmpty()) {
+                        Text(
+                            text = "\u2014",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = nonImportantColor,
+                        )
+                        Text(
+                            text = categories.joinToString(", "),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = nonImportantColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
             }
         }
     }
@@ -168,7 +168,8 @@ fun RssFeedItem(
 @SuppressWarnings("MagicNumber")
 private fun RssFeedItemPreview() = RssFeedItem(
     modifier = Modifier,
-    title = "Very interesting news! Be hurry to read it! Do not miss!",
+    title = "Very interesting news! Be hurry to read it! Do not miss! But be aware, " +
+        "it is a loooong title!",
     categories = listOf(
         "Category 1",
         "Category 2",
@@ -179,6 +180,4 @@ private fun RssFeedItemPreview() = RssFeedItem(
     ),
     pubDate = ZonedDateTime.of(2024, 3, 1, 12, 0, 0, 0, ZoneId.systemDefault()),
     imageUrl = "https://example.com/image.jpg",
-    description = "Clones of the Famicom console, released under local brands, " +
-        "are increasingly appearing in the catalogs of some Japanese retail chains.",
 )

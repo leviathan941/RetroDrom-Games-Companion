@@ -122,7 +122,6 @@ fun RssFeedScreen(
                         categories = rssFeedItem.categories,
                         pubDate = rssFeedItem.pubDate.asDateTime(),
                         imageUrl = rssFeedItem.description?.imageUrl,
-                        description = rssFeedItem.description?.paragraphs?.firstOrNull(),
                     )
                     HorizontalDivider(
                         thickness = 1.dp,
