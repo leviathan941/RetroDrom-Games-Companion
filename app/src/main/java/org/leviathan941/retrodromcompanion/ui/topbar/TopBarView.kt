@@ -168,7 +168,7 @@ private fun ActionsView(
             is TopBarAction.Browse -> {
                 ButtonView(
                     onClick = onActionClick,
-                    painter = painterResource(id = R.drawable.google_material_open_in_browser),
+                    painter = painterResource(id = R.drawable.google_material_globe),
                     contentDescRes = R.string.top_bar_action_icon_desc_open_in_browser,
                 )
             }

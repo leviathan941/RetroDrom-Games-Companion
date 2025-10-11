@@ -26,8 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItemDescription
@@ -57,7 +55,7 @@ fun RssItemDescriptionScreen(
         topBar = {
             TopBarView(
                 prefs = TopBarPrefs(
-                    title = stringResource(id = R.string.rss_feed_item_description_screen_title),
+                    title = itemDescription.title,
                     navButton = TopBarNavButton.BACK,
                     actions = listOf(
                         TopBarAction.Browse(itemDescription.link),
