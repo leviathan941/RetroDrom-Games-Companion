@@ -74,7 +74,7 @@ public class Notifications @Inject constructor(
 
         val channelId = notificationChannelId(data.channelId)
         val title = data.title ?: channelId.channelName(context)
-        val smallIcon = R.drawable.google_material_news
+        val smallIcon = R.drawable.retrodrom_games_push_notification
         val visibility = channelId.visibility()
         val notificationId = channelId.notificationId()
 

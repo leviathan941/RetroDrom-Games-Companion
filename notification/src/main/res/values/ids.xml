@@ -22,5 +22,5 @@
     <string name="misc_notification_channel_description"/>
     <string name="misc_notification_channel_name"/>
 
-    <drawable name="google_material_news"/>
+    <drawable name="retrodrom_games_push_notification"/>
 </resources>
