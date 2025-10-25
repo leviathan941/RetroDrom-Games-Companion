@@ -90,4 +90,6 @@
     <string name="settings_about_item_licenses_title">Лицензии</string>
     <string name="drawer_telegram_external_link_badge_description">Перейти в группу Telegram</string>
     <string name="open_external_link_application_not_found">Приложение для открытия ссылки не найдено</string>
+    <string name="drawer_youtube_external_link_badge_description">Перейти на YouTube канал</string>
+    <string name="drawer_boosty_external_link_badge_description">Перейти на наш Boosty</string>
 </resources>

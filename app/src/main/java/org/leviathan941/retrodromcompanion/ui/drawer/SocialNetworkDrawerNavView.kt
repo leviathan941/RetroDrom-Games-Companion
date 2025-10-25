@@ -19,6 +19,8 @@
 package org.leviathan941.retrodromcompanion.ui.drawer
 
 import android.util.Log
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
@@ -37,35 +39,34 @@ import org.leviathan941.retrodromcompanion.R
 
 private const val TAG = "SocialNetworkDrawerNav"
 
+sealed interface SocialNetworkIcon {
+    val contentScale: ContentScale
+    data class Url(
+        val url: String,
+        override val contentScale: ContentScale = ContentScale.Fit,
+    ) : SocialNetworkIcon
+    data class Resource(
+        @param:DrawableRes val resId: Int,
+        override val contentScale: ContentScale = ContentScale.Fit,
+    ) : SocialNetworkIcon
+}
+
 @Composable
 fun SocialNetworkDrawerNavView(
     title: String,
     modifier: Modifier = Modifier,
-    iconUrl: String? = null,
+    icon: SocialNetworkIcon? = null,
     badgeContentDescription: String? = null,
     isSelected: () -> Boolean = { false },
     onClick: () -> Unit = {},
 ) {
-    val placeholder = rememberVectorPainter(image = Icons.Default.Person)
     DrawerMenuItemView(
         title = title,
         modifier = modifier,
         icon = {
-            AsyncImage(
-                modifier = Modifier
-                    .size(24.dp),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(iconUrl)
-                    .build(),
-                placeholder = placeholder,
-                error = placeholder,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                filterQuality = FilterQuality.Low,
-                onError = { error ->
-                    Log.e(TAG, "Error while loading image", error.result.throwable)
-                },
-            )
+            icon?.let {
+                SocialNetworkIconView(it)
+            }
         },
         badge = {
             Icon(
@@ -76,4 +77,37 @@ fun SocialNetworkDrawerNavView(
         isSelected = isSelected(),
         onClick = onClick,
     )
+}
+
+@Composable
+private fun SocialNetworkIconView(icon: SocialNetworkIcon) {
+    when (icon) {
+        is SocialNetworkIcon.Url -> {
+            val placeholder = rememberVectorPainter(image = Icons.Default.Person)
+            AsyncImage(
+                modifier = Modifier
+                    .size(24.dp),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(icon.url)
+                    .build(),
+                placeholder = placeholder,
+                error = placeholder,
+                contentDescription = null,
+                contentScale = icon.contentScale,
+                filterQuality = FilterQuality.Low,
+                onError = { error ->
+                    Log.e(TAG, "Error while loading image", error.result.throwable)
+                },
+            )
+        }
+        is SocialNetworkIcon.Resource -> {
+            Image(
+                modifier = Modifier
+                    .size(24.dp),
+                contentScale = icon.contentScale,
+                painter = painterResource(icon.resId),
+                contentDescription = null,
+            )
+        }
+    }
 }
