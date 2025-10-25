@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.leviathan941.retrodromcompanion.AndroidSdk
 import org.leviathan941.retrodromcompanion.Application
 import org.leviathan941.retrodromcompanion.JvmVersions
@@ -29,9 +30,9 @@ plugins {
     alias(libs.plugins.aboutlibraries.android)
 }
 
-java {
-    toolchain {
-        languageVersion.set(JvmVersions.JAVA_LANG)
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(JvmVersions.KOTLIN_JVM_TARGET)
     }
 }
 
@@ -70,10 +71,17 @@ android {
             versionNameSuffix = "-SNAPSHOT"
         }
     }
+
+    compileOptions {
+        sourceCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
+        targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
     }
+
     packaging {
         resources {
             excludes += setOf(

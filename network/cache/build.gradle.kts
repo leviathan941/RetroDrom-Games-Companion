@@ -17,6 +17,7 @@
  */
 
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.leviathan941.retrodromcompanion.AndroidSdk
 import org.leviathan941.retrodromcompanion.JvmVersions
 
@@ -27,9 +28,9 @@ plugins {
     alias(libs.plugins.kotlin.ksp)
 }
 
-java {
-    toolchain {
-        languageVersion.set(JvmVersions.JAVA_LANG)
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(JvmVersions.KOTLIN_JVM_TARGET)
     }
 }
 
@@ -43,6 +44,11 @@ android {
 
     kotlin {
         explicitApi = ExplicitApiMode.Strict
+    }
+
+    compileOptions {
+        sourceCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
+        targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
     }
 
     room {
