@@ -18,6 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,6 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import kotlinx.coroutines.flow.StateFlow
+import org.leviathan941.retrodromcompanion.ui.NAVIGATION_ANIMATION_DURATION_MS
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 
 @Composable
@@ -44,8 +48,39 @@ fun MainNavHost(
         navController = navHostController,
         startDestination = uiState.destination,
         modifier = modifier,
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(
+                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
+                ),
+            )
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -it },
+                animationSpec = tween(
+                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
+                ),
+            )
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(
+                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
+                ),
+            )
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { -it },
+                animationSpec = tween(
+                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
+                ),
+            )
+        },
     ) {
-
         navigation<MainDestination.RssFeed>(
             startDestination = predefinedDestinations.rssFeedStart,
         ) {

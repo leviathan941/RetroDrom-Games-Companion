@@ -48,6 +48,8 @@ internal const val FEEDBACK_URL = "https://retrodrom.games/feedback/"
 
 internal const val MAIN_RSS_FEED_ID = 0
 
+internal const val NAVIGATION_ANIMATION_DURATION_MS = 300
+
 internal val APP_THEME_DEFAULT = when {
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> ThemeType.DYNAMIC
     Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> ThemeType.SYSTEM
