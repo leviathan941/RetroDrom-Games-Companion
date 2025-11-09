@@ -8,12 +8,12 @@ appcompat = "1.7.1"
 browser = "1.9.0"
 coil3 = "3.3.0"
 composeActivity = "1.11.0"
-composeBom = "2025.10.01"
+composeBom = "2025.11.00"
 composeMaterial3 = "1.4.0"
 composeMaterialIconsCore = "1.7.8"
 coreKtx = "1.17.0"
 datastore = "1.1.7"
-firebaseBom = "34.4.0"
+firebaseBom = "34.5.0"
 googleMaterial = "1.13.0"
 googleServicesPlugin = "4.4.4"
 gson = "2.13.2"
@@ -22,16 +22,16 @@ kotlinPlugin = "2.2.21"
 kotlinXCoroutines = "1.10.2"
 kotlinXSerialization = "1.9.0"
 ksoup = "0.6.0"
-ksp = "2.3.0"
+ksp = "2.3.2"
 ktRssReader = "2.2.3"
 lifecycle = "2.9.4"
-navigation = "2.9.5"
+navigation = "2.9.6"
 pagingCompose = "3.3.6"
 retrofit = "3.0.0"
 room = "2.8.3"
 
 [libraries]
-aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }      # Material 3 UI
+aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "composeActivity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
