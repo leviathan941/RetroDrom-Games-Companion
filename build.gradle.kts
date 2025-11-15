@@ -16,16 +16,16 @@
 
 plugins {
     alias(libs.plugins.android.application) apply false
-    alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.kotlin.parcelize) apply false
+    alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.jetbrains.kotlin.parcelize) apply false
     alias(libs.plugins.android.library) apply false
-    alias(libs.plugins.kotlin.ksp) apply false
-    alias(libs.plugins.kotlin.serialization) apply false
-    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.google.ksp) apply false
+    alias(libs.plugins.jetbrains.kotlin.serialization) apply false
+    alias(libs.plugins.jetbrains.kotlin.compose.compiler) apply false
     alias(libs.plugins.google.services) apply false
-    alias(libs.plugins.dagger.hilt.android) apply false
+    alias(libs.plugins.google.dagger.hilt.android) apply false
     alias(libs.plugins.aboutlibraries.android) apply false
-    alias(libs.plugins.room) apply false
+    alias(libs.plugins.androidx.room) apply false
 }
 
 tasks.register("clean", Delete::class) {

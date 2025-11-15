@@ -23,7 +23,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 kotlin {
@@ -53,8 +53,8 @@ android {
 dependencies {
     implementation(project(":common"))
 
-    api(libs.datastore.preferences)
+    api(libs.androidx.datastore.preferences)
 
-    implementation(libs.dagger.hilt.android)
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.google.dagger.hilt.android)
+    implementation(libs.jetbrains.kotlinx.coroutines.android)
 }

@@ -22,8 +22,8 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.ksp)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.ksp)
 }
 
 kotlin {
@@ -51,10 +51,10 @@ android {
 }
 
 dependencies {
-    api(libs.paging.compose)
+    api(libs.androidx.paging.compose)
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.jetbrains.kotlinx.coroutines.android)
 
     implementation(libs.ktrssreader.android)
     implementation(libs.ktrssreader.annotation)

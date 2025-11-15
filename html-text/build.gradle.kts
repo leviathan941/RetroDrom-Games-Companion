@@ -23,8 +23,8 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.compose.compiler)
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 kotlin {
@@ -56,8 +56,8 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
     implementation(libs.annotatedtext)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.compose.material3)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
     implementation(libs.compose.ui)
-    implementation(libs.ksoup.html)
+    implementation(libs.mohamedrejeb.ksoup.html)
 }

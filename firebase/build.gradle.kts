@@ -23,9 +23,9 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.ksp)
-    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.google.dagger.hilt.android)
 }
 
 kotlin {
@@ -57,8 +57,8 @@ dependencies {
     implementation(project(":preferences"))
 
     implementation(libs.androidx.lifecycle.process)
-    implementation(libs.dagger.hilt.android)
-    ksp(libs.dagger.hilt.compiler)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.messaging)
+    implementation(libs.google.dagger.hilt.android)
+    ksp(libs.google.dagger.hilt.compiler)
+    implementation(platform(libs.google.firebase.bom))
+    implementation(libs.google.firebase.messaging)
 }

@@ -21,12 +21,12 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.jetbrains.kotlin.compose.compiler)
+    alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.ksp)
-    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.aboutlibraries.android)
 }
 
@@ -115,28 +115,28 @@ dependencies {
 
     implementation(libs.google.material)
 
-    implementation(platform(libs.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.compose.material.icons.core.android)
-    implementation(libs.compose.material3)
+    implementation(libs.androidx.compose.material.icons.core.android)
+    implementation(libs.androidx.compose.material3)
 
-    implementation(libs.activity.compose)
+    implementation(libs.androidx.activity.compose)
 
-    implementation(libs.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.coil3.compose)
     implementation(libs.coil3.network.okhttp)
 
-    implementation(libs.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences)
 
-    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.jetbrains.kotlinx.serialization.json)
 
-    implementation(libs.accompanist.permissions)
+    implementation(libs.google.accompanist.permissions)
 
-    implementation(libs.dagger.hilt.android)
+    implementation(libs.google.dagger.hilt.android)
     implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
-    ksp(libs.dagger.hilt.compiler)
+    ksp(libs.google.dagger.hilt.compiler)
 
     debugImplementation(libs.compose.ui.tooling)
 }

@@ -23,7 +23,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 kotlin {
@@ -53,8 +53,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.gson)
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    implementation(libs.google.gson)
+    implementation(libs.jetbrains.kotlinx.coroutines.android)
+    implementation(libs.squareup.retrofit)
+    implementation(libs.squareup.retrofit.converter.gson)
 }

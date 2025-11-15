@@ -23,8 +23,8 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.compose.compiler)
+    alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 kotlin {
@@ -54,7 +54,7 @@ android {
 dependencies {
     api(project(":html-text:api"))
 
-    implementation(platform(libs.compose.bom))
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
     implementation(libs.coil3.compose)
