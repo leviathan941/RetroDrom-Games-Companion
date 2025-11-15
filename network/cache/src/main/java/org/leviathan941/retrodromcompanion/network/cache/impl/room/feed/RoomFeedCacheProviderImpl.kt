@@ -33,7 +33,7 @@ import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.RoomFeedDatabase
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryEntity
 import org.leviathan941.retrodromcompanion.network.wordpress.WpGetErrorException
-import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
+import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import javax.inject.Inject
 import javax.inject.Named
@@ -47,8 +47,7 @@ private const val TAG = "RoomFeedCacheProvider"
 internal class RoomFeedCacheProviderImpl @Inject constructor(
     @param:ApplicationContext
     private val context: Context,
-    @param:Named(DiKeys.RETRODROM_WP_RETROFIT_CLIENT)
-    private val wpRetrofitClient: WpRetrofitClient,
+    private val wpNetworkClient: WpNetworkClient,
     @param:Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
     private val coroutineScope: CoroutineScope,
 ) : FeedCacheProvider {
@@ -83,7 +82,7 @@ internal class RoomFeedCacheProviderImpl @Inject constructor(
         }
 
     private suspend fun fetchCategories(): Result<List<RoomFeedCategoryEntity>> = try {
-        wpRetrofitClient.fetchCategories()
+        wpNetworkClient.fetchCategories()
             .map { it.toEntity() }
             .let {
                 Log.d(TAG, "Fetched ${it.size} categories from WP")

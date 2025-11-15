@@ -25,8 +25,8 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.google.ksp)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.google.ksp)
     alias(libs.plugins.aboutlibraries.android)
 }
 

@@ -16,10 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.common.di
+package org.leviathan941.retrodromcompanion.network.wordpress
 
-public object DiKeys {
-    public const val APPLICATION_COROUTINE_SCOPE: String = "applicationCoroutineScope"
-    public const val MAIN_DATASTORE: String = "mainDataStore"
-    public const val MAIN_ACTIVITY_CLASS: String = "mainActivityClass"
+import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
+
+public interface WpNetworkClient {
+    @Throws(WpGetErrorException::class)
+    public suspend fun fetchCategories(): List<WpFeedCategory>
 }

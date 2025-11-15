@@ -16,10 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.common.di
+package org.leviathan941.retrodromcompanion.network.di
 
-public object DiKeys {
-    public const val APPLICATION_COROUTINE_SCOPE: String = "applicationCoroutineScope"
-    public const val MAIN_DATASTORE: String = "mainDataStore"
-    public const val MAIN_ACTIVITY_CLASS: String = "mainActivityClass"
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import org.leviathan941.retrodromcompanion.common.Constants
+import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
+import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+public abstract class WpNetworkApplicationModule {
+    public companion object {
+        @Provides
+        @Singleton
+        public fun provideRetrodromWpRetrofitClient(): WpNetworkClient =
+            WpRetrofitClient(Constants.RETRODROM_BASE_URL)
+    }
 }
