@@ -18,22 +18,16 @@
 
 package org.leviathan941.retrodromcompanion.network.di
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.leviathan941.retrodromcompanion.common.Constants
+import org.leviathan941.retrodromcompanion.network.wordpress.WpKtorClient
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
-import org.leviathan941.retrodromcompanion.network.wordpress.WpRetrofitClient
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 public abstract class WpNetworkApplicationModule {
-    public companion object {
-        @Provides
-        @Singleton
-        public fun provideRetrodromWpRetrofitClient(): WpNetworkClient =
-            WpRetrofitClient(Constants.RETRODROM_BASE_URL)
-    }
+    @Binds
+    internal abstract fun bindRetrodromWpRetrofitClient(i: WpKtorClient): WpNetworkClient
 }

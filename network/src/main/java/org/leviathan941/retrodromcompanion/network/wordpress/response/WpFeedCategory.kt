@@ -18,15 +18,17 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 public data class WpFeedCategory(
-    @SerializedName("id")
+    @SerialName("id")
     val id: Int,
-    @SerializedName("name")
+    @SerialName("name")
     val name: String,
-    @SerializedName("link")
+    @SerialName("link")
     val link: String,
-    @SerializedName("count")
+    @SerialName("count")
     val postsCount: Int,
 )

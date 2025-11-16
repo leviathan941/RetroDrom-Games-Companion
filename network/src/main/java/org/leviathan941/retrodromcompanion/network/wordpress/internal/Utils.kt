@@ -18,4 +18,4 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress.internal
 
-internal const val WP_TAG = "WordpressRetrofit"
+internal const val WP_TAG = "WordpressApi"

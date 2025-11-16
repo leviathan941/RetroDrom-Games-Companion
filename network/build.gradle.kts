@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 kotlin {
@@ -58,10 +59,14 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.google.dagger.hilt.android)
-    implementation(libs.google.gson)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
-    implementation(libs.squareup.retrofit)
-    implementation(libs.squareup.retrofit.converter.gson)
+
+    implementation(platform(libs.ktor.bom))
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.resources)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
     ksp(libs.google.dagger.hilt.compiler)
 }

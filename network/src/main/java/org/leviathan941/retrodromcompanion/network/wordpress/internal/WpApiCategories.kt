@@ -18,11 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress.internal
 
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
-import retrofit2.Response
-import retrofit2.http.GET
+import io.ktor.resources.Resource
+import kotlinx.serialization.ExperimentalSerializationApi
 
-internal interface WpApiService {
-    @GET("wp-json/wp/v2/categories")
-    suspend fun fetchCategories(): Response<List<WpFeedCategory>>
-}
+@OptIn(ExperimentalSerializationApi::class)
+@Resource("wp-json/wp/v2/categories")
+internal class WpApiCategories

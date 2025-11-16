@@ -19,7 +19,6 @@ coil3 = "3.3.0"
 google-accompanist = "0.37.3"
 google-firebase-bom = "34.6.0"
 google-material = "1.13.0"
-google-gson = "2.13.2"
 google-ksp = "2.3.2"
 google-services-plugin = "4.4.4"
 google-dagger-hilt = "2.57.2"
@@ -28,7 +27,7 @@ jetbrains-kotlinx-coroutines = "1.10.2"
 jetbrains-kotlinx-serialization = "1.9.0"
 mohamedrejeb-ksoup = "0.6.0"
 kt-rss-reader = "2.2.3"
-squareup-retrofit = "3.0.0"
+ktor-bom = "3.3.2"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
@@ -61,16 +60,19 @@ google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android
 google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "google-dagger-hilt" }
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "google-firebase-bom" }
 google-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
-google-gson = { group = "com.google.code.gson", name = "gson", version.ref = "google-gson" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 jetbrains-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "jetbrains-kotlinx-coroutines" }
 jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization" }
+ktor-bom = { group = "io.ktor", name = "ktor-bom", version.ref = "ktor-bom" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation" }
+ktor-client-okhttp = { group = "io.ktor", name = "ktor-client-okhttp" }
+ktor-client-resources = { group = "io.ktor", name = "ktor-client-resources" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json" }
 ktrssreader-android = { group = "com.github.ivanisidrowu.KtRssReader", name = "android", version.ref = "kt-rss-reader" }
 ktrssreader-annotation = { group = "com.github.ivanisidrowu.KtRssReader", name = "annotation", version.ref = "kt-rss-reader" }
 ktrssreader-processor = { group = "com.github.ivanisidrowu.KtRssReader", name = "processor", version.ref = "kt-rss-reader" }
 mohamedrejeb-ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "mohamedrejeb-ksoup" }
-squareup-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "squareup-retrofit" }
-squareup-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "squareup-retrofit" }
 
 [plugins]
 aboutlibraries-android = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "about-libraries-compose-m3" }
