@@ -54,6 +54,7 @@ dependencies {
     api(libs.androidx.paging.compose)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.jetbrains.kotlinx.collections.immutable)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
 
     implementation(libs.ktrssreader.android)

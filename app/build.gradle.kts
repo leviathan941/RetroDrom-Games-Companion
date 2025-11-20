@@ -28,6 +28,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.aboutlibraries.android)
+    alias(libs.plugins.skydoves.compose.stability.analyzer)
 }
 
 kotlin {
@@ -130,6 +131,7 @@ dependencies {
 
     implementation(libs.androidx.datastore.preferences)
 
+    implementation(libs.jetbrains.kotlinx.collections.immutable)
     implementation(libs.jetbrains.kotlinx.serialization.json)
 
     implementation(libs.google.accompanist.permissions)

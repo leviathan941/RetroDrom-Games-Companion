@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android) apply false
     alias(libs.plugins.aboutlibraries.android) apply false
     alias(libs.plugins.androidx.room) apply false
+    alias(libs.plugins.skydoves.compose.stability.analyzer) apply false
 }
 
 tasks.register("clean", Delete::class) {

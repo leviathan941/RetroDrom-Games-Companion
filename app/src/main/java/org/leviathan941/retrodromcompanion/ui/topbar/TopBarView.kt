@@ -39,6 +39,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.retrodromcompanion.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -159,7 +161,7 @@ private fun ButtonView(
 
 @Composable
 private fun ActionsView(
-    actions: List<TopBarAction> = emptyList(),
+    actions: ImmutableList<TopBarAction> = persistentListOf(),
     onClick: (TopBarAction) -> Unit = {},
 ) {
     actions.forEach { action ->

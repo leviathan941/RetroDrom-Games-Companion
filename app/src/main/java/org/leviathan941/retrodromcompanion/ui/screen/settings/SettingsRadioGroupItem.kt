@@ -18,6 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.settings
 
+import androidx.compose.runtime.Stable
+
+@Stable
 data class SettingsRadioGroupItem<T>(
     val value: T,
     val title: String,

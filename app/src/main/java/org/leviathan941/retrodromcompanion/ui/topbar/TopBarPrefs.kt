@@ -18,11 +18,14 @@
 
 package org.leviathan941.retrodromcompanion.ui.topbar
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
 data class TopBarPrefs(
     val title: String = "",
     val subtitle: String = "",
     val navButton: TopBarNavButton = TopBarNavButton.NONE,
-    val actions: List<TopBarAction> = emptyList(),
+    val actions: ImmutableList<TopBarAction> = persistentListOf(),
 )
 
 enum class TopBarNavButton {

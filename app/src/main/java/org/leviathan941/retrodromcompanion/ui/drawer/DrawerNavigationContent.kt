@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.toRoute
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -68,7 +69,7 @@ fun DrawerNavigationContent(
         is MainViewState.RssFeed -> {
             state.screenData.takeUnless { it.isEmpty() }?.let { rssScreens ->
                 RssFeedDrawerNavView(
-                    rssScreens = rssScreens.values.toList(),
+                    rssScreens = rssScreens.values.toImmutableList(),
                     isSelected = { screen ->
                         navBackStackEntry?.run {
                             isRouteActive<RssFeedDestination.Feed>() &&

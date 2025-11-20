@@ -23,12 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import kotlinx.collections.immutable.ImmutableList
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 @Composable
 fun RssFeedDrawerNavView(
-    rssScreens: List<MainNavScreen.RssFeed>,
+    rssScreens: ImmutableList<MainNavScreen.RssFeed>,
     modifier: Modifier = Modifier,
     isSelected: (MainNavScreen.RssFeed) -> Boolean = { false },
     onClick: (MainNavScreen.RssFeed) -> Unit = {},

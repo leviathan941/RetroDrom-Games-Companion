@@ -19,6 +19,8 @@
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
 import android.util.Log
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssDescription
 import org.leviathan941.retrodromcompanion.rssreader.RssPublicationDate
@@ -37,7 +39,7 @@ internal fun ParsedRssItem.toPublic(): RssChannelItem? {
             title = title,
             link = link,
             pubDate = RssPublicationDate(pubDate),
-            categories = categories ?: emptyList(),
+            categories = categories?.toImmutableList() ?: persistentListOf(),
             description = parseRssDescription(description),
             creator = creator,
             postId = postId,
@@ -49,7 +51,7 @@ private fun parseRssDescription(description: String): RssDescription =
     HtmlParser(description).parse().let {
         RssDescription(
             imageUrl = it.images.firstOrNull(),
-            paragraphs = it.paragraphs,
+            paragraphs = it.paragraphs.toImmutableList(),
             html = description,
         )
     }

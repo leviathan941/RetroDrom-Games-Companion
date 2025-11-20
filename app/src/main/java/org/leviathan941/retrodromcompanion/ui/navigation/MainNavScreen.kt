@@ -18,12 +18,14 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
+import androidx.compose.runtime.Stable
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
 
 sealed interface MainNavScreen {
     val topBarPrefs: TopBarPrefs
 
+    @Stable
     data class RssFeed(
         val id: Int,
         val title: String,
@@ -36,6 +38,7 @@ sealed interface MainNavScreen {
             )
     }
 
+    @Stable
     data class Settings(
         val title: String = "",
     ) : MainNavScreen {

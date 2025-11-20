@@ -27,6 +27,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
+import kotlinx.collections.immutable.toImmutableList
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -65,7 +66,7 @@ fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
                 value = it,
                 title = stringResource(id = it.toStringResource()),
             )
-        }
+        }.toImmutableList()
         val selectedItem = themeItems.find { it.value == appTheme } ?: themeItems.first()
         SettingsScreen(
             data = MainNavScreen.Settings(

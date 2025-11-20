@@ -49,6 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
 import java.time.ZoneId
@@ -59,7 +61,7 @@ private const val TAG = "RssFeedItem"
 @Composable
 fun RssFeedItem(
     title: String,
-    categories: List<String>,
+    categories: ImmutableList<String>,
     pubDate: ZonedDateTime,
     modifier: Modifier = Modifier,
     imageUrl: String? = null,
@@ -170,7 +172,7 @@ private fun RssFeedItemPreview() = RssFeedItem(
     modifier = Modifier,
     title = "Very interesting news! Be hurry to read it! Do not miss! But be aware, " +
         "it is a loooong title!",
-    categories = listOf(
+    categories = persistentListOf(
         "Category 1",
         "Category 2",
         "Category 3",

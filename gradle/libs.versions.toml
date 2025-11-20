@@ -23,11 +23,13 @@ google-material = "1.13.0"
 google-ksp = "2.3.2"
 google-services-plugin = "4.4.4"
 jetbrains-kotlin-plugin = "2.2.21"
+jetbrains-kotlinx-collections-immutable = "0.4.0"
 jetbrains-kotlinx-coroutines = "1.10.2"
 jetbrains-kotlinx-serialization = "1.9.0"
 mohamedrejeb-ksoup = "0.6.0"
 kt-rss-reader = "2.2.3"
 ktor-bom = "3.3.2"
+skydoves-compose-stability-analyzer = "0.5.3"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
@@ -61,6 +63,7 @@ google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compil
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "google-firebase-bom" }
 google-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
+jetbrains-kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "jetbrains-kotlinx-collections-immutable" }
 jetbrains-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "jetbrains-kotlinx-coroutines" }
 jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization" }
 ktor-bom = { group = "io.ktor", name = "ktor-bom", version.ref = "ktor-bom" }
@@ -86,3 +89,4 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 jetbrains-kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "jetbrains-kotlin-plugin" }
+skydoves-compose-stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version.ref = "skydoves-compose-stability-analyzer" }

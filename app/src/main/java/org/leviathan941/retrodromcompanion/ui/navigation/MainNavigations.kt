@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.navigation
 
 import androidx.annotation.Keep
+import androidx.compose.runtime.Stable
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.leviathan941.retrodromcompanion.common.Constants
@@ -60,6 +61,7 @@ sealed interface SettingsDestination : AppDestination {
 }
 
 sealed interface RssFeedDestination : AppDestination {
+    @Stable
     @Keep
     @Serializable
     data class Feed(
@@ -68,6 +70,7 @@ sealed interface RssFeedDestination : AppDestination {
         val channelUrl: String,
     ) : RssFeedDestination
 
+    @Stable
     @Keep
     @Serializable
     data class ItemDescription(
@@ -78,6 +81,7 @@ sealed interface RssFeedDestination : AppDestination {
         val creator: String?,
     ) : RssFeedDestination
 
+    @Stable
     @Keep
     @Serializable
     data class LoadingItem(

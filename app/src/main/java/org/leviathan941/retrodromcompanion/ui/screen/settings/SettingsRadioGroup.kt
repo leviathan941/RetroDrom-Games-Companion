@@ -33,11 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun <T> SettingsRadioGroup(
     selectedItem: SettingsRadioGroupItem<T>,
-    items: List<SettingsRadioGroupItem<T>>,
+    items: ImmutableList<SettingsRadioGroupItem<T>>,
     onItemChange: (SettingsRadioGroupItem<T>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -71,7 +73,7 @@ fun <T> SettingsRadioGroup(
 @Composable
 @SuppressWarnings("MagicNumber")
 private fun SettingsRadioGroupPreview() {
-    val items = listOf(
+    val items = persistentListOf(
         SettingsRadioGroupItem(1, "Item 1"),
         SettingsRadioGroupItem(2, "Item 2"),
         SettingsRadioGroupItem(3, "Item 3"),

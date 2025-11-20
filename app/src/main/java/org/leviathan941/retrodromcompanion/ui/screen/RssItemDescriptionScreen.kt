@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItemDescription
@@ -57,7 +58,7 @@ fun RssItemDescriptionScreen(
                 prefs = TopBarPrefs(
                     title = itemDescription.title,
                     navButton = TopBarNavButton.BACK,
-                    actions = listOf(
+                    actions = persistentListOf(
                         TopBarAction.Browse(itemDescription.link),
                     ),
                 ),
