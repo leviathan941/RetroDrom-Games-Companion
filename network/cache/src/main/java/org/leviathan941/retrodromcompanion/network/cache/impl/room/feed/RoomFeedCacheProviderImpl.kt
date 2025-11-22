@@ -32,7 +32,6 @@ import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvi
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.RoomFeedDatabase
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryEntity
-import org.leviathan941.retrodromcompanion.network.wordpress.WpGetErrorException
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import javax.inject.Inject
@@ -81,17 +80,12 @@ internal class RoomFeedCacheProviderImpl @Inject constructor(
             )
         }
 
-    private suspend fun fetchCategories(): Result<List<RoomFeedCategoryEntity>> = try {
+    private suspend fun fetchCategories(): Result<List<RoomFeedCategoryEntity>> =
         wpNetworkClient.fetchCategories()
-            .map { it.toEntity() }
-            .let {
-                Log.d(TAG, "Fetched ${it.size} categories from WP")
-                Result.success(it)
+            .map { categories ->
+                Log.d(TAG, "Fetched ${categories.size} categories from WP")
+                categories.map { it.toEntity() }
             }
-    } catch (e: WpGetErrorException) {
-        Log.e(TAG, "Failed to fetch categories", e)
-        Result.failure(e)
-    }
 
     private fun WpFeedCategory.toEntity(): RoomFeedCategoryEntity = RoomFeedCategoryEntity(
         id = this.id,

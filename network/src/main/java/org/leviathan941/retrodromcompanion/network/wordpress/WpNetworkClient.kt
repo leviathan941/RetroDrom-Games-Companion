@@ -21,6 +21,5 @@ package org.leviathan941.retrodromcompanion.network.wordpress
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 
 public interface WpNetworkClient {
-    @Throws(WpGetErrorException::class)
-    public suspend fun fetchCategories(): List<WpFeedCategory>
+    public suspend fun fetchCategories(): Result<List<WpFeedCategory>>
 }

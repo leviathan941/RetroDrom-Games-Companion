@@ -53,23 +53,27 @@ internal class WpKtorClient @Inject constructor() : WpNetworkClient {
         }
     }
 
-    override suspend fun fetchCategories(): List<WpFeedCategory> = try {
-        httpClient.get(WpApiCategories()).handleResponse() ?: emptyList()
+    override suspend fun fetchCategories(): Result<List<WpFeedCategory>> = try {
+        httpClient.get(WpApiCategories()).handleResponse()
     } catch (e: Exception) {
         Log.e(WP_TAG, "fetchCategories: ${e.message}", e)
-        throw WpGetErrorException(
-            message = e.message ?: "Unknown error",
-            cause = e,
+        Result.failure(
+            WpGetErrorException(
+                message = e.message ?: "Unknown error",
+                cause = e,
+            ),
         )
     }
 
-    private suspend inline fun <reified T> HttpResponse.handleResponse(): T? {
+    private suspend inline fun <reified T> HttpResponse.handleResponse(): Result<T> {
         logResponse()
         return if (status.isSuccess()) {
-            body<T>()
+            Result.success(body<T>())
         } else {
-            throw WpGetErrorException(
-                message = "Code: ${status.value}, Message: ${status.description}",
+            Result.failure(
+                WpGetErrorException(
+                    message = "Code: ${status.value}, Message: ${status.description}",
+                ),
             )
         }
     }
