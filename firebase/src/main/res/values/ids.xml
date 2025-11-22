@@ -19,5 +19,5 @@
 
 <resources>
     <string name="push_notification_default_channel_id"/>
-    <drawable name="google_material_news"/>
+    <drawable name="retrodrom_games_push_notification"/>
 </resources>

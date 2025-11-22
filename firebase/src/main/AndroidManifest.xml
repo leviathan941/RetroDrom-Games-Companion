@@ -11,7 +11,7 @@
         </service>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/google_material_news" /> <!-- TODO: Change icon -->
+            android:resource="@drawable/retrodrom_games_push_notification" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/default_push_notification_color" />
