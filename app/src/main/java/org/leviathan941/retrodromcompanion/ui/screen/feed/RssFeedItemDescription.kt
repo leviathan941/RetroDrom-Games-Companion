@@ -36,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.compose.htmltext.HtmlText
 import org.leviathan941.compose.htmltext.imagecontent.ImageContentCreator
 import org.leviathan941.retrodromcompanion.R
@@ -100,7 +101,7 @@ fun RssFeedItemDescription(
             html = itemDescription.html,
             textStyle = MaterialTheme.typography.bodyLarge,
             linkColor = MaterialTheme.colorScheme.primary,
-            inlineContentCreators = listOf(
+            inlineContentCreators = persistentListOf(
                 ImageContentCreator(
                     localDensity = LocalDensity.current,
                     modifier = Modifier.wrapContentSize(align = Alignment.TopStart),

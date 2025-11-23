@@ -145,4 +145,6 @@ dependencies {
     ksp(libs.google.dagger.hilt.compiler)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    lintChecks(libs.slack.compose.lint.checks)
 }

@@ -29,6 +29,8 @@ import androidx.core.text.HtmlCompat
 import com.aghajari.compose.text.AnnotatedText
 import com.aghajari.compose.text.fromHtml
 import com.aghajari.compose.text.getInlineContentMap
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.compose.htmltext.api.InlineContentCreator
 import org.leviathan941.compose.htmltext.internal.createInlineContent
 import org.leviathan941.compose.htmltext.internal.extractTags
@@ -40,7 +42,7 @@ public fun HtmlText(
     modifier: Modifier = Modifier,
     textColor: Color = LocalContentColor.current,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    inlineContentCreators: List<InlineContentCreator> = emptyList(),
+    inlineContentCreators: ImmutableList<InlineContentCreator> = persistentListOf(),
     onLinkClick: (String) -> Unit = {},
 ) {
     val text = html.fromHtml(

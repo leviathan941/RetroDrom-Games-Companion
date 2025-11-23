@@ -48,6 +48,19 @@ fun LoadingView(
     onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit = { _, _ -> },
     onRetryClick: () -> Unit = {},
 ) {
+    when (state) {
+        LoadingState.InProgress -> InProgressView(modifier)
+        is LoadingState.Failure -> FailureView(
+            failureState = state,
+            modifier = modifier,
+            onErrorLongPress = onErrorLongPress,
+            onRetryClick = onRetryClick,
+        )
+    }
+}
+
+@Composable
+private fun InProgressView(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(
@@ -56,67 +69,63 @@ fun LoadingView(
         ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        when (state) {
-            LoadingState.InProgress -> InProgressView()
-            is LoadingState.Failure -> FailureView(
-                failureState = state,
-                onErrorLongPress = onErrorLongPress,
-                onRetryClick = onRetryClick,
-            )
-        }
+        CircularProgressIndicator()
+        Text(
+            text = stringResource(id = R.string.loading_screen_in_progress_message),
+            style = MaterialTheme.typography.titleMedium,
+        )
     }
 }
 
 @Composable
-@Suppress("MultipleEmitters")
-private fun InProgressView() {
-    CircularProgressIndicator()
-    Text(
-        text = stringResource(id = R.string.loading_screen_in_progress_message),
-        style = MaterialTheme.typography.titleMedium,
-    )
-}
-
-@Composable
-@Suppress("MultipleEmitters")
 private fun FailureView(
     failureState: LoadingState.Failure,
     onErrorLongPress: (label: CharSequence, text: CharSequence) -> Unit,
     onRetryClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Text(
-        modifier = Modifier
-            .combinedClickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-                enabled = true,
-                onLongClick = {
-                    onErrorLongPress(
-                        failureState.clipboardLabel,
-                        failureState.message,
-                    )
-                },
-                onClick = {},
-            ),
-        text = stringResource(R.string.loading_screen_failure_title),
-        textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.titleMedium,
-        overflow = TextOverflow.Ellipsis,
-        maxLines = 4,
-    )
-    Text(
-        modifier = Modifier
-            .clickable { onRetryClick() },
-        text = AnnotatedString(
-            text = stringResource(
-                id = R.string.loading_screen_failure_retry_button,
-            ).uppercase(),
-            spanStyle = SpanStyle(
-                color = ClickableTextColor,
-            ),
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(
+            space = 20.dp,
+            alignment = Alignment.CenterVertically,
         ),
-        style = MaterialTheme.typography.titleMedium,
-    )
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            modifier = Modifier
+                .combinedClickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    enabled = true,
+                    onLongClick = {
+                        onErrorLongPress(
+                            failureState.clipboardLabel,
+                            failureState.message,
+                        )
+                    },
+                    onClick = {},
+                ),
+            text = stringResource(R.string.loading_screen_failure_title),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleMedium,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 4,
+        )
+        Text(
+            modifier = Modifier
+                .clickable { onRetryClick() },
+            text = AnnotatedString(
+                text = stringResource(
+                    id = R.string.loading_screen_failure_retry_button,
+                ).uppercase(),
+                spanStyle = SpanStyle(
+                    color = ClickableTextColor,
+                ),
+            ),
+            style = MaterialTheme.typography.titleMedium,
+        )
+    }
 }
 
 @Preview(showBackground = true)
