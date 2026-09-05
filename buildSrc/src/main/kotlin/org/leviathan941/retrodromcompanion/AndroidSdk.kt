@@ -19,5 +19,5 @@ package org.leviathan941.retrodromcompanion
 object AndroidSdk {
     const val COMPILE_SDK_VERSION = 37
     const val MIN_SDK_VERSION = 26
-    const val TARGET_SDK_VERSION = 36
+    const val TARGET_SDK_VERSION = 37
 }
