@@ -4,10 +4,11 @@ Native Android client for the [RetroDrom Games](https://retrodrom.games/) site (
 blog): browses the site's RSS categories/posts, opens articles, and receives push
 notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose only.
 
-- Language/toolchain: Kotlin 2.3, JDK 17, AGP 9.4, Gradle 9.7 (wrapper), KSP. AGP 9 supplies
-  Kotlin compilation itself — no module applies `org.jetbrains.kotlin.android`.
-- SDK: min 26, compile 37, target 36. App id `org.segowski.retrodromgames`, code namespace
-  `org.leviathan941.retrodromcompanion`.
+- Toolchain: Kotlin with KSP, targeting JVM 17 (no Gradle toolchain is pinned, so it builds
+  on whichever JDK runs Gradle). The Android Gradle Plugin supplies Kotlin compilation itself
+  — no module applies `org.jetbrains.kotlin.android`.
+- `minSdk` is 26 — check it before reaching for a newer platform API. App id
+  `org.segowski.retrodromgames`, code namespace `org.leviathan941.retrodromcompanion`.
 - Key libs: Compose + Material 3, Navigation Compose, Hilt, Ktor (WordPress REST API),
   Room (feed-category cache), DataStore Preferences, Paging 3, Coil 3, Firebase Messaging,
   KtRssReader, AboutLibraries.
@@ -29,6 +30,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 
 Versions live in `gradle/libs.versions.toml`; SDK/JVM/app-version constants live in
 `buildSrc/src/main/kotlin/org/leviathan941/retrodromcompanion/` (bump `AppVersion` for releases).
+Read them from there rather than restating them here — version numbers in this file go stale.
 
 ## Conventions
 
