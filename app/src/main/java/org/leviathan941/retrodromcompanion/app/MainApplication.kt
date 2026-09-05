@@ -24,6 +24,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
@@ -45,7 +46,18 @@ class MainApplication : Application() {
 
     private fun onCreateDebug() {
         ProcessLifecycleOwner.get().lifecycleScope.launch {
-            Log.d(TAG, "Messaging token: ${Messaging.registrationToken()}")
+            try {
+                Log.d(TAG, "Messaging token: ${Messaging.registrationToken()}")
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // FCM registration fails hard whenever Play Services cannot
+                // authenticate the device, for example on an emulator or a
+                // device with no Google account. Messaging already logs the
+                // cause, and dumping the token is a debug-only convenience, so
+                // it must never bring the application down.
+                Log.w(TAG, "Skipping messaging token dump: ${e.message}")
+            }
         }
     }
 
