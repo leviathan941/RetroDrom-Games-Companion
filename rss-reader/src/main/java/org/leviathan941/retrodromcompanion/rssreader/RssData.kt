@@ -20,22 +20,22 @@ package org.leviathan941.retrodromcompanion.rssreader
 
 import kotlinx.collections.immutable.ImmutableList
 
-data class RssChannelItem(
-    val title: String,
-    val link: String,
-    val pubDate: RssPublicationDate,
-    val categories: ImmutableList<String>,
-    val description: RssDescription?,
-    val creator: String?,
-    val postId: String?,
+public data class RssChannelItem(
+    public val title: String,
+    public val link: String,
+    public val pubDate: RssPublicationDate,
+    public val categories: ImmutableList<String>,
+    public val description: RssDescription?,
+    public val creator: String?,
+    public val postId: String?,
 )
 
-data class RssPublicationDate(
-    val value: String,
+public data class RssPublicationDate(
+    public val value: String,
 )
 
-data class RssDescription(
-    val imageUrl: String?,
-    val paragraphs: ImmutableList<String>,
-    val html: String,
+public data class RssDescription(
+    public val imageUrl: String?,
+    public val paragraphs: ImmutableList<String>,
+    public val html: String,
 )

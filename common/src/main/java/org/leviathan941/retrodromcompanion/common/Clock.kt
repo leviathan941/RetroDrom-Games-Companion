@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.common
 
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
+import javax.inject.Inject
 
-public interface WpNetworkClient {
-    public suspend fun fetchCategories(): Result<List<WpFeedCategory>>
+public interface Clock {
+    public fun currentTimeMillis(): Long
+}
 
-    public suspend fun fetchRssFeedChannelPage(
-        channelUrl: String,
-        pageNumber: Int,
-    ): Result<WpFeedChannel>
+public class SystemClock @Inject constructor() : Clock {
+    override fun currentTimeMillis(): Long = System.currentTimeMillis()
 }

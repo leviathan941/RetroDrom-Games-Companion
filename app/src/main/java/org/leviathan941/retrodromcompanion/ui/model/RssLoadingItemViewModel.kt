@@ -30,16 +30,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.rssreader.RssItemFinder
+import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 
 @HiltViewModel(assistedFactory = RssLoadingItemViewModel.Factory::class)
 class RssLoadingItemViewModel @AssistedInject constructor(
     @Assisted private val rssLoadingItem: RssFeedDestination.LoadingItem,
+    rssFeedProviderFactory: RssFeedProvider.Factory,
 ) : ViewModel() {
-    private val rssItemFinder = RssItemFinder(
-        channelUrl = rssLoadingItem.channelUrl,
-    )
+    private val rssFeedProvider: RssFeedProvider =
+        rssFeedProviderFactory.create(rssLoadingItem.channelUrl)
 
     private val _viewState = MutableStateFlow<RssLoadingItemViewState>(
         RssLoadingItemViewState.Loading,
@@ -48,7 +48,7 @@ class RssLoadingItemViewModel @AssistedInject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _viewState.value = rssItemFinder.findByPostId(rssLoadingItem.postId)?.let {
+            _viewState.value = rssFeedProvider.findByPostId(rssLoadingItem.postId)?.let {
                 RssLoadingItemViewState.Success(
                     item = it,
                 )

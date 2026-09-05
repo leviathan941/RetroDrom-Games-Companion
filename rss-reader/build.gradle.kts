@@ -16,12 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.leviathan941.retrodromcompanion.AndroidSdk
 import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.ksp)
 }
 
@@ -35,10 +37,6 @@ android {
     namespace = "org.leviathan941.retrodromcompanion.rssreader"
     compileSdk = AndroidSdk.COMPILE_SDK_VERSION
 
-    buildFeatures {
-        buildConfig = true
-    }
-
     compileOptions {
         sourceCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
         targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
@@ -51,16 +49,21 @@ android {
     defaultConfig {
         minSdk = AndroidSdk.MIN_SDK_VERSION
     }
+
+    kotlin {
+        explicitApi = ExplicitApiMode.Strict
+    }
 }
 
 dependencies {
     api(libs.androidx.paging.compose)
 
-    implementation(libs.androidx.core.ktx)
+    implementation(project(":common"))
+    implementation(project(":network:cache"))
+
+    implementation(libs.google.dagger.hilt.android)
     implementation(libs.jetbrains.kotlinx.collections.immutable)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
 
-    implementation(libs.ktrssreader.android)
-    implementation(libs.ktrssreader.annotation)
-    ksp(libs.ktrssreader.processor)
+    ksp(libs.google.dagger.hilt.compiler)
 }

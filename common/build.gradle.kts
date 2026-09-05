@@ -23,6 +23,8 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.google.dagger.hilt.android)
+    alias(libs.plugins.google.ksp)
 }
 
 kotlin {
@@ -51,4 +53,10 @@ android {
     kotlin {
         explicitApi = ExplicitApiMode.Strict
     }
+}
+
+dependencies {
+    implementation(libs.google.dagger.hilt.android)
+
+    ksp(libs.google.dagger.hilt.compiler)
 }

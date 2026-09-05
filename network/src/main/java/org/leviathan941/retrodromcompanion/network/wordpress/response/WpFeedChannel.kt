@@ -16,16 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.network.wordpress.response
 
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
+import kotlinx.serialization.Serializable
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
-public interface WpNetworkClient {
-    public suspend fun fetchCategories(): Result<List<WpFeedCategory>>
-
-    public suspend fun fetchRssFeedChannelPage(
-        channelUrl: String,
-        pageNumber: Int,
-    ): Result<WpFeedChannel>
-}
+@Serializable
+@XmlSerialName(value = "channel")
+public data class WpFeedChannel(
+    @XmlElement
+    val title: String? = null,
+    @XmlElement
+    val link: String? = null,
+    val items: List<WpFeedItem> = emptyList(),
+)

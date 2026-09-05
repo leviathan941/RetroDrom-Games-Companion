@@ -38,8 +38,9 @@ import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
 @HiltViewModel(assistedFactory = RssFeedViewModel.Factory::class)
 class RssFeedViewModel @AssistedInject constructor(
     @Assisted channelUrl: String,
+    rssFeedProviderFactory: RssFeedProvider.Factory,
 ) : ViewModel() {
-    private val rssFeedProvider = RssFeedProvider(channelUrl)
+    private val rssFeedProvider = rssFeedProviderFactory.create(channelUrl)
 
     private val _rssChannelItems = MutableStateFlow<PagingData<RssChannelItem>>(PagingData.empty())
     val rssChannelItems: StateFlow<PagingData<RssChannelItem>> = _rssChannelItems.asStateFlow()

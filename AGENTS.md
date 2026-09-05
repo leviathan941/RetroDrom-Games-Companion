@@ -9,9 +9,9 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
   — no module applies `org.jetbrains.kotlin.android`.
 - `minSdk` is 26 — check it before reaching for a newer platform API. App id
   `org.segowski.retrodromgames`, code namespace `org.leviathan941.retrodromcompanion`.
-- Key libs: Compose + Material 3, Navigation Compose, Hilt, Ktor (WordPress REST API),
-  Room (feed-category cache), DataStore Preferences, Paging 3, Coil 3, Firebase Messaging,
-  KtRssReader, AboutLibraries.
+- Key libs: Compose + Material 3, Navigation Compose, Hilt, Ktor (WordPress REST API and the
+  RSS feed), Room (feed cache), DataStore Preferences, Paging 3, Coil 3, Firebase Messaging,
+  AboutLibraries.
 
 ## Modules
 
@@ -21,12 +21,12 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:common` | Shared constants (site base URL), DI keys, request codes. |
 | `:firebase` | FCM messaging service and push token handling. |
 | `:html-text`, `:html-text:api`, `:html-text:imagecontent` | Standalone Compose library (`org.leviathan941.compose.htmltext`) that renders HTML as `AnnotatedString`, with pluggable inline content (e.g. `<img>`). Keep it app-agnostic. |
-| `:network` | Ktor client for the WordPress REST API (`WpNetworkClient` / `WpKtorClient`). |
-| `:network:cache` | Room database caching feed categories behind `FeedCacheProvider`. |
+| `:network` | Ktor client for the WordPress REST API and the RSS feed (`WpNetworkClient` / `WpKtorClient`). |
+| `:network:cache` | Room database caching feed categories and channel items, read behind `FeedCacheProvider` and written behind `FeedCacheMutator`. |
 | `:notification` | Notification channels, builders, helpers. |
 | `:permission` | Compose permission rationale UI (Accompanist permissions). |
 | `:preferences` | DataStore-backed UI/promo preferences with migrations. |
-| `:rss-reader` | RSS fetching/parsing into paged feed items. |
+| `:rss-reader` | Pages the cached feed with Paging 3 and refills it via a `RemoteMediator`. |
 
 Versions live in `gradle/libs.versions.toml`; SDK/JVM/app-version constants live in
 `buildSrc/src/main/kotlin/org/leviathan941/retrodromcompanion/` (bump `AppVersion` for releases).
@@ -54,8 +54,8 @@ Read them from there rather than restating them here — version numbers in this
 ./gradlew build                # compile everything (also runs lint)
 ```
 
-There are currently **no tests** — the `src/test` and `src/androidTest` directories exist but
-are empty, so `./gradlew test` is a no-op. Compilation plus Android lint is the practical gate.
+The only tests are `:network`'s JVM unit tests, which cover the RSS response mapping and feed
+URL building; `./gradlew test` runs them. Compilation plus Android lint is otherwise the gate.
 
 Every module sets `lint { warningsAsErrors = true }`, so a lint *warning* in any module
 fails the build — the exit code is the gate, and per-module reports under

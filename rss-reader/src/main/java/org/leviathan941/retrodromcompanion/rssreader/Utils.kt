@@ -21,8 +21,8 @@ package org.leviathan941.retrodromcompanion.rssreader
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-fun RssPublicationDate.asDateTime(): ZonedDateTime =
+public fun RssPublicationDate.asDateTime(): ZonedDateTime =
     ZonedDateTime.parse(value, DateTimeFormatter.RFC_1123_DATE_TIME)
 
-fun String.asDateTime(): ZonedDateTime =
+public fun String.asDateTime(): ZonedDateTime =
     ZonedDateTime.parse(this, DateTimeFormatter.RFC_1123_DATE_TIME)

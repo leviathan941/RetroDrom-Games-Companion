@@ -1,0 +1,173 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "f7f6e0a479b0220266dd85dc9ce8cca2",
+    "entities": [
+      {
+        "tableName": "feed_categories",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`autoId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` INTEGER NOT NULL, `name` TEXT NOT NULL, `link` TEXT NOT NULL, `posts_count` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "autoId",
+            "columnName": "autoId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "link",
+            "columnName": "link",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postsCount",
+            "columnName": "posts_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "autoId"
+          ]
+        }
+      },
+      {
+        "tableName": "feed_channel_items",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`auto_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `channel_url` TEXT NOT NULL, `page_number` INTEGER NOT NULL, `title` TEXT NOT NULL, `link` TEXT NOT NULL, `pub_date` TEXT NOT NULL, `categories` TEXT NOT NULL, `creator` TEXT NOT NULL, `description` TEXT NOT NULL, `post_id` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "autoId",
+            "columnName": "auto_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "channelUrl",
+            "columnName": "channel_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pageNumber",
+            "columnName": "page_number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "link",
+            "columnName": "link",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pubDate",
+            "columnName": "pub_date",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categories",
+            "columnName": "categories",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creator",
+            "columnName": "creator",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "postId",
+            "columnName": "post_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "auto_id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_feed_channel_items_channel_url_page_number",
+            "unique": false,
+            "columnNames": [
+              "channel_url",
+              "page_number"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_feed_channel_items_channel_url_page_number` ON `${TABLE_NAME}` (`channel_url`, `page_number`)"
+          },
+          {
+            "name": "index_feed_channel_items_channel_url_post_id",
+            "unique": false,
+            "columnNames": [
+              "channel_url",
+              "post_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_feed_channel_items_channel_url_post_id` ON `${TABLE_NAME}` (`channel_url`, `post_id`)"
+          }
+        ]
+      },
+      {
+        "tableName": "feed_cache_metadata",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`channel_url` TEXT NOT NULL, `items_last_updated` INTEGER NOT NULL, PRIMARY KEY(`channel_url`))",
+        "fields": [
+          {
+            "fieldPath": "channelUrl",
+            "columnName": "channel_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemsLastUpdated",
+            "columnName": "items_last_updated",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "channel_url"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f7f6e0a479b0220266dd85dc9ce8cca2')"
+    ]
+  }
+}

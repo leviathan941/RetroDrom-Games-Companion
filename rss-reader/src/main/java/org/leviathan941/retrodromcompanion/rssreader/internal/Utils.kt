@@ -18,34 +18,21 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import android.util.Log
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssDescription
 import org.leviathan941.retrodromcompanion.rssreader.RssPublicationDate
 
-internal const val TAG = "RssReader"
-
-internal const val PAGING_INITIAL_PAGE_NUMBER = 1
-
-internal fun ParsedRssItem.toPublic(): RssChannelItem? {
-    val isItemInvalid = title == null || link == null || pubDate == null || description == null
-    return if (isItemInvalid) {
-        Log.e(TAG, "Invalid RSS channel item: $this")
-        null
-    } else {
-        RssChannelItem(
-            title = title,
-            link = link,
-            pubDate = RssPublicationDate(pubDate),
-            categories = categories?.toImmutableList() ?: persistentListOf(),
-            description = parseRssDescription(description),
-            creator = creator,
-            postId = postId,
-        )
-    }
-}
+internal fun FeedChannelItem.toPublic(): RssChannelItem = RssChannelItem(
+    title = title,
+    link = link,
+    pubDate = RssPublicationDate(pubDate),
+    categories = categories,
+    description = parseRssDescription(description),
+    creator = creator.takeIf { it.isNotBlank() },
+    postId = postId.takeIf { it.isNotBlank() },
+)
 
 private fun parseRssDescription(description: String): RssDescription =
     HtmlParser(description).parse().let {

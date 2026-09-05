@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.metadata
 
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-public interface WpNetworkClient {
-    public suspend fun fetchCategories(): Result<List<WpFeedCategory>>
-
-    public suspend fun fetchRssFeedChannelPage(
-        channelUrl: String,
-        pageNumber: Int,
-    ): Result<WpFeedChannel>
-}
+@Entity(tableName = RoomFeedCacheMetadataTable.TABLE_NAME)
+internal data class RoomFeedCacheMetadataEntity(
+    @PrimaryKey
+    @ColumnInfo(name = RoomFeedCacheMetadataTable.COLUMN_CHANNEL_URL)
+    val channelUrl: String,
+    @ColumnInfo(name = RoomFeedCacheMetadataTable.COLUMN_ITEMS_LAST_UPDATED)
+    val itemsLastUpdated: Long,
+)

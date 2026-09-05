@@ -18,16 +18,44 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.di
 
+import android.content.Context
+import androidx.room.Room
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
+import org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.RoomFeedCacheMutatorImpl
 import org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.RoomFeedCacheProviderImpl
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.FEED_CACHE_DATABASE_NAME
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.RoomFeedDatabase
+import javax.inject.Singleton
 
 @Suppress("unused")
 @Module
+@InstallIn(SingletonComponent::class)
 public abstract class RoomFeedApplicationModule {
     @Binds
-    internal abstract fun bindsFeedCacheProvider(
-        impl: RoomFeedCacheProviderImpl,
-    ): FeedCacheProvider
+    internal abstract fun bindFeedCacheProvider(impl: RoomFeedCacheProviderImpl): FeedCacheProvider
+
+    @Binds
+    internal abstract fun bindFeedCacheMutator(impl: RoomFeedCacheMutatorImpl): FeedCacheMutator
+
+    internal companion object {
+        // Each instance owns its own invalidation tracker, so a second one would not see the
+        // writes made through the first.
+        @Provides
+        @Singleton
+        fun provideRoomFeedDatabase(
+            @ApplicationContext
+            context: Context,
+        ): RoomFeedDatabase = Room.databaseBuilder(
+            context = context,
+            klass = RoomFeedDatabase::class.java,
+            name = FEED_CACHE_DATABASE_NAME,
+        ).build()
+    }
 }

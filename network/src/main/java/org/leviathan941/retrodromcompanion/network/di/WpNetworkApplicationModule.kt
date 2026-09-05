@@ -20,8 +20,11 @@ package org.leviathan941.retrodromcompanion.network.di
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.okhttp.OkHttp
 import org.leviathan941.retrodromcompanion.network.wordpress.WpKtorClient
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
 
@@ -30,4 +33,9 @@ import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
 public abstract class WpNetworkApplicationModule {
     @Binds
     internal abstract fun bindRetrodromWpRetrofitClient(i: WpKtorClient): WpNetworkClient
+
+    internal companion object {
+        @Provides
+        fun provideHttpClientEngine(): HttpClientEngine = OkHttp.create()
+    }
 }

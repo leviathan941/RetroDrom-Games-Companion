@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,11 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress.internal
+package org.leviathan941.retrodromcompanion.network.cache.api.feed
 
-import io.ktor.resources.Resource
-import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.collections.immutable.ImmutableList
 
-@OptIn(ExperimentalSerializationApi::class)
-@Resource("wp-json/wp/v2/categories")
-internal class WpApiCategories
+public data class FeedChannelItem(
+    val title: String,
+    val link: String,
+    val pubDate: String,
+    val categories: ImmutableList<String>,
+    val creator: String,
+    val description: String,
+    val postId: String,
+)

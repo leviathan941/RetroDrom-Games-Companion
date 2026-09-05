@@ -23,6 +23,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.google.ksp)
 }
@@ -60,6 +61,8 @@ android {
 }
 
 dependencies {
+    api(libs.androidx.paging.common)
+    api(libs.jetbrains.kotlinx.collections.immutable)
     api(libs.jetbrains.kotlinx.coroutines.android)
 
     implementation(project(":common"))
@@ -67,7 +70,9 @@ dependencies {
 
     implementation(libs.google.dagger.hilt.android)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
     implementation(libs.androidx.room.runtime)
 
+    ksp(libs.google.dagger.hilt.compiler)
     ksp(libs.androidx.room.compiler)
 }

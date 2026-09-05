@@ -56,6 +56,10 @@ android {
     kotlin {
         explicitApi = ExplicitApiMode.Strict
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -70,6 +74,11 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.client.resources)
     implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.serialization.kotlinx.xml)
 
     ksp(libs.google.dagger.hilt.compiler)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.jetbrains.kotlinx.coroutines.test)
+    testImplementation(libs.ktor.client.mock)
 }

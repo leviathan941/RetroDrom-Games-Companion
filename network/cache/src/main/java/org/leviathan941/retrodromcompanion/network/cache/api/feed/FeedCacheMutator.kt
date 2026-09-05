@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,24 +18,13 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.api.feed
 
-import androidx.paging.PagingSource
-import kotlinx.coroutines.flow.Flow
+public interface FeedCacheMutator {
+    public suspend fun refreshCategories(): Result<Unit>
 
-public interface FeedCacheProvider {
-    public val categories: Flow<List<FeedCategory>>
+    public suspend fun refreshChannelItems(channelUrl: String): Result<Int>
 
-    /**
-     * Items come back in the order they were fetched, and the source is invalidated whenever
-     * [FeedCacheMutator] changes the cache.
-     */
-    public fun channelItemsPagingSource(channelUrl: String): PagingSource<Int, FeedChannelItem>
-
-    public suspend fun findChannelItemByPostId(
+    public suspend fun loadChannelItemsPage(
         channelUrl: String,
-        postId: String,
-    ): FeedChannelItem?
-
-    public suspend fun channelItemsLastUpdatedMillis(channelUrl: String): Long?
-
-    public suspend fun channelItemsLastPageNumber(channelUrl: String): Int?
+        pageNumber: Int,
+    ): Result<Int>
 }

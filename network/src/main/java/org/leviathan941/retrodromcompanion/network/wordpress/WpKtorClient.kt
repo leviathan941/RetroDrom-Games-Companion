@@ -19,44 +19,64 @@
 package org.leviathan941.retrodromcompanion.network.wordpress
 
 import android.util.Log
-import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.okhttp.OkHttp
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.plugins.resources.get
+import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
+import io.ktor.http.appendPathSegments
 import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
-import org.leviathan941.retrodromcompanion.common.Constants
+import io.ktor.http.takeFrom
+import kotlinx.coroutines.CancellationException
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.FEED_PAGE_QUERY_PARAM
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.FEED_PATH_SEGMENT
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.HttpClientFactory
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.WP_TAG
-import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpApiCategories
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpApiFeedCategories
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
+import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
+import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedRssResponse
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class WpKtorClient @Inject constructor() : WpNetworkClient {
-    private val httpClient = HttpClient(engineFactory = OkHttp) {
-        install(plugin = Resources)
-        install(plugin = ContentNegotiation) {
-            json(
-                Json {
-                    ignoreUnknownKeys = true
-                },
-            )
-        }
-        defaultRequest {
-            url(urlString = Constants.RETRODROM_BASE_URL)
-        }
-    }
+internal class WpKtorClient @Inject constructor(
+    httpClientFactory: HttpClientFactory,
+) : WpNetworkClient {
+    private val httpClient = httpClientFactory.create()
 
     override suspend fun fetchCategories(): Result<List<WpFeedCategory>> = try {
-        httpClient.get(WpApiCategories()).handleResponse()
+        httpClient.get(WpApiFeedCategories()).handleResponse()
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         Log.e(WP_TAG, "fetchCategories: ${e.message}", e)
+        Result.failure(
+            WpGetErrorException(
+                message = e.message ?: "Unknown error",
+                cause = e,
+            ),
+        )
+    }
+
+    override suspend fun fetchRssFeedChannelPage(
+        channelUrl: String,
+        pageNumber: Int,
+    ): Result<WpFeedChannel> = try {
+        // The channel URL is a WordPress category permalink, so the feed lives underneath it.
+        httpClient.get {
+            url {
+                takeFrom(channelUrl)
+                appendPathSegments(FEED_PATH_SEGMENT)
+                parameters.append(FEED_PAGE_QUERY_PARAM, pageNumber.toString())
+            }
+        }.handleResponse<WpFeedRssResponse>().mapCatching { response ->
+            response.channel
+                ?: throw WpGetErrorException(message = "RSS response does not contain channel")
+        }
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Log.e(WP_TAG, "fetchRssFeedChannelPage: ${e.message}", e)
         Result.failure(
             WpGetErrorException(
                 message = e.message ?: "Unknown error",
@@ -82,7 +102,7 @@ internal class WpKtorClient @Inject constructor() : WpNetworkClient {
         Log.d(
             WP_TAG,
             """
-                fetchCategories:
+                wpResponse:
                     isSuccessful=${status.isSuccess()},
                     code=${status.value},
                     message=${status.description}

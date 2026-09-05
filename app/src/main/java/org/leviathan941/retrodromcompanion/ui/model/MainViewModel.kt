@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.common.Constants
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
@@ -43,6 +44,7 @@ class MainViewModel @Inject constructor(
     @param:ApplicationContext
     private val context: Context,
     private val feedCacheProvider: FeedCacheProvider,
+    private val feedCacheMutator: FeedCacheMutator,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(
         MainViewState.RssFeed(
@@ -64,7 +66,7 @@ class MainViewModel @Inject constructor(
 
     fun refreshRssFeedData() {
         viewModelScope.launch {
-            feedCacheProvider.refresh().onFailure { e ->
+            feedCacheMutator.refreshCategories().onFailure { e ->
                 Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS categories", e)
             }
         }

@@ -18,79 +18,49 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed
 
-import android.content.Context
-import android.util.Log
-import androidx.room.Room
-import androidx.room.withTransaction
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.CoroutineScope
+import androidx.paging.PagingSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import org.leviathan941.retrodromcompanion.common.di.DiKeys
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.RoomFeedDatabase
-import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryEntity
-import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import javax.inject.Inject
-import javax.inject.Named
 import javax.inject.Singleton
-
-private const val FEED_CACHE_DATABASE_NAME: String = "feed_cache.db"
-
-private const val TAG = "RoomFeedCacheProvider"
 
 @Singleton
 internal class RoomFeedCacheProviderImpl @Inject constructor(
-    @param:ApplicationContext
-    private val context: Context,
-    private val wpNetworkClient: WpNetworkClient,
-    @param:Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
-    private val coroutineScope: CoroutineScope,
+    private val database: RoomFeedDatabase,
 ) : FeedCacheProvider {
-
-    private val database: RoomFeedDatabase by lazy {
-        Room.databaseBuilder(
-            context = context,
-            klass = RoomFeedDatabase::class.java,
-            name = FEED_CACHE_DATABASE_NAME,
-        ).build()
-    }
 
     override val categories: Flow<List<FeedCategory>>
         get() = database.categoriesDao().allFlow()
 
-    override suspend fun refresh(): Result<Unit> =
-        withContext(coroutineScope.coroutineContext + Dispatchers.IO) {
-            fetchCategories().fold(
-                onSuccess = { categories ->
-                    database.withTransaction {
-                        with(database.categoriesDao()) {
-                            clear()
-                            addAll(categories)
-                        }
-                    }
-                    Result.success(Unit)
-                },
-                onFailure = {
-                    Result.failure(it)
-                },
-            )
-        }
+    override fun channelItemsPagingSource(
+        channelUrl: String,
+    ): PagingSource<Int, FeedChannelItem> =
+        database.channelItemDao().pagingSource(channelUrl)
 
-    private suspend fun fetchCategories(): Result<List<RoomFeedCategoryEntity>> =
-        wpNetworkClient.fetchCategories()
-            .map { categories ->
-                Log.d(TAG, "Fetched ${categories.size} categories from WP")
-                categories.map { it.toEntity() }
-            }
+    override suspend fun findChannelItemByPostId(
+        channelUrl: String,
+        postId: String,
+    ): FeedChannelItem? = withContext(Dispatchers.IO) {
+        database.channelItemDao().findByPostId(
+            channelUrl = channelUrl,
+            postId = postId,
+        )
+    }
 
-    private fun WpFeedCategory.toEntity(): RoomFeedCategoryEntity = RoomFeedCategoryEntity(
-        id = this.id,
-        name = this.name,
-        link = this.link,
-        postsCount = this.postsCount,
-    )
+    override suspend fun channelItemsLastUpdatedMillis(
+        channelUrl: String,
+    ): Long? = withContext(Dispatchers.IO) {
+        database.cacheMetadataDao().itemsLastUpdated(channelUrl)
+    }
+
+    override suspend fun channelItemsLastPageNumber(
+        channelUrl: String,
+    ): Int? = withContext(Dispatchers.IO) {
+        database.channelItemDao().lastPageNumber(channelUrl)
+    }
 }

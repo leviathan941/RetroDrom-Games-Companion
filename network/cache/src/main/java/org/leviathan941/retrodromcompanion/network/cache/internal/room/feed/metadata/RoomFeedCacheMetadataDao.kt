@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.metadata
 
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Upsert
 
-public interface WpNetworkClient {
-    public suspend fun fetchCategories(): Result<List<WpFeedCategory>>
+@Dao
+internal interface RoomFeedCacheMetadataDao {
+    @Query(
+        """
+        SELECT items_last_updated FROM feed_cache_metadata
+        WHERE channel_url = :channelUrl
+        """,
+    )
+    suspend fun itemsLastUpdated(channelUrl: String): Long?
 
-    public suspend fun fetchRssFeedChannelPage(
-        channelUrl: String,
-        pageNumber: Int,
-    ): Result<WpFeedChannel>
+    @Upsert
+    suspend fun upsert(entity: RoomFeedCacheMetadataEntity)
 }

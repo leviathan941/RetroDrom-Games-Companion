@@ -16,16 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.network.wordpress
+package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel
 
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
-import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
+internal object RoomFeedChannelItemTable {
+    const val TABLE_NAME: String = "feed_channel_items"
 
-public interface WpNetworkClient {
-    public suspend fun fetchCategories(): Result<List<WpFeedCategory>>
-
-    public suspend fun fetchRssFeedChannelPage(
-        channelUrl: String,
-        pageNumber: Int,
-    ): Result<WpFeedChannel>
+    const val COLUMN_AUTO_ID: String = "auto_id"
+    const val COLUMN_CHANNEL_URL: String = "channel_url"
+    const val COLUMN_PAGE_NUMBER: String = "page_number"
+    const val COLUMN_TITLE: String = "title"
+    const val COLUMN_LINK: String = "link"
+    const val COLUMN_PUB_DATE: String = "pub_date"
+    const val COLUMN_CATEGORIES: String = "categories"
+    const val COLUMN_CREATOR: String = "creator"
+    const val COLUMN_DESCRIPTION: String = "description"
+    const val COLUMN_POST_ID: String = "post_id"
 }

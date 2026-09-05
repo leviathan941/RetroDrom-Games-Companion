@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,18 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import java.util.concurrent.TimeUnit
-
-internal const val FEED_URL_SUFFIX = "feed"
-internal const val PAGE_QUERY_PARAM = "paged"
-internal val EXPIRED_TIME_MILLIS = TimeUnit.HOURS.toMillis(1L)
 internal const val RSS_READER_TAG = "RssReader"
 
-internal object Rss {
-    const val CHANNEL_TAG = "channel"
-    const val ITEM_TAG = "item"
-    const val DC_CREATOR_TAG = "dc:creator"
-    const val CATEGORY_TAG = "category"
-    const val PUBLICATION_DATE_TAG = "pubDate"
-    const val POST_ID_TAG = "post_id"
-}
+internal const val FEED_PAGING_INITIAL_PAGE_NUMBER = 1

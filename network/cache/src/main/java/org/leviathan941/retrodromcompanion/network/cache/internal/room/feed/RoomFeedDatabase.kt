@@ -18,20 +18,37 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryDao
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryEntity
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel.RoomFeedChannelItemDao
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel.RoomFeedChannelItemEntity
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.metadata.RoomFeedCacheMetadataDao
+import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.metadata.RoomFeedCacheMetadataEntity
 
-private const val DB_VERSION = 1
+internal const val FEED_CACHE_DATABASE_NAME: String = "feed_cache.db"
+private const val DB_VERSION = 2
 
 @Database(
     entities = [
         RoomFeedCategoryEntity::class,
+        RoomFeedChannelItemEntity::class,
+        RoomFeedCacheMetadataEntity::class,
     ],
     version = DB_VERSION,
     exportSchema = true,
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2),
+    ],
 )
+@TypeConverters(RoomFeedTypeConverters::class)
 internal abstract class RoomFeedDatabase : RoomDatabase() {
     internal abstract fun categoriesDao(): RoomFeedCategoryDao
+
+    internal abstract fun channelItemDao(): RoomFeedChannelItemDao
+
+    internal abstract fun cacheMetadataDao(): RoomFeedCacheMetadataDao
 }
