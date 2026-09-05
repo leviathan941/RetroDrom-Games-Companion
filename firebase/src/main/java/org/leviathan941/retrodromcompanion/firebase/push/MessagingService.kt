@@ -18,6 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.firebase.push
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -34,12 +35,16 @@ import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 private const val TAG = "MessagingService"
 
+// Lint still expects the deprecated onNewToken() callback. It is never invoked while
+// "firebase_messaging_installation_id_enabled" is set, because FCM then reports
+// registration through onRegistered() instead.
+@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 @AndroidEntryPoint
 internal class MessagingService : FirebaseMessagingService() {
     @Inject lateinit var notifications: Notifications
 
-    override fun onNewToken(token: String) {
-        Log.d(TAG, "Refreshed token: $token")
+    override fun onRegistered(installationId: String) {
+        Log.d(TAG, "Registered with FID: $installationId")
         ProcessLifecycleOwner.get().lifecycleScope.launch {
             PreferencesRepository(applicationContext.mainDataStore).ui.first().let { prefs ->
                 prefs.subscribedPushTopics.mapNotNull {

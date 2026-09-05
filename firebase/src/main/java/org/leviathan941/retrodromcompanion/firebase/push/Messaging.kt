@@ -21,7 +21,6 @@ package org.leviathan941.retrodromcompanion.firebase.push
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 public object Messaging {
@@ -31,17 +30,6 @@ public object Messaging {
         public val value: String,
     ) {
         NEW_RETRODROM_POSTS("new_retrodrom_posts"),
-    }
-
-    public suspend fun registrationToken(): String = suspendCoroutine { continuation ->
-        FirebaseMessaging.getInstance().token
-            .addOnSuccessListener { token ->
-                continuation.resume(token)
-            }
-            .addOnFailureListener { ex ->
-                Log.e(TAG, "Failed to get registration token", ex)
-                continuation.resumeWithException(ex)
-            }
     }
 
     public suspend fun subscribeToTopic(topic: Topic): Boolean = suspendCoroutine { continuation ->
