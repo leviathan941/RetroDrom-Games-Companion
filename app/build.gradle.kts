@@ -77,6 +77,11 @@ android {
         targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
     }
 
+    lint {
+        warningsAsErrors = true
+        checkDependencies = true
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true

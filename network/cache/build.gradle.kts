@@ -50,6 +50,10 @@ android {
         targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
     }
 
+    lint {
+        warningsAsErrors = true
+    }
+
     room {
         schemaDirectory("$projectDir/schemas")
     }

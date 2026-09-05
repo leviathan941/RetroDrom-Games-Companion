@@ -41,11 +41,6 @@
         <item quantity="few">%d дня назад</item>
         <item quantity="many">%d дней назад</item>
     </plurals>
-    <plurals name="rss_feed_item_publication_time_weeks">
-        <item quantity="one">%d неделя назад</item>
-        <item quantity="few">%d недели назад</item>
-        <item quantity="many">%d недель назад</item>
-    </plurals>
     <plurals name="rss_feed_item_publication_time_months">
         <item quantity="one">%d месяц назад</item>
         <item quantity="few">%d месяца назад</item>

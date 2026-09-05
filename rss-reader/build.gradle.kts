@@ -44,6 +44,10 @@ android {
         targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
     }
 
+    lint {
+        warningsAsErrors = true
+    }
+
     defaultConfig {
         minSdk = AndroidSdk.MIN_SDK_VERSION
     }

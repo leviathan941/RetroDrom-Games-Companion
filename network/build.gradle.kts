@@ -49,6 +49,10 @@ android {
         targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
     }
 
+    lint {
+        warningsAsErrors = true
+    }
+
     kotlin {
         explicitApi = ExplicitApiMode.Strict
     }
