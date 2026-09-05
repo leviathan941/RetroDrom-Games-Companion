@@ -4,8 +4,9 @@ Native Android client for the [RetroDrom Games](https://retrodrom.games/) site (
 blog): browses the site's RSS categories/posts, opens articles, and receives push
 notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose only.
 
-- Language/toolchain: Kotlin 2.2, JDK 17, AGP 8.13, Gradle 9.2 (wrapper), KSP.
-- SDK: min 26, compile/target 36. App id `org.segowski.retrodromgames`, code namespace
+- Language/toolchain: Kotlin 2.3, JDK 17, AGP 9.4, Gradle 9.7 (wrapper), KSP. AGP 9 supplies
+  Kotlin compilation itself — no module applies `org.jetbrains.kotlin.android`.
+- SDK: min 26, compile 37, target 36. App id `org.segowski.retrodromgames`, code namespace
   `org.leviathan941.retrodromcompanion`.
 - Key libs: Compose + Material 3, Navigation Compose, Hilt, Ktor (WordPress REST API),
   Room (feed-category cache), DataStore Preferences, Paging 3, Coil 3, Firebase Messaging,

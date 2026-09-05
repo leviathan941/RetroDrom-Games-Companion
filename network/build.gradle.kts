@@ -23,7 +23,6 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.jetbrains.kotlin.serialization)

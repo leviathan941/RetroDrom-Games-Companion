@@ -1,7 +1,7 @@
 [versions]
-about-libraries-compose-m3 = "13.1.0"
+about-libraries-compose-m3 = "15.2.0"
 aghajari-annotated-text = "1.0.3"
-android-gradle-plugin = "8.13.1"
+android-gradle-plugin = "9.4.0"
 androidx-activity = "1.12.0"
 androidx-appcompat = "1.7.1"
 androidx-browser = "1.9.0"
@@ -17,19 +17,19 @@ androidx-paging-compose = "3.3.6"
 androidx-room = "2.8.4"
 coil3 = "3.3.0"
 google-accompanist = "0.37.3"
-google-dagger-hilt = "2.57.2"
+google-dagger-hilt = "2.60.1"
 google-firebase-bom = "34.6.0"
 google-material = "1.13.0"
-google-ksp = "2.3.2"
+google-ksp = "2.3.11"
 google-services-plugin = "4.4.4"
-jetbrains-kotlin-plugin = "2.2.21"
+jetbrains-kotlin-plugin = "2.3.21"
 jetbrains-kotlinx-collections-immutable = "0.4.0"
 jetbrains-kotlinx-coroutines = "1.10.2"
 jetbrains-kotlinx-serialization = "1.9.0"
 mohamedrejeb-ksoup = "0.6.0"
 kt-rss-reader = "2.2.3"
 ktor-bom = "3.3.2"
-skydoves-compose-stability-analyzer = "0.5.3"
+skydoves-compose-stability-analyzer = "0.8.0"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
@@ -85,7 +85,6 @@ androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
 google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "google-dagger-hilt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "jetbrains-kotlin-plugin" }
