@@ -74,3 +74,14 @@ resource — that ships blank strings and missing icons at runtime.
 
 `local.properties` (SDK path) and `app/google-services.json` are git-ignored but present
 locally; a build without the latter fails in the Google Services plugin.
+
+## Plans & reports
+
+Plan and report documents an agent produces go in `.local/` at the repository root —
+plans in `.local/plans/`, reports in `.local/reports/` — one Markdown file per document,
+named in short kebab-case. The directory is git-ignored, so these notes sit next to the
+code they describe without ever entering a commit or a review.
+
+Use it for documents worth re-reading later. Throwaway working files (build logs,
+screenshots, one-off scripts) stay in the session scratchpad, which is discarded with the
+session.

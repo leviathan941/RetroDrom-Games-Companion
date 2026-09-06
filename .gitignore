@@ -34,3 +34,6 @@ google-services.json
 
 # Mac OS Finder files
 .DS_Store
+
+# Agent-generated plans and reports
+.local/
