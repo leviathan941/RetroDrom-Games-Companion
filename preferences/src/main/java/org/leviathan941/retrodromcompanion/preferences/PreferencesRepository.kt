@@ -26,6 +26,8 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
+import org.leviathan941.retrodromcompanion.preferences.internal.APP_DATA_VERSION
+import org.leviathan941.retrodromcompanion.preferences.internal.APP_DATA_VERSION_DEFAULT
 import org.leviathan941.retrodromcompanion.preferences.internal.APP_THEME_PREFERENCE_KEY
 import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW
 import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW_DEFAULT
@@ -56,4 +58,12 @@ public class PreferencesRepository @Inject constructor(
             )
         }
     public val promoEditor: PromoPreferencesEditor = PromoPreferencesEditor(dataStore)
+
+    public val appData: Flow<AppDataPreferences> = dataStore.data
+        .map { preferences ->
+            AppDataPreferences(
+                version = preferences[APP_DATA_VERSION] ?: APP_DATA_VERSION_DEFAULT,
+            )
+        }
+    public val appDataEditor: AppDataPreferencesEditor = AppDataPreferencesEditor(dataStore)
 }

@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.app
+package org.leviathan941.retrodromcompanion.preferences
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
-import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
-import org.leviathan941.retrodromcompanion.notification.Notifications
-
-@HiltAndroidApp
-class MainApplication : Application() {
-    @Inject lateinit var notifications: Notifications
-
-    @Inject lateinit var appDataMigrator: AppDataMigrator
-
-    override fun onCreate() {
-        super.onCreate()
-        // Call to initialize
-        notifications
-        appDataMigrator.start()
-    }
-}
+public data class AppDataPreferences(
+    val version: Int,
+)

@@ -18,6 +18,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | Module | Purpose |
 | --- | --- |
 | `:app` | UI layer: Compose screens, drawer, top bar, navigation, view models, themes. |
+| `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. |
 | `:common` | Shared constants (site base URL), DI keys, request codes. |
 | `:firebase` | FCM messaging service and push token handling. |
 | `:html-text`, `:html-text:api`, `:html-text:imagecontent` | Standalone Compose library (`org.leviathan941.compose.htmltext`) that renders HTML as `AnnotatedString`, with pluggable inline content (e.g. `<img>`). Keep it app-agnostic. |
@@ -38,9 +39,10 @@ Read them from there rather than restating them here — version numbers in this
   `public` and explicit return types. `:app` does not.
 - Package layout per module: public API at the top level (or `api/`), implementation under
   `internal/` or `impl/`; Hilt modules under `di/`.
-- Source files carry the GPL v3 header (`RetroDrom Games Companion / Copyright (C) …`); Gradle
-  build scripts and `buildSrc` carry the Apache 2.0 header. Copy the header of a neighbouring
-  file when adding one.
+- Source files and module `build.gradle.kts` scripts carry the GPL v3 header
+  (`RetroDrom Games Companion / Copyright (C) …`). Only the root `build.gradle.kts`,
+  `settings.gradle.kts`, `buildSrc` and `app/build.gradle.kts` carry the Apache 2.0 header.
+  Copy the header of a neighbouring file when adding one.
 - Style is ktlint (`android_studio` code style) configured in `.editorconfig`: trailing commas
   allowed, multiline signatures from 2 parameters, import ordering rule disabled.
 - `detekt.yaml` exists for standalone/IDE detekt runs; no detekt or ktlint Gradle plugin is

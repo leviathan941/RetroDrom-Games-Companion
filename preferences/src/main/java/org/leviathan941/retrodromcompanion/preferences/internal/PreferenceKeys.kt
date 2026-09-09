@@ -29,3 +29,6 @@ internal val SUBSCRIBED_PUSH_TOPICS = stringSetPreferencesKey("subscribed_push_t
 // PromoPreferences
 internal val PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW =
     intPreferencesKey("push_posts_promo_starts_until_show")
+
+// AppDataPreferences
+internal val APP_DATA_VERSION = intPreferencesKey("app_data_version")

@@ -20,3 +20,6 @@ package org.leviathan941.retrodromcompanion.preferences.internal
 
 // PromoPreferences
 internal const val PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW_DEFAULT = 2
+
+// AppDataPreferences
+internal const val APP_DATA_VERSION_DEFAULT = 0

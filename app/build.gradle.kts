@@ -98,6 +98,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":app:migration"))
     implementation(project(":common"))
     implementation(project(":firebase"))
     implementation(project(":html-text"))
@@ -114,6 +115,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
