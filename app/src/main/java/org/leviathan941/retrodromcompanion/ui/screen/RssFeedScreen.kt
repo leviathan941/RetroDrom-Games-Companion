@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen
 
-import android.content.ClipData
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -38,8 +37,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -52,6 +51,7 @@ import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
 import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
+import org.leviathan941.retrodromcompanion.ui.copyToClipboard
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
@@ -191,6 +191,7 @@ private fun LazyItemScope.LoadingRefreshErrorView(
     coroutineScope: CoroutineScope,
     retry: () -> Unit,
 ) {
+    val context = LocalContext.current
     val clipboard = LocalClipboard.current
     LoadingView(
         modifier = Modifier.fillParentMaxSize(),
@@ -200,14 +201,7 @@ private fun LazyItemScope.LoadingRefreshErrorView(
         ),
         onErrorLongPress = { label, message ->
             coroutineScope.launch {
-                clipboard.setClipEntry(
-                    ClipEntry(
-                        ClipData.newPlainText(
-                            label,
-                            message,
-                        ),
-                    ),
-                )
+                copyToClipboard(context, clipboard, label, message)
             }
         },
         onRetryClick = { retry() },
@@ -220,6 +214,7 @@ private fun LoadingAppendErrorView(
     coroutineScope: CoroutineScope,
     retry: () -> Unit,
 ) {
+    val context = LocalContext.current
     val clipboard = LocalClipboard.current
     val errorClipboardLabel = stringResource(R.string.error_copied_clipboard_label)
     RssFeedLoadFailedNextItem(
@@ -228,14 +223,7 @@ private fun LoadingAppendErrorView(
         onRetry = { retry() },
         onErrorLongPress = { message ->
             coroutineScope.launch {
-                clipboard.setClipEntry(
-                    ClipEntry(
-                        ClipData.newPlainText(
-                            errorClipboardLabel,
-                            message,
-                        ),
-                    ),
-                )
+                copyToClipboard(context, clipboard, errorClipboardLabel, message)
             }
         },
     )

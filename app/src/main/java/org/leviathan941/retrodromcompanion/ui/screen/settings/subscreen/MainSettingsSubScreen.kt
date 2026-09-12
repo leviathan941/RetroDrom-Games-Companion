@@ -36,9 +36,10 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.navigation.SettingsDestination
 import org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen
-import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableNavItem
+import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTitleItem
+import org.leviathan941.retrodromcompanion.ui.screen.settings.rememberSettingsNavigationIcon
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource
 
 @Composable
@@ -57,41 +58,45 @@ fun MainSettingsSubScreen(
         navigationActions = navigationActions,
     ) {
         SettingsGroup(
-            name = stringResource(id = R.string.settings_group_name_interface),
+            title = stringResource(id = R.string.settings_group_name_interface),
         ) {
-            SettingsClickableNavItem(
+            SettingsClickableItem(
                 title = stringResource(id = R.string.settings_interface_item_theme_title),
                 subtitle = stringResource(id = appTheme.toStringResource()),
                 leadingIcon = painterResource(id = R.drawable.google_material_contrast),
+                trailingIcon = rememberSettingsNavigationIcon(),
             ) {
                 navigationActions.navigateToSettingsItem(SettingsDestination.AppTheme)
             }
 
             HorizontalDivider()
 
-            SettingsClickableNavItem(
+            SettingsClickableItem(
                 title = stringResource(id = R.string.settings_interface_item_notifications_title),
                 leadingIcon = rememberVectorPainter(Icons.Default.Notifications),
+                trailingIcon = rememberSettingsNavigationIcon(),
             ) {
                 navigationActions.navigateToSettingsItem(SettingsDestination.Notifications)
             }
         }
 
         SettingsGroup(
-            name = stringResource(id = R.string.settings_group_name_about),
+            title = stringResource(id = R.string.settings_group_name_about),
         ) {
-            SettingsClickableNavItem(
+            SettingsClickableItem(
                 title = stringResource(id = R.string.settings_about_item_feedback_title),
                 leadingIcon = painterResource(id = R.drawable.google_material_feedback),
+                trailingIcon = rememberSettingsNavigationIcon(),
             ) {
                 navigationActions.navigateToSettingsItem(SettingsDestination.Feedback)
             }
 
             HorizontalDivider()
 
-            SettingsClickableNavItem(
+            SettingsClickableItem(
                 title = stringResource(id = R.string.settings_about_item_licenses_title),
                 leadingIcon = painterResource(id = R.drawable.google_material_license),
+                trailingIcon = rememberSettingsNavigationIcon(),
             ) {
                 navigationActions.navigateToSettingsItem(SettingsDestination.Licenses)
             }

@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.settings
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,18 +42,31 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+/**
+ * Trailing icon marking a settings item that navigates to a sub-screen.
+ */
 @Composable
-fun SettingsClickableNavItem(
+fun rememberSettingsNavigationIcon(): Painter =
+    rememberVectorPainter(Icons.AutoMirrored.Default.KeyboardArrowRight)
+
+@Composable
+fun SettingsClickableItem(
     title: String,
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     leadingIcon: Painter? = null,
+    trailingIcon: Painter? = null,
+    onLongClick: (() -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(enabled = onClick != null) { onClick?.invoke() },
+            .combinedClickable(
+                enabled = onClick != null || onLongClick != null,
+                onLongClick = onLongClick,
+                onClick = { onClick?.invoke() },
+            ),
     ) {
         Row(
             modifier = Modifier
@@ -93,28 +106,31 @@ fun SettingsClickableNavItem(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                         overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
+                        maxLines = 2,
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            trailingIcon?.let { painter ->
+                Spacer(modifier = Modifier.weight(1f))
 
-            Icon(
-                modifier = Modifier.size(32.dp),
-                imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null,
-            )
+                Icon(
+                    modifier = Modifier.size(SETTINGS_TRAILING_ICON_SIZE),
+                    painter = painter,
+                    contentDescription = null,
+                )
+            }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun SettingsClickableNavItemPreview() {
-    SettingsClickableNavItem(
+private fun SettingsClickableItemPreview() {
+    SettingsClickableItem(
         title = "Title",
-        subtitle = null,
+        subtitle = "Subtitle",
         leadingIcon = rememberVectorPainter(Icons.Default.Notifications),
+        trailingIcon = rememberSettingsNavigationIcon(),
     )
 }

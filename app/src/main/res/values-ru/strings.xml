@@ -64,9 +64,9 @@
     <string name="theme_name_system">Системная</string>
     <string name="theme_name_dynamic">Адаптивная</string>
     <string name="settings_group_name_about">О нас</string>
-    <string name="settings_about_item_feedback_title">Обратная связь</string>
+    <string name="settings_about_item_feedback_title">Связаться с нами</string>
     <string name="settings_about_item_app_version_title">Версия приложения</string>
-    <string name="settings_about_feedback_screen_site">"По вопросам размещения рекламы, ошибок в публикациях и прочим вопросам: "</string>
+    <string name="settings_about_feedback_screen_description">По вопросам рекламы, ошибок в публикациях и другим вопросам:</string>
     <string name="rss_feed_item_description_from_author">от %s</string>
     <string name="notification_permission_dialog_title">Получайте уведомления о новых публикациях</string>
     <string name="notification_permission_dialog_text">Мы хотим чтобы Вы всегда были в курсе новостей. Для этого разрешите нам показывать уведомления о новых публикациях.</string>
@@ -87,4 +87,9 @@
     <string name="open_external_link_application_not_found">Приложение для открытия ссылки не найдено</string>
     <string name="drawer_youtube_external_link_badge_description">Перейти на YouTube канал</string>
     <string name="drawer_boosty_external_link_badge_description">Перейти на наш Boosty</string>
+    <string name="settings_about_feedback_screen_site_title">Сайт</string>
+    <string name="settings_about_feedback_screen_email_title">Эл. почта</string>
+    <string name="settings_about_feedback_screen_site_copied_clipboard_label">Ссылка скопирована в буфер обмена</string>
+    <string name="settings_about_feedback_screen_email_copied_clipboard_label">Адрес эл. почты скопирован в буфер обмена</string>
+    <string name="open_email_application_not_found">Приложение для отправки почты не найдено</string>
 </resources>

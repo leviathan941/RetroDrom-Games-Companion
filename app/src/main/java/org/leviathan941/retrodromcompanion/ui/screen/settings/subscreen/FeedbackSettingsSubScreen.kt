@@ -18,50 +18,81 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.ParagraphStyle
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextLinkStyles
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.text.withLink
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.ui.FEEDBACK_EMAIL
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_URL
-import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTextItem
+import org.leviathan941.retrodromcompanion.ui.copyToClipboard
+import org.leviathan941.retrodromcompanion.ui.openEmailByIntent
+import org.leviathan941.retrodromcompanion.ui.openUrlByIntent
+import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableItem
+import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsGroup
 
 @Composable
 fun FeedbackSettingsSubScreen() {
-    val siteFeedback = stringResource(id = R.string.settings_about_feedback_screen_site)
-    val linkSpanStyle = SpanStyle(MaterialTheme.colorScheme.primary)
-    SettingsTextItem(
-        text = buildAnnotatedString {
-            withStyle(
-                ParagraphStyle(
-                    lineBreak = LineBreak.Heading,
-                ),
-            ) {
-                append(siteFeedback)
-                append("\n")
-                withLink(
-                    link = LinkAnnotation.Url(
-                        url = FEEDBACK_URL,
-                        styles = TextLinkStyles(style = linkSpanStyle),
-                    ),
-                ) {
-                    append(FEEDBACK_URL)
-                }
-            }
-        },
+    val context = LocalContext.current
+    val clipboard = LocalClipboard.current
+    val coroutineScope = rememberCoroutineScope()
+    val siteCopiedLabel = stringResource(
+        id = R.string.settings_about_feedback_screen_site_copied_clipboard_label,
     )
+    val emailCopiedLabel = stringResource(
+        id = R.string.settings_about_feedback_screen_email_copied_clipboard_label,
+    )
+
+    SettingsGroup(
+        title = stringResource(id = R.string.settings_about_feedback_screen_description),
+        titleStyle = MaterialTheme.typography.bodyLarge,
+    ) {
+        SettingsClickableItem(
+            title = stringResource(id = R.string.settings_about_feedback_screen_site_title),
+            subtitle = FEEDBACK_URL,
+            leadingIcon = painterResource(id = R.drawable.google_material_globe),
+            onLongClick = {
+                coroutineScope.launch {
+                    copyToClipboard(context, clipboard, siteCopiedLabel, FEEDBACK_URL)
+                }
+            },
+            onClick = {
+                openUrlByIntent(context, FEEDBACK_URL)
+            },
+        )
+
+        HorizontalDivider()
+
+        SettingsClickableItem(
+            title = stringResource(id = R.string.settings_about_feedback_screen_email_title),
+            subtitle = FEEDBACK_EMAIL,
+            leadingIcon = rememberVectorPainter(Icons.Default.Email),
+            onLongClick = {
+                coroutineScope.launch {
+                    copyToClipboard(context, clipboard, emailCopiedLabel, FEEDBACK_EMAIL)
+                }
+            },
+            onClick = {
+                openEmailByIntent(context, FEEDBACK_EMAIL)
+            },
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun FeedbackSettingsSubScreenPreview() {
-    FeedbackSettingsSubScreen()
+    Column {
+        FeedbackSettingsSubScreen()
+    }
 }

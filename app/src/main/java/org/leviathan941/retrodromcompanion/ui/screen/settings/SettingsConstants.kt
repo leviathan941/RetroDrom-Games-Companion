@@ -21,3 +21,4 @@ package org.leviathan941.retrodromcompanion.ui.screen.settings
 import androidx.compose.ui.unit.dp
 
 val SETTINGS_LEADING_ICON_SIZE = 26.dp
+val SETTINGS_TRAILING_ICON_SIZE = 32.dp

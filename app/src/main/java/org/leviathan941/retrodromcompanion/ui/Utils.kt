@@ -20,6 +20,7 @@
 package org.leviathan941.retrodromcompanion.ui
 
 import android.content.ActivityNotFoundException
+import android.content.ClipData
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
@@ -27,6 +28,8 @@ import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
 import androidx.annotation.PluralsRes
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.Clipboard
 import androidx.core.net.toUri
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -45,6 +48,7 @@ internal const val MAIN_VIEW_TAG = "MainView"
 internal const val RSS_SCREEN_TAG = "RssScreen"
 
 internal const val FEEDBACK_URL = "https://retrodrom.games/feedback/"
+internal const val FEEDBACK_EMAIL = "retrodrom.games@gmail.com"
 
 internal const val MAIN_RSS_FEED_ID = 0
 
@@ -155,5 +159,41 @@ fun openUrlByIntent(
             R.string.open_external_link_application_not_found,
             Toast.LENGTH_LONG,
         ).show()
+    }
+}
+
+fun openEmailByIntent(
+    context: Context,
+    email: String,
+) {
+    try {
+        context.startActivity(
+            Intent(Intent.ACTION_SENDTO).apply {
+                data = "mailto:$email".toUri()
+            },
+        )
+    } catch (_: ActivityNotFoundException) {
+        Toast.makeText(
+            context,
+            R.string.open_email_application_not_found,
+            Toast.LENGTH_LONG,
+        ).show()
+    }
+}
+
+suspend fun copyToClipboard(
+    context: Context,
+    clipboard: Clipboard,
+    label: CharSequence,
+    text: CharSequence,
+) {
+    clipboard.setClipEntry(
+        ClipEntry(
+            ClipData.newPlainText(label, text),
+        ),
+    )
+    // Android 13 and above shows its own clipboard confirmation overlay.
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        Toast.makeText(context, label, Toast.LENGTH_SHORT).show()
     }
 }

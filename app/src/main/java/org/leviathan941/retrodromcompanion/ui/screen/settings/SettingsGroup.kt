@@ -31,13 +31,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsGroup(
-    name: String,
+    title: String,
     modifier: Modifier = Modifier,
+    titleStyle: TextStyle = MaterialTheme.typography.titleMedium,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
@@ -50,8 +52,8 @@ fun SettingsGroup(
             ),
     ) {
         Text(
-            text = name,
-            style = MaterialTheme.typography.titleMedium,
+            text = title,
+            style = titleStyle,
         )
 
         Spacer(
@@ -72,7 +74,7 @@ fun SettingsGroup(
 @Preview(showBackground = true)
 @Composable
 private fun SettingsGroupPreview() {
-    SettingsGroup(name = "Group") {
+    SettingsGroup(title = "Group") {
         Text("Item 1")
         HorizontalDivider()
         Text("Item 2")
