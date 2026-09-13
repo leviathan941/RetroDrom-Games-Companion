@@ -77,6 +77,22 @@ resource — that ships blank strings and missing icons at runtime.
 `local.properties` (SDK path) and `app/google-services.json` are git-ignored but present
 locally; a build without the latter fails in the Google Services plugin.
 
+## KMP migration (in progress)
+
+The project is being ported to Kotlin Multiplatform and Compose Multiplatform so it can ship on
+iOS. Read [`docs/kmp/migration-plan.md`](docs/kmp/migration-plan.md) before starting any work
+that touches dependencies, modules or the build — it holds the phase/stage breakdown and the
+per-module status tables, and it is the source of truth for what is already done.
+
+- [`docs/kmp/library-audit.md`](docs/kmp/library-audit.md) records the verified multiplatform
+  status of every dependency. Check it before assuming a library does or does not support iOS,
+  and re-verify the row against the artifact's Gradle Module Metadata before acting on it.
+- [`docs/adr/`](docs/adr/README.md) holds the decisions that constrain later stages. Do not
+  re-litigate an `Accepted` record; raise a new one instead.
+- Working rules for the port: one stage per branch, each ending with a green gate and a working
+  Android app; never combine a dependency swap with a source-set move; update the status tables
+  in the same commit as the work.
+
 ## Plans & reports
 
 Plan and report documents an agent produces go in `.local/` at the repository root —
@@ -84,6 +100,9 @@ plans in `.local/plans/`, reports in `.local/reports/` — one Markdown file per
 named in short kebab-case. The directory is git-ignored, so these notes sit next to the
 code they describe without ever entering a commit or a review.
 
-Use it for documents worth re-reading later. Throwaway working files (build logs,
-screenshots, one-off scripts) stay in the session scratchpad, which is discarded with the
+Use it for per-task working notes worth re-reading later. Throwaway working files (build
+logs, screenshots, one-off scripts) stay in the session scratchpad, which is discarded with the
 session.
+
+Documents that outlive a task belong in `docs/` and are committed: durable plans under
+`docs/<topic>/`, decisions as numbered records under `docs/adr/`.
