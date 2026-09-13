@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,10 +29,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
-private const val TAG = "MainViewPromoModel"
+private val logger = Logger.withTag("MainViewPromoModel")
 
 @HiltViewModel
 class RssFeedPromoModel @Inject constructor(
@@ -46,7 +46,7 @@ class RssFeedPromoModel @Inject constructor(
             .cancellable()
             .map { prefs ->
                 prefs.pushPosts.run {
-                    Log.d(TAG, "Push posts prefs: startsUntilShow: $startsUntilShow")
+                    logger.d { "Push posts prefs: startsUntilShow: $startsUntilShow" }
                     startsUntilShow < 1
                 }
             }
@@ -56,7 +56,7 @@ class RssFeedPromoModel @Inject constructor(
         }
 
         combine(isPushPostsPromoAllowed, isPushPostsTopicSubscribed) { isAllowed, isSubscribed ->
-            Log.d(TAG, "Set promo state: isAllowed: $isAllowed, isSubscribed: $isSubscribed")
+            logger.d { "Set promo state: isAllowed: $isAllowed, isSubscribed: $isSubscribed" }
             RssFeedPromoState(
                 shouldApplyPushPostsPromo = isAllowed && !isSubscribed,
             )

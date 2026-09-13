@@ -24,8 +24,6 @@ import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.chan
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedItem
 
-internal const val FEED_TAG = "RoomFeedCache"
-
 internal fun WpFeedItem.toEntityOrNull(
     channelUrl: String,
     pageNumber: Int,

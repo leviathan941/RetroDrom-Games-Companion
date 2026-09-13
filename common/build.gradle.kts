@@ -57,6 +57,7 @@ android {
 
 dependencies {
     implementation(libs.google.dagger.hilt.android)
+    implementation(libs.touchlab.kermit)
 
     ksp(libs.google.dagger.hilt.compiler)
 }

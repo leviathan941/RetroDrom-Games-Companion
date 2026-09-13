@@ -30,6 +30,7 @@ mohamedrejeb-ksoup = "0.6.0"
 ktor-bom = "3.5.2"
 slack-compose-lint-checks = "1.6.0"
 skydoves-compose-stability-analyzer = "0.13.0"
+touchlab-kermit = "2.2.0"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
@@ -81,6 +82,7 @@ ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serializatio
 ktor-serialization-kotlinx-xml = { group = "io.ktor", name = "ktor-serialization-kotlinx-xml" }
 mohamedrejeb-ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "mohamedrejeb-ksoup" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
+touchlab-kermit = { group = "co.touchlab", name = "kermit", version.ref = "touchlab-kermit" }
 
 [plugins]
 aboutlibraries-android = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "about-libraries-compose-m3" }

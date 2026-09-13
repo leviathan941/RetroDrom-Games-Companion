@@ -19,6 +19,7 @@ starting a stage that depends on a row — versions move.
 | `io.ktor:ktor-client-*` (core, content-negotiation, resources, serialization) | 3.5.2 | yes | Engine is the only platform part. |
 | `com.mohamedrejeb.ksoup:ksoup-html` | 0.6.0 | yes | |
 | `org.jetbrains.kotlinx:*` (coroutines, serialization, collections-immutable) | — | yes | `kotlinx-coroutines-android` is the Android artifact of a multiplatform library. |
+| `co.touchlab:kermit` | 2.2.0 | yes | Replaced `android.util.Log` in A1 (ADR-0003). Used through the `Logger` facade in `:common`; `:html-text:imagecontent` depends on it directly to stay app-agnostic. |
 
 
 ## Must be replaced
@@ -28,7 +29,6 @@ starting a stage that depends on a row — versions move.
 | `com.google.dagger:hilt-android` + `androidx.hilt` | Android-only | **Metro** `dev.zacsweers.metro` 1.4.3 — compile-time, multiplatform, has Dagger/Hilt interop for a gradual migration | A4 (ADR-0001) |
 | `androidx.room:*` 2.8.5 | Room 2.x is multiplatform in its artifacts, but Room 3 is the line Google develops and the one aimed at KMP | **Room 3** — group `androidx.room3`, artifacts `room3-runtime` / `room3-compiler` / `room3-paging` / `room3-migration` and the `androidx.room3` Gradle plugin, 3.0.3 stable (2026-09-09); iOS variants verified. Needs `androidx.sqlite:sqlite-bundled` 2.7.1 for the driver. | A6 (ADR-0004) |
 | `androidx.navigation:navigation-compose` 2.10.1 | Google's artifact publishes **only** android, jvmStubs and linux_x64 — no iOS | **Navigation 3**, in two steps. A8: Google's `androidx.navigation3:navigation3-ui` 1.1.7 + `androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0, on Android. A10: coordinates swapped to `org.jetbrains.androidx.navigation3:navigation3-ui` 1.1.1 + `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0. Both publish the same `androidx.navigation3.*` packages (verified by inspecting the JetBrains jar), so the second step touches no imports. `navigation3-common` arrives transitively. | A8 / A10 (ADR-0002) |
-| `android.util.Log` (15 call sites) | Platform API | **Kermit** `co.touchlab:kermit` 2.2.0 | A1 (ADR-0003) |
 | `androidx.compose.*` via Compose BOM | Android-only artifacts | Compose Multiplatform Gradle plugin (`org.jetbrains.compose` 1.12.0) and its `compose.*` accessors | A9 |
 | `R.string` / `R.drawable` via `stringResource` / `painterResource` (~31 call sites, plus `values-ru`) | Android resource system | `org.jetbrains.compose.resources` + `composeResources/` | A10 |
 | `io.coil-kt.coil3:coil-network-okhttp` | Pulls OkHttp | `io.coil-kt.coil3:coil-network-ktor3` 3.6.2 — reuses the Ktor client already in the project | A2 |

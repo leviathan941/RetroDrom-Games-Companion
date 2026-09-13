@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress
 
-import android.util.Log
 import io.ktor.client.call.body
 import io.ktor.client.plugins.resources.get
 import io.ktor.client.request.get
@@ -27,16 +26,18 @@ import io.ktor.http.appendPathSegments
 import io.ktor.http.isSuccess
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.CancellationException
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.FEED_PAGE_QUERY_PARAM
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.FEED_PATH_SEGMENT
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.HttpClientFactory
-import org.leviathan941.retrodromcompanion.network.wordpress.internal.WP_TAG
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpApiFeedCategories
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedRssResponse
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private val logger = Logger.withTag("WordpressApi")
 
 @Singleton
 internal class WpKtorClient @Inject constructor(
@@ -49,7 +50,7 @@ internal class WpKtorClient @Inject constructor(
     } catch (e: CancellationException) {
         throw e
     } catch (e: Exception) {
-        Log.e(WP_TAG, "fetchCategories: ${e.message}", e)
+        logger.e(e) { "fetchCategories: ${e.message}" }
         Result.failure(
             WpGetErrorException(
                 message = e.message ?: "Unknown error",
@@ -76,7 +77,7 @@ internal class WpKtorClient @Inject constructor(
     } catch (e: CancellationException) {
         throw e
     } catch (e: Exception) {
-        Log.e(WP_TAG, "fetchRssFeedChannelPage: ${e.message}", e)
+        logger.e(e) { "fetchRssFeedChannelPage: ${e.message}" }
         Result.failure(
             WpGetErrorException(
                 message = e.message ?: "Unknown error",
@@ -99,14 +100,13 @@ internal class WpKtorClient @Inject constructor(
     }
 
     private fun HttpResponse.logResponse() {
-        Log.d(
-            WP_TAG,
+        logger.d {
             """
                 wpResponse:
                     isSuccessful=${status.isSuccess()},
                     code=${status.value},
                     message=${status.description}
-            """.trimIndent(),
-        )
+            """.trimIndent()
+        }
     }
 }

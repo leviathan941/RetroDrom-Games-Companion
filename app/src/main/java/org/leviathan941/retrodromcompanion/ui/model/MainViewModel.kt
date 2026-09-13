@@ -19,7 +19,6 @@
 package org.leviathan941.retrodromcompanion.ui.model
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +34,7 @@ import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutat
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
-import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
+import org.leviathan941.retrodromcompanion.ui.mainViewLogger
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import javax.inject.Inject
 
@@ -67,7 +66,7 @@ class MainViewModel @Inject constructor(
     fun refreshRssFeedData() {
         viewModelScope.launch {
             feedCacheMutator.refreshCategories().onFailure { e ->
-                Log.e(MAIN_VIEW_TAG, "Failed to fetch RSS categories", e)
+                mainViewLogger.e(e) { "Failed to fetch RSS categories" }
             }
         }
     }
@@ -93,7 +92,7 @@ class MainViewModel @Inject constructor(
             .plus(rssCategoryScreens)
             .associateBy { it.id }
             .toMap()
-        Log.d(MAIN_VIEW_TAG, "Fetched RSS categories: $allScreens")
+        mainViewLogger.d { "Fetched RSS categories: $allScreens" }
         return allScreens
     }
 }

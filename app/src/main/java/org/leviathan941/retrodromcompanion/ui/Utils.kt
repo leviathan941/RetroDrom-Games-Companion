@@ -34,6 +34,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
@@ -44,8 +45,8 @@ import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
-internal const val MAIN_VIEW_TAG = "MainView"
-internal const val RSS_SCREEN_TAG = "RssScreen"
+internal val mainViewLogger = Logger.withTag("MainView")
+internal val rssScreenLogger = Logger.withTag("RssScreen")
 
 internal const val FEEDBACK_URL = "https://retrodrom.games/feedback/"
 internal const val FEEDBACK_EMAIL = "retrodrom.games@gmail.com"

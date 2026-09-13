@@ -58,7 +58,7 @@ compilation, the Compose BOM stays, and every stage is fully verified by `./grad
 
 | # | Stage | Outcome | Blocked by |
 | --- | --- | --- | --- |
-| A1 | Logging → Kermit | `android.util.Log` gone from all 15 call sites; a `Logger` facade available from `:common`. Cheapest stage — establishes the "replace a platform API with a multiplatform one" pattern. | — |
+| A1 | Logging → Kermit | **Done.** `android.util.Log` gone from all 15 call sites; `Logger` facade in `:common` (`common.logging.Logger`), tagged instances instead of per-call-site tags, with `Logger.setMinLevel(LogLevel)` as the single config entry point. `:html-text:imagecontent` uses Kermit directly to stay app-agnostic. | — |
 | A2 | Coil network layer | `coil-network-okhttp` → `coil-network-ktor3`, sharing the existing Ktor client. | — |
 | A3 | Metro spike | Verify Metro's compiler plugin works with AGP-supplied Kotlin compilation on one small module (`:preferences` or `:common`). The single biggest unknown in the plan — see the risk note below. | — |
 | A4 | Hilt → Metro | All 7 Hilt modules migrated, `hiltViewModel()` replaced. Metro's Hilt interop allows doing this module by module rather than in one commit. | A3, ADR-0001 |

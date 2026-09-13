@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen.feed
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,11 +51,12 @@ import coil3.request.ImageRequest
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-private const val TAG = "RssFeedItem"
+private val logger = Logger.withTag("RssFeedItem")
 
 @Composable
 fun RssFeedItem(
@@ -97,7 +97,7 @@ fun RssFeedItem(
                     contentScale = ContentScale.Crop,
                     filterQuality = FilterQuality.Low,
                     onError = { error ->
-                        Log.e(TAG, "Error while loading image", error.result.throwable)
+                        logger.e(error.result.throwable) { "Error while loading image" }
                     },
                 )
             }

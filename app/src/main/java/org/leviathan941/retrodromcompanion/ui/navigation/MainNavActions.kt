@@ -18,11 +18,10 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.toRoute
-import org.leviathan941.retrodromcompanion.ui.MAIN_VIEW_TAG
+import org.leviathan941.retrodromcompanion.ui.mainViewLogger
 
 data class MainNavPredefinedDestinations(
     val rssFeedStart: RssFeedDestination.Feed,
@@ -43,9 +42,9 @@ class MainNavActionsImpl(
 ) : MainNavActions {
     override fun navigateBack() {
         if (navController.popBackStack()) {
-            Log.d(MAIN_VIEW_TAG, "Navigate back")
+            mainViewLogger.d { "Navigate back" }
         } else {
-            Log.d(MAIN_VIEW_TAG, "No back stack entry, cannot navigate back")
+            mainViewLogger.d { "No back stack entry, cannot navigate back" }
             navigateToStartedRssFeed()
         }
     }
@@ -55,13 +54,13 @@ class MainNavActionsImpl(
     }
 
     override fun navigateToRssFeed(destination: RssFeedDestination.Feed) {
-        Log.d(MAIN_VIEW_TAG, "Navigate to RSS feed screen: $destination")
+        mainViewLogger.d { "Navigate to RSS feed screen: $destination" }
         val isInsideRssFeed = navController.currentDestination
             ?.hasRoute<RssFeedDestination.Feed>() == true
         val toSameFeed = navController.currentBackStackEntry?.takeIf { isInsideRssFeed }
             ?.toRoute<RssFeedDestination.Feed>() == destination
         if (toSameFeed) {
-            Log.d(MAIN_VIEW_TAG, "Already on the same RSS feed screen")
+            mainViewLogger.d { "Already on the same RSS feed screen" }
             return
         }
         navController.navigate(destination) {
@@ -73,7 +72,7 @@ class MainNavActionsImpl(
     }
 
     override fun navigateToRssItemDescription(destination: RssFeedDestination.ItemDescription) {
-        Log.d(MAIN_VIEW_TAG, "Navigate to RSS item description screen")
+        mainViewLogger.d { "Navigate to RSS item description screen" }
         navController.navigate(destination) {
             popUpTo<RssFeedDestination.Feed>()
             launchSingleTop = true
@@ -81,14 +80,14 @@ class MainNavActionsImpl(
     }
 
     override fun navigateToSettings() {
-        Log.d(MAIN_VIEW_TAG, "Navigate to settings screen")
+        mainViewLogger.d { "Navigate to settings screen" }
         navController.navigate(MainDestination.Settings) {
             launchSingleTop = true
         }
     }
 
     override fun navigateToSettingsItem(destination: SettingsDestination) {
-        Log.d(MAIN_VIEW_TAG, "Navigate to $destination settings screen")
+        mainViewLogger.d { "Navigate to $destination settings screen" }
         navController.navigate(destination) {
             launchSingleTop = true
         }

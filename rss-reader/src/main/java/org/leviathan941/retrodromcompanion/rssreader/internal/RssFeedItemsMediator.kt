@@ -18,16 +18,18 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import org.leviathan941.retrodromcompanion.common.Clock
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
 import java.util.concurrent.TimeUnit
+
+private val logger = Logger.withTag("RssReader")
 
 @OptIn(ExperimentalPagingApi::class)
 internal class RssFeedItemsMediator(
@@ -39,7 +41,7 @@ internal class RssFeedItemsMediator(
     override suspend fun initialize(): InitializeAction {
         val lastUpdatedMillis = cacheProvider.channelItemsLastUpdatedMillis(channelUrl) ?: 0L
         val ageMillis = clock.currentTimeMillis() - lastUpdatedMillis
-        Log.d(RSS_READER_TAG, "Cached items of $channelUrl are $ageMillis ms old")
+        logger.d { "Cached items of $channelUrl are $ageMillis ms old" }
         return if (ageMillis >= FEED_EXPIRED_TIME_MILLIS) {
             InitializeAction.LAUNCH_INITIAL_REFRESH
         } else {
@@ -55,7 +57,7 @@ internal class RssFeedItemsMediator(
         LoadType.PREPEND -> MediatorResult.Success(endOfPaginationReached = true)
 
         LoadType.REFRESH -> {
-            Log.d(RSS_READER_TAG, "Refreshing RSS feed items of $channelUrl")
+            logger.d { "Refreshing RSS feed items of $channelUrl" }
             cacheMutator.refreshChannelItems(channelUrl).toMediatorResult()
         }
 
@@ -63,7 +65,7 @@ internal class RssFeedItemsMediator(
             val pageNumber = cacheProvider.channelItemsLastPageNumber(channelUrl)
                 ?.plus(1)
                 ?: FEED_PAGING_INITIAL_PAGE_NUMBER
-            Log.d(RSS_READER_TAG, "Loading RSS feed items of $channelUrl page $pageNumber")
+            logger.d { "Loading RSS feed items of $channelUrl page $pageNumber" }
             cacheMutator.loadChannelItemsPage(
                 channelUrl = channelUrl,
                 pageNumber = pageNumber,
@@ -76,7 +78,7 @@ internal class RssFeedItemsMediator(
             MediatorResult.Success(endOfPaginationReached = loadedCount <= 0)
         },
         onFailure = { error ->
-            Log.e(RSS_READER_TAG, "Failed to load RSS feed items of $channelUrl", error)
+            logger.e(error) { "Failed to load RSS feed items of $channelUrl" }
             MediatorResult.Error(error)
         },
     )

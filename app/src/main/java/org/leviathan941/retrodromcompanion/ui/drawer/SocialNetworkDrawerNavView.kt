@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.drawer
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
@@ -36,8 +35,9 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 
-private const val TAG = "SocialNetworkDrawerNav"
+private val logger = Logger.withTag("SocialNetworkDrawerNav")
 
 sealed interface SocialNetworkIcon {
     val contentScale: ContentScale
@@ -96,7 +96,7 @@ private fun SocialNetworkIconView(icon: SocialNetworkIcon) {
                 contentScale = icon.contentScale,
                 filterQuality = FilterQuality.Low,
                 onError = { error ->
-                    Log.e(TAG, "Error while loading image", error.result.throwable)
+                    logger.e(error.result.throwable) { "Error while loading image" }
                 },
             )
         }

@@ -58,9 +58,10 @@ dependencies {
     api(project(":html-text:api"))
 
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.coil3.compose)
     implementation(libs.compose.foundation)
     implementation(libs.compose.ui)
-    implementation(libs.coil3.compose)
+    implementation(libs.touchlab.kermit)
 
     lintChecks(libs.slack.compose.lint.checks)
 }

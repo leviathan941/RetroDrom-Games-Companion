@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.app.migration
 
-import android.util.Log
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,13 +29,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.leviathan941.retrodromcompanion.app.migration.internal.AppDataMigration
 import org.leviathan941.retrodromcompanion.common.di.DiKeys
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.milliseconds
 
-private const val TAG = "AppDataMigrator"
+private val logger = Logger.withTag("AppDataMigrator")
 private const val MIGRATION_TIMEOUT_MS = 10_000L
 private const val NO_MIGRATIONS_VERSION = 0
 
@@ -74,11 +74,11 @@ public class AppDataMigrator @Inject internal constructor(
                     migrate()
                 }
             } catch (e: TimeoutCancellationException) {
-                Log.e(TAG, "App data migration timed out", e)
+                logger.e(e) { "App data migration timed out" }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                Log.e(TAG, "App data migration failed", e)
+                logger.e(e) { "App data migration failed" }
             } finally {
                 state.value = AppDataMigrationState.Finished
             }
@@ -89,10 +89,10 @@ public class AppDataMigrator @Inject internal constructor(
         val currentVersion = migrations.maxOfOrNull { it.version } ?: NO_MIGRATIONS_VERSION
         val storedVersion = preferencesRepository.appData.first().version
         if (storedVersion >= currentVersion) {
-            Log.d(TAG, "App data version $storedVersion is up to date")
+            logger.d { "App data version $storedVersion is up to date" }
             return
         }
-        Log.d(TAG, "Migrating app data from version $storedVersion to $currentVersion")
+        logger.d { "Migrating app data from version $storedVersion to $currentVersion" }
         migrations
             .filter { it.version > storedVersion }
             .sortedBy { it.version }
@@ -101,7 +101,7 @@ public class AppDataMigrator @Inject internal constructor(
                 // Persisted after each step so that an interrupted run resumes at the right
                 // place instead of replaying or skipping a migration.
                 preferencesRepository.appDataEditor.setVersion(migration.version)
-                Log.d(TAG, "Applied app data migration ${migration.version}")
+                logger.d { "Applied app data migration ${migration.version}" }
             }
     }
 }

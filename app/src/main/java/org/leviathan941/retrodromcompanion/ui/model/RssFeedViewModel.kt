@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -33,7 +32,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
-import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
+import org.leviathan941.retrodromcompanion.ui.rssScreenLogger
 
 @HiltViewModel(assistedFactory = RssFeedViewModel.Factory::class)
 class RssFeedViewModel @AssistedInject constructor(
@@ -46,7 +45,7 @@ class RssFeedViewModel @AssistedInject constructor(
     val rssChannelItems: StateFlow<PagingData<RssChannelItem>> = _rssChannelItems.asStateFlow()
 
     init {
-        Log.d(RSS_SCREEN_TAG, "Load RSS channel: $channelUrl")
+        rssScreenLogger.d { "Load RSS channel: $channelUrl" }
         viewModelScope.launch {
             rssFeedProvider.rssChannelItems
                 .cachedIn(viewModelScope)

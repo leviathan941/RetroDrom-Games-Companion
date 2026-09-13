@@ -18,11 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed
 
-import android.util.Log
 import androidx.room.withTransaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.leviathan941.retrodromcompanion.common.Clock
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.RoomFeedDatabase
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel.RoomFeedChannelItemEntity
@@ -30,6 +30,8 @@ import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.meta
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private val logger = Logger.withTag("RoomFeedCache")
 
 private const val FIRST_PAGE_NUMBER = 1
 
@@ -42,7 +44,7 @@ internal class RoomFeedCacheMutatorImpl @Inject constructor(
     override suspend fun refreshCategories(): Result<Unit> = withContext(Dispatchers.IO) {
         wpNetworkClient.fetchCategories()
             .mapCatching { categories ->
-                Log.d(FEED_TAG, "Fetched ${categories.size} categories from WP")
+                logger.d { "Fetched ${categories.size} categories from WP" }
                 database.withTransaction {
                     database.categoriesDao().run {
                         clear()
@@ -102,7 +104,7 @@ internal class RoomFeedCacheMutatorImpl @Inject constructor(
                     pageNumber = pageNumber,
                 )
             }.also {
-                Log.d(FEED_TAG, "Fetched ${it.size} items of $channelUrl page $pageNumber")
+                logger.d { "Fetched ${it.size} items of $channelUrl page $pageNumber" }
             }
         }
     }

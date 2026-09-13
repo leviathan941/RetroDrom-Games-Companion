@@ -19,7 +19,6 @@
 package org.leviathan941.retrodromcompanion
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrationState
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.notification.extractDeeplink
 import org.leviathan941.retrodromcompanion.ui.MainView
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -40,7 +40,7 @@ import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
 import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeViewModel
 
-private const val TAG = "MainActivity"
+private val logger = Logger.withTag("MainActivity")
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -70,7 +70,7 @@ class MainActivity : ComponentActivity() {
 
                     LaunchedEffect(Unit) {
                         extractDeeplink(intent)?.let {
-                            Log.d(TAG, "Handle deeplink: $it")
+                            logger.d { "Handle deeplink: $it" }
                             navController.navigate(it)
                         }
                     }

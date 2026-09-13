@@ -18,13 +18,13 @@
 
 package org.leviathan941.retrodromcompanion.firebase.push
 
-import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 
 public object Messaging {
-    private const val TAG = "Messaging"
+    private val logger = Logger.withTag("Messaging")
 
     public enum class Topic(
         public val value: String,
@@ -35,11 +35,11 @@ public object Messaging {
     public suspend fun subscribeToTopic(topic: Topic): Boolean = suspendCoroutine { continuation ->
         FirebaseMessaging.getInstance().subscribeToTopic(topic.value)
             .addOnSuccessListener {
-                Log.d(TAG, "Subscribed to topic $topic")
+                logger.d { "Subscribed to topic $topic" }
                 continuation.resume(true)
             }
             .addOnFailureListener { ex ->
-                Log.e(TAG, "Failed to subscribe to topic $topic", ex)
+                logger.e(ex) { "Failed to subscribe to topic $topic" }
                 continuation.resume(false)
             }
     }
@@ -48,11 +48,11 @@ public object Messaging {
         suspendCoroutine { continuation ->
             FirebaseMessaging.getInstance().unsubscribeFromTopic(topic.value)
                 .addOnSuccessListener {
-                    Log.d(TAG, "Unsubscribed from topic $topic")
+                    logger.d { "Unsubscribed from topic $topic" }
                     continuation.resume(true)
                 }
                 .addOnFailureListener { ex ->
-                    Log.e(TAG, "Failed to unsubscribe from topic $topic", ex)
+                    logger.e(ex) { "Failed to unsubscribe from topic $topic" }
                     continuation.resume(false)
                 }
         }

@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,7 +49,7 @@ import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
-import org.leviathan941.retrodromcompanion.ui.RSS_SCREEN_TAG
+import org.leviathan941.retrodromcompanion.ui.rssScreenLogger
 import org.leviathan941.retrodromcompanion.ui.copyToClipboard
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -105,7 +104,7 @@ fun RssFeedScreen(
             modifier = Modifier.padding(paddings),
             state = rememberPullToRefreshState(),
             onRefresh = {
-                Log.d(RSS_SCREEN_TAG, "Refresh RSS channel: ${screen.channelUrl}")
+                rssScreenLogger.d { "Refresh RSS channel: ${screen.channelUrl}" }
                 isRefreshing = true
                 rssChannelItems.refresh()
             },

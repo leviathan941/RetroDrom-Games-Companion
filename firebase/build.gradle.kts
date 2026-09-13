@@ -56,6 +56,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
     implementation(project(":notification"))
     implementation(project(":preferences"))
 

@@ -19,7 +19,6 @@
 package org.leviathan941.retrodromcompanion.firebase.push
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -28,12 +27,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.notification.NotificationData
 import org.leviathan941.retrodromcompanion.notification.Notifications
 import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
-private const val TAG = "MessagingService"
+private val logger = Logger.withTag("MessagingService")
 
 // Lint still expects the deprecated onNewToken() callback. It is never invoked while
 // "firebase_messaging_installation_id_enabled" is set, because FCM then reports
@@ -44,7 +44,7 @@ internal class MessagingService : FirebaseMessagingService() {
     @Inject lateinit var notifications: Notifications
 
     override fun onRegistered(installationId: String) {
-        Log.d(TAG, "Registered with FID: $installationId")
+        logger.d { "Registered with FID: $installationId" }
         ProcessLifecycleOwner.get().lifecycleScope.launch {
             PreferencesRepository(applicationContext.mainDataStore).ui.first().let { prefs ->
                 prefs.subscribedPushTopics.mapNotNull {
@@ -57,14 +57,14 @@ internal class MessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.d(TAG, "Received message from: ${message.from}")
+        logger.d { "Received message from: ${message.from}" }
 
         if (message.data.isNotEmpty()) {
-            Log.d(TAG, "Message data payload: ${message.data}")
+            logger.d { "Message data payload: ${message.data}" }
         }
 
         message.toNotificationData()?.let {
-            Log.d(TAG, "Message notification data: $it")
+            logger.d { "Message notification data: $it" }
             notifications.sendPushNotification(
                 context = this,
                 data = it,

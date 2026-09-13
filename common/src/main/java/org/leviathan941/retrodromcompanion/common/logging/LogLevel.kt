@@ -16,6 +16,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.rssreader.internal
+package org.leviathan941.retrodromcompanion.common.logging
 
-internal const val FEED_PAGING_INITIAL_PAGE_NUMBER = 1
+import co.touchlab.kermit.Severity
+
+/**
+ * Severity of a log message, in ascending order. Used to filter logging through
+ * [Logger.setMinLevel].
+ *
+ * [Assert] has no [Logger] method of its own; it exists so that a minimum level can silence
+ * everything the app actually logs.
+ */
+public enum class LogLevel {
+    Verbose,
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Assert,
+}
+
+internal fun LogLevel.toSeverity(): Severity = when (this) {
+    LogLevel.Verbose -> Severity.Verbose
+    LogLevel.Debug -> Severity.Debug
+    LogLevel.Info -> Severity.Info
+    LogLevel.Warn -> Severity.Warn
+    LogLevel.Error -> Severity.Error
+    LogLevel.Assert -> Severity.Assert
+}
