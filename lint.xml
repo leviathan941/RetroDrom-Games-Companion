@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Shared Android lint configuration, picked up by every module (lint reads lint.xml from the
+  module directory and its parents).
+
+  Every module sets warningsAsErrors, which would turn each new upstream release into a build
+  failure. The version-update checks are lowered to informational: they still appear in the
+  lint reports, but warningsAsErrors does not promote them.
+-->
+<lint>
+    <issue id="AndroidGradlePluginVersion" severity="informational" />
+    <issue id="GradleDependency" severity="informational" />
+    <issue id="NewerVersionAvailable" severity="informational" />
+</lint>

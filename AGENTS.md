@@ -66,6 +66,12 @@ no baseline file.** Fix a new finding, or suppress it narrowly at the declaratio
 `@SuppressLint("IssueId")` plus a comment saying why; adding a baseline to hide one is a
 last resort.
 
+The one exception is the version-update checks (`NewerVersionAvailable`, `GradleDependency`,
+`AndroidGradlePluginVersion`): the root `lint.xml`, which every module inherits, lowers them to
+`informational`, which `warningsAsErrors` does not promote. A new upstream release therefore
+shows up as a `Hint` in `:app`'s lint report (it flags `gradle/libs.versions.toml`) instead of
+failing the build.
+
 `:app` also sets `checkDependencies = true`, so its lint analyses the library modules'
 sources as well. That is what keeps `UnusedResources` quiet: `:notification`, `:permission`
 and `:firebase` each declare an empty placeholder resource in their own `res/values/ids.xml`
