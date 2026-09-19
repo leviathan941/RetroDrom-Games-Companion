@@ -96,7 +96,7 @@ Bottom-up along the real dependency graph.
 | B1 | `:common` | First real KMP module; validates the A8 convention plugins. | low |
 | B2 | `:html-text:api`, `:html-text`, `:html-text:imagecontent` | Pure Compose + ksoup + Coil, no DI. The natural first CMP module. | low |
 | B3 | `:preferences` | DataStore path via `expect`/`actual`. | low |
-| B4 | `:network` | Darwin engine; existing JVM tests move to `commonTest`. | medium |
+| B4 | `:network` | Darwin engine; existing JVM tests move to `commonTest`. Engine dependencies can come from one `commonMain` dependency on `io.ktor:ktor-client-engine-defaults` (Ktor ≥ 3.6), which pulls in OkHttp on Android (through its JVM variant) and Darwin on iOS, instead of an engine dependency per source set. Its engine is only reachable through the default `HttpClient {}`, so DI would provide a base `HttpClient` instead of an `HttpClientEngine`: the WordPress client derives from it with `base.config { … }` and Coil takes the base, both sharing one reference-counted engine with no engine `expect`/`actual` at all. Verify ServiceLoader engine discovery on a minified Android release build. | medium |
 | B5 | `:network:cache` | `expect`/`actual` database builder and KSP running for the iOS targets. The driver and the Room 3 API surface are already done in A6, so this stage is build configuration rather than code. | medium |
 | B6 | `:rss-reader` | Paging is already multiplatform; mostly follows B4/B5. | low |
 | B7 | `:permission` | Accompanist has no iOS story — implement the A7 interface per platform. | medium |
