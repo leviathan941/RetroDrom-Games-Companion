@@ -15,6 +15,7 @@ starting a stage that depends on a row — versions move.
 | `androidx.datastore:datastore-preferences` | 1.2.1 | yes | Needs an `expect` for the file path only. |
 | `androidx.lifecycle:lifecycle-viewmodel` | 2.11.0 | yes | androidx `ViewModel` itself is multiplatform; the JetBrains fork is not needed. `lifecycle-process` is Android-only. |
 | `io.coil-kt.coil3:coil-compose` | 3.6.3 | yes | |
+| `io.coil-kt.coil3:coil-network-ktor3` | 3.6.3 | yes | Replaced `coil-network-okhttp` in A2. Built on the app's injected `HttpClientEngine`, so it follows whatever engine A5/C2 choose per platform. |
 | `com.mikepenz:aboutlibraries-compose-m3` | 15.2.0 | yes | |
 | `io.ktor:ktor-client-*` (core, content-negotiation, resources, serialization) | 3.6.0 | yes | Engine is the only platform part. |
 | `com.mohamedrejeb.ksoup:ksoup-html` | 0.6.0 | yes | |
@@ -31,7 +32,6 @@ starting a stage that depends on a row — versions move.
 | `androidx.navigation:navigation-compose` 2.10.1 | Google's artifact publishes **only** android, jvmStubs and linux_x64 — no iOS | **Navigation 3**, in two steps. A8: Google's `androidx.navigation3:navigation3-ui` 1.1.7 + `androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0, on Android. A10: coordinates swapped to `org.jetbrains.androidx.navigation3:navigation3-ui` 1.1.1 + `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0. Both publish the same `androidx.navigation3.*` packages (verified by inspecting the JetBrains jar), so the second step touches no imports. `navigation3-common` arrives transitively. | A8 / A10 (ADR-0002) |
 | `androidx.compose.*` via Compose BOM | Android-only artifacts | Compose Multiplatform Gradle plugin (`org.jetbrains.compose` 1.12.0) and its `compose.*` accessors | A9 |
 | `R.string` / `R.drawable` via `stringResource` / `painterResource` (~31 call sites, plus `values-ru`) | Android resource system | `org.jetbrains.compose.resources` + `composeResources/` | A10 |
-| `io.coil-kt.coil3:coil-network-okhttp` | Pulls OkHttp | `io.coil-kt.coil3:coil-network-ktor3` 3.6.3 — reuses the Ktor client already in the project | A2 |
 | `io.ktor:ktor-client-okhttp` | Android engine | Keep on Android, add `io.ktor:ktor-client-darwin` 3.6.0 for iOS, engine chosen through DI | A5 / C2 |
 | `com.google.accompanist:accompanist-permissions` | Android-only | Own interface in `:permission`; `dev.icerock.moko:permissions` 0.20.1 is the candidate implementation | A7 / B7 |
 

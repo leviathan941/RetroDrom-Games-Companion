@@ -133,7 +133,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.coil3.compose)
-    implementation(libs.coil3.network.okhttp)
+    implementation(libs.coil3.network.ktor3)
+
+    implementation(platform(libs.ktor.bom))
+    implementation(libs.ktor.client.core)
 
     implementation(libs.androidx.datastore.preferences)
 

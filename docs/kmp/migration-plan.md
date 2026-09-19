@@ -59,7 +59,7 @@ compilation, the Compose BOM stays, and every stage is fully verified by `./grad
 | # | Stage | Outcome | Blocked by |
 | --- | --- | --- | --- |
 | A1 | Logging → Kermit | **Done.** `android.util.Log` gone from all 15 call sites; `Logger` facade in `:common` (`common.logging.Logger`), tagged instances instead of per-call-site tags, with `Logger.setMinLevel(LogLevel)` as the single config entry point. `:html-text:imagecontent` uses Kermit directly to stay app-agnostic. | — |
-| A2 | Coil network layer | `coil-network-okhttp` → `coil-network-ktor3`, sharing the existing Ktor client. | — |
+| A2 | Coil network layer | **Done.** `coil-network-okhttp` → `coil-network-ktor3`. `MainApplication` is Coil's `SingletonImageLoader.Factory` and builds its `HttpClient` on the `HttpClientEngine` `:network` provides (now `@Singleton`), so images and the WordPress client share one engine. Coil shares the engine rather than the WordPress client, which carries content negotiation and a site-specific `defaultRequest`. | — |
 | A3 | Metro spike | Verify Metro's compiler plugin works with AGP-supplied Kotlin compilation on one small module (`:preferences` or `:common`). The single biggest unknown in the plan — see the risk note below. | — |
 | A4 | Hilt → Metro | All 7 Hilt modules migrated, `hiltViewModel()` replaced. Metro's Hilt interop allows doing this module by module rather than in one commit. | A3, ADR-0001 |
 | A5 | Ktor engine behind DI | `:network` no longer references OkHttp directly; the engine is injected. | A4 |

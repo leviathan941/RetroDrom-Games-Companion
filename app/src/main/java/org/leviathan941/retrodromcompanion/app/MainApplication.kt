@@ -19,16 +19,27 @@
 package org.leviathan941.retrodromcompanion.app
 
 import android.app.Application
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.network.ktor3.KtorNetworkFetcherFactory
+import dagger.Lazy
 import dagger.hilt.android.HiltAndroidApp
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngine
 import javax.inject.Inject
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
 import org.leviathan941.retrodromcompanion.notification.Notifications
 
 @HiltAndroidApp
-class MainApplication : Application() {
+class MainApplication :
+    Application(),
+    SingletonImageLoader.Factory {
     @Inject lateinit var notifications: Notifications
 
     @Inject lateinit var appDataMigrator: AppDataMigrator
+
+    @Inject lateinit var httpClientEngine: Lazy<HttpClientEngine>
 
     override fun onCreate() {
         super.onCreate()
@@ -36,4 +47,13 @@ class MainApplication : Application() {
         notifications
         appDataMigrator.start()
     }
+
+    // Coil shares the app's Ktor engine rather than discovering its own through ServiceLoader,
+    // so image loading and the WordPress client use one connection pool.
+    override fun newImageLoader(context: PlatformContext): ImageLoader =
+        ImageLoader.Builder(context)
+            .components {
+                add(KtorNetworkFetcherFactory(httpClient = { HttpClient(httpClientEngine.get()) }))
+            }
+            .build()
 }

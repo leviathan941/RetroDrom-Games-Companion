@@ -25,6 +25,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
+import javax.inject.Singleton
 import org.leviathan941.retrodromcompanion.network.wordpress.WpKtorClient
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
 
@@ -36,6 +37,7 @@ public abstract class WpNetworkApplicationModule {
 
     internal companion object {
         @Provides
+        @Singleton
         fun provideHttpClientEngine(): HttpClientEngine = OkHttp.create()
     }
 }
