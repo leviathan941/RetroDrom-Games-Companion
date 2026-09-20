@@ -60,8 +60,8 @@ compilation, the Compose BOM stays, and every stage is fully verified by `./grad
 | --- | --- | --- | --- |
 | A1 | Logging → Kermit | **Done.** `android.util.Log` gone from all 15 call sites; `Logger` facade in `:common` (`common.logging.Logger`), tagged instances instead of per-call-site tags, with `Logger.setMinLevel(LogLevel)` as the single config entry point. `:html-text:imagecontent` uses Kermit directly to stay app-agnostic. | — |
 | A2 | Coil network layer | **Done.** `coil-network-okhttp` → `coil-network-ktor3`. `MainApplication` is Coil's `SingletonImageLoader.Factory` and builds its `HttpClient` on the `HttpClientEngine` `:network` provides (now `@Singleton`), so images and the WordPress client share one engine. Coil shares the engine rather than the WordPress client, which carries content negotiation and a site-specific `defaultRequest`. | — |
-| A3 | Metro spike | Verify Metro's compiler plugin works with AGP-supplied Kotlin compilation on one small module (`:preferences` or `:common`). The single biggest unknown in the plan — see the risk note below. | — |
-| A4 | Hilt → Metro | All 7 Hilt modules migrated, `hiltViewModel()` replaced. Metro's Hilt interop allows doing this module by module rather than in one commit. | A3, ADR-0001 |
+| A3 | Metro spike | **Done.** Metro 1.4.4 verified on `:preferences` under AGP-supplied Kotlin: the compiler plugin reaches the kotlinc command line, FIR/IR codegen and graph validation run, `javax.inject` qualifiers and cross-module Hilt `@Module`s are honoured, and Metro coexists with `:app`'s Hilt/KSP. R8, `explicitApi = Strict`, lint and the configuration cache are all clean. Spike code reverted; only these notes and the ADR amendment landed. | — |
+| A4 | Hilt → Metro | **One commit, no interop.** Every Hilt annotation across 27 files in 9 modules goes straight to its native Metro equivalent: `@HiltAndroidApp`/`@AndroidEntryPoint` → a `@DependencyGraph(AppScope::class)` held by `MainApplication`; the 6 `@HiltViewModel` classes and 8 `hiltViewModel()` call sites → `@ContributesIntoMap` + `@ClassKey` behind a `ViewModelProvider.Factory`; `@Module`/`@Binds`/`@Provides` → `@BindingContainer`/`@Binds`/`@Provides`; `@Assisted*` and `@Binds @IntoSet` → Metro's own. Hilt, `androidx.hilt` and the Hilt KSP processor all leave the build together. | A3, ADR-0001 |
 | A5 | Ktor engine behind DI | `:network` no longer references OkHttp directly; the engine is injected. | A4 |
 | A6 | Room 2.x → Room 3 | `androidx.room` → `androidx.room3` 3.0.3 across `:network:cache`, driver-based builder on `BundledSQLiteDriver`, remaining blocking DAO methods made suspend. Verify an upgrade over an install with real cached data. | A4, ADR-0004 |
 | A7 | Platform APIs isolated | Custom Tabs, permissions, notifications, FCM and anything taking a `Context` sit behind interfaces declared in common-ready modules. | A4 |
@@ -78,11 +78,13 @@ toolchain, and the resource migration depends on it.
 | A10 | Compose BOM → Compose Multiplatform | Compose artifacts come from the CMP Gradle plugin's `compose.*` accessors. Includes swapping the Navigation 3 coordinates to the JetBrains ones — a version catalog change, no imports touched. Still Android-only at runtime. | A9 |
 | A11 | Resources → `compose.resources` | `R.string` / `R.drawable` replaced at ~31 call sites; `values-ru` becomes `composeResources/values-ru`. | A10 |
 
-**Risk carried by this ordering.** A3 now runs on the current toolchain rather than after the KMP
-spike. If Metro turns out to need a Kotlin Gradle plugin applied explicitly, a piece of A9 has to
-be pulled forward — apply `org.jetbrains.kotlin.android`, or go straight to the multiplatform
-plugin for that module. That is a known and acceptable outcome of A3, not a reason to reorder
-back; A3 exists to find it out cheaply.
+**Risk retired.** This ordering carried one risk: that Metro would need a Kotlin Gradle plugin
+applied explicitly, forcing a piece of A9 forward. **A3 settled it — it does not.** AGP's built-in
+Kotlin runs `KotlinCompilerPluginSupportPlugin`s exactly as KGP does, and Metro is one. Note also
+that the escape hatch ADR-0001 named was never available: AGP 9 hard-fails if
+`org.jetbrains.kotlin.android`, `kotlin-kapt` or `org.jetbrains.kotlin.multiplatform` is applied
+alongside built-in Kotlin. Had A3 failed, the only routes would have been a project-wide toolchain
+regression or pulling A9 forward wholesale.
 
 **Exit criterion for Phase A:** no Android-only dependency remains except the ones listed as
 deliberate in [`library-audit.md`](library-audit.md).

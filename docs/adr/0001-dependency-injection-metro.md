@@ -35,6 +35,59 @@ the time of writing), done entirely on Android before any module gains multiplat
 - Metro is younger than Hilt and less widely deployed. Accepted deliberately: the project is
   ~9k lines, and the DI surface is small enough that a reversal would be days, not weeks.
 
+## Amended 2026-09-20 (A3 spike)
+
+The A3 spike verified Metro **1.4.4** (not 1.4.3) on `:preferences`. Three corrections to the
+above, none of which change the decision to use Metro.
+
+**1. The toolchain question is settled — Metro works with AGP-supplied Kotlin compilation.**
+AGP 9's built-in Kotlin applies KGP's `KotlinBaseApiPlugin` and runs every
+`KotlinCompilerPluginSupportPlugin` exactly as KGP does. Metro is one, so it needs no Kotlin
+Gradle plugin of its own. Verified end to end: the compiler plugin reaches the kotlinc command
+line, FIR/IR codegen and graph validation run, and `javax.inject` qualifiers resolve. R8,
+`explicitApi = Strict`, Android lint and the configuration cache are all unaffected.
+
+**2. The fallback named in the Consequences never existed.** AGP 9 hard-fails when
+`org.jetbrains.kotlin.android`, `kotlin-kapt` or `org.jetbrains.kotlin.multiplatform` is applied
+alongside built-in Kotlin, unless `android.builtInKotlin=false` *and* `android.newDsl=false` are
+set project-wide. "Apply the Kotlin plugin explicitly" was not a per-module escape hatch. Moot,
+since Metro worked, but the text was wrong.
+
+**3. The Dagger/Hilt interop will not be used.** A4 converts every Hilt annotation directly to its
+native Metro equivalent in one commit, rather than flipping `:app`'s graph first and leaving the
+library modules on Hilt behind interop. Four reasons:
+
+- Metro's interop is **one-directional**. A Metro `@DependencyGraph` merges Hilt `@Module`s and
+  `@EntryPoint`s, but Hilt's generated component cannot see Metro bindings, and Metro does not
+  consume `@HiltAndroidApp`. A staged migration would have to run root-first, and that first
+  commit is already irreducible — the graph, both `@AndroidEntryPoint`s, 6 view models and all 8
+  `hiltViewModel()` call sites hang off the single root component. Staging would only have split
+  off five modules of mechanical annotation swaps.
+- Keeping Hilt on the classpath is what creates the problems. A `@DependencyGraph(Singleton::class)`
+  cannot compile while `hilt-android` is present without `excludes` for the three public
+  `@InstallIn(SingletonComponent::class) @EntryPoint` interfaces Hilt ships for its own Android
+  machinery — one of which is not even nameable from Kotlin. Those excludes would be added and
+  then deleted again.
+- **Interop is the riskier option, not the safer one.** Metro ships native `@Assisted`,
+  `@AssistedInject`, `@AssistedFactory`, `@IntoSet`, `@ElementsIntoSet`, `@Multibinds`, `@IntoMap`,
+  `@ClassKey` and `@ContributesIntoMap` — every mechanism this project uses. Interop would mean
+  relying on Metro reading *Dagger's* versions of those instead.
+- The surface is small: 27 files carrying DI annotations across 9 modules, plus the build files.
+
+**This spends one of the three reasons this ADR gave for choosing Metro.** The Rationale above
+lists Dagger/Hilt interop as letting the migration "proceed one module at a time"; we are not
+using it. The decision stands on the other two — compile-time graph validation and multiplatform
+support — which Koin does not offer and which were always the load-bearing ones. Recorded here
+rather than quietly dropped.
+
+The practical consequence: A4 is one branch, one commit, one green gate, plus a manual smoke run.
+Runtime semantics (scope mapping, the view model factory, eager-vs-lazy initialisation) are the
+real risk and are not covered by the compiler; a staged route would not have surfaced them
+earlier either. Convert in dependency order on the branch (`:common` → leaves → `:app`) as a
+debugging tactic, even though only the final state has to compile.
+
+Full spike findings, including the `excludes` snippet, are in `.local/reports/a3-metro-spike.md`.
+
 ## Alternatives considered
 
 - **Koin** — multiplatform and mature, but runtime resolution loses compile-time graph checking.
