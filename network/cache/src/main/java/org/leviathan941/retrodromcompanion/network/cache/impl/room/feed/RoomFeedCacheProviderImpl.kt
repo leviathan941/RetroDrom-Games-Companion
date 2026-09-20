@@ -22,9 +22,7 @@ import androidx.paging.PagingSource
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
@@ -45,20 +43,14 @@ internal class RoomFeedCacheProviderImpl(
     override suspend fun findChannelItemByPostId(
         channelUrl: String,
         postId: String,
-    ): FeedChannelItem? = withContext(Dispatchers.IO) {
-        database.channelItemDao().findByPostId(
-            channelUrl = channelUrl,
-            postId = postId,
-        )
-    }
+    ): FeedChannelItem? = database.channelItemDao().findByPostId(
+        channelUrl = channelUrl,
+        postId = postId,
+    )
 
     override suspend fun channelItemsLastUpdatedMillis(channelUrl: String): Long? =
-        withContext(Dispatchers.IO) {
-            database.cacheMetadataDao().itemsLastUpdated(channelUrl)
-        }
+        database.cacheMetadataDao().itemsLastUpdated(channelUrl)
 
     override suspend fun channelItemsLastPageNumber(channelUrl: String): Int? =
-        withContext(Dispatchers.IO) {
-            database.channelItemDao().lastPageNumber(channelUrl)
-        }
+        database.channelItemDao().lastPageNumber(channelUrl)
 }

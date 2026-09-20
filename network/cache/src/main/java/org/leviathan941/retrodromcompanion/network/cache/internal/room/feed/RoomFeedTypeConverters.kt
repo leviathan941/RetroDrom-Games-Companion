@@ -18,7 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed
 
-import androidx.room.TypeConverter
+import androidx.room3.ColumnTypeConverter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -27,11 +27,11 @@ import kotlinx.collections.immutable.toImmutableList
 private const val CATEGORIES_SEPARATOR = "\u001F"
 
 internal object RoomFeedTypeConverters {
-    @TypeConverter
+    @ColumnTypeConverter
     fun categoriesToString(categories: ImmutableList<String>): String =
         categories.joinToString(separator = CATEGORIES_SEPARATOR)
 
-    @TypeConverter
+    @ColumnTypeConverter
     fun stringToCategories(value: String): ImmutableList<String> =
         value.takeIf { it.isNotEmpty() }
             ?.split(CATEGORIES_SEPARATOR)

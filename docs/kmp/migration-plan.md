@@ -63,7 +63,7 @@ compilation, the Compose BOM stays, and every stage is fully verified by `./grad
 | A3 | Metro spike | **Done.** Metro 1.4.4 verified on `:preferences` under AGP-supplied Kotlin: the compiler plugin reaches the kotlinc command line, FIR/IR codegen and graph validation run, `javax.inject` qualifiers and cross-module Hilt `@Module`s are honoured, and Metro coexists with `:app`'s Hilt/KSP. R8, `explicitApi = Strict`, lint and the configuration cache are all clean. Spike code reverted; only these notes and the ADR amendment landed. | — |
 | A4 | Hilt → Metro | **Done.** Hilt, `androidx.hilt` and the Hilt KSP processor are gone; KSP now runs only in `:network:cache`, for Room. `MainApplication` owns a single `@DependencyGraph(AppScope::class)`; `MainActivity` and `:firebase`'s `MessagingService` reach it through the `Application` instead of `@AndroidEntryPoint`. The 6 view models and 8 call sites moved to `dev.zacsweers.metro:metrox-viewmodel` + `metrox-viewmodel-compose` 1.4.4 (`metroViewModel()` / `assistedMetroViewModel()`). `DiKeys`' string `@Named`s became typed `@Qualifier`s in `:common`, alongside a project `@ApplicationContext`. | A3, ADR-0001 |
 | A5 | Ktor engine behind DI | **Done.** No module names an engine any more: `:network` depends on `io.ktor:ktor-client-engine-defaults`, whose metadata maps JVM → OkHttp and Apple → Darwin, and DI provides a base `HttpClient` (`HttpClientModule`) instead of an `HttpClientEngine`. `HttpClientFactory` became `WpHttpClientFactory` and derives with `baseClient.config { … }`; Coil takes the base client through the app graph. One engine, one connection pool, no `expect`/`actual`. R8 keeps the ServiceLoader wiring — verified on the minified release build, no keep rule. | A4, ADR-0005 |
-| A6 | Room 2.x → Room 3 | `androidx.room` → `androidx.room3` 3.0.3 across `:network:cache`, driver-based builder on `BundledSQLiteDriver`, remaining blocking DAO methods made suspend. Verify an upgrade over an install with real cached data. | A4, ADR-0004 |
+| A6 | Room 2.x → Room 3 | **Done.** `androidx.room` 2.8.5 → `androidx.room3` 3.0.3 across `:network:cache` (10 files), `room { }` → `room3 { }`, and a driver-based builder on `BundledSQLiteDriver` (`androidx.sqlite:sqlite-bundled` 2.7.1) with `setQueryCoroutineContext(Dispatchers.IO)`. `RoomFeedCategoryDao.addAll`/`clear` are now suspend, so every DAO operation is. Three renames the ADR had not foreseen: `@TypeConverter(s)` → `@ColumnTypeConverter(s)`, `withTransaction` → `withWriteTransaction` (there is no `room3-ktx`), and `PagingSource` now needs `room3-paging`'s `PagingSourceDaoReturnTypeConverter` registered via `@DaoReturnTypeConverters`. Schema files and `user_version` unchanged; upgrade over a Room 2 install with real cached data verified offline on an API 37 emulator. Costs ~1.2 MB per install in bundled-SQLite native libs. | A4, ADR-0004 |
 | A7 | Platform APIs isolated | Custom Tabs, permissions, notifications, FCM and anything taking a `Context` sit behind interfaces declared in common-ready modules. | A4 |
 | A8 | Navigation 2 → Navigation 3 | Back stack owned by the app as a `SnapshotStateList`; drawer and top bar reworked onto it. Type-safe `@Serializable` routes survive as back stack keys. Uses Google's `androidx.navigation3` 1.1.7 — the JetBrains coordinate swap happens in A10. Largest Phase A stage after A4. | A4, ADR-0002 |
 
@@ -104,7 +104,7 @@ Bottom-up along the real dependency graph.
 
 | # | Module | Main work | Risk |
 | --- | --- | --- | --- |
-| B1 | `:common` | First real KMP module; validates the A8 convention plugins. | low |
+| B1 | `:common` | First real KMP module; validates the A9 convention plugins. | low |
 | B2 | `:html-text:api`, `:html-text`, `:html-text:imagecontent` | Pure Compose + ksoup + Coil, no DI. The natural first CMP module. | low |
 | B3 | `:preferences` | DataStore path via `expect`/`actual`. | low |
 | B4 | `:network` | Source-set configuration only: the existing JVM tests move to `commonTest` and the dependencies move to `commonMain`. The engine question was settled in A5 (ADR-0005) — `ktor-client-engine-defaults` already resolves Darwin for the Apple targets, so no engine work is left here. | low |
@@ -137,7 +137,7 @@ Bottom-up along the real dependency graph.
 | `:html-text:api` | no | no | |
 | `:html-text:imagecontent` | no | no | |
 | `:network` | yes | no | A5 removed the last Android-only dependency |
-| `:network:cache` | no | no | |
+| `:network:cache` | yes | no | A6 put it on Room 3 with a driver-based builder |
 | `:notification` | no | no | Common shape only |
 | `:permission` | no | no | |
 | `:preferences` | no | no | |
@@ -146,5 +146,5 @@ Bottom-up along the real dependency graph.
 
 ## Open decisions
 
-None. All four current ADRs are accepted; raise a new record if a stage turns up a decision that
+None. All five current ADRs are accepted; raise a new record if a stage turns up a decision that
 constrains later work.

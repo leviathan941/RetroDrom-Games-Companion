@@ -12,7 +12,8 @@ androidx-datastore = "1.2.1"
 androidx-lifecycle = "2.11.0"
 androidx-navigation = "2.10.1"
 androidx-paging-compose = "3.5.1"
-androidx-room = "2.8.5"
+androidx-room3 = "3.0.3"
+androidx-sqlite = "2.7.1"
 coil3 = "3.6.3"
 google-accompanist = "0.37.3"
 google-firebase-bom = "34.19.0"
@@ -49,10 +50,10 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androidx-paging-compose" }
 androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "androidx-paging-compose" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
-androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "androidx-room" }
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
+androidx-room3-compiler = { group = "androidx.room3", name = "room3-compiler", version.ref = "androidx-room3" }
+androidx-room3-paging = { group = "androidx.room3", name = "room3-paging", version.ref = "androidx-room3" }
+androidx-room3-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "androidx-room3" }
+androidx-sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "androidx-sqlite" }
 annotatedtext = { group = "io.github.aghajari", name = "AnnotatedText", version.ref = "aghajari-annotated-text" }
 coil3-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil3" }
 coil3-network-ktor3 = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil3" }
@@ -88,7 +89,7 @@ zacsweers-metrox-viewmodel-compose = { group = "dev.zacsweers.metro", name = "me
 aboutlibraries-android = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "about-libraries-compose-m3" }
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
-androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
+androidx-room3 = { id = "androidx.room3", version.ref = "androidx-room3" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
 jetbrains-kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "jetbrains-kotlin-plugin" }

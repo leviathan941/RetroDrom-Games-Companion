@@ -19,13 +19,15 @@
 package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.di
 
 import android.content.Context
-import androidx.room.Room
+import androidx.room3.Room
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
+import kotlinx.coroutines.Dispatchers
 import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
@@ -55,6 +57,9 @@ public abstract class RoomFeedApplicationModule {
             context = context,
             klass = RoomFeedDatabase::class.java,
             name = FEED_CACHE_DATABASE_NAME,
-        ).build()
+        )
+            .setDriver(BundledSQLiteDriver())
+            .setQueryCoroutineContext(Dispatchers.IO)
+            .build()
     }
 }

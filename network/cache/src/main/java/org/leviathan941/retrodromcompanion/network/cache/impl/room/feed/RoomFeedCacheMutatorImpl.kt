@@ -18,7 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed
 
-import androidx.room.withTransaction
+import androidx.room3.withWriteTransaction
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -47,7 +47,7 @@ internal class RoomFeedCacheMutatorImpl(
         wpNetworkClient.fetchCategories()
             .mapCatching { categories ->
                 logger.d { "Fetched ${categories.size} categories from WP" }
-                database.withTransaction {
+                database.withWriteTransaction {
                     database.categoriesDao().run {
                         clear()
                         addAll(categories.map { it.toEntity() })
@@ -62,7 +62,7 @@ internal class RoomFeedCacheMutatorImpl(
             pageNumber = FIRST_PAGE_NUMBER,
         ).mapCatching { entities ->
             // A failed refresh must leave the previously cached feed readable.
-            database.withTransaction {
+            database.withWriteTransaction {
                 database.channelItemDao().clearAll(channelUrl)
                 database.channelItemDao().addAll(entities)
                 database.cacheMetadataDao().upsert(
@@ -82,7 +82,7 @@ internal class RoomFeedCacheMutatorImpl(
         channelUrl = channelUrl,
         pageNumber = pageNumber,
     ).mapCatching { entities ->
-        database.withTransaction {
+        database.withWriteTransaction {
             database.channelItemDao().clearPage(
                 channelUrl = channelUrl,
                 pageNumber = pageNumber,

@@ -23,7 +23,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.androidx.room)
+    alias(libs.plugins.androidx.room3)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.zacsweers.metro)
 }
@@ -55,7 +55,7 @@ android {
         warningsAsErrors = true
     }
 
-    room {
+    room3 {
         schemaDirectory("$projectDir/schemas")
     }
 }
@@ -68,9 +68,9 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":network"))
 
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.paging)
-    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room3.paging)
+    implementation(libs.androidx.room3.runtime)
+    implementation(libs.androidx.sqlite.bundled)
 
-    ksp(libs.androidx.room.compiler)
+    ksp(libs.androidx.room3.compiler)
 }

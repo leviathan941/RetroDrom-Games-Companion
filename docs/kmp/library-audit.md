@@ -28,7 +28,7 @@ starting a stage that depends on a row — versions move.
 | Dependency | Problem | Replacement | Stage |
 | --- | --- | --- | --- |
 | `com.google.dagger:hilt-android` + `androidx.hilt` | Android-only | **Done in A4.** Replaced by **Metro** `dev.zacsweers.metro` 1.4.4 — compile-time and multiplatform. The Hilt interop was deliberately not used; every annotation went straight to its native Metro equivalent and Hilt left the build. `hiltViewModel()` is replaced by `dev.zacsweers.metro:metrox-viewmodel` + `metrox-viewmodel-compose` 1.4.4, both `commonMain` KMP artifacts, so the view model wiring is already in its Phase B shape. | A4 (ADR-0001) |
-| `androidx.room:*` 2.8.5 | Room 2.x is multiplatform in its artifacts, but Room 3 is the line Google develops and the one aimed at KMP | **Room 3** — group `androidx.room3`, artifacts `room3-runtime` / `room3-compiler` / `room3-paging` / `room3-migration` and the `androidx.room3` Gradle plugin, 3.0.3 stable (2026-09-09); iOS variants verified. Needs `androidx.sqlite:sqlite-bundled` 2.7.1 for the driver. | A6 (ADR-0004) |
+| `androidx.room:*` 2.8.5 | Room 2.x is multiplatform in its artifacts, but Room 3 is the line Google develops and the one aimed at KMP | **Done in A6.** Now `androidx.room3` 3.0.3 (`room3-runtime` / `room3-compiler` / `room3-paging` and the `androidx.room3` Gradle plugin, whose extension is `room3 { }`), plus `androidx.sqlite:sqlite-bundled` 2.7.1 for `BundledSQLiteDriver`. Re-verified against Gradle Module Metadata on 2026-09-20: iOS variants published for every artifact used, and 3.0.3 is still the latest stable. `room-ktx` was dropped — there is no `room3-ktx`. | A6 (ADR-0004) |
 | `androidx.navigation:navigation-compose` 2.10.1 | Google's artifact publishes **only** android, jvmStubs and linux_x64 — no iOS | **Navigation 3**, in two steps. A8: Google's `androidx.navigation3:navigation3-ui` 1.1.7 + `androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0, on Android. A10: coordinates swapped to `org.jetbrains.androidx.navigation3:navigation3-ui` 1.1.1 + `org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0. Both publish the same `androidx.navigation3.*` packages (verified by inspecting the JetBrains jar), so the second step touches no imports. `navigation3-common` arrives transitively. | A8 / A10 (ADR-0002) |
 | `androidx.compose.*` via Compose BOM | Android-only artifacts | Compose Multiplatform Gradle plugin (`org.jetbrains.compose` 1.12.0) and its `compose.*` accessors | A9 |
 | `R.string` / `R.drawable` via `stringResource` / `painterResource` (~31 call sites, plus `values-ru`) | Android resource system | `org.jetbrains.compose.resources` + `composeResources/` | A10 |
@@ -69,4 +69,8 @@ starting a stage that depends on a row — versions move.
   byte-identical to the previous ones. `org.jetbrains.androidx.lifecycle` was already on the
   classpath before A4 in any case.
 - Room 3 generates Kotlin only and requires KSP — both already true here. It drops the
-  SupportSQLite APIs entirely, so the database is built through a `SQLiteDriver`.
+  SupportSQLite APIs entirely, so the database is built through a `SQLiteDriver`. On Android it
+  falls back to `AndroidSQLiteDriver` from `androidx.sqlite:sqlite-framework`, which
+  `room3-runtime` already pulls in; `sqlite-bundled` is an extra dependency needed only because
+  ADR-0004 chose the bundled driver. `room3-paging` no longer registers itself — its
+  `PagingSourceDaoReturnTypeConverter` has to be named in `@DaoReturnTypeConverters`.

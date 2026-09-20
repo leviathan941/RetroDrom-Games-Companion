@@ -18,9 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room3.Dao
+import androidx.room3.Insert
+import androidx.room3.Query
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -29,8 +29,8 @@ internal interface RoomFeedCategoryDao {
     fun allFlow(): Flow<List<RoomFeedCategoryEntity>>
 
     @Insert
-    fun addAll(entities: List<RoomFeedCategoryEntity>)
+    suspend fun addAll(entities: List<RoomFeedCategoryEntity>)
 
     @Query("DELETE FROM feed_categories")
-    fun clear()
+    suspend fun clear()
 }

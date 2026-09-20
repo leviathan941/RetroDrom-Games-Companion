@@ -19,9 +19,9 @@
 package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel
 
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room3.Dao
+import androidx.room3.Insert
+import androidx.room3.Query
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
 
 @Dao

@@ -18,10 +18,12 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed
 
-import androidx.room.AutoMigration
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
+import androidx.room3.AutoMigration
+import androidx.room3.ColumnTypeConverters
+import androidx.room3.DaoReturnTypeConverters
+import androidx.room3.Database
+import androidx.room3.RoomDatabase
+import androidx.room3.paging.PagingSourceDaoReturnTypeConverter
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryDao
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryEntity
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel.RoomFeedChannelItemDao
@@ -44,7 +46,8 @@ private const val DB_VERSION = 2
         AutoMigration(from = 1, to = 2),
     ],
 )
-@TypeConverters(RoomFeedTypeConverters::class)
+@ColumnTypeConverters(RoomFeedTypeConverters::class)
+@DaoReturnTypeConverters(PagingSourceDaoReturnTypeConverter::class)
 internal abstract class RoomFeedDatabase : RoomDatabase() {
     internal abstract fun categoriesDao(): RoomFeedCategoryDao
 

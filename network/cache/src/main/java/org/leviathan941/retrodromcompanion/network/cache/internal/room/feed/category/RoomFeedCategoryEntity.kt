@@ -18,9 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room3.ColumnInfo
+import androidx.room3.Entity
+import androidx.room3.PrimaryKey
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 
 @Entity(RoomFeedCategoryTable.TABLE_NAME)
