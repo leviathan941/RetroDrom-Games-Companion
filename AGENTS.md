@@ -54,7 +54,9 @@ Read them from there rather than restating them here — version numbers in this
 - Source files and module `build.gradle.kts` scripts carry the GPL v3 header
   (`RetroDrom Games Companion / Copyright (C) …`). Only the root `build.gradle.kts`,
   `settings.gradle.kts`, `buildSrc` and `app/build.gradle.kts` carry the Apache 2.0 header.
-  Copy the header of a neighbouring file when adding one.
+  Copy a neighbouring file's header for its shape, but set the year deliberately: a new file
+  takes the current year, while a file that is moved, renamed or rewritten in place keeps the
+  year it already had.
 - Style is ktlint (`android_studio` code style) configured in `.editorconfig`: trailing commas
   allowed, multiline signatures from 2 parameters, import ordering rule disabled.
 - `detekt.yaml` exists for standalone/IDE detekt runs; no detekt or ktlint Gradle plugin is
