@@ -40,20 +40,20 @@ import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.asDateTime
-import org.leviathan941.retrodromcompanion.ui.rssScreenLogger
 import org.leviathan941.retrodromcompanion.ui.copyToClipboard
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+import org.leviathan941.retrodromcompanion.ui.rssScreenLogger
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadFailedNextItem
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadingNextItem
@@ -69,11 +69,11 @@ fun RssFeedScreen(
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
     screenViewModel: RssFeedViewModel =
-        hiltViewModel<RssFeedViewModel, RssFeedViewModel.Factory>(
+        assistedMetroViewModel<RssFeedViewModel, RssFeedViewModel.Factory>(
             viewModelStoreOwner = viewModelStoreOwner,
             key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
-            creationCallback = { factory ->
-                factory.create(screen.channelUrl)
+            createViewModel = {
+                create(screen.channelUrl)
             },
         ),
     itemClicked: (item: RssChannelItem) -> Unit,

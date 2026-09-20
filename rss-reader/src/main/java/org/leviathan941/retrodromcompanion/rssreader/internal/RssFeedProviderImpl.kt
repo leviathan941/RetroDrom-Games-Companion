@@ -23,9 +23,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.leviathan941.retrodromcompanion.common.Clock
@@ -35,7 +35,8 @@ import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
 
 @OptIn(ExperimentalPagingApi::class)
-internal class RssFeedProviderImpl @AssistedInject constructor(
+@AssistedInject
+internal class RssFeedProviderImpl(
     @Assisted private val channelUrl: String,
     private val cacheProvider: FeedCacheProvider,
     private val cacheMutator: FeedCacheMutator,

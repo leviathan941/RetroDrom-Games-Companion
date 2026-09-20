@@ -20,10 +20,14 @@ package org.leviathan941.retrodromcompanion.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,8 +37,8 @@ import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 
-@HiltViewModel(assistedFactory = RssLoadingItemViewModel.Factory::class)
-class RssLoadingItemViewModel @AssistedInject constructor(
+@AssistedInject
+class RssLoadingItemViewModel(
     @Assisted private val rssLoadingItem: RssFeedDestination.LoadingItem,
     rssFeedProviderFactory: RssFeedProvider.Factory,
 ) : ViewModel() {
@@ -61,7 +65,9 @@ class RssLoadingItemViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
+    @ManualViewModelAssistedFactoryKey
+    @ContributesIntoMap(AppScope::class, binding<ManualViewModelAssistedFactory>())
+    interface Factory : ManualViewModelAssistedFactory {
         fun create(rssLoadingItem: RssFeedDestination.LoadingItem): RssLoadingItemViewModel
     }
 }

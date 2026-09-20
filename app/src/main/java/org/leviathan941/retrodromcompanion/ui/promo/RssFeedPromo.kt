@@ -21,8 +21,8 @@ package org.leviathan941.retrodromcompanion.ui.promo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
@@ -30,7 +30,7 @@ import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionV
 @Composable
 fun RssFeedPromo(
     backStackEntry: NavBackStackEntry,
-    viewModel: RssFeedPromoModel = hiltViewModel(
+    viewModel: RssFeedPromoModel = metroViewModel(
         viewModelStoreOwner = backStackEntry,
         key = ViewModelKeys.MAIN_VIEW_PROMO_MODEL,
     ),

@@ -23,9 +23,9 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.google.ksp)
+    alias(libs.plugins.zacsweers.metro)
 }
 
 kotlin {
@@ -68,11 +68,9 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":network"))
 
-    implementation(libs.google.dagger.hilt.android)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.paging)
     implementation(libs.androidx.room.runtime)
 
-    ksp(libs.google.dagger.hilt.compiler)
     ksp(libs.androidx.room.compiler)
 }

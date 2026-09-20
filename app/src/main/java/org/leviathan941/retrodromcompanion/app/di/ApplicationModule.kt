@@ -19,44 +19,45 @@
 package org.leviathan941.retrodromcompanion.app.di
 
 import android.app.Application
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import org.leviathan941.retrodromcompanion.MainActivity
-import org.leviathan941.retrodromcompanion.common.di.DiKeys
-import org.leviathan941.retrodromcompanion.network.cache.impl.room.feed.di.RoomFeedApplicationModule
+import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
+import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
+import org.leviathan941.retrodromcompanion.common.di.MainActivityClass
+import org.leviathan941.retrodromcompanion.common.di.MainDataStore
 import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
-import javax.inject.Named
-import javax.inject.Singleton
 
-@Module(
-    includes = [
-        RoomFeedApplicationModule::class,
-    ],
-)
-@InstallIn(SingletonComponent::class)
-interface ApplicationModule {
-    companion object {
+@BindingContainer
+@ContributesTo(AppScope::class)
+object ApplicationModule {
 
-        @Provides
-        @Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
-        fun provideApplicationCoroutineScope(): CoroutineScope =
-            ProcessLifecycleOwner.get().lifecycleScope
+    @Provides
+    @ApplicationContext
+    fun provideApplicationContext(application: Application): Context =
+        application.applicationContext
 
-        @Provides
-        @Named(DiKeys.MAIN_DATASTORE)
-        @Singleton
-        fun provideMainDataStore(application: Application): DataStore<Preferences> =
-            application.applicationContext.mainDataStore
+    @Provides
+    @ApplicationCoroutineScope
+    fun provideApplicationCoroutineScope(): CoroutineScope =
+        ProcessLifecycleOwner.get().lifecycleScope
 
-        @Provides
-        @Named(DiKeys.MAIN_ACTIVITY_CLASS)
-        fun provideMainActivityClass(): Class<*> = MainActivity::class.java
-    }
+    @Provides
+    @MainDataStore
+    @SingleIn(AppScope::class)
+    fun provideMainDataStore(application: Application): DataStore<Preferences> =
+        application.applicationContext.mainDataStore
+
+    @Provides
+    @MainActivityClass
+    fun provideMainActivityClass(): Class<*> = MainActivity::class.java
 }

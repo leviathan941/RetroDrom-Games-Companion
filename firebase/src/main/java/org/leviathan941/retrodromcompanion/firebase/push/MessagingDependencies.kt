@@ -16,18 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.common.di
+package org.leviathan941.retrodromcompanion.firebase.push
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import org.leviathan941.retrodromcompanion.common.Clock
-import org.leviathan941.retrodromcompanion.common.SystemClock
+import org.leviathan941.retrodromcompanion.notification.Notifications
 
-@Module
-@InstallIn(SingletonComponent::class)
-public abstract class CommonApplicationModule {
-    @Binds
-    internal abstract fun bindClock(impl: SystemClock): Clock
+/**
+ * What [MessagingService] needs from the application graph.
+ *
+ * `FirebaseMessagingService` is instantiated by the framework, so it cannot be constructor
+ * injected. The `Application` implements this interface and delegates to the graph.
+ */
+public interface MessagingDependencies {
+    public val notifications: Notifications
 }

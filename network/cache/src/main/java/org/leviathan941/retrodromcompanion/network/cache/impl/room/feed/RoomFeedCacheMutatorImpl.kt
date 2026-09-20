@@ -19,6 +19,9 @@
 package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed
 
 import androidx.room.withTransaction
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.leviathan941.retrodromcompanion.common.Clock
@@ -28,15 +31,14 @@ import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.Room
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel.RoomFeedChannelItemEntity
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.metadata.RoomFeedCacheMetadataEntity
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private val logger = Logger.withTag("RoomFeedCache")
 
 private const val FIRST_PAGE_NUMBER = 1
 
-@Singleton
-internal class RoomFeedCacheMutatorImpl @Inject constructor(
+@Inject
+@SingleIn(AppScope::class)
+internal class RoomFeedCacheMutatorImpl(
     private val wpNetworkClient: WpNetworkClient,
     private val database: RoomFeedDatabase,
     private val clock: Clock,

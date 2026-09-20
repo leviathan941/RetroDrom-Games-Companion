@@ -9,14 +9,12 @@ androidx-compose-bom = "2026.09.00"
 androidx-core-ktx = "1.19.0"
 androidx-core-splashscreen = "1.2.0"
 androidx-datastore = "1.2.1"
-androidx-hilt = "1.4.0"
 androidx-lifecycle = "2.11.0"
 androidx-navigation = "2.10.1"
 androidx-paging-compose = "3.5.1"
 androidx-room = "2.8.5"
 coil3 = "3.6.3"
 google-accompanist = "0.37.3"
-google-dagger-hilt = "2.60.1"
 google-firebase-bom = "34.19.0"
 google-material = "1.14.0"
 google-ksp = "2.3.12"
@@ -31,6 +29,7 @@ ktor-bom = "3.6.0"
 slack-compose-lint-checks = "1.6.0"
 skydoves-compose-stability-analyzer = "0.14.0"
 touchlab-kermit = "2.2.0"
+zacsweers-metro = "1.4.4"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
@@ -43,9 +42,9 @@ androidx-compose-material-icons-core-android = { group = "androidx.compose.mater
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-core-splashscreen" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidx-datastore" }
-androidx-hilt-lifecycle-viewmodel-compose = { group = "androidx.hilt", name = "hilt-lifecycle-viewmodel-compose", version.ref = "androidx-hilt" }
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androidx-paging-compose" }
@@ -62,8 +61,6 @@ compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "google-accompanist" }
-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-dagger-hilt" }
-google-dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "google-dagger-hilt" }
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "google-firebase-bom" }
 google-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
@@ -83,16 +80,18 @@ ktor-serialization-kotlinx-xml = { group = "io.ktor", name = "ktor-serialization
 mohamedrejeb-ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "mohamedrejeb-ksoup" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 touchlab-kermit = { group = "co.touchlab", name = "kermit", version.ref = "touchlab-kermit" }
+zacsweers-metrox-viewmodel = { group = "dev.zacsweers.metro", name = "metrox-viewmodel", version.ref = "zacsweers-metro" }
+zacsweers-metrox-viewmodel-compose = { group = "dev.zacsweers.metro", name = "metrox-viewmodel-compose", version.ref = "zacsweers-metro" }
 
 [plugins]
 aboutlibraries-android = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "about-libraries-compose-m3" }
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 androidx-room = { id = "androidx.room", version.ref = "androidx-room" }
-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "google-dagger-hilt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
 jetbrains-kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "jetbrains-kotlin-plugin" }
 skydoves-compose-stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version.ref = "skydoves-compose-stability-analyzer" }
+zacsweers-metro = { id = "dev.zacsweers.metro", version.ref = "zacsweers-metro" }

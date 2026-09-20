@@ -19,6 +19,9 @@
 package org.leviathan941.retrodromcompanion.network.cache.impl.room.feed
 
 import androidx.paging.PagingSource
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -26,20 +29,17 @@ import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvi
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.RoomFeedDatabase
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class RoomFeedCacheProviderImpl @Inject constructor(
+@Inject
+@SingleIn(AppScope::class)
+internal class RoomFeedCacheProviderImpl(
     private val database: RoomFeedDatabase,
 ) : FeedCacheProvider {
 
     override val categories: Flow<List<FeedCategory>>
         get() = database.categoriesDao().allFlow()
 
-    override fun channelItemsPagingSource(
-        channelUrl: String,
-    ): PagingSource<Int, FeedChannelItem> =
+    override fun channelItemsPagingSource(channelUrl: String): PagingSource<Int, FeedChannelItem> =
         database.channelItemDao().pagingSource(channelUrl)
 
     override suspend fun findChannelItemByPostId(
@@ -52,15 +52,13 @@ internal class RoomFeedCacheProviderImpl @Inject constructor(
         )
     }
 
-    override suspend fun channelItemsLastUpdatedMillis(
-        channelUrl: String,
-    ): Long? = withContext(Dispatchers.IO) {
-        database.cacheMetadataDao().itemsLastUpdated(channelUrl)
-    }
+    override suspend fun channelItemsLastUpdatedMillis(channelUrl: String): Long? =
+        withContext(Dispatchers.IO) {
+            database.cacheMetadataDao().itemsLastUpdated(channelUrl)
+        }
 
-    override suspend fun channelItemsLastPageNumber(
-        channelUrl: String,
-    ): Int? = withContext(Dispatchers.IO) {
-        database.channelItemDao().lastPageNumber(channelUrl)
-    }
+    override suspend fun channelItemsLastPageNumber(channelUrl: String): Int? =
+        withContext(Dispatchers.IO) {
+            database.channelItemDao().lastPageNumber(channelUrl)
+        }
 }

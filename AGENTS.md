@@ -4,12 +4,13 @@ Native Android client for the [RetroDrom Games](https://retrodrom.games/) site (
 blog): browses the site's RSS categories/posts, opens articles, and receives push
 notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose only.
 
-- Toolchain: Kotlin with KSP, targeting JVM 17 (no Gradle toolchain is pinned, so it builds
-  on whichever JDK runs Gradle). The Android Gradle Plugin supplies Kotlin compilation itself
-  — no module applies `org.jetbrains.kotlin.android`.
+- Toolchain: Kotlin targeting JVM 17 (no Gradle toolchain is pinned, so it builds on whichever
+  JDK runs Gradle). The Android Gradle Plugin supplies Kotlin compilation itself — no module
+  applies `org.jetbrains.kotlin.android`. KSP runs in `:network:cache` only, for Room; DI is a
+  compiler plugin (Metro) and needs none.
 - `minSdk` is 26 — check it before reaching for a newer platform API. App id
   `org.segowski.retrodromgames`, code namespace `org.leviathan941.retrodromcompanion`.
-- Key libs: Compose + Material 3, Navigation Compose, Hilt, Ktor (WordPress REST API and the
+- Key libs: Compose + Material 3, Navigation Compose, Metro (DI), Ktor (WordPress REST API and the
   RSS feed), Room (feed cache), DataStore Preferences, Paging 3, Coil 3, Firebase Messaging,
   AboutLibraries.
 
@@ -38,7 +39,18 @@ Read them from there rather than restating them here — version numbers in this
 - Every library module enables `ExplicitApiMode.Strict` — public declarations need explicit
   `public` and explicit return types. `:app` does not.
 - Package layout per module: public API at the top level (or `api/`), implementation under
-  `internal/` or `impl/`; Hilt modules under `di/`.
+  `internal/` or `impl/`; Metro binding containers and the app graph under `di/`.
+- DI is [Metro](https://github.com/ZacSweers/metro). `MainApplication` owns the single
+  `@DependencyGraph(AppScope::class)`; framework-instantiated classes reach it through the
+  `Application`. Any class carrying `@ContributesTo` / `@ContributesBinding` / `@ContributesIntoSet`
+  must be **public** for Metro to merge it — a contribution from an `internal` class is rejected
+  ("its module is not a friend module to this one") and shows up as a `[Metro/MissingBinding]`
+  error naming it under `similar bindings:`. Its members may be `internal`, which is why the
+  `@Binds`-only binding containers still exist: they keep the implementations internal. Hilt
+  tolerated internal implementations only because Dagger generates Java, which ignores Kotlin
+  `internal`. `@Provides` must sit in an `object` or a `companion object`, never directly in an
+  abstract container. View models are multibound via `metrox-viewmodel`; retrieve them with
+  `metroViewModel()` / `assistedMetroViewModel()`.
 - Source files and module `build.gradle.kts` scripts carry the GPL v3 header
   (`RetroDrom Games Companion / Copyright (C) …`). Only the root `build.gradle.kts`,
   `settings.gradle.kts`, `buildSrc` and `app/build.gradle.kts` carry the Apache 2.0 header.

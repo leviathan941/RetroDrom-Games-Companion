@@ -27,7 +27,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
@@ -45,7 +45,7 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toString
 @Composable
 fun MainSettingsSubScreen(
     navigationActions: MainNavActions,
-    screenViewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(
+    screenViewModel: SettingsViewModel = metroViewModel<SettingsViewModel>(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
     ),
 ) {

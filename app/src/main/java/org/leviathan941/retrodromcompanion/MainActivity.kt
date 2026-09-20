@@ -21,15 +21,17 @@ package org.leviathan941.retrodromcompanion
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.metroViewModel
+import org.leviathan941.retrodromcompanion.app.MainApplication
+import org.leviathan941.retrodromcompanion.app.di.AppGraph
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrationState
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
 import org.leviathan941.retrodromcompanion.common.logging.Logger
@@ -42,9 +44,12 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeViewModel
 
 private val logger = Logger.withTag("MainActivity")
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject lateinit var appDataMigrator: AppDataMigrator
+    private val appGraph: AppGraph
+        get() = (application as MainApplication).appGraph
+
+    private val appDataMigrator: AppDataMigrator
+        get() = appGraph.appDataMigrator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,26 +57,30 @@ class MainActivity : ComponentActivity() {
             appDataMigrator.state.value !is AppDataMigrationState.Finished
         }
         setContent {
-            val themeViewModel = hiltViewModel<ThemeViewModel>(
-                key = ViewModelKeys.THEME_VIEW_MODEL,
-            )
-            val appTheme by themeViewModel.appTheme.collectAsState()
-            val navController = rememberNavController()
-            val migrationState by appDataMigrator.state.collectAsStateWithLifecycle()
-
-            MainTheme(
-                selectedTheme = appTheme,
-                materialColorSchemes = SecondThemeColorScheme,
+            CompositionLocalProvider(
+                LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
             ) {
-                // Nothing may read app data until the migrations are over. Holding the splash
-                // screen alone would not do: the content underneath still composes.
-                if (migrationState is AppDataMigrationState.Finished) {
-                    MainView(navController)
+                val themeViewModel = metroViewModel<ThemeViewModel>(
+                    key = ViewModelKeys.THEME_VIEW_MODEL,
+                )
+                val appTheme by themeViewModel.appTheme.collectAsState()
+                val navController = rememberNavController()
+                val migrationState by appDataMigrator.state.collectAsStateWithLifecycle()
 
-                    LaunchedEffect(Unit) {
-                        extractDeeplink(intent)?.let {
-                            logger.d { "Handle deeplink: $it" }
-                            navController.navigate(it)
+                MainTheme(
+                    selectedTheme = appTheme,
+                    materialColorSchemes = SecondThemeColorScheme,
+                ) {
+                    // Nothing may read app data until the migrations are over. Holding the splash
+                    // screen alone would not do: the content underneath still composes.
+                    if (migrationState is AppDataMigrationState.Finished) {
+                        MainView(navController)
+
+                        LaunchedEffect(Unit) {
+                            extractDeeplink(intent)?.let {
+                                logger.d { "Handle deeplink: $it" }
+                                navController.navigate(it)
+                            }
                         }
                     }
                 }

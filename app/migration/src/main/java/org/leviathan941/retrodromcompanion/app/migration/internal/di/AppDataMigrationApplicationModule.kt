@@ -18,11 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.app.migration.internal.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import dagger.multibindings.IntoSet
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.IntoSet
 import org.leviathan941.retrodromcompanion.app.migration.internal.AppDataMigration
 import org.leviathan941.retrodromcompanion.app.migration.internal.DeleteKtRssReaderCacheMigration
 
@@ -31,13 +31,11 @@ import org.leviathan941.retrodromcompanion.app.migration.internal.DeleteKtRssRea
  * newer than the stored version and applies them in version order, so unbinding a step would
  * let a sufficiently old installation skip it.
  */
-@Suppress("unused")
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class AppDataMigrationApplicationModule {
+@BindingContainer
+@ContributesTo(AppScope::class)
+public abstract class AppDataMigrationApplicationModule {
     @Binds
     @IntoSet
-    abstract fun bindDeleteKtRssReaderCacheMigration(
-        impl: DeleteKtRssReaderCacheMigration,
-    ): AppDataMigration
+    internal abstract val DeleteKtRssReaderCacheMigration.bindDeleteKtRssReaderCacheMigration:
+        AppDataMigration
 }

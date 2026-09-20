@@ -22,18 +22,23 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
-    alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.services)
     alias(libs.plugins.jetbrains.kotlin.serialization)
-    alias(libs.plugins.google.ksp)
     alias(libs.plugins.aboutlibraries.android)
     alias(libs.plugins.skydoves.compose.stability.analyzer)
+    alias(libs.plugins.zacsweers.metro)
 }
 
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.fromTarget(JvmVersions.KOTLIN_JVM_TARGET)
     }
+}
+
+metro {
+    // build/reports/metro/<variant>/graph-dump/ names every binding, its kind, its scope and
+    // its source location. It is the only practical way to diff the graph across a change.
+    reportsDestination = layout.buildDirectory.dir("reports/metro")
 }
 
 android {
@@ -118,6 +123,7 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation(libs.google.material)
@@ -145,9 +151,9 @@ dependencies {
 
     implementation(libs.google.accompanist.permissions)
 
-    implementation(libs.google.dagger.hilt.android)
-    implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
-    ksp(libs.google.dagger.hilt.compiler)
+    implementation(libs.zacsweers.metrox.viewmodel)
+    implementation(libs.zacsweers.metrox.viewmodel.compose)
+
 
     debugImplementation(libs.compose.ui.tooling)
 

@@ -22,10 +22,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ManualViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,8 +38,8 @@ import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
 import org.leviathan941.retrodromcompanion.ui.rssScreenLogger
 
-@HiltViewModel(assistedFactory = RssFeedViewModel.Factory::class)
-class RssFeedViewModel @AssistedInject constructor(
+@AssistedInject
+class RssFeedViewModel(
     @Assisted channelUrl: String,
     rssFeedProviderFactory: RssFeedProvider.Factory,
 ) : ViewModel() {
@@ -56,7 +60,9 @@ class RssFeedViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
+    @ManualViewModelAssistedFactoryKey
+    @ContributesIntoMap(AppScope::class, binding<ManualViewModelAssistedFactory>())
+    interface Factory : ManualViewModelAssistedFactory {
         fun create(channelUrl: String): RssFeedViewModel
     }
 }

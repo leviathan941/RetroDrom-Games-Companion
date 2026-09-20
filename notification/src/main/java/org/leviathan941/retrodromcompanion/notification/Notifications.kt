@@ -30,22 +30,23 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import org.leviathan941.retrodromcompanion.common.RequestCode
-import org.leviathan941.retrodromcompanion.common.di.DiKeys
+import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
+import org.leviathan941.retrodromcompanion.common.di.MainActivityClass
 import org.leviathan941.retrodromcompanion.notification.internal.channelName
 import org.leviathan941.retrodromcompanion.notification.internal.notificationChannelId
 import org.leviathan941.retrodromcompanion.notification.internal.notificationId
 import org.leviathan941.retrodromcompanion.notification.internal.visibility
 
-@Singleton
-public class Notifications @Inject constructor(
+@Inject
+@SingleIn(AppScope::class)
+public class Notifications(
     @param:ApplicationContext
     private val context: Context,
-    @param:Named(DiKeys.MAIN_ACTIVITY_CLASS)
+    @param:MainActivityClass
     private val pushActivityClass: Class<*>,
 ) {
 

@@ -18,6 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.call.body
 import io.ktor.client.plugins.resources.get
 import io.ktor.client.request.get
@@ -34,13 +37,12 @@ import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpApiFeedC
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedRssResponse
-import javax.inject.Inject
-import javax.inject.Singleton
 
 private val logger = Logger.withTag("WordpressApi")
 
-@Singleton
-internal class WpKtorClient @Inject constructor(
+@Inject
+@SingleIn(AppScope::class)
+internal class WpKtorClient(
     httpClientFactory: HttpClientFactory,
 ) : WpNetworkClient {
     private val httpClient = httpClientFactory.create()

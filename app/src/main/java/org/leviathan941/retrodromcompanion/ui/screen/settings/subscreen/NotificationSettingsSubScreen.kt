@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
@@ -41,7 +41,7 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsSwitchItem
 @Composable
 fun NotificationSettingsSubScreen(
     modifier: Modifier = Modifier,
-    screenViewModel: SettingsViewModel = hiltViewModel<SettingsViewModel>(
+    screenViewModel: SettingsViewModel = metroViewModel<SettingsViewModel>(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
     ),
 ) {

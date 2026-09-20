@@ -18,8 +18,29 @@
 
 package org.leviathan941.retrodromcompanion.common.di
 
-public object DiKeys {
-    public const val APPLICATION_COROUTINE_SCOPE: String = "applicationCoroutineScope"
-    public const val MAIN_DATASTORE: String = "mainDataStore"
-    public const val MAIN_ACTIVITY_CLASS: String = "mainActivityClass"
-}
+import dev.zacsweers.metro.Qualifier
+
+/**
+ * The application [android.content.Context].
+ */
+@Qualifier
+public annotation class ApplicationContext
+
+/**
+ * The process-lifetime `CoroutineScope`, bound to the `ProcessLifecycleOwner`.
+ * Work launched in it outlives any Activity but dies with the process.
+ */
+@Qualifier
+public annotation class ApplicationCoroutineScope
+
+/**
+ * The app's single `DataStore<Preferences>`, backing every stored preference.
+ */
+@Qualifier
+public annotation class MainDataStore
+
+/**
+ * The [Class] of the Activity a push notification opens.
+ */
+@Qualifier
+public annotation class MainActivityClass

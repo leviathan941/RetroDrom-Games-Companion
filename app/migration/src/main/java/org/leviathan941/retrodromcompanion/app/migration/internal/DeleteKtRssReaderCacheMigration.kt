@@ -19,15 +19,16 @@
 package org.leviathan941.retrodromcompanion.app.migration.internal
 
 import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
 
 private const val LEGACY_RSS_CACHE_DATABASE_NAME = "ktrssreader.db"
 
 /**
  * Removes the database left behind by the KtRssReader library, which the app no longer opens.
  */
-internal class DeleteKtRssReaderCacheMigration @Inject constructor(
+@Inject
+internal class DeleteKtRssReaderCacheMigration(
     @param:ApplicationContext
     private val context: Context,
 ) : AppDataMigration {

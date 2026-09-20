@@ -23,6 +23,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.zacsweers.metro)
 }
 
 kotlin {
@@ -58,6 +59,5 @@ dependencies {
 
     api(libs.androidx.datastore.preferences)
 
-    implementation(libs.google.dagger.hilt.android)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
 }

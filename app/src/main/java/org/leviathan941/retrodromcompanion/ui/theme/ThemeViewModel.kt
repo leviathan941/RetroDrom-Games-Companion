@@ -20,8 +20,11 @@ package org.leviathan941.retrodromcompanion.ui.theme
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,8 +34,10 @@ import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 
-@HiltViewModel
-class ThemeViewModel @Inject constructor(
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
+class ThemeViewModel(
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)

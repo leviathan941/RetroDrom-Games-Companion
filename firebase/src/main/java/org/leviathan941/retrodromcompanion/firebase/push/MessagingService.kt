@@ -23,8 +23,6 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.common.logging.Logger
@@ -39,9 +37,13 @@ private val logger = Logger.withTag("MessagingService")
 // "firebase_messaging_installation_id_enabled" is set, because FCM then reports
 // registration through onRegistered() instead.
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
-@AndroidEntryPoint
 internal class MessagingService : FirebaseMessagingService() {
-    @Inject lateinit var notifications: Notifications
+    // `application` is null until the service is attached, so this must stay a get() property
+    // rather than a field initialiser.
+    private val notifications: Notifications
+        get() = checkNotNull(application as? MessagingDependencies) {
+            "Application must implement MessagingDependencies"
+        }.notifications
 
     override fun onRegistered(installationId: String) {
         logger.d { "Registered with FID: $installationId" }

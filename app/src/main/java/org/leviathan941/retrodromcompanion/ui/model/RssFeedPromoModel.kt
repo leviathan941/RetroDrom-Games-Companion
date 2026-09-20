@@ -20,8 +20,11 @@ package org.leviathan941.retrodromcompanion.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.cancellable
@@ -35,8 +38,10 @@ import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 private val logger = Logger.withTag("MainViewPromoModel")
 
-@HiltViewModel
-class RssFeedPromoModel @Inject constructor(
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
+class RssFeedPromoModel(
     private val preferencesRepository: PreferencesRepository,
     private val pushNotificationModel: PushNotificationModel,
 ) : ViewModel() {

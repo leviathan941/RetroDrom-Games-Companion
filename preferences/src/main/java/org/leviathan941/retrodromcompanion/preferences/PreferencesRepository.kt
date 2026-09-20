@@ -20,12 +20,12 @@ package org.leviathan941.retrodromcompanion.preferences
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.leviathan941.retrodromcompanion.common.di.DiKeys
+import org.leviathan941.retrodromcompanion.common.di.MainDataStore
 import org.leviathan941.retrodromcompanion.preferences.internal.APP_DATA_VERSION
 import org.leviathan941.retrodromcompanion.preferences.internal.APP_DATA_VERSION_DEFAULT
 import org.leviathan941.retrodromcompanion.preferences.internal.APP_THEME_PREFERENCE_KEY
@@ -33,9 +33,10 @@ import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO
 import org.leviathan941.retrodromcompanion.preferences.internal.PUSH_POSTS_PROMO_STARTS_UNTIL_SHOW_DEFAULT
 import org.leviathan941.retrodromcompanion.preferences.internal.SUBSCRIBED_PUSH_TOPICS
 
-@Singleton
-public class PreferencesRepository @Inject constructor(
-    @Named(DiKeys.MAIN_DATASTORE)
+@Inject
+@SingleIn(AppScope::class)
+public class PreferencesRepository(
+    @MainDataStore
     dataStore: DataStore<Preferences>,
 ) {
     public val ui: Flow<UiPreferences> = dataStore.data

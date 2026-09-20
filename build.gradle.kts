@@ -22,10 +22,10 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization) apply false
     alias(libs.plugins.jetbrains.kotlin.compose.compiler) apply false
     alias(libs.plugins.google.services) apply false
-    alias(libs.plugins.google.dagger.hilt.android) apply false
     alias(libs.plugins.aboutlibraries.android) apply false
     alias(libs.plugins.androidx.room) apply false
     alias(libs.plugins.skydoves.compose.stability.analyzer) apply false
+    alias(libs.plugins.zacsweers.metro) apply false
 }
 
 tasks.register("clean", Delete::class) {

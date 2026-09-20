@@ -23,8 +23,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.google.dagger.hilt.android)
-    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.zacsweers.metro)
 }
 
 kotlin {
@@ -61,9 +60,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":network:cache"))
 
-    implementation(libs.google.dagger.hilt.android)
     implementation(libs.jetbrains.kotlinx.collections.immutable)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
 
-    ksp(libs.google.dagger.hilt.compiler)
 }

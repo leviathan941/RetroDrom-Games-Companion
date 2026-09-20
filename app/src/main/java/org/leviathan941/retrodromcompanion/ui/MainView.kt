@@ -26,9 +26,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.common.Constants
@@ -44,7 +44,7 @@ import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 @Composable
 fun MainView(
     navController: NavHostController,
-    mainViewModel: MainViewModel = hiltViewModel(
+    mainViewModel: MainViewModel = metroViewModel(
         key = ViewModelKeys.MAIN_VIEW_MODEL,
     ),
 ) {

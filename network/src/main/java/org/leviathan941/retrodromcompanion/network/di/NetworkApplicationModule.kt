@@ -18,26 +18,26 @@
 
 package org.leviathan941.retrodromcompanion.network.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
-import javax.inject.Singleton
 import org.leviathan941.retrodromcompanion.network.wordpress.WpKtorClient
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
 
-@Module
-@InstallIn(SingletonComponent::class)
-public abstract class WpNetworkApplicationModule {
+@BindingContainer
+@ContributesTo(AppScope::class)
+public abstract class NetworkApplicationModule {
     @Binds
-    internal abstract fun bindRetrodromWpRetrofitClient(i: WpKtorClient): WpNetworkClient
+    internal abstract val WpKtorClient.bindRetrodromWpRetrofitClient: WpNetworkClient
 
     internal companion object {
         @Provides
-        @Singleton
-        fun provideHttpClientEngine(): HttpClientEngine = OkHttp.create()
+        @SingleIn(AppScope::class)
+        internal fun provideHttpClientEngine(): HttpClientEngine = OkHttp.create()
     }
 }

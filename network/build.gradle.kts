@@ -23,9 +23,8 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.google.dagger.hilt.android)
-    alias(libs.plugins.google.ksp)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.zacsweers.metro)
 }
 
 kotlin {
@@ -65,7 +64,6 @@ android {
 dependencies {
     implementation(project(":common"))
 
-    implementation(libs.google.dagger.hilt.android)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
 
     implementation(platform(libs.ktor.bom))
@@ -76,7 +74,6 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.serialization.kotlinx.xml)
 
-    ksp(libs.google.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.jetbrains.kotlinx.coroutines.test)

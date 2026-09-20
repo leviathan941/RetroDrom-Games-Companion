@@ -61,7 +61,7 @@ compilation, the Compose BOM stays, and every stage is fully verified by `./grad
 | A1 | Logging → Kermit | **Done.** `android.util.Log` gone from all 15 call sites; `Logger` facade in `:common` (`common.logging.Logger`), tagged instances instead of per-call-site tags, with `Logger.setMinLevel(LogLevel)` as the single config entry point. `:html-text:imagecontent` uses Kermit directly to stay app-agnostic. | — |
 | A2 | Coil network layer | **Done.** `coil-network-okhttp` → `coil-network-ktor3`. `MainApplication` is Coil's `SingletonImageLoader.Factory` and builds its `HttpClient` on the `HttpClientEngine` `:network` provides (now `@Singleton`), so images and the WordPress client share one engine. Coil shares the engine rather than the WordPress client, which carries content negotiation and a site-specific `defaultRequest`. | — |
 | A3 | Metro spike | **Done.** Metro 1.4.4 verified on `:preferences` under AGP-supplied Kotlin: the compiler plugin reaches the kotlinc command line, FIR/IR codegen and graph validation run, `javax.inject` qualifiers and cross-module Hilt `@Module`s are honoured, and Metro coexists with `:app`'s Hilt/KSP. R8, `explicitApi = Strict`, lint and the configuration cache are all clean. Spike code reverted; only these notes and the ADR amendment landed. | — |
-| A4 | Hilt → Metro | **One commit, no interop.** Every Hilt annotation across 27 files in 9 modules goes straight to its native Metro equivalent: `@HiltAndroidApp`/`@AndroidEntryPoint` → a `@DependencyGraph(AppScope::class)` held by `MainApplication`; the 6 `@HiltViewModel` classes and 8 `hiltViewModel()` call sites → `@ContributesIntoMap` + `@ClassKey` behind a `ViewModelProvider.Factory`; `@Module`/`@Binds`/`@Provides` → `@BindingContainer`/`@Binds`/`@Provides`; `@Assisted*` and `@Binds @IntoSet` → Metro's own. Hilt, `androidx.hilt` and the Hilt KSP processor all leave the build together. | A3, ADR-0001 |
+| A4 | Hilt → Metro | **Done.** Hilt, `androidx.hilt` and the Hilt KSP processor are gone; KSP now runs only in `:network:cache`, for Room. `MainApplication` owns a single `@DependencyGraph(AppScope::class)`; `MainActivity` and `:firebase`'s `MessagingService` reach it through the `Application` instead of `@AndroidEntryPoint`. The 6 view models and 8 call sites moved to `dev.zacsweers.metro:metrox-viewmodel` + `metrox-viewmodel-compose` 1.4.4 (`metroViewModel()` / `assistedMetroViewModel()`). `DiKeys`' string `@Named`s became typed `@Qualifier`s in `:common`, alongside a project `@ApplicationContext`. | A3, ADR-0001 |
 | A5 | Ktor engine behind DI | `:network` no longer references OkHttp directly; the engine is injected. | A4 |
 | A6 | Room 2.x → Room 3 | `androidx.room` → `androidx.room3` 3.0.3 across `:network:cache`, driver-based builder on `BundledSQLiteDriver`, remaining blocking DAO methods made suspend. Verify an upgrade over an install with real cached data. | A4, ADR-0004 |
 | A7 | Platform APIs isolated | Custom Tabs, permissions, notifications, FCM and anything taking a `Context` sit behind interfaces declared in common-ready modules. | A4 |
@@ -75,8 +75,17 @@ toolchain, and the resource migration depends on it.
 | # | Stage | Outcome | Blocked by |
 | --- | --- | --- | --- |
 | A9 | Toolchain spike | `org.jetbrains.kotlin.multiplatform` + `com.android.kotlin.multiplatform.library` applied alongside AGP 9.4; convention plugins in `buildSrc` so 13 modules do not each hand-roll a KMP block. Success = one module compiles for `android` and `iosSimulatorArm64`. | A1–A8 |
-| A10 | Compose BOM → Compose Multiplatform | Compose artifacts come from the CMP Gradle plugin's `compose.*` accessors. Includes swapping the Navigation 3 coordinates to the JetBrains ones — a version catalog change, no imports touched. Still Android-only at runtime. | A9 |
+| A10 | Compose BOM → Compose Multiplatform | Compose artifacts come from the CMP Gradle plugin's `compose.*` accessors. Includes swapping the Navigation 3 coordinates to the JetBrains ones — a version catalog change, no imports touched. Still Android-only at runtime. Note A4 already put `org.jetbrains.androidx.lifecycle:*` and `org.jetbrains.compose.*` on the Android classpath through `metrox-viewmodel-compose`; they resolve as metadata-only facades onto the `androidx.*` artifacts and changed no resolved version. | A9 |
 | A11 | Resources → `compose.resources` | `R.string` / `R.drawable` replaced at ~31 call sites; `values-ru` becomes `composeResources/values-ru`. | A10 |
+
+**A4 finding worth carrying forward.** Metro merges a contribution only when the class carrying
+`@ContributesTo` / `@ContributesBinding` is visible to the merging module: an `internal` one is
+discovered and then rejected ("its module is not a friend module to this one"). Hilt tolerated
+`internal` implementations because Dagger generates Java, which ignores Kotlin `internal`. The
+working shape is a **public** binding container with `internal` members — which is what the Hilt
+modules already were — so `@Binds`-only containers were kept rather than folded into
+`@ContributesBinding` on the implementations. Also: `@Provides` cannot live in an abstract
+container; it belongs in an `object` or the container's `companion object`.
 
 **Risk retired.** This ordering carried one risk: that Metro would need a Kotlin Gradle plugin
 applied explicitly, forcing a piece of A9 forward. **A3 settled it — it does not.** AGP's built-in

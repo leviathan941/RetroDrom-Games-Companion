@@ -18,10 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
+import dev.zacsweers.metro.Inject
 import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
-import javax.inject.Inject
 
-internal class RssFeedProviderFactory @Inject constructor(
+@Inject
+internal class RssFeedProviderFactory(
     private val implFactory: RssFeedProviderImpl.Factory,
 ) : RssFeedProvider.Factory {
     override fun create(channelUrl: String): RssFeedProvider = implFactory.create(channelUrl)

@@ -23,29 +23,26 @@ import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.ktor3.KtorNetworkFetcherFactory
-import dagger.Lazy
-import dagger.hilt.android.HiltAndroidApp
+import dev.zacsweers.metro.createGraphFactory
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngine
-import javax.inject.Inject
-import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
+import org.leviathan941.retrodromcompanion.app.di.AppGraph
+import org.leviathan941.retrodromcompanion.firebase.push.MessagingDependencies
 import org.leviathan941.retrodromcompanion.notification.Notifications
 
-@HiltAndroidApp
 class MainApplication :
     Application(),
-    SingletonImageLoader.Factory {
-    @Inject lateinit var notifications: Notifications
+    SingletonImageLoader.Factory,
+    MessagingDependencies {
+    val appGraph: AppGraph by lazy { createGraphFactory<AppGraph.Factory>().create(this) }
 
-    @Inject lateinit var appDataMigrator: AppDataMigrator
-
-    @Inject lateinit var httpClientEngine: Lazy<HttpClientEngine>
+    override val notifications: Notifications
+        get() = appGraph.notifications
 
     override fun onCreate() {
         super.onCreate()
-        // Call to initialize
+        // Call to initialize.
         notifications
-        appDataMigrator.start()
+        appGraph.appDataMigrator.start()
     }
 
     // Coil shares the app's Ktor engine rather than discovering its own through ServiceLoader,
@@ -53,7 +50,11 @@ class MainApplication :
     override fun newImageLoader(context: PlatformContext): ImageLoader =
         ImageLoader.Builder(context)
             .components {
-                add(KtorNetworkFetcherFactory(httpClient = { HttpClient(httpClientEngine.get()) }))
+                add(
+                    KtorNetworkFetcherFactory(
+                        httpClient = { HttpClient(appGraph.httpClientEngine()) },
+                    ),
+                )
             }
             .build()
 }

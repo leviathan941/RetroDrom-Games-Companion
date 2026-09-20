@@ -18,6 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress.internal
 
+import dev.zacsweers.metro.Inject
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -30,14 +31,14 @@ import io.ktor.serialization.kotlinx.xml.xml
 import kotlinx.serialization.json.Json
 import nl.adaptivity.xmlutil.serialization.XML
 import org.leviathan941.retrodromcompanion.common.Constants
-import javax.inject.Inject
 
 internal const val FEED_PATH_SEGMENT = "feed"
 internal const val FEED_PAGE_QUERY_PARAM = "paged"
 
 private val RSS_CONTENT_TYPE = ContentType("application", "rss+xml")
 
-internal class HttpClientFactory @Inject constructor(
+@Inject
+internal class HttpClientFactory(
     private val engine: HttpClientEngine,
 ) {
     fun create(): HttpClient = HttpClient(engine) {

@@ -22,11 +22,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.toImmutableList
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
@@ -57,7 +57,7 @@ fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
     }
 
     composable<SettingsDestination.AppTheme> {
-        val screenViewModel = hiltViewModel<SettingsViewModel>(
+        val screenViewModel = metroViewModel<SettingsViewModel>(
             key = ViewModelKeys.SETTINGS_VIEW_MODEL,
         )
         val appTheme by screenViewModel.appTheme.collectAsState()

@@ -21,9 +21,9 @@ package org.leviathan941.retrodromcompanion.app.model
 import android.app.Application
 import android.widget.Toast
 import androidx.annotation.StringRes
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,14 +31,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.common.di.DiKeys
+import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
-@Singleton
-class PushNotificationModel @Inject constructor(
+@Inject
+@SingleIn(AppScope::class)
+class PushNotificationModel(
     private val application: Application,
-    @param:Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
+    @param:ApplicationCoroutineScope
     private val scope: CoroutineScope,
     private val preferencesRepository: PreferencesRepository,
 ) {

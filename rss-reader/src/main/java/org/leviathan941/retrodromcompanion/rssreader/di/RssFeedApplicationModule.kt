@@ -18,18 +18,16 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.ContributesTo
 import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
 import org.leviathan941.retrodromcompanion.rssreader.internal.RssFeedProviderFactory
 
-@Module
-@InstallIn(SingletonComponent::class)
+@BindingContainer
+@ContributesTo(AppScope::class)
 public abstract class RssFeedApplicationModule {
     @Binds
-    internal abstract fun bindRssFeedProviderFactory(
-        impl: RssFeedProviderFactory,
-    ): RssFeedProvider.Factory
+    internal abstract val RssFeedProviderFactory.bindRssFeedProviderFactory: RssFeedProvider.Factory
 }

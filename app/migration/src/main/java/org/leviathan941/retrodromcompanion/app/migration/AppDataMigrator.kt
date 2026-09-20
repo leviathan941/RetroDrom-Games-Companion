@@ -18,6 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.app.migration
 
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,12 +31,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import org.leviathan941.retrodromcompanion.app.migration.internal.AppDataMigration
-import org.leviathan941.retrodromcompanion.common.di.DiKeys
+import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 import kotlin.time.Duration.Companion.milliseconds
 
 private val logger = Logger.withTag("AppDataMigrator")
@@ -47,11 +47,12 @@ private const val NO_MIGRATIONS_VERSION = 0
  * instead and keep the UI from reading app data until it turns
  * [AppDataMigrationState.Finished].
  */
-@Singleton
-public class AppDataMigrator @Inject internal constructor(
-    @param:Named(DiKeys.APPLICATION_COROUTINE_SCOPE)
+@Inject
+@SingleIn(AppScope::class)
+public class AppDataMigrator internal constructor(
+    @param:ApplicationCoroutineScope
     private val scope: CoroutineScope,
-    private val migrations: Set<@JvmSuppressWildcards AppDataMigration>,
+    private val migrations: Set<AppDataMigration>,
     private val preferencesRepository: PreferencesRepository,
 ) {
     public val state: StateFlow<AppDataMigrationState>

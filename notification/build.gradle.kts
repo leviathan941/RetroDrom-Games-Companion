@@ -23,6 +23,7 @@ import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.zacsweers.metro)
 }
 
 kotlin {
@@ -57,5 +58,4 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.google.dagger.hilt.android)
 }
