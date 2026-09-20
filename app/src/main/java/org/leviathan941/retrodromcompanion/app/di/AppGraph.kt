@@ -23,7 +23,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metrox.viewmodel.ViewModelGraph
-import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.HttpClient
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
 import org.leviathan941.retrodromcompanion.firebase.push.MessagingDependencies
 
@@ -40,9 +40,9 @@ interface AppGraph :
     val appDataMigrator: AppDataMigrator
 
     // Deliberately a Provider: Coil only builds its ImageLoader on the first image request, so
-    // the engine must not be created at process start. The binding is app-scoped, so every
-    // invocation returns the one shared engine.
-    val httpClientEngine: () -> HttpClientEngine
+    // the client must not be created at process start. The binding is app-scoped, so every
+    // invocation returns the one shared client.
+    val httpClient: () -> HttpClient
 
     @DependencyGraph.Factory
     fun interface Factory {

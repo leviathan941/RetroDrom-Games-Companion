@@ -20,7 +20,6 @@ package org.leviathan941.retrodromcompanion.network.wordpress.internal
 
 import dev.zacsweers.metro.Inject
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.resources.Resources
@@ -38,10 +37,12 @@ internal const val FEED_PAGE_QUERY_PARAM = "paged"
 private val RSS_CONTENT_TYPE = ContentType("application", "rss+xml")
 
 @Inject
-internal class HttpClientFactory(
-    private val engine: HttpClientEngine,
+internal class WpHttpClientFactory(
+    private val baseClient: HttpClient,
 ) {
-    fun create(): HttpClient = HttpClient(engine) {
+    // Derived from the shared base client, so it reuses its engine instead of opening a second
+    // connection pool.
+    fun create(): HttpClient = baseClient.config {
         install(plugin = Resources)
         install(plugin = ContentNegotiation) {
             json(

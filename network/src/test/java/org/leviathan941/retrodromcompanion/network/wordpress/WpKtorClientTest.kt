@@ -18,6 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress
 
+import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
@@ -30,7 +31,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import org.leviathan941.retrodromcompanion.network.wordpress.internal.HttpClientFactory
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpHttpClientFactory
 
 /**
  * Covers what the response models alone cannot show: how a feed URL is built on top of a channel
@@ -96,7 +97,7 @@ class WpKtorClientTest {
     }
 
     private fun clientOf(engine: MockEngine): WpKtorClient =
-        WpKtorClient(HttpClientFactory(engine))
+        WpKtorClient(WpHttpClientFactory(HttpClient(engine)))
 
     private fun MockRequestHandleScope.respondRss() = respond(
         content = sample,

@@ -1,6 +1,6 @@
 /*
  * RetroDrom Games Companion
- * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,20 @@ package org.leviathan941.retrodromcompanion.network.di
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
-import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
-import org.leviathan941.retrodromcompanion.network.wordpress.WpKtorClient
-import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+import io.ktor.client.HttpClient
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-public abstract class NetworkApplicationModule {
-    @Binds
-    internal abstract val WpKtorClient.bindWpNetworkClient: WpNetworkClient
+public object HttpClientModule {
+    /**
+     * The base client every consumer derives from, so the whole app shares one engine and one
+     * connection pool. The engine itself is not named anywhere: `ktor-client-engine-defaults`
+     * resolves it per target - OkHttp on Android, Darwin on iOS. See ADR-0005.
+     */
+    @Provides
+    @SingleIn(AppScope::class)
+    internal fun provideHttpClient(): HttpClient = HttpClient()
 }

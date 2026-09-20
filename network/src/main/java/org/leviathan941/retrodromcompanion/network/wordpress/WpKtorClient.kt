@@ -32,8 +32,8 @@ import kotlinx.coroutines.CancellationException
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.FEED_PAGE_QUERY_PARAM
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.FEED_PATH_SEGMENT
-import org.leviathan941.retrodromcompanion.network.wordpress.internal.HttpClientFactory
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpApiFeedCategories
+import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpHttpClientFactory
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedCategory
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedChannel
 import org.leviathan941.retrodromcompanion.network.wordpress.response.WpFeedRssResponse
@@ -43,7 +43,7 @@ private val logger = Logger.withTag("WordpressApi")
 @Inject
 @SingleIn(AppScope::class)
 internal class WpKtorClient(
-    httpClientFactory: HttpClientFactory,
+    httpClientFactory: WpHttpClientFactory,
 ) : WpNetworkClient {
     private val httpClient = httpClientFactory.create()
 

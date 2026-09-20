@@ -24,7 +24,6 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.network.ktor3.KtorNetworkFetcherFactory
 import dev.zacsweers.metro.createGraphFactory
-import io.ktor.client.HttpClient
 import org.leviathan941.retrodromcompanion.app.di.AppGraph
 import org.leviathan941.retrodromcompanion.firebase.push.MessagingDependencies
 import org.leviathan941.retrodromcompanion.notification.Notifications
@@ -45,14 +44,14 @@ class MainApplication :
         appGraph.appDataMigrator.start()
     }
 
-    // Coil shares the app's Ktor engine rather than discovering its own through ServiceLoader,
-    // so image loading and the WordPress client use one connection pool.
+    // Coil shares the app's base Ktor client rather than building its own, so image loading and
+    // the WordPress client use one engine and one connection pool.
     override fun newImageLoader(context: PlatformContext): ImageLoader =
         ImageLoader.Builder(context)
             .components {
                 add(
                     KtorNetworkFetcherFactory(
-                        httpClient = { HttpClient(appGraph.httpClientEngine()) },
+                        httpClient = { appGraph.httpClient() },
                     ),
                 )
             }

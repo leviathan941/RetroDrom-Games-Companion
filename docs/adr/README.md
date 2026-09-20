@@ -11,3 +11,4 @@ Status values: `Proposed` (needs a decision), `Accepted`, `Superseded by NNNN`.
 | [0002](0002-navigation-library.md) | Navigation library: Navigation 2 → Navigation 3 | Accepted |
 | [0003](0003-logging-kermit.md) | Logging: `android.util.Log` → Kermit | Accepted |
 | [0004](0004-room3.md) | Persistence: Room 2.x → Room 3 | Accepted |
+| [0005](0005-http-engine-selection.md) | HTTP engine selection: `ktor-client-engine-defaults` | Accepted |
