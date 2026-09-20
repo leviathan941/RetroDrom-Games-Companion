@@ -66,6 +66,7 @@ google-firebase-messaging = { group = "com.google.firebase", name = "firebase-me
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 jetbrains-kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "jetbrains-kotlinx-collections-immutable" }
 jetbrains-kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "jetbrains-kotlinx-coroutines" }
+jetbrains-kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "jetbrains-kotlinx-coroutines" }
 jetbrains-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "jetbrains-kotlinx-coroutines" }
 jetbrains-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

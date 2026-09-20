@@ -64,7 +64,7 @@ android {
 dependencies {
     implementation(project(":common"))
 
-    implementation(libs.jetbrains.kotlinx.coroutines.android)
+    implementation(libs.jetbrains.kotlinx.coroutines.core)
 
     implementation(platform(libs.ktor.bom))
     implementation(libs.ktor.client.core)
