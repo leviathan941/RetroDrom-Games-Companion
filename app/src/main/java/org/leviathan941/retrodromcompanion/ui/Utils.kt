@@ -26,7 +26,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
 import android.provider.Settings
-import android.widget.Toast
 import androidx.annotation.PluralsRes
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
@@ -34,6 +33,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
@@ -147,6 +147,7 @@ fun openNotificationSettings(context: Context) {
 fun openUrlByIntent(
     context: Context,
     url: String,
+    showMessage: (UserMessage) -> Unit,
 ) {
     try {
         context.startActivity(
@@ -155,17 +156,14 @@ fun openUrlByIntent(
             },
         )
     } catch (_: ActivityNotFoundException) {
-        Toast.makeText(
-            context,
-            R.string.open_external_link_application_not_found,
-            Toast.LENGTH_LONG,
-        ).show()
+        showMessage(UserMessage.Resource(R.string.open_external_link_application_not_found))
     }
 }
 
 fun openEmailByIntent(
     context: Context,
     email: String,
+    showMessage: (UserMessage) -> Unit,
 ) {
     try {
         context.startActivity(
@@ -174,19 +172,15 @@ fun openEmailByIntent(
             },
         )
     } catch (_: ActivityNotFoundException) {
-        Toast.makeText(
-            context,
-            R.string.open_email_application_not_found,
-            Toast.LENGTH_LONG,
-        ).show()
+        showMessage(UserMessage.Resource(R.string.open_email_application_not_found))
     }
 }
 
 suspend fun copyToClipboard(
-    context: Context,
     clipboard: Clipboard,
     label: CharSequence,
     text: CharSequence,
+    showMessage: (UserMessage) -> Unit,
 ) {
     clipboard.setClipEntry(
         ClipEntry(
@@ -195,6 +189,6 @@ suspend fun copyToClipboard(
     )
     // Android 13 and above shows its own clipboard confirmation overlay.
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-        Toast.makeText(context, label, Toast.LENGTH_SHORT).show()
+        showMessage(UserMessage.Text(label.toString()))
     }
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_EMAIL
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_URL
 import org.leviathan941.retrodromcompanion.ui.copyToClipboard
@@ -42,7 +43,7 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableI
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsGroup
 
 @Composable
-fun FeedbackSettingsSubScreen() {
+fun FeedbackSettingsSubScreen(showMessage: (UserMessage) -> Unit) {
     val context = LocalContext.current
     val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
@@ -63,11 +64,11 @@ fun FeedbackSettingsSubScreen() {
             leadingIcon = painterResource(id = R.drawable.google_material_globe),
             onLongClick = {
                 coroutineScope.launch {
-                    copyToClipboard(context, clipboard, siteCopiedLabel, FEEDBACK_URL)
+                    copyToClipboard(clipboard, siteCopiedLabel, FEEDBACK_URL, showMessage)
                 }
             },
             onClick = {
-                openUrlByIntent(context, FEEDBACK_URL)
+                openUrlByIntent(context, FEEDBACK_URL, showMessage)
             },
         )
 
@@ -79,11 +80,11 @@ fun FeedbackSettingsSubScreen() {
             leadingIcon = rememberVectorPainter(Icons.Default.Email),
             onLongClick = {
                 coroutineScope.launch {
-                    copyToClipboard(context, clipboard, emailCopiedLabel, FEEDBACK_EMAIL)
+                    copyToClipboard(clipboard, emailCopiedLabel, FEEDBACK_EMAIL, showMessage)
                 }
             },
             onClick = {
-                openEmailByIntent(context, FEEDBACK_EMAIL)
+                openEmailByIntent(context, FEEDBACK_EMAIL, showMessage)
             },
         )
     }
@@ -93,6 +94,6 @@ fun FeedbackSettingsSubScreen() {
 @Composable
 private fun FeedbackSettingsSubScreenPreview() {
     Column {
-        FeedbackSettingsSubScreen()
+        FeedbackSettingsSubScreen(showMessage = {})
     }
 }

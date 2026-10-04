@@ -77,7 +77,7 @@ class RssFeedPromoModel(
     fun subscribePushPostsTopic() {
         pushNotificationModel.subscribeToTopic(
             topic = Messaging.Topic.NEW_RETRODROM_POSTS,
-            showToastOnFailed = false,
+            showMessageOnFailed = false,
         )
     }
 }

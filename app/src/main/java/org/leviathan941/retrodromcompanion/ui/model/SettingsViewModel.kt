@@ -69,14 +69,14 @@ class SettingsViewModel(
     fun subscribeToTopic(topic: Messaging.Topic) {
         pushNotificationModel.subscribeToTopic(
             topic = topic,
-            showToastOnFailed = true,
+            showMessageOnFailed = true,
         )
     }
 
     fun unsubscribeFromTopic(topic: Messaging.Topic) {
         pushNotificationModel.unsubscribeFromTopic(
             topic = topic,
-            showToastOnFailed = true,
+            showMessageOnFailed = true,
         )
     }
 }

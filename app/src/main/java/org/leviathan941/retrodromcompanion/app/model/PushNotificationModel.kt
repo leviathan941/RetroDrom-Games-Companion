@@ -18,8 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.app.model
 
-import android.app.Application
-import android.widget.Toast
 import androidx.annotation.StringRes
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
@@ -31,6 +29,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.app.message.UserMessage
+import org.leviathan941.retrodromcompanion.app.message.UserMessages
 import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
@@ -38,7 +38,7 @@ import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 @Inject
 @SingleIn(AppScope::class)
 class PushNotificationModel(
-    private val application: Application,
+    private val userMessages: UserMessages,
     @param:ApplicationCoroutineScope
     private val scope: CoroutineScope,
     private val preferencesRepository: PreferencesRepository,
@@ -65,14 +65,14 @@ class PushNotificationModel(
 
     fun subscribeToTopic(
         topic: Messaging.Topic,
-        showToastOnFailed: Boolean = true,
+        showMessageOnFailed: Boolean = true,
     ) {
         scope.launch {
             if (Messaging.subscribeToTopic(topic)) {
                 preferencesRepository.uiEditor.addPushTopicSubscription(topic.value)
-            } else if (showToastOnFailed) {
-                showTopicSubscriptionFailedToast(
-                    textRes = R.string.push_topic_subscription_failed_toast_text,
+            } else if (showMessageOnFailed) {
+                showTopicSubscriptionFailedMessage(
+                    textRes = R.string.push_topic_subscription_failed_message,
                     topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value,
                 )
             }
@@ -81,31 +81,29 @@ class PushNotificationModel(
 
     fun unsubscribeFromTopic(
         topic: Messaging.Topic,
-        showToastOnFailed: Boolean = true,
+        showMessageOnFailed: Boolean = true,
     ) {
         scope.launch {
             if (Messaging.unsubscribeFromTopic(Messaging.Topic.NEW_RETRODROM_POSTS)) {
                 preferencesRepository.uiEditor.removePushTopicSubscription(topic.value)
-            } else if (showToastOnFailed) {
-                showTopicSubscriptionFailedToast(
-                    textRes = R.string.push_topic_unsubscription_failed_toast_text,
+            } else if (showMessageOnFailed) {
+                showTopicSubscriptionFailedMessage(
+                    textRes = R.string.push_topic_unsubscription_failed_message,
                     topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value,
                 )
             }
         }
     }
 
-    private fun showTopicSubscriptionFailedToast(
+    private fun showTopicSubscriptionFailedMessage(
         @StringRes textRes: Int,
         topicName: String,
     ) {
-        Toast.makeText(
-            application,
-            application.getString(
-                textRes,
-                topicName,
+        userMessages.show(
+            UserMessage.Resource(
+                textRes = textRes,
+                formatArgs = listOf(topicName),
             ),
-            Toast.LENGTH_SHORT,
-        ).show()
+        )
     }
 }

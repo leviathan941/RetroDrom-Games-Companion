@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.ui.isRouteActive
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
@@ -60,6 +61,7 @@ fun DrawerNavigationContent(
     navBackStackEntry: NavBackStackEntry?,
     drawerState: DrawerState,
     coroutineScope: CoroutineScope,
+    showMessage: (UserMessage) -> Unit,
 ) {
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
     val uiState by uiState.collectAsState()
@@ -109,6 +111,7 @@ fun DrawerNavigationContent(
             openUrlByIntent(
                 context = context,
                 url = "https://t.me/retrodrom",
+                showMessage = showMessage,
             )
             closeDrawer()
         },
@@ -128,6 +131,7 @@ fun DrawerNavigationContent(
             openUrlByIntent(
                 context = context,
                 url = "https://www.youtube.com/@RetroDrom",
+                showMessage = showMessage,
             )
             closeDrawer()
         },
@@ -148,6 +152,7 @@ fun DrawerNavigationContent(
             openUrlByIntent(
                 context = context,
                 url = "https://boosty.to/retrodrom",
+                showMessage = showMessage,
             )
             closeDrawer()
         },
@@ -195,6 +200,7 @@ private fun DrawerNavigationContentPreview() {
                 navBackStackEntry = null,
                 drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
                 coroutineScope = rememberCoroutineScope(),
+                showMessage = {},
             )
         }
     }

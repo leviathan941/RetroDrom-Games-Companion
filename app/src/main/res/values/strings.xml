@@ -62,8 +62,8 @@
     <string name="rss_news_notification_channel_name">New posts</string>
     <string name="misc_notification_channel_name">Misc</string>
     <string name="misc_notification_channel_description">Non-identified notifications</string>
-    <string name="push_topic_subscription_failed_toast_text">Could not subscribe to topic \'%s\'</string>
-    <string name="push_topic_unsubscription_failed_toast_text">Could not unsubscribe from topic \'%s\'</string>
+    <string name="push_topic_subscription_failed_message">Could not subscribe to topic \'%s\'</string>
+    <string name="push_topic_unsubscription_failed_message">Could not unsubscribe from topic \'%s\'</string>
     <string name="rss_feed_post_loading_item_title">Loading post</string>
     <string name="error_copied_clipboard_label">The error text copied into clipboard</string>
     <string name="settings_about_item_licenses_title">Licenses</string>

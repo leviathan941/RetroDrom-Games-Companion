@@ -25,4 +25,5 @@ object ViewModelKeys {
     const val THEME_VIEW_MODEL = "theme_view_model"
     const val MAIN_VIEW_PROMO_MODEL = "main_view_promo_model"
     const val RSS_ITEM_LOADING_MODEL = "rss_item_loading_model"
+    const val USER_MESSAGES_VIEW_MODEL = "user_messages_view_model"
 }

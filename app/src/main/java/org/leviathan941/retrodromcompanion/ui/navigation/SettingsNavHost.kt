@@ -30,6 +30,7 @@ import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.toImmutableList
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
+import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroup
@@ -85,13 +86,16 @@ fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
     }
 
     composable<SettingsDestination.Feedback> {
+        val userMessagesViewModel = metroViewModel<UserMessagesViewModel>(
+            key = ViewModelKeys.USER_MESSAGES_VIEW_MODEL,
+        )
         SettingsScreen(
             data = MainNavScreen.Settings(
                 title = stringResource(id = R.string.settings_about_item_feedback_title),
             ),
             navigationActions = navigationActions,
         ) {
-            FeedbackSettingsSubScreen()
+            FeedbackSettingsSubScreen(showMessage = userMessagesViewModel::show)
         }
     }
 
