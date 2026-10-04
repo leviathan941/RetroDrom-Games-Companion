@@ -28,9 +28,9 @@ jetbrains-kotlinx-serialization = "1.11.0"
 mohamedrejeb-ksoup = "0.6.0"
 ktor-bom = "3.6.0"
 slack-compose-lint-checks = "1.6.0"
-skydoves-compose-stability-analyzer = "0.14.0"
+skydoves-compose-stability-analyzer = "0.15.0"
 touchlab-kermit = "2.2.0"
-zacsweers-metro = "1.4.4"
+zacsweers-metro = "1.4.5"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
