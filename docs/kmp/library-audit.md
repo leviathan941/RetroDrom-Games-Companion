@@ -46,7 +46,7 @@ version leaves this file for the catalog.
 
 | Dependency | Why | iOS counterpart |
 | --- | --- | --- |
-| `androidx.browser` (Custom Tabs) | No multiplatform equivalent found yet — search again when A7b starts | `SFSafariViewController` behind the link-opening interface introduced in A7b |
+| `androidx.browser` (Custom Tabs) | No multiplatform equivalent found yet — search again when A7j starts | `SFSafariViewController` behind the in-app browser interface introduced in A7j |
 | `com.google.firebase:firebase-messaging` + Google Services plugin | Android SDK | Firebase iOS SDK via Swift, or `dev.gitlive:firebase-messaging` 2.7.0. Deferring push on iOS to after the first release is a legitimate option. Search for a KMP library again when A7e starts. |
 | `androidx.core:core-splashscreen`, `androidx.activity`, `androidx.appcompat`, `com.google.android.material` | Android entry point | Native iOS launch screen and `UIViewController` host |
 | `androidx.lifecycle:lifecycle-process` | Android process lifecycle | iOS app delegate callbacks |
