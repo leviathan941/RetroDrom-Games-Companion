@@ -19,7 +19,6 @@
 
 package org.leviathan941.retrodromcompanion.ui
 
-import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.Context
 import android.content.Intent
@@ -29,7 +28,7 @@ import android.provider.Settings
 import androidx.annotation.PluralsRes
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
-import androidx.core.net.toUri
+import androidx.compose.ui.platform.UriHandler
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination.Companion.hasRoute
 import org.leviathan941.retrodromcompanion.R
@@ -144,35 +143,34 @@ fun openNotificationSettings(context: Context) {
     )
 }
 
-fun openUrlByIntent(
-    context: Context,
+fun UriHandler.openUrl(
     url: String,
     showMessage: (UserMessage) -> Unit,
-) {
-    try {
-        context.startActivity(
-            Intent(Intent.ACTION_VIEW).apply {
-                data = url.toUri()
-            },
-        )
-    } catch (_: ActivityNotFoundException) {
-        showMessage(UserMessage.Resource(R.string.open_external_link_application_not_found))
-    }
-}
+) = openUriOrReport(
+    uri = url,
+    showMessage = showMessage,
+    notFoundMessage = UserMessage.Resource(R.string.open_external_link_application_not_found),
+)
 
-fun openEmailByIntent(
-    context: Context,
+fun UriHandler.openEmail(
     email: String,
     showMessage: (UserMessage) -> Unit,
+) = openUriOrReport(
+    uri = "mailto:$email",
+    showMessage = showMessage,
+    notFoundMessage = UserMessage.Resource(R.string.open_email_application_not_found),
+)
+
+// UriHandler.openUri throws IllegalArgumentException when no app can open the URI.
+private fun UriHandler.openUriOrReport(
+    uri: String,
+    showMessage: (UserMessage) -> Unit,
+    notFoundMessage: UserMessage,
 ) {
     try {
-        context.startActivity(
-            Intent(Intent.ACTION_SENDTO).apply {
-                data = "mailto:$email".toUri()
-            },
-        )
-    } catch (_: ActivityNotFoundException) {
-        showMessage(UserMessage.Resource(R.string.open_email_application_not_found))
+        openUri(uri)
+    } catch (_: IllegalArgumentException) {
+        showMessage(notFoundMessage)
     }
 }
 

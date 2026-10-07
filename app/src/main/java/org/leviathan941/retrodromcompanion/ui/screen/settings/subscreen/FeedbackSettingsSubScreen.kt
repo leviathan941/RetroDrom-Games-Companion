@@ -27,7 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,14 +37,14 @@ import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_EMAIL
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_URL
 import org.leviathan941.retrodromcompanion.ui.copyToClipboard
-import org.leviathan941.retrodromcompanion.ui.openEmailByIntent
-import org.leviathan941.retrodromcompanion.ui.openUrlByIntent
+import org.leviathan941.retrodromcompanion.ui.openEmail
+import org.leviathan941.retrodromcompanion.ui.openUrl
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsGroup
 
 @Composable
 fun FeedbackSettingsSubScreen(showMessage: (UserMessage) -> Unit) {
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
     val siteCopiedLabel = stringResource(
@@ -68,7 +68,7 @@ fun FeedbackSettingsSubScreen(showMessage: (UserMessage) -> Unit) {
                 }
             },
             onClick = {
-                openUrlByIntent(context, FEEDBACK_URL, showMessage)
+                uriHandler.openUrl(FEEDBACK_URL, showMessage)
             },
         )
 
@@ -84,7 +84,7 @@ fun FeedbackSettingsSubScreen(showMessage: (UserMessage) -> Unit) {
                 }
             },
             onClick = {
-                openEmailByIntent(context, FEEDBACK_EMAIL, showMessage)
+                uriHandler.openEmail(FEEDBACK_EMAIL, showMessage)
             },
         )
     }

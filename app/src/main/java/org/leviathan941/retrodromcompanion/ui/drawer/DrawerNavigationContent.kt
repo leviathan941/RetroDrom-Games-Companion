@@ -29,7 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.navigation.NavBackStackEntry
@@ -48,7 +48,7 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActionsStub
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
-import org.leviathan941.retrodromcompanion.ui.openUrlByIntent
+import org.leviathan941.retrodromcompanion.ui.openUrl
 import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
 import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
@@ -65,7 +65,7 @@ fun DrawerNavigationContent(
 ) {
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
     val uiState by uiState.collectAsState()
-    val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     when (val state = uiState) {
         is MainViewState.RssFeed -> {
@@ -108,8 +108,7 @@ fun DrawerNavigationContent(
             R.string.drawer_telegram_external_link_badge_description,
         ),
         onClick = {
-            openUrlByIntent(
-                context = context,
+            uriHandler.openUrl(
                 url = "https://t.me/retrodrom",
                 showMessage = showMessage,
             )
@@ -128,8 +127,7 @@ fun DrawerNavigationContent(
             R.string.drawer_youtube_external_link_badge_description,
         ),
         onClick = {
-            openUrlByIntent(
-                context = context,
+            uriHandler.openUrl(
                 url = "https://www.youtube.com/@RetroDrom",
                 showMessage = showMessage,
             )
@@ -149,8 +147,7 @@ fun DrawerNavigationContent(
             R.string.drawer_boosty_external_link_badge_description,
         ),
         onClick = {
-            openUrlByIntent(
-                context = context,
+            uriHandler.openUrl(
                 url = "https://boosty.to/retrodrom",
                 showMessage = showMessage,
             )
