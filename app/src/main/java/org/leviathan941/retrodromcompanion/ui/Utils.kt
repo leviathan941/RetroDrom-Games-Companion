@@ -20,11 +20,8 @@
 package org.leviathan941.retrodromcompanion.ui
 
 import android.content.ClipData
-import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.os.Build
-import android.provider.Settings
 import androidx.annotation.PluralsRes
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
@@ -134,14 +131,6 @@ fun MainNavScreen.RssFeed.toDestination(): RssFeedDestination.Feed =
 
 fun RssFeedDestination.Feed.toScreen(): MainNavScreen.RssFeed =
     MainNavScreen.RssFeed(id, title, channelUrl)
-
-fun openNotificationSettings(context: Context) {
-    context.startActivity(
-        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
-            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
-        },
-    )
-}
 
 fun UriHandler.openUrl(
     url: String,

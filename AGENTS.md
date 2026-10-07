@@ -26,7 +26,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:network` | Ktor client for the WordPress REST API and the RSS feed (`WpNetworkClient` / `WpKtorClient`). |
 | `:network:cache` | Room database caching feed categories and channel items, read behind `FeedCacheProvider` and written behind `FeedCacheMutator`. |
 | `:notification` | Notification channels, builders, helpers. |
-| `:permission` | Compose permission rationale UI (Accompanist permissions). |
+| `:permission` | Compose permission request and rationale UI on Calf (`calf-permissions`). |
 | `:preferences` | DataStore-backed UI/promo preferences with migrations. |
 | `:rss-reader` | Pages the cached feed with Paging 3 and refills it via a `RemoteMediator`. |
 

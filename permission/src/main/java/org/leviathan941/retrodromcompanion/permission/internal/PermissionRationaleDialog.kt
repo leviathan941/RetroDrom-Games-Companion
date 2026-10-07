@@ -33,7 +33,10 @@ import org.leviathan941.retrodromcompanion.permission.PermissionRationale
 import org.leviathan941.retrodromcompanion.permission.R
 
 @Composable
-internal fun PermissionRationaleDialog(data: PermissionRationale.Data) {
+internal fun PermissionRationaleDialog(
+    data: PermissionRationale.Data,
+    onConfirm: () -> Unit,
+) {
     AlertDialog(
         onDismissRequest = {
             data.onDismiss()
@@ -58,7 +61,7 @@ internal fun PermissionRationaleDialog(data: PermissionRationale.Data) {
         confirmButton = {
             Button(
                 onClick = {
-                    data.onConfirm()
+                    onConfirm()
                     data.onDismiss()
                 },
             ) {
@@ -92,7 +95,7 @@ private fun PermissionRationaleDialogPreview() {
                 "middle of text.",
             icon = rememberVectorPainter(Icons.Default.Notifications),
             onDismiss = {},
-            onConfirm = {},
         ),
+        onConfirm = {},
     )
 }

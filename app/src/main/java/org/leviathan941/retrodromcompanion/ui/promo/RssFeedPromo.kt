@@ -44,7 +44,6 @@ fun RssFeedPromo(
             },
             allowRationale = false,
             onRationaleDismiss = {},
-            onRationaleConfirm = {},
         )
     }
 }

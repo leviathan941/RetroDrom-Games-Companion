@@ -26,6 +26,5 @@ public object PermissionRationale {
         val description: String,
         val icon: Painter,
         val onDismiss: () -> Unit,
-        val onConfirm: () -> Unit,
     )
 }

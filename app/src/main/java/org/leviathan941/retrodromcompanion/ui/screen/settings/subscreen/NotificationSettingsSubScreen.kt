@@ -26,7 +26,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import dev.zacsweers.metrox.viewmodel.metroViewModel
@@ -34,7 +33,6 @@ import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.firebase.push.Messaging
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
-import org.leviathan941.retrodromcompanion.ui.openNotificationSettings
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsSwitchItem
 
@@ -48,7 +46,6 @@ fun NotificationSettingsSubScreen(
     val subscribedPushTopics by screenViewModel.subscribedPushTopics.collectAsState()
     val permissionGranted = remember { mutableStateOf(false) }
     val showRationale = remember { mutableStateOf(false) }
-    val context = LocalContext.current
 
     NotificationPermissionView(
         onPermissionResult = { isGranted ->
@@ -57,9 +54,6 @@ fun NotificationSettingsSubScreen(
         allowRationale = showRationale.value,
         onRationaleDismiss = {
             showRationale.value = false
-        },
-        onRationaleConfirm = {
-            openNotificationSettings(context)
         },
     )
 

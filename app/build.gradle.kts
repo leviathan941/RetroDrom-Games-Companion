@@ -149,8 +149,6 @@ dependencies {
     implementation(libs.jetbrains.kotlinx.collections.immutable)
     implementation(libs.jetbrains.kotlinx.serialization.json)
 
-    implementation(libs.google.accompanist.permissions)
-
     implementation(libs.zacsweers.metrox.viewmodel)
     implementation(libs.zacsweers.metrox.viewmodel.compose)
 

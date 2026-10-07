@@ -15,7 +15,6 @@ androidx-paging-compose = "3.5.1"
 androidx-room3 = "3.0.3"
 androidx-sqlite = "2.7.1"
 coil3 = "3.6.3"
-google-accompanist = "0.37.3"
 google-firebase-bom = "34.19.0"
 google-material = "1.14.0"
 google-ksp = "2.3.12"
@@ -25,6 +24,7 @@ jetbrains-kotlinx-collections-immutable = "0.5.2"
 jetbrains-kotlinx-coroutines = "1.11.0"
 junit = "4.13.2"
 jetbrains-kotlinx-serialization = "1.11.0"
+mohamedrejeb-calf = "0.14.0"
 mohamedrejeb-ksoup = "0.6.0"
 ktor-bom = "3.6.0"
 slack-compose-lint-checks = "1.6.0"
@@ -61,7 +61,6 @@ compose-foundation = { group = "androidx.compose.foundation", name = "foundation
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "google-accompanist" }
 google-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "google-firebase-bom" }
 google-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 google-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
@@ -79,6 +78,8 @@ ktor-client-engine-defaults = { group = "io.ktor", name = "ktor-client-engine-de
 ktor-client-resources = { group = "io.ktor", name = "ktor-client-resources" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json" }
 ktor-serialization-kotlinx-xml = { group = "io.ktor", name = "ktor-serialization-kotlinx-xml" }
+mohamedrejeb-calf-permissions-core = { group = "com.mohamedrejeb.calf", name = "calf-permissions-core", version.ref = "mohamedrejeb-calf" }
+mohamedrejeb-calf-permissions-notifications = { group = "com.mohamedrejeb.calf", name = "calf-permissions-notifications", version.ref = "mohamedrejeb-calf" }
 mohamedrejeb-ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "mohamedrejeb-ksoup" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 touchlab-kermit = { group = "co.touchlab", name = "kermit", version.ref = "touchlab-kermit" }

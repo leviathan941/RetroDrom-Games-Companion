@@ -55,7 +55,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.google.accompanist.permissions)
+    implementation(libs.mohamedrejeb.calf.permissions.core)
+    implementation(libs.mohamedrejeb.calf.permissions.notifications)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material.icons.core.android)
     implementation(libs.androidx.compose.material3)

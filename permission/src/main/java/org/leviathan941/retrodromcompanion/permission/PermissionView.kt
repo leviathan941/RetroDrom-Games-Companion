@@ -20,21 +20,29 @@ package org.leviathan941.retrodromcompanion.permission
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
+import com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi
+import com.mohamedrejeb.calf.permissions.Notification
+import com.mohamedrejeb.calf.permissions.Permission
+import com.mohamedrejeb.calf.permissions.isGranted
+import com.mohamedrejeb.calf.permissions.rememberPermissionState
+import com.mohamedrejeb.calf.permissions.shouldShowRationale
 import org.leviathan941.retrodromcompanion.permission.internal.PermissionRationaleDialog
 
+/**
+ * Requests [permission] unless it is already granted, and reports the outcome through
+ * [onPermissionResult]. Once the user has denied it, the system dialog is replaced by a
+ * rationale dialog, shown only while [allowRationale] is set, whose confirm button opens the
+ * app's settings page for the permission.
+ */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 public fun PermissionView(
-    permission: String,
+    permission: AppPermission,
     onPermissionResult: (isGranted: Boolean) -> Unit,
     rationaleData: PermissionRationale.Data,
     allowRationale: Boolean = true,
 ) {
-    val permissionState = rememberPermissionState(permission, onPermissionResult)
+    val permissionState = rememberPermissionState(permission.toCalfPermission(), onPermissionResult)
 
     when {
         permissionState.status.isGranted -> {
@@ -47,6 +55,7 @@ public fun PermissionView(
             if (allowRationale) {
                 PermissionRationaleDialog(
                     data = rationaleData,
+                    onConfirm = permissionState::openAppSettings,
                 )
             }
         }
@@ -57,4 +66,8 @@ public fun PermissionView(
             }
         }
     }
+}
+
+private fun AppPermission.toCalfPermission(): Permission = when (this) {
+    AppPermission.Notifications -> Permission.Notification
 }
