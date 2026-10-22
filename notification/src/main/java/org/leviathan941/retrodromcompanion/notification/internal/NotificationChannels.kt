@@ -19,8 +19,8 @@
 package org.leviathan941.retrodromcompanion.notification.internal
 
 import android.content.Context
-import java.util.UUID
 import kotlin.math.absoluteValue
+import kotlin.uuid.Uuid
 import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
 import org.leviathan941.retrodromcompanion.notification.R
 
@@ -55,4 +55,4 @@ internal fun NotificationChannelId.notificationId(): Int = when (this) {
         uniqueNotificationId()
 }
 
-private fun uniqueNotificationId(): Int = UUID.randomUUID().hashCode().absoluteValue
+private fun uniqueNotificationId(): Int = Uuid.random().hashCode().absoluteValue

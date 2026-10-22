@@ -15,123 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 package org.leviathan941.retrodromcompanion.notification
 
-import android.Manifest
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationChannelCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.app.TaskStackBuilder
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.SingleIn
-import org.leviathan941.retrodromcompanion.common.RequestCode
-import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
-import org.leviathan941.retrodromcompanion.common.di.MainActivityClass
-import org.leviathan941.retrodromcompanion.notification.internal.channelName
-import org.leviathan941.retrodromcompanion.notification.internal.notificationChannelId
-import org.leviathan941.retrodromcompanion.notification.internal.notificationId
-import org.leviathan941.retrodromcompanion.notification.internal.visibility
-
-@Inject
-@SingleIn(AppScope::class)
-public class Notifications(
-    @param:ApplicationContext
-    private val context: Context,
-    @param:MainActivityClass
-    private val pushActivityClass: Class<*>,
-) {
-
-    init {
-        NotificationManagerCompat.from(context)
-            .createNotificationChannelsCompat(
-                listOf(
-                    newsChannel(context),
-                    defaultChannel(context),
-                ),
-            )
-    }
-
-    public fun sendPushNotification(
-        context: Context,
-        data: NotificationData,
-    ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS,
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-
-        val channelId = notificationChannelId(data.channelId)
-        val title = data.title ?: channelId.channelName(context)
-        val smallIcon = R.drawable.retrodrom_games_push_notification
-        val visibility = channelId.visibility()
-        val notificationId = channelId.notificationId()
-
-        val extras = Bundle().apply {
-            data.payloadData.forEach { (key, value) ->
-                putString(key, value)
-            }
-        }
-        val intent = Intent(context, pushActivityClass).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            putExtras(extras)
-        }
-        val pendingIntent = TaskStackBuilder.create(context).run {
-            addNextIntentWithParentStack(intent)
-            getPendingIntent(RequestCode.PUSH_NOTIFICATION, PendingIntent.FLAG_IMMUTABLE)
-        }
-
-        NotificationCompat.Builder(context, channelId.value)
-            .setContentTitle(title)
-            .setContentText(data.message)
-            .setContentIntent(pendingIntent)
-            .setCategory(NotificationCompat.CATEGORY_SOCIAL)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setSmallIcon(smallIcon)
-            .setAutoCancel(true)
-            .setVisibility(visibility)
-            .build()
-            .let {
-                NotificationManagerCompat.from(context).notify(notificationId, it)
-            }
-    }
-
-    private fun newsChannel(context: Context): NotificationChannelCompat =
-        createChannelWithDefaultConfig(
-            channelId = NotificationChannelId.RETRODROM_RSS_POSTS,
-            name = context.getString(R.string.rss_news_notification_channel_name),
-            description = context.getString(R.string.rss_news_notification_channel_description),
-        )
-
-    private fun defaultChannel(context: Context): NotificationChannelCompat =
-        createChannelWithDefaultConfig(
-            channelId = NotificationChannelId.MISC,
-            name = context.getString(R.string.misc_notification_channel_name),
-            description = context.getString(R.string.misc_notification_channel_description),
-        )
-
-    private fun createChannelWithDefaultConfig(
-        channelId: NotificationChannelId,
-        name: String,
-        description: String,
-    ): NotificationChannelCompat = NotificationChannelCompat.Builder(
-        channelId.value,
-        NotificationManagerCompat.IMPORTANCE_DEFAULT,
-    ).setDescription(description)
-        .setName(name)
-        .setShowBadge(true)
-        .setVibrationEnabled(true)
-        .build()
+/**
+ * Shows notifications to the user.
+ */
+public interface Notifications {
+    /**
+     * Shows [data] as a notification. Nothing is shown when the user has not granted the
+     * notification permission.
+     */
+    public fun show(data: NotificationData)
 }

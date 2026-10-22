@@ -50,7 +50,7 @@ version leaves this file for the catalog.
 | `com.google.firebase:firebase-messaging` + Google Services plugin | Android SDK | Firebase iOS SDK via Swift, or `dev.gitlive:firebase-messaging` 2.7.0. Deferring push on iOS to after the first release is a legitimate option. Search for a KMP library again when A7e starts. |
 | `androidx.core:core-splashscreen`, `androidx.activity`, `androidx.appcompat`, `com.google.android.material` | Android entry point | Native iOS launch screen and `UIViewController` host |
 | `androidx.lifecycle:lifecycle-process` | Android process lifecycle | iOS app delegate callbacks |
-| Android notification channels (`:notification`) | Platform model differs fundamentally; no KMP library looked for yet — search when A7d starts | `UNUserNotificationCenter` |
+| Android notification channels (`:notification`) | Platform model differs fundamentally. Since A7d it sits behind the `Notifications` interface. Showing a received push as a local notification is Android-only: FCM does not display notification messages while the app is in the foreground, whereas iOS presents them through `UNUserNotificationCenterDelegate`. No library adopted. Evaluated 2026-10-22 against module metadata and sources: `io.github.mirzemehdi:kmpnotifier-local` 2.0.1 has one channel, with `IMPORTANCE_HIGH` hard-coded, no channel choice per notification (requested since 2025-02, PRs still open) and no lock-screen visibility. `io.github.tweener:alarmee` 2.7.1 drops channel descriptions and custom tap extras, has no visibility, and pulls the author's `kmpkit`. Both push modules register their own `FirebaseMessagingService`, which collides with ours — relevant for A7e. | `UNUserNotificationCenter` |
 
 ## Toolchain notes
 

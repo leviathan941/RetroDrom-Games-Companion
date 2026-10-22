@@ -67,10 +67,7 @@ internal class MessagingService : FirebaseMessagingService() {
 
         message.toNotificationData()?.let {
             logger.d { "Message notification data: $it" }
-            notifications.sendPushNotification(
-                context = this,
-                data = it,
-            )
+            notifications.show(it)
         }
     }
 
