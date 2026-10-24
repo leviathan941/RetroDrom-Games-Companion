@@ -25,6 +25,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
@@ -35,6 +36,7 @@ import org.leviathan941.retrodromcompanion.app.di.AppGraph
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrationState
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
 import org.leviathan941.retrodromcompanion.common.logging.Logger
+import org.leviathan941.retrodromcompanion.notification.POST_ID_PAYLOAD_DATA_KEY
 import org.leviathan941.retrodromcompanion.notification.extractDeeplink
 import org.leviathan941.retrodromcompanion.ui.MainView
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -77,9 +79,12 @@ class MainActivity : ComponentActivity() {
                         MainView(navController)
 
                         LaunchedEffect(Unit) {
-                            extractDeeplink(intent)?.let {
+                            extractDeeplink(
+                                data = intent.dataString,
+                                postId = intent.getStringExtra(POST_ID_PAYLOAD_DATA_KEY),
+                            )?.let {
                                 logger.d { "Handle deeplink: $it" }
-                                navController.navigate(it)
+                                navController.navigate(it.toUri())
                             }
                         }
                     }

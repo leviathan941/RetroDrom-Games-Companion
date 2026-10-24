@@ -58,4 +58,8 @@ dependencies {
     implementation(project(":common"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(platform(libs.ktor.bom))
+    implementation(libs.ktor.http)
+
+    testImplementation(libs.junit)
 }

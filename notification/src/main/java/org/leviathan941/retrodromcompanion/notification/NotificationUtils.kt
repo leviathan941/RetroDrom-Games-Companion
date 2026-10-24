@@ -18,8 +18,10 @@
 
 package org.leviathan941.retrodromcompanion.notification
 
-import android.content.Intent
-import android.net.Uri
+import io.ktor.http.URLBuilder
+import io.ktor.http.URLProtocol
+import io.ktor.http.appendPathSegments
+import io.ktor.http.parseUrl
 import org.leviathan941.retrodromcompanion.common.Constants
 
 private const val RETRODROM_DEEPLINK_SCHEME = "retrodrom"
@@ -33,24 +35,27 @@ public const val RETRODROM_FEED_ITEM_BASE_PATH: String =
 
 public const val POST_ID_PAYLOAD_DATA_KEY: String = "post_id"
 
-public fun createFeedItemDeeplink(postId: String): Uri? {
+public fun createFeedItemDeeplink(postId: String): String? {
     if (postId.isEmpty()) return null
 
-    return Uri.Builder()
-        .scheme(RETRODROM_DEEPLINK_SCHEME)
-        .authority(RETRODROM_FEED_HOST)
-        .appendPath(RETRODROM_FEED_ITEM_PATH)
-        .appendPath(postId)
-        .appendQueryParameter(RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL, Constants.RETRODROM_BASE_URL)
-        .build()
+    return URLBuilder(
+        protocol = URLProtocol.createOrDefault(RETRODROM_DEEPLINK_SCHEME),
+        host = RETRODROM_FEED_HOST,
+    ).apply {
+        appendPathSegments(RETRODROM_FEED_ITEM_PATH, postId, encodeSlash = true)
+        parameters.append(RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL, Constants.RETRODROM_BASE_URL)
+    }.buildString()
 }
 
-public fun extractDeeplink(intent: Intent): Uri? = with(intent) {
-    data ?: extras?.let { bundle ->
-        bundle.getString(POST_ID_PAYLOAD_DATA_KEY)?.let { postId ->
-            createFeedItemDeeplink(postId)
-        }
-    }
-}?.takeIf { it.isSupportedDeeplink() }
+/**
+ * Picks the deeplink a launch carries: [data] wins when present, otherwise one is built from the
+ * push payload's [postId]. Returns `null` unless the result uses the app's own scheme.
+ */
+public fun extractDeeplink(
+    data: String?,
+    postId: String?,
+): String? = (data ?: postId?.let(::createFeedItemDeeplink))
+    ?.takeIf { it.isSupportedDeeplink() }
 
-private fun Uri.isSupportedDeeplink(): Boolean = scheme == RETRODROM_DEEPLINK_SCHEME
+private fun String.isSupportedDeeplink(): Boolean =
+    parseUrl(this)?.protocol?.name == RETRODROM_DEEPLINK_SCHEME

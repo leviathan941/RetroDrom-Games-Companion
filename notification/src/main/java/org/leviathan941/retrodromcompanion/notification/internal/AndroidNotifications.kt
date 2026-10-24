@@ -30,6 +30,7 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -38,8 +39,10 @@ import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
 import org.leviathan941.retrodromcompanion.common.di.MainActivityClass
 import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
 import org.leviathan941.retrodromcompanion.notification.NotificationData
+import org.leviathan941.retrodromcompanion.notification.POST_ID_PAYLOAD_DATA_KEY
 import org.leviathan941.retrodromcompanion.notification.Notifications
 import org.leviathan941.retrodromcompanion.notification.R
+import org.leviathan941.retrodromcompanion.notification.createFeedItemDeeplink
 
 @Inject
 @SingleIn(AppScope::class)
@@ -81,9 +84,13 @@ internal class AndroidNotifications(
                 putString(key, value)
             }
         }
+        // Pending intents that differ only in extras are one and the same, so without its own
+        // data a tap would open whichever post the oldest shown notification carried.
+        val deeplink = data.payloadData[POST_ID_PAYLOAD_DATA_KEY]?.let(::createFeedItemDeeplink)
         val intent = Intent(context, pushActivityClass).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtras(extras)
+            setData(deeplink?.toUri())
         }
         val pendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(intent)

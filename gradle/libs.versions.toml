@@ -76,6 +76,7 @@ ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation" }
 ktor-client-engine-defaults = { group = "io.ktor", name = "ktor-client-engine-defaults" }
 ktor-client-resources = { group = "io.ktor", name = "ktor-client-resources" }
+ktor-http = { group = "io.ktor", name = "ktor-http" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json" }
 ktor-serialization-kotlinx-xml = { group = "io.ktor", name = "ktor-serialization-kotlinx-xml" }
 mohamedrejeb-calf-permissions-core = { group = "com.mohamedrejeb.calf", name = "calf-permissions-core", version.ref = "mohamedrejeb-calf" }

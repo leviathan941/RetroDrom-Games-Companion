@@ -76,8 +76,9 @@ Read them from there rather than restating them here — version numbers in this
 ./gradlew build                # compile everything (also runs lint)
 ```
 
-The only tests are `:network`'s JVM unit tests, which cover the RSS response mapping and feed
-URL building; `./gradlew test` runs them. Compilation plus Android lint is otherwise the gate.
+The only tests are JVM unit tests: `:network`'s cover the RSS response mapping and feed URL
+building, `:notification`'s the feed-item deeplink string; `./gradlew test` runs them.
+Compilation plus Android lint is otherwise the gate.
 
 `build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
 the committed baseline in `app/stability/`: a composable whose parameters become less stable
