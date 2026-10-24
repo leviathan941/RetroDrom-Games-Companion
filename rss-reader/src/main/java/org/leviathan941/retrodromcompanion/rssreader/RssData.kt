@@ -36,6 +36,5 @@ public data class RssPublicationDate(
 
 public data class RssDescription(
     public val imageUrl: String?,
-    public val paragraphs: ImmutableList<String>,
     public val html: String,
 )

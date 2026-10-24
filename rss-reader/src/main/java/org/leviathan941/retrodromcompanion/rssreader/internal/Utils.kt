@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import kotlinx.collections.immutable.toImmutableList
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.RssDescription
@@ -34,11 +33,7 @@ internal fun FeedChannelItem.toPublic(): RssChannelItem = RssChannelItem(
     postId = postId.takeIf { it.isNotBlank() },
 )
 
-private fun parseRssDescription(description: String): RssDescription =
-    HtmlParser(description).parse().let {
-        RssDescription(
-            imageUrl = it.images.firstOrNull(),
-            paragraphs = it.paragraphs.toImmutableList(),
-            html = description,
-        )
-    }
+private fun parseRssDescription(description: String): RssDescription = RssDescription(
+    imageUrl = findFirstImageSource(description),
+    html = description,
+)

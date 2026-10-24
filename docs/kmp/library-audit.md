@@ -23,7 +23,7 @@ version leaves this file for the catalog.
 | `io.coil-kt.coil3:coil-network-ktor3` | yes | Replaced `coil-network-okhttp` in A2. Since A5 it takes the app's injected base `HttpClient`, so it follows whatever engine `ktor-client-engine-defaults` resolves per target. |
 | `com.mikepenz:aboutlibraries-compose-m3` | yes | |
 | `io.ktor:ktor-client-*` (core, content-negotiation, engine-defaults, resources, serialization), `io.ktor:ktor-http` | 3.6.0 | yes | Engine is the only platform part, and since A5 it is resolved rather than named — see ADR-0005. `ktor-http` is declared directly by `:notification` since A7f, which builds the push deeplink with its `URLBuilder`. |
-| `com.mohamedrejeb.ksoup:ksoup-html` | yes | |
+| `com.mohamedrejeb.ksoup:ksoup-html` | yes | Also used by `:rss-reader` since A7g, where it replaced `android.text.Html` for feed image extraction. Re-verified 2026-10-24: `ios_arm64` and `ios_simulator_arm64` variants published. |
 | `org.jetbrains.kotlinx:*` (coroutines, serialization, collections-immutable) | — | yes | `kotlinx-coroutines-android` is the Android artifact of a multiplatform library. |
 | `co.touchlab:kermit` | yes | Replaced `android.util.Log` in A1 (ADR-0003). Used through the `Logger` facade in `:common`; `:html-text:imagecontent` depends on it directly to stay app-agnostic. |
 

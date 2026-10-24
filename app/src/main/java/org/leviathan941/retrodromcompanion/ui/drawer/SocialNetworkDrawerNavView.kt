@@ -29,10 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.common.logging.Logger
@@ -87,7 +87,7 @@ private fun SocialNetworkIconView(icon: SocialNetworkIcon) {
             AsyncImage(
                 modifier = Modifier
                     .size(24.dp),
-                model = ImageRequest.Builder(LocalContext.current)
+                model = ImageRequest.Builder(LocalPlatformContext.current)
                     .data(icon.url)
                     .build(),
                 placeholder = placeholder,

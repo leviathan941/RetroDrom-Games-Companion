@@ -18,32 +18,26 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import android.text.Html
+import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlHandler
+import com.mohamedrejeb.ksoup.html.parser.KsoupHtmlParser
 
-internal class HtmlParser(
-    private val html: String,
-) {
-    var images: List<String> = emptyList()
-        private set
-    var paragraphs: List<String> = emptyList()
-        private set
-
-    fun parse(): HtmlParser {
-        val foundImages = mutableListOf<String>()
-        val imageHandler = Html.ImageGetter { imageSrc ->
-            foundImages.add(imageSrc)
-            null
-        }
-        val tagHandler = Html.TagHandler { _, _, _, _ -> }
-        Html.fromHtml(
-            html,
-            Html.FROM_HTML_MODE_COMPACT,
-            imageHandler,
-            tagHandler,
-        ).split("\n")
-            .filterNot { it.isBlank() || it == "\ufffc" }
-            .let { paragraphs = it }
-        images = foundImages
-        return this
+internal fun findFirstImageSource(html: String): String? {
+    var source: String? = null
+    KsoupHtmlParser(
+        handler = object : KsoupHtmlHandler {
+            override fun onOpenTag(
+                name: String,
+                attributes: Map<String, String>,
+                isImplied: Boolean,
+            ) {
+                if (source == null && name == "img") {
+                    source = attributes["src"]?.takeIf { it.isNotBlank() }
+                }
+            }
+        },
+    ).apply {
+        write(html)
+        end()
     }
+    return source
 }

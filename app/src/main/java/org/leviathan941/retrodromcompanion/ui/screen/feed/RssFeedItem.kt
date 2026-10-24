@@ -38,7 +38,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -84,7 +84,7 @@ fun RssFeedItem(
                     modifier = Modifier
                         .size(75.dp)
                         .clip(RoundedCornerShape(3.dp)),
-                    model = ImageRequest.Builder(LocalContext.current)
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
                         .data(imageUrl)
                         .build(),
                     placeholder = painterResource(
