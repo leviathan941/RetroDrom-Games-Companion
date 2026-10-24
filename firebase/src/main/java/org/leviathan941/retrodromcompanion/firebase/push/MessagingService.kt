@@ -27,9 +27,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.notification.NotificationData
-import org.leviathan941.retrodromcompanion.notification.Notifications
-import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
-import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
 
 private val logger = Logger.withTag("MessagingService")
 
@@ -40,19 +38,21 @@ private val logger = Logger.withTag("MessagingService")
 internal class MessagingService : FirebaseMessagingService() {
     // `application` is null until the service is attached, so this must stay a get() property
     // rather than a field initialiser.
-    private val notifications: Notifications
+    private val dependencies: MessagingDependencies
         get() = checkNotNull(application as? MessagingDependencies) {
             "Application must implement MessagingDependencies"
-        }.notifications
+        }
 
     override fun onRegistered(installationId: String) {
         logger.d { "Registered with FID: $installationId" }
+        val pushMessaging = dependencies.pushMessaging
+        val preferencesRepository = dependencies.preferencesRepository
         ProcessLifecycleOwner.get().lifecycleScope.launch {
-            PreferencesRepository(applicationContext.mainDataStore).ui.first().let { prefs ->
+            preferencesRepository.ui.first().let { prefs ->
                 prefs.subscribedPushTopics.mapNotNull {
-                    Messaging.topicFromValue(it)
+                    PushMessaging.Topic.fromValue(it)
                 }.forEach {
-                    Messaging.subscribeToTopic(it)
+                    pushMessaging.subscribeToTopic(it)
                 }
             }
         }
@@ -67,7 +67,7 @@ internal class MessagingService : FirebaseMessagingService() {
 
         message.toNotificationData()?.let {
             logger.d { "Message notification data: $it" }
-            notifications.show(it)
+            dependencies.notifications.show(it)
         }
     }
 

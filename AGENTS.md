@@ -21,11 +21,11 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:app` | UI layer: Compose screens, drawer, top bar, navigation, view models, themes. |
 | `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. |
 | `:common` | Shared constants (site base URL), DI keys, request codes. |
-| `:firebase` | FCM messaging service and push token handling. |
+| `:firebase` | FCM messaging service and the Firebase implementation of `PushMessaging` (topic subscriptions). |
 | `:html-text`, `:html-text:api`, `:html-text:imagecontent` | Standalone Compose library (`org.leviathan941.compose.htmltext`) that renders HTML as `AnnotatedString`, with pluggable inline content (e.g. `<img>`). Keep it app-agnostic. |
 | `:network` | Ktor client for the WordPress REST API and the RSS feed (`WpNetworkClient` / `WpKtorClient`). |
 | `:network:cache` | Room database caching feed categories and channel items, read behind `FeedCacheProvider` and written behind `FeedCacheMutator`. |
-| `:notification` | Notification channels, builders, helpers. |
+| `:notification` | Notification channels, builders, helpers; the `Notifications` and `PushMessaging` interfaces. |
 | `:permission` | Compose permission request and rationale UI on Calf (`calf-permissions`). |
 | `:preferences` | DataStore-backed UI/promo preferences with migrations. |
 | `:rss-reader` | Pages the cached feed with Paging 3 and refills it via a `RemoteMediator`. |

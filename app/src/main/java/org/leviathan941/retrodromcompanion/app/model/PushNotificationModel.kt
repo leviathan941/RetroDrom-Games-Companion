@@ -32,7 +32,7 @@ import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.app.message.UserMessages
 import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
-import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 @Inject
@@ -42,9 +42,11 @@ class PushNotificationModel(
     @param:ApplicationCoroutineScope
     private val scope: CoroutineScope,
     private val preferencesRepository: PreferencesRepository,
+    private val pushMessaging: PushMessaging,
 ) {
-    private val _subscribedPushTopics = MutableStateFlow(emptySet<Messaging.Topic>())
-    val subscribedPushTopics: StateFlow<Set<Messaging.Topic>> = _subscribedPushTopics.asStateFlow()
+    private val _subscribedPushTopics = MutableStateFlow(emptySet<PushMessaging.Topic>())
+    val subscribedPushTopics: StateFlow<Set<PushMessaging.Topic>> =
+        _subscribedPushTopics.asStateFlow()
 
     init {
         scope.launch {
@@ -53,7 +55,7 @@ class PushNotificationModel(
                 .collect { uiPreferences ->
                     _subscribedPushTopics.value = uiPreferences.subscribedPushTopics
                         .mapNotNull { topicName ->
-                            Messaging.topicFromValue(topicName)
+                            PushMessaging.Topic.fromValue(topicName)
                         }.toSet()
                 }
         }
@@ -64,32 +66,32 @@ class PushNotificationModel(
     }
 
     fun subscribeToTopic(
-        topic: Messaging.Topic,
+        topic: PushMessaging.Topic,
         showMessageOnFailed: Boolean = true,
     ) {
         scope.launch {
-            if (Messaging.subscribeToTopic(topic)) {
+            if (pushMessaging.subscribeToTopic(topic)) {
                 preferencesRepository.uiEditor.addPushTopicSubscription(topic.value)
             } else if (showMessageOnFailed) {
                 showTopicSubscriptionFailedMessage(
                     textRes = R.string.push_topic_subscription_failed_message,
-                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value,
+                    topicName = topic.value,
                 )
             }
         }
     }
 
     fun unsubscribeFromTopic(
-        topic: Messaging.Topic,
+        topic: PushMessaging.Topic,
         showMessageOnFailed: Boolean = true,
     ) {
         scope.launch {
-            if (Messaging.unsubscribeFromTopic(Messaging.Topic.NEW_RETRODROM_POSTS)) {
+            if (pushMessaging.unsubscribeFromTopic(topic)) {
                 preferencesRepository.uiEditor.removePushTopicSubscription(topic.value)
             } else if (showMessageOnFailed) {
                 showTopicSubscriptionFailedMessage(
                     textRes = R.string.push_topic_unsubscription_failed_message,
-                    topicName = Messaging.Topic.NEW_RETRODROM_POSTS.value,
+                    topicName = topic.value,
                 )
             }
         }

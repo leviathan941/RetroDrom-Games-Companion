@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
-import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
@@ -47,7 +47,7 @@ class SettingsViewModel(
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
     val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
 
-    val subscribedPushTopics: StateFlow<Set<Messaging.Topic>>
+    val subscribedPushTopics: StateFlow<Set<PushMessaging.Topic>>
         get() = pushNotificationModel.subscribedPushTopics
 
     init {
@@ -66,14 +66,14 @@ class SettingsViewModel(
         }
     }
 
-    fun subscribeToTopic(topic: Messaging.Topic) {
+    fun subscribeToTopic(topic: PushMessaging.Topic) {
         pushNotificationModel.subscribeToTopic(
             topic = topic,
             showMessageOnFailed = true,
         )
     }
 
-    fun unsubscribeFromTopic(topic: Messaging.Topic) {
+    fun unsubscribeFromTopic(topic: PushMessaging.Topic) {
         pushNotificationModel.unsubscribeFromTopic(
             topic = topic,
             showMessageOnFailed = true,

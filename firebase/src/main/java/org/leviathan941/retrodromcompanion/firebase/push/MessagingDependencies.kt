@@ -19,6 +19,8 @@
 package org.leviathan941.retrodromcompanion.firebase.push
 
 import org.leviathan941.retrodromcompanion.notification.Notifications
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 /**
  * What [MessagingService] needs from the application graph.
@@ -28,4 +30,6 @@ import org.leviathan941.retrodromcompanion.notification.Notifications
  */
 public interface MessagingDependencies {
     public val notifications: Notifications
+    public val pushMessaging: PushMessaging
+    public val preferencesRepository: PreferencesRepository
 }

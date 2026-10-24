@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
 import org.leviathan941.retrodromcompanion.common.logging.Logger
-import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 private val logger = Logger.withTag("MainViewPromoModel")
@@ -57,7 +57,7 @@ class RssFeedPromoModel(
             }
 
         val isPushPostsTopicSubscribed = pushNotificationModel.subscribedPushTopics.map {
-            Messaging.Topic.NEW_RETRODROM_POSTS in it
+            PushMessaging.Topic.NEW_RETRODROM_POSTS in it
         }
 
         combine(isPushPostsPromoAllowed, isPushPostsTopicSubscribed) { isAllowed, isSubscribed ->
@@ -76,7 +76,7 @@ class RssFeedPromoModel(
 
     fun subscribePushPostsTopic() {
         pushNotificationModel.subscribeToTopic(
-            topic = Messaging.Topic.NEW_RETRODROM_POSTS,
+            topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
             showMessageOnFailed = false,
         )
     }

@@ -30,7 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.firebase.push.Messaging
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
@@ -68,16 +68,16 @@ fun NotificationSettingsSubScreen(
             uncheckedIcon = painterResource(
                 id = R.drawable.google_material_notifications_bell_off,
             ),
-            checked = subscribedPushTopics.contains(Messaging.Topic.NEW_RETRODROM_POSTS) &&
+            checked = subscribedPushTopics.contains(PushMessaging.Topic.NEW_RETRODROM_POSTS) &&
                 permissionGranted.value,
             onCheckedChange = { isChecked ->
                 if (isChecked) {
                     screenViewModel.subscribeToTopic(
-                        topic = Messaging.Topic.NEW_RETRODROM_POSTS,
+                        topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
                     )
                 } else {
                     screenViewModel.unsubscribeFromTopic(
-                        topic = Messaging.Topic.NEW_RETRODROM_POSTS,
+                        topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
                     )
                 }
                 if (!permissionGranted.value) {

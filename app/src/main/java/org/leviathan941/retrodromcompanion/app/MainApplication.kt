@@ -27,6 +27,8 @@ import dev.zacsweers.metro.createGraphFactory
 import org.leviathan941.retrodromcompanion.app.di.AppGraph
 import org.leviathan941.retrodromcompanion.firebase.push.MessagingDependencies
 import org.leviathan941.retrodromcompanion.notification.Notifications
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 class MainApplication :
     Application(),
@@ -36,6 +38,12 @@ class MainApplication :
 
     override val notifications: Notifications
         get() = appGraph.notifications
+
+    override val pushMessaging: PushMessaging
+        get() = appGraph.pushMessaging
+
+    override val preferencesRepository: PreferencesRepository
+        get() = appGraph.preferencesRepository
 
     override fun onCreate() {
         super.onCreate()

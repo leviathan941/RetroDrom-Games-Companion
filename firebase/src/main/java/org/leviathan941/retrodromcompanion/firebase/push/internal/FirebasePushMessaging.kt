@@ -16,35 +16,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.firebase.push
+package org.leviathan941.retrodromcompanion.firebase.push.internal
 
 import com.google.firebase.messaging.FirebaseMessaging
+import dev.zacsweers.metro.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import org.leviathan941.retrodromcompanion.common.logging.Logger
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
 
-public object Messaging {
-    private val logger = Logger.withTag("Messaging")
+@Inject
+internal class FirebasePushMessaging : PushMessaging {
+    private val logger = Logger.withTag("FirebasePushMessaging")
 
-    public enum class Topic(
-        public val value: String,
-    ) {
-        NEW_RETRODROM_POSTS("new_retrodrom_posts"),
-    }
+    override suspend fun subscribeToTopic(topic: PushMessaging.Topic): Boolean =
+        suspendCoroutine { continuation ->
+            FirebaseMessaging.getInstance().subscribeToTopic(topic.value)
+                .addOnSuccessListener {
+                    logger.d { "Subscribed to topic $topic" }
+                    continuation.resume(true)
+                }
+                .addOnFailureListener { ex ->
+                    logger.e(ex) { "Failed to subscribe to topic $topic" }
+                    continuation.resume(false)
+                }
+        }
 
-    public suspend fun subscribeToTopic(topic: Topic): Boolean = suspendCoroutine { continuation ->
-        FirebaseMessaging.getInstance().subscribeToTopic(topic.value)
-            .addOnSuccessListener {
-                logger.d { "Subscribed to topic $topic" }
-                continuation.resume(true)
-            }
-            .addOnFailureListener { ex ->
-                logger.e(ex) { "Failed to subscribe to topic $topic" }
-                continuation.resume(false)
-            }
-    }
-
-    public suspend fun unsubscribeFromTopic(topic: Topic): Boolean =
+    override suspend fun unsubscribeFromTopic(topic: PushMessaging.Topic): Boolean =
         suspendCoroutine { continuation ->
             FirebaseMessaging.getInstance().unsubscribeFromTopic(topic.value)
                 .addOnSuccessListener {
@@ -56,6 +54,4 @@ public object Messaging {
                     continuation.resume(false)
                 }
         }
-
-    public fun topicFromValue(value: String): Topic? = Topic.entries.find { it.value == value }
 }
