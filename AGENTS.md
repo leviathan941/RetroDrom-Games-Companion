@@ -51,6 +51,12 @@ Read them from there rather than restating them here — version numbers in this
   `internal`. `@Provides` must sit in an `object` or a `companion object`, never directly in an
   abstract container. View models are multibound via `metrox-viewmodel`; retrieve them with
   `metroViewModel()` / `assistedMetroViewModel()`.
+- Metro's graph reports are off by default: Metro marks them debugging-only because they add
+  noticeable compile overhead. Request them with the `metro.reportsDestination` property (a path
+  relative to the module's build directory). The path is not a compile input, so force the
+  compilation: `./gradlew :app:compileDebugKotlin --rerun -Pmetro.reportsDestination=reports/metro`.
+  `app/build/reports/metro/<variant>/graph-dump/` then names every binding, its kind, its scope
+  and its source location — the practical way to diff the graph across a change.
 - Source files and module `build.gradle.kts` scripts carry the GPL v3 header
   (`RetroDrom Games Companion / Copyright (C) …`). Only the root `build.gradle.kts`,
   `settings.gradle.kts`, `buildSrc` and `app/build.gradle.kts` carry the Apache 2.0 header.

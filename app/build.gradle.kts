@@ -35,12 +35,6 @@ kotlin {
     }
 }
 
-metro {
-    // build/reports/metro/<variant>/graph-dump/ names every binding, its kind, its scope and
-    // its source location. It is the only practical way to diff the graph across a change.
-    reportsDestination = layout.buildDirectory.dir("reports/metro")
-}
-
 android {
     namespace = "org.leviathan941.retrodromcompanion"
     compileSdk = AndroidSdk.COMPILE_SDK_VERSION
