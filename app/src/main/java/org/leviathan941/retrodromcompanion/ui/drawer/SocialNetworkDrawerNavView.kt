@@ -100,6 +100,7 @@ private fun SocialNetworkIconView(icon: SocialNetworkIcon) {
                 },
             )
         }
+
         is SocialNetworkIcon.Resource -> {
             Image(
                 modifier = Modifier

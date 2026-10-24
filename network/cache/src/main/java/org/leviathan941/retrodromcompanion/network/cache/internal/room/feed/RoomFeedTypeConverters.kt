@@ -32,9 +32,9 @@ internal object RoomFeedTypeConverters {
         categories.joinToString(separator = CATEGORIES_SEPARATOR)
 
     @ColumnTypeConverter
-    fun stringToCategories(value: String): ImmutableList<String> =
-        value.takeIf { it.isNotEmpty() }
-            ?.split(CATEGORIES_SEPARATOR)
-            ?.toImmutableList()
-            ?: persistentListOf()
+    fun stringToCategories(value: String): ImmutableList<String> = value
+        .takeIf { it.isNotEmpty() }
+        ?.split(CATEGORIES_SEPARATOR)
+        ?.toImmutableList()
+        ?: persistentListOf()
 }

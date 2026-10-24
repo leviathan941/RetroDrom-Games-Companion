@@ -62,5 +62,4 @@ dependencies {
 
     implementation(libs.jetbrains.kotlinx.collections.immutable)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
-
 }

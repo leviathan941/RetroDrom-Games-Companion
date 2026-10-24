@@ -40,6 +40,9 @@ import kotlin.reflect.KClass
 @Inject
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class, binding<MetroViewModelFactory>())
+// Two of the overridden types do not fit on one line, and ktlint would put their continuation at
+// the property's own indent, where it reads as a separate parameter.
+@Suppress("ktlint:standard:indent", "ktlint:standard:parameter-list-spacing")
 class AppViewModelFactory(
     override val viewModelProviders:
         Map<KClass<out ViewModel>, () -> ViewModel>,

@@ -43,20 +43,30 @@ import co.touchlab.kermit.Logger as KermitLogger
 public class Logger private constructor(
     private val delegate: KermitLogger,
 ) {
-    public fun v(throwable: Throwable? = null, message: () -> String): Unit =
-        delegate.v(throwable, message = message)
+    public fun v(
+        throwable: Throwable? = null,
+        message: () -> String,
+    ): Unit = delegate.v(throwable, message = message)
 
-    public fun d(throwable: Throwable? = null, message: () -> String): Unit =
-        delegate.d(throwable, message = message)
+    public fun d(
+        throwable: Throwable? = null,
+        message: () -> String,
+    ): Unit = delegate.d(throwable, message = message)
 
-    public fun i(throwable: Throwable? = null, message: () -> String): Unit =
-        delegate.i(throwable, message = message)
+    public fun i(
+        throwable: Throwable? = null,
+        message: () -> String,
+    ): Unit = delegate.i(throwable, message = message)
 
-    public fun w(throwable: Throwable? = null, message: () -> String): Unit =
-        delegate.w(throwable, message = message)
+    public fun w(
+        throwable: Throwable? = null,
+        message: () -> String,
+    ): Unit = delegate.w(throwable, message = message)
 
-    public fun e(throwable: Throwable? = null, message: () -> String): Unit =
-        delegate.e(throwable, message = message)
+    public fun e(
+        throwable: Throwable? = null,
+        message: () -> String,
+    ): Unit = delegate.e(throwable, message = message)
 
     public companion object {
         public fun withTag(tag: String): Logger = Logger(KermitLogger.withTag(tag))

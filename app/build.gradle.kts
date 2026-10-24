@@ -152,7 +152,6 @@ dependencies {
     implementation(libs.zacsweers.metrox.viewmodel)
     implementation(libs.zacsweers.metrox.viewmodel.compose)
 
-
     debugImplementation(libs.compose.ui.tooling)
 
     lintChecks(libs.slack.compose.lint.checks)

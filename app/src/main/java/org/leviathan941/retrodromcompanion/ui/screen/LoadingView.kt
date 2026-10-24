@@ -50,6 +50,7 @@ fun LoadingView(
 ) {
     when (state) {
         LoadingState.InProgress -> InProgressView(modifier)
+
         is LoadingState.Failure -> FailureView(
             failureState = state,
             modifier = modifier,

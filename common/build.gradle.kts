@@ -56,5 +56,4 @@ android {
 
 dependencies {
     implementation(libs.touchlab.kermit)
-
 }

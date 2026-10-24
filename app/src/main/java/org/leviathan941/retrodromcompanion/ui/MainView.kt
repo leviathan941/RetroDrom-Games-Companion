@@ -89,6 +89,7 @@ fun MainView(
         userMessagesViewModel.messages.collect { message ->
             val text = when (message) {
                 is UserMessage.Text -> message.text
+
                 is UserMessage.Resource ->
                     resources.getString(message.textRes, *message.formatArgs.toTypedArray())
             }

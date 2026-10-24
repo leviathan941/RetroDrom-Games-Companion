@@ -37,6 +37,7 @@ internal fun notificationChannelId(value: String?): NotificationChannelId =
 internal fun NotificationChannelId.channelName(context: Context): String = when (this) {
     NotificationChannelId.RETRODROM_RSS_POSTS ->
         context.getString(R.string.rss_news_notification_channel_name)
+
     NotificationChannelId.MISC ->
         context.getString(R.string.misc_notification_channel_name)
 }
@@ -44,6 +45,7 @@ internal fun NotificationChannelId.channelName(context: Context): String = when 
 internal fun NotificationChannelId.visibility(): Int = when (this) {
     NotificationChannelId.RETRODROM_RSS_POSTS ->
         android.app.Notification.VISIBILITY_PUBLIC
+
     NotificationChannelId.MISC ->
         android.app.Notification.VISIBILITY_PRIVATE
 }

@@ -30,7 +30,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
  * A short message for the user, shown by the single snackbar host at the root of the UI.
  */
 sealed interface UserMessage {
-    data class Text(val text: String) : UserMessage
+    data class Text(
+        val text: String,
+    ) : UserMessage
 
     data class Resource(
         @param:StringRes val textRes: Int,
