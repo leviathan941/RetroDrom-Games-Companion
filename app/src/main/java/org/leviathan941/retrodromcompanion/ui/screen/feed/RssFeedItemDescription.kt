@@ -40,7 +40,7 @@ import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.compose.htmltext.HtmlText
 import org.leviathan941.compose.htmltext.imagecontent.ImageContentCreator
 import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.rssreader.asDateTime
+import org.leviathan941.retrodromcompanion.rssreader.asInstant
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
 
@@ -66,7 +66,7 @@ fun RssFeedItemDescription(
             modifier = Modifier
                 .padding(top = 10.dp),
             text = itemDescription.pubDate
-                .asDateTime()
+                .asInstant()
                 .toRssFeedPublicationTime(LocalResources.current),
             color = nonImportantColor,
             style = MaterialTheme.typography.labelMedium,

@@ -62,6 +62,7 @@ dependencies {
 
     implementation(libs.jetbrains.kotlinx.collections.immutable)
     implementation(libs.jetbrains.kotlinx.coroutines.android)
+    implementation(libs.jetbrains.kotlinx.datetime)
     implementation(libs.mohamedrejeb.ksoup.html)
 
     testImplementation(libs.junit)

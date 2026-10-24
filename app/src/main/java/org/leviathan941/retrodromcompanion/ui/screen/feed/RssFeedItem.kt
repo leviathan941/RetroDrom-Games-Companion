@@ -53,8 +53,7 @@ import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import kotlin.time.Instant
 
 private val logger = Logger.withTag("RssFeedItem")
 
@@ -62,7 +61,7 @@ private val logger = Logger.withTag("RssFeedItem")
 fun RssFeedItem(
     title: String,
     categories: ImmutableList<String>,
-    pubDate: ZonedDateTime,
+    pubDate: Instant,
     modifier: Modifier = Modifier,
     imageUrl: String? = null,
 ) {
@@ -180,6 +179,6 @@ private fun RssFeedItemPreview() = RssFeedItem(
         "Category 5",
         "Category 6",
     ),
-    pubDate = ZonedDateTime.of(2024, 3, 1, 12, 0, 0, 0, ZoneId.systemDefault()),
+    pubDate = Instant.parse("2024-03-01T12:00:00Z"),
     imageUrl = "https://example.com/image.jpg",
 )

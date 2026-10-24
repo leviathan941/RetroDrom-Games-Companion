@@ -27,7 +27,7 @@ import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.hours
 
 private val logger = Logger.withTag("RssReader")
 
@@ -84,6 +84,6 @@ internal class RssFeedItemsMediator(
     )
 
     private companion object {
-        val FEED_EXPIRED_TIME_MILLIS = TimeUnit.HOURS.toMillis(1L)
+        val FEED_EXPIRED_TIME_MILLIS = 1.hours.inWholeMilliseconds
     }
 }

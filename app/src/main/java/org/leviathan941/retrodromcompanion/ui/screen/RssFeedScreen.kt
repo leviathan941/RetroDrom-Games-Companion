@@ -49,7 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
-import org.leviathan941.retrodromcompanion.rssreader.asDateTime
+import org.leviathan941.retrodromcompanion.rssreader.asInstant
 import org.leviathan941.retrodromcompanion.ui.copyToClipboard
 import org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel
 import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
@@ -125,7 +125,7 @@ fun RssFeedScreen(
                         },
                         title = rssFeedItem.title,
                         categories = rssFeedItem.categories,
-                        pubDate = rssFeedItem.pubDate.asDateTime(),
+                        pubDate = rssFeedItem.pubDate.asInstant(),
                         imageUrl = rssFeedItem.description?.imageUrl,
                     )
                     HorizontalDivider(

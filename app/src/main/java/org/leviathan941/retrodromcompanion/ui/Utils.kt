@@ -35,11 +35,10 @@ import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
-import java.time.ZonedDateTime
-import java.time.temporal.ChronoUnit
+import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
-import kotlin.time.toDuration
+import kotlin.time.Instant
 
 internal val mainViewLogger = Logger.withTag("MainView")
 internal val rssScreenLogger = Logger.withTag("RssScreen")
@@ -57,37 +56,35 @@ internal val APP_THEME_DEFAULT = when {
     else -> ThemeType.LIGHT
 }
 
-fun ZonedDateTime.toRssFeedPublicationTime(resources: Resources): String {
-    val now = ZonedDateTime.now(zone)
-    val diffMinutes = ChronoUnit.MINUTES.between(this, now)
-        .toDuration(DurationUnit.MINUTES)
+fun Instant.toRssFeedPublicationTime(resources: Resources): String {
+    val age = Clock.System.now() - this
     return when {
-        diffMinutes.inWholeMinutes < 1L ->
+        age.inWholeMinutes < 1L ->
             resources.getString(R.string.rss_feed_item_publication_time_just_now)
 
-        diffMinutes.inWholeHours < 1L ->
+        age.inWholeHours < 1L ->
             resources.getTimeQuantityString(
                 R.plurals.rss_feed_item_publication_time_minutes,
-                diffMinutes,
+                age,
                 DurationUnit.MINUTES,
             )
 
-        diffMinutes.inWholeDays < 1L ->
+        age.inWholeDays < 1L ->
             resources.getTimeQuantityString(
                 R.plurals.rss_feed_item_publication_time_hours,
-                diffMinutes,
+                age,
                 DurationUnit.HOURS,
             )
 
-        diffMinutes.inWholeDays < 30L ->
+        age.inWholeDays < 30L ->
             resources.getTimeQuantityString(
                 R.plurals.rss_feed_item_publication_time_days,
-                diffMinutes,
+                age,
                 DurationUnit.DAYS,
             )
 
-        diffMinutes.inWholeDays < 365L ->
-            (diffMinutes.inWholeDays / 30L).let { diffMonths ->
+        age.inWholeDays < 365L ->
+            (age.inWholeDays / 30L).let { diffMonths ->
                 resources.getQuantityString(
                     R.plurals.rss_feed_item_publication_time_months,
                     diffMonths.toInt(),
@@ -96,7 +93,7 @@ fun ZonedDateTime.toRssFeedPublicationTime(resources: Resources): String {
             }
 
         else ->
-            (diffMinutes.inWholeDays / 365L).let { diffYears ->
+            (age.inWholeDays / 365L).let { diffYears ->
                 resources.getQuantityString(
                     R.plurals.rss_feed_item_publication_time_years,
                     diffYears.toInt(),

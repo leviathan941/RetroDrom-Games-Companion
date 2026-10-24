@@ -21,6 +21,7 @@ package org.leviathan941.retrodromcompanion.common
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import kotlin.time.Clock as KotlinClock
 
 public interface Clock {
     public fun currentTimeMillis(): Long
@@ -29,5 +30,5 @@ public interface Clock {
 @Inject
 @ContributesBinding(AppScope::class)
 public class SystemClock : Clock {
-    override fun currentTimeMillis(): Long = System.currentTimeMillis()
+    override fun currentTimeMillis(): Long = KotlinClock.System.now().toEpochMilliseconds()
 }

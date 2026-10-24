@@ -18,11 +18,10 @@
 
 package org.leviathan941.retrodromcompanion.rssreader
 
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import kotlinx.datetime.format.DateTimeComponents
+import kotlinx.datetime.parse
+import kotlin.time.Instant
 
-public fun RssPublicationDate.asDateTime(): ZonedDateTime =
-    ZonedDateTime.parse(value, DateTimeFormatter.RFC_1123_DATE_TIME)
+public fun RssPublicationDate.asInstant(): Instant = value.asInstant()
 
-public fun String.asDateTime(): ZonedDateTime =
-    ZonedDateTime.parse(this, DateTimeFormatter.RFC_1123_DATE_TIME)
+public fun String.asInstant(): Instant = Instant.parse(this, DateTimeComponents.Formats.RFC_1123)

@@ -240,13 +240,13 @@ public fun org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen(data: or
     - content: STABLE (composable function type)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem(title: kotlin.String, categories: kotlinx.collections.immutable.ImmutableList<kotlin.String>, pubDate: java.time.ZonedDateTime, modifier: androidx.compose.ui.Modifier, imageUrl: kotlin.String?): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem(title: kotlin.String, categories: kotlinx.collections.immutable.ImmutableList<kotlin.String>, pubDate: kotlin.time.Instant, modifier: androidx.compose.ui.Modifier, imageUrl: kotlin.String?): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - title: STABLE (String is immutable)
     - categories: STABLE (known stable type)
-    - pubDate: UNSTABLE (Java class; stability cannot be inferred)
+    - pubDate: UNSTABLE (cross-module type without @Stable/@Immutable)
     - modifier: STABLE (marked @Stable or @Immutable)
     - imageUrl: STABLE (class with no mutable properties)
 
