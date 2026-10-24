@@ -22,12 +22,13 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import org.leviathan941.retrodromcompanion.common.Clock
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedChannelItem
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Instant
 
 private val logger = Logger.withTag("RssReader")
 
@@ -39,10 +40,12 @@ internal class RssFeedItemsMediator(
     private val clock: Clock,
 ) : RemoteMediator<Int, FeedChannelItem>() {
     override suspend fun initialize(): InitializeAction {
-        val lastUpdatedMillis = cacheProvider.channelItemsLastUpdatedMillis(channelUrl) ?: 0L
-        val ageMillis = clock.currentTimeMillis() - lastUpdatedMillis
-        logger.d { "Cached items of $channelUrl are $ageMillis ms old" }
-        return if (ageMillis >= FEED_EXPIRED_TIME_MILLIS) {
+        val lastUpdated = Instant.fromEpochMilliseconds(
+            cacheProvider.channelItemsLastUpdatedMillis(channelUrl) ?: 0L,
+        )
+        val age = clock.now() - lastUpdated
+        logger.d { "Cached items of $channelUrl are $age old" }
+        return if (age >= FEED_EXPIRY_AGE) {
             InitializeAction.LAUNCH_INITIAL_REFRESH
         } else {
             InitializeAction.SKIP_INITIAL_REFRESH
@@ -84,6 +87,6 @@ internal class RssFeedItemsMediator(
     )
 
     private companion object {
-        val FEED_EXPIRED_TIME_MILLIS = 1.hours.inWholeMilliseconds
+        val FEED_EXPIRY_AGE = 1.hours
     }
 }

@@ -24,13 +24,13 @@ import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.leviathan941.retrodromcompanion.common.Clock
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.RoomFeedDatabase
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel.RoomFeedChannelItemEntity
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.metadata.RoomFeedCacheMetadataEntity
 import org.leviathan941.retrodromcompanion.network.wordpress.WpNetworkClient
+import kotlin.time.Clock
 
 private val logger = Logger.withTag("RoomFeedCache")
 
@@ -68,7 +68,7 @@ internal class RoomFeedCacheMutatorImpl(
                 database.cacheMetadataDao().upsert(
                     RoomFeedCacheMetadataEntity(
                         channelUrl = channelUrl,
-                        itemsLastUpdated = clock.currentTimeMillis(),
+                        itemsLastUpdated = clock.now().toEpochMilliseconds(),
                     ),
                 )
             }

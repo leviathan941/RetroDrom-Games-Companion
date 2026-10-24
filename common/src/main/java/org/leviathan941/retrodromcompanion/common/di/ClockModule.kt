@@ -16,19 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.common
+package org.leviathan941.retrodromcompanion.common.di
 
 import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
-import kotlin.time.Clock as KotlinClock
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import kotlin.time.Clock
 
-public interface Clock {
-    public fun currentTimeMillis(): Long
-}
-
-@Inject
-@ContributesBinding(AppScope::class)
-public class SystemClock : Clock {
-    override fun currentTimeMillis(): Long = KotlinClock.System.now().toEpochMilliseconds()
+@BindingContainer
+@ContributesTo(AppScope::class)
+public object ClockModule {
+    @Provides
+    internal fun provideClock(): Clock = Clock.System
 }
