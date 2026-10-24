@@ -47,6 +47,8 @@ internal class WpKtorClient(
 ) : WpNetworkClient {
     private val httpClient = httpClientFactory.create()
 
+    // Any request, response or decoding failure becomes a Result.failure for the caller.
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun fetchCategories(): Result<List<WpFeedCategory>> = try {
         httpClient.get(WpApiFeedCategories()).handleResponse()
     } catch (e: CancellationException) {
@@ -61,6 +63,8 @@ internal class WpKtorClient(
         )
     }
 
+    // Any request, response or decoding failure becomes a Result.failure for the caller.
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun fetchRssFeedChannelPage(
         channelUrl: String,
         pageNumber: Int,

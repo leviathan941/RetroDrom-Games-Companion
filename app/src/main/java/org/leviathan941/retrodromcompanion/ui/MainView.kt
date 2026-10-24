@@ -87,6 +87,8 @@ fun MainView(
     val resources = LocalResources.current
     LaunchedEffect(userMessagesViewModel, resources) {
         userMessagesViewModel.messages.collect { message ->
+            // getString takes its format arguments as a vararg.
+            @Suppress("SpreadOperator")
             val text = when (message) {
                 is UserMessage.Text -> message.text
 

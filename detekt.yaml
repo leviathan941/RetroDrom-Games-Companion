@@ -9,14 +9,17 @@ complexity:
     functionThreshold: 10
     ignoreDefaultParameters: true
   TooManyFunctions:
-    ignoreAnnotatedFunctions: ['Preview']
+    ignoreAnnotatedFunctions: ['Preview', 'PreviewLightDark']
   LongMethod:
     active: true
     threshold: 100
 style:
   UnusedPrivateMember:
     active: true
-    ignoreAnnotated: ['Preview']
+    ignoreAnnotated: ['Preview', 'PreviewLightDark']
+  ReturnCount:
+    active: true
+    excludeGuardClauses: true
   MagicNumber:
     active: true
     ignorePropertyDeclaration: true

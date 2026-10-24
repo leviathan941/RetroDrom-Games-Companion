@@ -61,6 +61,7 @@ public class AppDataMigrator internal constructor(
     /**
      * Starts the run. Subsequent calls are ignored.
      */
+    @Suppress("TooGenericExceptionCaught")
     public fun start() {
         val started = state.compareAndSet(
             expect = AppDataMigrationState.Pending,
@@ -79,6 +80,7 @@ public class AppDataMigrator internal constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
+                // A failed migration must not crash the app; the state still finishes below.
                 logger.e(e) { "App data migration failed" }
             } finally {
                 state.value = AppDataMigrationState.Finished
