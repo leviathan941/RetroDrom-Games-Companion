@@ -16,20 +16,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.leviathan941.retrodromcompanion.utils
+package org.leviathan941.retrodromcompanion.browser.internal
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
+import org.leviathan941.retrodromcompanion.browser.InAppBrowser
 
-fun openUrlInCustomTab(
-    context: Context,
-    url: String,
+// [context] must be an Activity, so that the tab opens in the app's task: from any other Context,
+// starting it would need FLAG_ACTIVITY_NEW_TASK.
+internal class CustomTabsInAppBrowser(
+    private val context: Context,
     @ColorInt toolbarColor: Int,
-) {
-    CustomTabsIntent.Builder().apply {
+) : InAppBrowser {
+    private val customTabsIntent = CustomTabsIntent.Builder().apply {
         setShowTitle(true)
         setDefaultColorSchemeParams(
             CustomTabColorSchemeParams.Builder()
@@ -37,5 +40,12 @@ fun openUrlInCustomTab(
                 .build(),
         )
         setUrlBarHidingEnabled(true)
-    }.build().launchUrl(context, url.toUri())
+    }.build()
+
+    override fun open(url: String): Boolean = try {
+        customTabsIntent.launchUrl(context, url.toUri())
+        true
+    } catch (_: ActivityNotFoundException) {
+        false
+    }
 }

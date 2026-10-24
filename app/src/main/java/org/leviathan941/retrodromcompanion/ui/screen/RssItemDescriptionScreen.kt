@@ -24,9 +24,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.persistentListOf
+import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.app.message.UserMessage
+import org.leviathan941.retrodromcompanion.browser.rememberInAppBrowser
+import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
+import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItemDescription
@@ -34,7 +38,6 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
-import org.leviathan941.retrodromcompanion.utils.openUrlInCustomTab
 
 @Composable
 fun RssItemDescriptionScreen(
@@ -42,14 +45,18 @@ fun RssItemDescriptionScreen(
     navigationActions: MainNavActions,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val toolbarColor = MaterialTheme.colorScheme.primaryContainer.toArgb()
+    val userMessagesViewModel = metroViewModel<UserMessagesViewModel>(
+        key = ViewModelKeys.USER_MESSAGES_VIEW_MODEL,
+    )
+    val inAppBrowser = rememberInAppBrowser(
+        toolbarColor = MaterialTheme.colorScheme.primaryContainer,
+    )
     val openUrl = { url: String ->
-        openUrlInCustomTab(
-            context = context,
-            url = url,
-            toolbarColor = toolbarColor,
-        )
+        if (!inAppBrowser.open(url)) {
+            userMessagesViewModel.show(
+                UserMessage.Resource(R.string.open_external_link_application_not_found),
+            )
+        }
     }
     Scaffold(
         modifier = modifier,
