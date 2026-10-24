@@ -25,6 +25,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalUriHandler
@@ -43,7 +44,10 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableI
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsGroup
 
 @Composable
-fun FeedbackSettingsSubScreen(showMessage: (UserMessage) -> Unit) {
+fun FeedbackSettingsSubScreen(
+    showMessage: (UserMessage) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val uriHandler = LocalUriHandler.current
     val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
@@ -56,6 +60,7 @@ fun FeedbackSettingsSubScreen(showMessage: (UserMessage) -> Unit) {
 
     SettingsGroup(
         title = stringResource(id = R.string.settings_about_feedback_screen_description),
+        modifier = modifier,
         titleStyle = MaterialTheme.typography.bodyLarge,
     ) {
         SettingsClickableItem(

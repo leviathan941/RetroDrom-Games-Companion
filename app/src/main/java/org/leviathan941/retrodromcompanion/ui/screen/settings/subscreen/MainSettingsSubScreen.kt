@@ -24,6 +24,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +46,7 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toString
 @Composable
 fun MainSettingsSubScreen(
     navigationActions: MainNavActions,
+    modifier: Modifier = Modifier,
     screenViewModel: SettingsViewModel = metroViewModel<SettingsViewModel>(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
     ),
@@ -56,6 +58,7 @@ fun MainSettingsSubScreen(
             title = stringResource(id = R.string.settings_screen_title),
         ),
         navigationActions = navigationActions,
+        modifier = modifier,
     ) {
         SettingsGroup(
             title = stringResource(id = R.string.settings_group_name_interface),

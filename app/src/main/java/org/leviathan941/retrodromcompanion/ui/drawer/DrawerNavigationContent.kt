@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
@@ -62,100 +63,103 @@ fun DrawerNavigationContent(
     drawerState: DrawerState,
     coroutineScope: CoroutineScope,
     showMessage: (UserMessage) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
     val uiState by uiState.collectAsState()
     val uriHandler = LocalUriHandler.current
 
-    when (val state = uiState) {
-        is MainViewState.RssFeed -> {
-            state.screenData.takeUnless { it.isEmpty() }?.let { rssScreens ->
-                RssFeedDrawerNavView(
-                    rssScreens = rssScreens.values.toImmutableList(),
-                    isSelected = { screen ->
-                        navBackStackEntry?.run {
-                            isRouteActive<RssFeedDestination.Feed>() &&
-                                toRoute<RssFeedDestination.Feed>() == screen.toDestination()
-                        } == true
-                    },
-                    onClick = { screen ->
-                        navigationActions.navigateToRssFeed(screen.toDestination())
-                        closeDrawer()
-                    },
-                )
+    Column(modifier = modifier) {
+        when (val state = uiState) {
+            is MainViewState.RssFeed -> {
+                state.screenData.takeUnless { it.isEmpty() }?.let { rssScreens ->
+                    RssFeedDrawerNavView(
+                        rssScreens = rssScreens.values.toImmutableList(),
+                        isSelected = { screen ->
+                            navBackStackEntry?.run {
+                                isRouteActive<RssFeedDestination.Feed>() &&
+                                    toRoute<RssFeedDestination.Feed>() == screen.toDestination()
+                            } == true
+                        },
+                        onClick = { screen ->
+                            navigationActions.navigateToRssFeed(screen.toDestination())
+                            closeDrawer()
+                        },
+                    )
+                }
             }
         }
+
+        HorizontalDivider()
+
+        SettingsDrawerNavView(
+            isSelected = {
+                navBackStackEntry?.isRouteActive<MainDestination.Settings>() == true
+            },
+            onClick = {
+                navigationActions.navigateToSettings()
+                closeDrawer()
+            },
+        )
+
+        HorizontalDivider()
+
+        SocialNetworkDrawerNavView(
+            title = stringResource(R.string.drawer_telegram_item_title),
+            icon = SocialNetworkIcon.Resource(R.drawable.telegram_logo),
+            badgeContentDescription = stringResource(
+                R.string.drawer_telegram_external_link_badge_description,
+            ),
+            onClick = {
+                uriHandler.openUrl(
+                    url = "https://t.me/retrodrom",
+                    showMessage = showMessage,
+                )
+                closeDrawer()
+            },
+        )
+
+        HorizontalDivider()
+
+        SocialNetworkDrawerNavView(
+            title = stringResource(R.string.drawer_youtube_item_title),
+            icon = SocialNetworkIcon.Resource(
+                resId = R.drawable.youtube_logo,
+            ),
+            badgeContentDescription = stringResource(
+                R.string.drawer_youtube_external_link_badge_description,
+            ),
+            onClick = {
+                uriHandler.openUrl(
+                    url = "https://www.youtube.com/@RetroDrom",
+                    showMessage = showMessage,
+                )
+                closeDrawer()
+            },
+        )
+
+        HorizontalDivider()
+
+        SocialNetworkDrawerNavView(
+            title = stringResource(R.string.drawer_boosty_item_title),
+            icon = SocialNetworkIcon.Resource(
+                resId = R.drawable.boosty_logo,
+                contentScale = ContentScale.Crop,
+            ),
+            badgeContentDescription = stringResource(
+                R.string.drawer_boosty_external_link_badge_description,
+            ),
+            onClick = {
+                uriHandler.openUrl(
+                    url = "https://boosty.to/retrodrom",
+                    showMessage = showMessage,
+                )
+                closeDrawer()
+            },
+        )
+
+        HorizontalDivider()
     }
-
-    HorizontalDivider()
-
-    SettingsDrawerNavView(
-        isSelected = {
-            navBackStackEntry?.isRouteActive<MainDestination.Settings>() == true
-        },
-        onClick = {
-            navigationActions.navigateToSettings()
-            closeDrawer()
-        },
-    )
-
-    HorizontalDivider()
-
-    SocialNetworkDrawerNavView(
-        title = stringResource(R.string.drawer_telegram_item_title),
-        icon = SocialNetworkIcon.Resource(R.drawable.telegram_logo),
-        badgeContentDescription = stringResource(
-            R.string.drawer_telegram_external_link_badge_description,
-        ),
-        onClick = {
-            uriHandler.openUrl(
-                url = "https://t.me/retrodrom",
-                showMessage = showMessage,
-            )
-            closeDrawer()
-        },
-    )
-
-    HorizontalDivider()
-
-    SocialNetworkDrawerNavView(
-        title = stringResource(R.string.drawer_youtube_item_title),
-        icon = SocialNetworkIcon.Resource(
-            resId = R.drawable.youtube_logo,
-        ),
-        badgeContentDescription = stringResource(
-            R.string.drawer_youtube_external_link_badge_description,
-        ),
-        onClick = {
-            uriHandler.openUrl(
-                url = "https://www.youtube.com/@RetroDrom",
-                showMessage = showMessage,
-            )
-            closeDrawer()
-        },
-    )
-
-    HorizontalDivider()
-
-    SocialNetworkDrawerNavView(
-        title = stringResource(R.string.drawer_boosty_item_title),
-        icon = SocialNetworkIcon.Resource(
-            resId = R.drawable.boosty_logo,
-            contentScale = ContentScale.Crop,
-        ),
-        badgeContentDescription = stringResource(
-            R.string.drawer_boosty_external_link_badge_description,
-        ),
-        onClick = {
-            uriHandler.openUrl(
-                url = "https://boosty.to/retrodrom",
-                showMessage = showMessage,
-            )
-            closeDrawer()
-        },
-    )
-
-    HorizontalDivider()
 }
 
 @PreviewLightDark
