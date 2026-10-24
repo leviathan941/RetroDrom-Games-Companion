@@ -73,6 +73,11 @@ Read them from there rather than restating them here — version numbers in this
 The only tests are `:network`'s JVM unit tests, which cover the RSS response mapping and feed
 URL building; `./gradlew test` runs them. Compilation plus Android lint is otherwise the gate.
 
+`build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
+the committed baseline in `app/stability/`: a composable whose parameters become less stable
+fails the build. When a change is intended (a new or changed composable), regenerate the baseline
+with `./gradlew :app:stabilityDump` and commit it with the change.
+
 Every module sets `lint { warningsAsErrors = true }`, so a lint *warning* in any module
 fails the build — the exit code is the gate, and per-module reports under
 `<module>/build/reports/` only matter when diagnosing a failure. **Lint is clean: there is
