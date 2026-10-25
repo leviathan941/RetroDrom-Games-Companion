@@ -1,6 +1,5 @@
 [versions]
 about-libraries-compose-m3 = "15.3.0"
-aghajari-annotated-text = "1.0.3"
 android-gradle-plugin = "9.4.1"
 androidx-activity = "1.13.0"
 androidx-appcompat = "1.8.0"
@@ -55,7 +54,6 @@ androidx-room3-compiler = { group = "androidx.room3", name = "room3-compiler", v
 androidx-room3-paging = { group = "androidx.room3", name = "room3-paging", version.ref = "androidx-room3" }
 androidx-room3-runtime = { group = "androidx.room3", name = "room3-runtime", version.ref = "androidx-room3" }
 androidx-sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "androidx-sqlite" }
-annotatedtext = { group = "io.github.aghajari", name = "AnnotatedText", version.ref = "aghajari-annotated-text" }
 coil3-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil3" }
 coil3-network-ktor3 = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil3" }
 compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
@@ -83,6 +81,7 @@ ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serializatio
 ktor-serialization-kotlinx-xml = { group = "io.ktor", name = "ktor-serialization-kotlinx-xml" }
 mohamedrejeb-calf-permissions-core = { group = "com.mohamedrejeb.calf", name = "calf-permissions-core", version.ref = "mohamedrejeb-calf" }
 mohamedrejeb-calf-permissions-notifications = { group = "com.mohamedrejeb.calf", name = "calf-permissions-notifications", version.ref = "mohamedrejeb-calf" }
+mohamedrejeb-ksoup-entities = { group = "com.mohamedrejeb.ksoup", name = "ksoup-entities", version.ref = "mohamedrejeb-ksoup" }
 mohamedrejeb-ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "mohamedrejeb-ksoup" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 touchlab-kermit = { group = "co.touchlab", name = "kermit", version.ref = "touchlab-kermit" }

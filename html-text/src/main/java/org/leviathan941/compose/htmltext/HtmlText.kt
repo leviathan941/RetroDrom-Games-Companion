@@ -20,20 +20,24 @@ package org.leviathan941.compose.htmltext
 
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.LinkInteractionListener
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.TextUnit
-import androidx.core.text.HtmlCompat
-import com.aghajari.compose.text.AnnotatedText
-import com.aghajari.compose.text.fromHtml
-import com.aghajari.compose.text.getInlineContentMap
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.compose.htmltext.api.InlineContentCreator
-import org.leviathan941.compose.htmltext.internal.createInlineContent
-import org.leviathan941.compose.htmltext.internal.extractTags
+import org.leviathan941.compose.htmltext.internal.htmlToContent
 
 @Composable
 public fun HtmlText(
@@ -45,25 +49,26 @@ public fun HtmlText(
     inlineContentCreators: ImmutableList<InlineContentCreator> = persistentListOf(),
     onLinkClick: (String) -> Unit = {},
 ) {
-    val text = html.fromHtml(
-        flags = HtmlCompat.FROM_HTML_MODE_LEGACY,
-        linkColor = linkColor,
-    )
-    val htmlTags = extractTags(html)
-    val inlineContent = inlineContentCreators.takeUnless { it.isEmpty() }?.let {
-        text.createInlineContent(
-            creators = it,
-            tags = htmlTags,
+    val currentOnLinkClick by rememberUpdatedState(onLinkClick)
+    val content = remember(html, linkColor, inlineContentCreators) {
+        htmlToContent(
+            html = html,
+            linkStyles = TextLinkStyles(
+                style = SpanStyle(color = linkColor, textDecoration = TextDecoration.Underline),
+            ),
+            linkInteractionListener = { link ->
+                (link as? LinkAnnotation.Url)?.let { currentOnLinkClick(it.url) }
+            },
+            inlineContentCreators = inlineContentCreators,
         )
-    } ?: text.getInlineContentMap()
+    }
 
-    AnnotatedText(
-        text = text,
+    Text(
+        text = content.text,
         color = textColor,
         modifier = modifier,
-        onURLClick = onLinkClick,
         // Workaround for https://issuetracker.google.com/issues/297002108
         style = textStyle.copy(lineHeight = TextUnit.Unspecified),
-        inlineContent = inlineContent,
+        inlineContent = content.inlineContent,
     )
 }

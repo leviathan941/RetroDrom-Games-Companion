@@ -59,12 +59,13 @@ dependencies {
 
     api(libs.jetbrains.kotlinx.collections.immutable)
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.annotatedtext)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.material3)
     implementation(libs.compose.ui)
+    implementation(libs.mohamedrejeb.ksoup.entities)
     implementation(libs.mohamedrejeb.ksoup.html)
 
     lintChecks(libs.slack.compose.lint.checks)
+
+    testImplementation(libs.junit)
 }

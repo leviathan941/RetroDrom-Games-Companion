@@ -18,9 +18,6 @@
 
 package org.leviathan941.compose.htmltext.imagecontent
 
-import android.os.Build
-import android.text.style.DynamicDrawableSpan
-import android.text.style.ImageSpan
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -33,7 +30,7 @@ import co.touchlab.kermit.Logger
 import coil3.compose.AsyncImage
 import org.leviathan941.compose.htmltext.api.HtmlTag
 import org.leviathan941.compose.htmltext.api.InlineContentCreator
-import org.leviathan941.compose.htmltext.imagecontent.internal.findImgTag
+import org.leviathan941.compose.htmltext.imagecontent.internal.toImgTag
 
 private val logger = Logger.withTag("HtmlTextImageContent")
 
@@ -45,15 +42,10 @@ public class ImageContentCreator(
     private val placeholder: Painter? = null,
     private val error: Painter? = null,
 ) : InlineContentCreator {
-    override fun create(
-        id: String,
-        span: Any,
-        start: Int,
-        end: Int,
-        tags: List<HtmlTag>,
-    ): InlineTextContent? {
-        val imageSpan = span as? ImageSpan ?: return null
-        val imgTag = imageSpan.source?.let { tags.findImgTag(source = it) }
+    override fun create(tag: HtmlTag): InlineTextContent? {
+        if (tag.name != "img") return null
+        val source = tag.attributes["src"] ?: return null
+        val imgTag = tag.toImgTag()
         val width = imgTag?.width.toSpOrElse(localDensity, defaultWidth)
         val height = imgTag?.height.toSpOrElse(localDensity, defaultHeight)
 
@@ -61,34 +53,13 @@ public class ImageContentCreator(
             placeholder = Placeholder(
                 width = width,
                 height = height,
-                placeholderVerticalAlign = when (imageSpan.verticalAlignment) {
-                    DynamicDrawableSpan.ALIGN_BOTTOM -> {
-                        PlaceholderVerticalAlign.TextBottom
-                    }
-
-                    DynamicDrawableSpan.ALIGN_CENTER -> {
-                        PlaceholderVerticalAlign.TextCenter
-                    }
-
-                    DynamicDrawableSpan.ALIGN_BASELINE -> {
-                        PlaceholderVerticalAlign.AboveBaseline
-                    }
-
-                    else -> {
-                        PlaceholderVerticalAlign.TextTop
-                    }
-                },
+                // android.text.Html aligned its image spans to the bottom.
+                placeholderVerticalAlign = PlaceholderVerticalAlign.TextBottom,
             ),
         ) {
-            val desc = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                imageSpan.contentDescription?.toString()
-            } else {
-                null
-            }
-
             AsyncImage(
-                model = span.source,
-                contentDescription = desc,
+                model = source,
+                contentDescription = tag.attributes["alt"]?.takeIf { it.isNotBlank() },
                 modifier = modifier,
                 placeholder = placeholder,
                 error = error,

@@ -21,11 +21,9 @@ package org.leviathan941.compose.htmltext.api
 import androidx.compose.foundation.text.InlineTextContent
 
 public interface InlineContentCreator {
-    public fun create(
-        id: String,
-        span: Any,
-        start: Int,
-        end: Int,
-        tags: List<HtmlTag>,
-    ): InlineTextContent?
+    /**
+     * Returns the content shown in place of [tag], or `null` to leave [tag] to the next creator.
+     * Every opening tag of the HTML is offered, in document order.
+     */
+    public fun create(tag: HtmlTag): InlineTextContent?
 }
