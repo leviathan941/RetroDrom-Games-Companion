@@ -26,8 +26,6 @@ import androidx.annotation.PluralsRes
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.UriHandler
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavDestination.Companion.hasRoute
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.common.logging.Logger
@@ -110,8 +108,6 @@ private fun Resources.getTimeQuantityString(
 ): String = duration.toInt(durationUnit).let { quantity ->
     getQuantityString(id, quantity, quantity)
 }
-
-inline fun <reified T : Any> NavBackStackEntry.isRouteActive(): Boolean = destination.hasRoute<T>()
 
 fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? = description?.let { desc ->
     RssFeedDestination.ItemDescription(

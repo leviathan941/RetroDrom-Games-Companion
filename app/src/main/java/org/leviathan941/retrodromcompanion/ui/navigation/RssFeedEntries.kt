@@ -20,11 +20,8 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.remember
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.navDeepLink
-import androidx.navigation.toRoute
-import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_BASE_PATH
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromo
 import org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen
 import org.leviathan941.retrodromcompanion.ui.screen.RssItemDescriptionScreen
@@ -32,15 +29,14 @@ import org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemScreen
 import org.leviathan941.retrodromcompanion.ui.toDestination
 import org.leviathan941.retrodromcompanion.ui.toScreen
 
-fun NavGraphBuilder.rssFeedNavHost(
+fun EntryProviderScope<NavKey>.rssFeedEntries(
     navigationActions: MainNavActions,
     drawerState: DrawerState,
 ) {
-    composable<RssFeedDestination.Feed> { backStackEntry ->
-        val screen = remember { backStackEntry.toRoute<RssFeedDestination.Feed>().toScreen() }
+    entry<RssFeedDestination.Feed> { destination ->
+        val screen = remember(destination) { destination.toScreen() }
         RssFeedScreen(
             screen = screen,
-            viewModelStoreOwner = backStackEntry,
             drawerState = drawerState,
             itemClicked = { item ->
                 item.toDestination()?.let {
@@ -49,27 +45,19 @@ fun NavGraphBuilder.rssFeedNavHost(
             },
         )
 
-        RssFeedPromo(backStackEntry)
+        RssFeedPromo()
     }
 
-    composable<RssFeedDestination.ItemDescription> { backStackEntry ->
+    entry<RssFeedDestination.ItemDescription> { destination ->
         RssItemDescriptionScreen(
-            itemDescription = backStackEntry.toRoute(),
+            itemDescription = destination,
             navigationActions = navigationActions,
         )
     }
 
-    composable<RssFeedDestination.LoadingItem>(
-        deepLinks = listOf(
-            navDeepLink<RssFeedDestination.LoadingItem>(
-                basePath = RETRODROM_FEED_ITEM_BASE_PATH,
-            ),
-        ),
-    ) { backStackEntry ->
-        val rssLoadingItem = remember { backStackEntry.toRoute<RssFeedDestination.LoadingItem>() }
+    entry<RssFeedDestination.LoadingItem> { destination ->
         RssLoadingItemScreen(
-            item = rssLoadingItem,
-            viewModelStoreOwner = backStackEntry,
+            item = destination,
             navActions = navigationActions,
         )
     }

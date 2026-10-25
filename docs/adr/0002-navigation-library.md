@@ -63,3 +63,15 @@ benefit to the Android app well before the port reaches iOS.
 - Type-safe routes survive: the `@Serializable` route classes stay, they just become back stack
   keys instead of graph destinations.
 - The project depends on a JetBrains-published artifact whose cadence trails androidx.
+
+## Amended 2026-10-25 (A8)
+
+A8 uses **1.2.0** rather than 1.1.7, and A10 swaps to the JetBrains **1.2.0**: Google's
+`navigation3-runtime` / `navigation3-ui` and JetBrains' `navigation3-ui` are all stable at 1.2.0,
+so the version gap the Consequences warned about has closed. `lifecycle-viewmodel-navigation3`
+stays at 2.11.0 on both coordinates. 1.2.0 is also what brings the multiplatform
+`androidx.navigation3.runtime.deeplink` API, which replaced Nav2's `navDeepLink`.
+
+The decision is unchanged. One detail of the shape it describes: the back stack is a single
+`NavBackStack<NavKey>` saved through an explicit `SavedStateConfiguration`, not a bare
+`SnapshotStateList`, so it survives configuration changes and process death on every target.

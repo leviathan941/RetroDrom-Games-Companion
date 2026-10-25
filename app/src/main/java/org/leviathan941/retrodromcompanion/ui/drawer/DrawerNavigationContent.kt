@@ -33,8 +33,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,13 +40,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
-import org.leviathan941.retrodromcompanion.ui.isRouteActive
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
-import org.leviathan941.retrodromcompanion.ui.navigation.MainDestination
+import org.leviathan941.retrodromcompanion.ui.navigation.AppDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActionsStub
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
-import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
+import org.leviathan941.retrodromcompanion.ui.navigation.SettingsDestination
 import org.leviathan941.retrodromcompanion.ui.openUrl
 import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
 import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
@@ -59,7 +56,7 @@ import org.leviathan941.retrodromcompanion.ui.toDestination
 fun DrawerNavigationContent(
     uiState: StateFlow<MainViewState>,
     navigationActions: MainNavActions,
-    navBackStackEntry: NavBackStackEntry?,
+    currentDestination: AppDestination?,
     drawerState: DrawerState,
     coroutineScope: CoroutineScope,
     showMessage: (UserMessage) -> Unit,
@@ -76,10 +73,7 @@ fun DrawerNavigationContent(
                     RssFeedDrawerNavView(
                         rssScreens = rssScreens.values.toImmutableList(),
                         isSelected = { screen ->
-                            navBackStackEntry?.run {
-                                isRouteActive<RssFeedDestination.Feed>() &&
-                                    toRoute<RssFeedDestination.Feed>() == screen.toDestination()
-                            } == true
+                            currentDestination == screen.toDestination()
                         },
                         onClick = { screen ->
                             navigationActions.navigateToRssFeed(screen.toDestination())
@@ -94,7 +88,7 @@ fun DrawerNavigationContent(
 
         SettingsDrawerNavView(
             isSelected = {
-                navBackStackEntry?.isRouteActive<MainDestination.Settings>() == true
+                currentDestination is SettingsDestination
             },
             onClick = {
                 navigationActions.navigateToSettings()
@@ -198,7 +192,7 @@ private fun DrawerNavigationContentPreview() {
                     ),
                 ),
                 navigationActions = MainNavActionsStub(),
-                navBackStackEntry = null,
+                currentDestination = null,
                 drawerState = rememberDrawerState(initialValue = DrawerValue.Open),
                 coroutineScope = rememberCoroutineScope(),
                 showMessage = {},

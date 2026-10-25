@@ -86,6 +86,11 @@ android {
         buildConfig = true
     }
 
+    testOptions {
+        // The navigation actions log through Kermit, whose Android writer calls android.util.Log.
+        unitTests.isReturnDefaultValues = true
+    }
+
     packaging {
         resources {
             excludes += setOf(
@@ -130,7 +135,9 @@ dependencies {
 
     implementation(libs.androidx.activity.compose)
 
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
 
     implementation(libs.coil3.compose)
     implementation(libs.coil3.network.ktor3)
@@ -147,6 +154,8 @@ dependencies {
     implementation(libs.zacsweers.metrox.viewmodel.compose)
 
     debugImplementation(libs.compose.ui.tooling)
+
+    testImplementation(libs.junit)
 
     lintChecks(libs.slack.compose.lint.checks)
 }

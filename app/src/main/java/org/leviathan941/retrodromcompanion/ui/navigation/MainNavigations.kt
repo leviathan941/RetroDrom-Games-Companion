@@ -20,23 +20,47 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 
 import androidx.annotation.Keep
 import androidx.compose.runtime.Stable
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.deeplink.DeepLinkRequest
+import androidx.navigation3.runtime.deeplink.DeepLinkUri
+import androidx.navigation3.runtime.deeplink.UriDeepLinkMatcher
+import androidx.savedstate.serialization.SavedStateConfiguration
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import org.leviathan941.retrodromcompanion.common.Constants
+import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_BASE_PATH
 import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL
 
-sealed interface AppDestination
+@Serializable
+sealed interface AppDestination : NavKey
 
-sealed interface MainDestination : AppDestination {
-
-    @Keep
-    @Serializable
-    data object RssFeed : MainDestination
-
-    @Keep
-    @Serializable
-    data object Settings : MainDestination
+/**
+ * Saves the back stack by registering every [AppDestination] explicitly, which non-Android targets
+ * require: Android's reflection-based alternative is not multiplatform.
+ */
+@OptIn(ExperimentalSerializationApi::class)
+val appDestinationSavedStateConfiguration = SavedStateConfiguration {
+    serializersModule = SerializersModule {
+        polymorphic(NavKey::class) {
+            subclassesOfSealed<AppDestination>()
+        }
+    }
 }
+
+private val feedItemDeepLinkMatcher = UriDeepLinkMatcher(
+    uriPattern = DeepLinkUri(
+        "$RETRODROM_FEED_ITEM_BASE_PATH/{postId}" +
+            "?$RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL={$RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL}",
+    ),
+    serializer = RssFeedDestination.LoadingItem.serializer(),
+)
+
+/** Returns the destination [deeplink] opens, or `null` when it matches none. */
+fun matchDeepLink(deeplink: String): RssFeedDestination.LoadingItem? =
+    feedItemDeepLinkMatcher.match(DeepLinkRequest(deeplink))?.key
 
 sealed interface SettingsDestination : AppDestination {
     @Keep

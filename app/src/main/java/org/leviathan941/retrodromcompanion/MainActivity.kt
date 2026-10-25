@@ -22,13 +22,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.core.net.toUri
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
 import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.leviathan941.retrodromcompanion.app.MainApplication
@@ -40,6 +37,7 @@ import org.leviathan941.retrodromcompanion.notification.POST_ID_PAYLOAD_DATA_KEY
 import org.leviathan941.retrodromcompanion.notification.extractDeeplink
 import org.leviathan941.retrodromcompanion.ui.MainView
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
+import org.leviathan941.retrodromcompanion.ui.navigation.matchDeepLink
 import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
 import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeViewModel
@@ -58,6 +56,14 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().setKeepOnScreenCondition {
             appDataMigrator.state.value !is AppDataMigrationState.Finished
         }
+        val deepLinkDestination = extractDeeplink(
+            data = intent.dataString,
+            postId = intent.getStringExtra(POST_ID_PAYLOAD_DATA_KEY),
+        )?.let { deeplink ->
+            matchDeepLink(deeplink).also {
+                logger.d { "Handle deeplink $deeplink: $it" }
+            }
+        }
         setContent {
             CompositionLocalProvider(
                 LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
@@ -66,7 +72,6 @@ class MainActivity : ComponentActivity() {
                     key = ViewModelKeys.THEME_VIEW_MODEL,
                 )
                 val appTheme by themeViewModel.appTheme.collectAsState()
-                val navController = rememberNavController()
                 val migrationState by appDataMigrator.state.collectAsStateWithLifecycle()
 
                 MainTheme(
@@ -76,17 +81,7 @@ class MainActivity : ComponentActivity() {
                     // Nothing may read app data until the migrations are over. Holding the splash
                     // screen alone would not do: the content underneath still composes.
                     if (migrationState is AppDataMigrationState.Finished) {
-                        MainView(navController)
-
-                        LaunchedEffect(Unit) {
-                            extractDeeplink(
-                                data = intent.dataString,
-                                postId = intent.getStringExtra(POST_ID_PAYLOAD_DATA_KEY),
-                            )?.let {
-                                logger.d { "Handle deeplink: $it" }
-                                navController.navigate(it.toUri())
-                            }
-                        }
+                        MainView(deepLinkDestination)
                     }
                 }
             }

@@ -10,7 +10,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
   compiler plugin (Metro) and needs none.
 - `minSdk` is 26 — check it before reaching for a newer platform API. App id
   `org.segowski.retrodromgames`, code namespace `org.leviathan941.retrodromcompanion`.
-- Key libs: Compose + Material 3, Navigation Compose, Metro (DI), Ktor (WordPress REST API and the
+- Key libs: Compose + Material 3, Navigation 3, Metro (DI), Ktor (WordPress REST API and the
   RSS feed), Room (feed cache), DataStore Preferences, Paging 3, Coil 3, Firebase Messaging,
   AboutLibraries.
 

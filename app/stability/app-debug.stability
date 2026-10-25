@@ -5,11 +5,11 @@
 //   ./gradlew :app:stabilityDump
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.MainView(navController: androidx.navigation.NavHostController, modifier: androidx.compose.ui.Modifier, mainViewModel: org.leviathan941.retrodromcompanion.ui.model.MainViewModel, userMessagesViewModel: org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.MainView(deepLinkDestination: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem?, modifier: androidx.compose.ui.Modifier, mainViewModel: org.leviathan941.retrodromcompanion.ui.model.MainViewModel, userMessagesViewModel: org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel): kotlin.Unit
   skippable: true
   restartable: true
   params:
-    - navController: UNSTABLE (cross-module type without @Stable/@Immutable)
+    - deepLinkDestination: STABLE (marked @Stable or @Immutable)
     - modifier: STABLE (marked @Stable or @Immutable)
     - mainViewModel: UNSTABLE (has mutable properties or unstable members)
     - userMessagesViewModel: UNSTABLE (has mutable properties or unstable members)
@@ -35,13 +35,13 @@ public fun org.leviathan941.retrodromcompanion.ui.drawer.DrawerMenuItemView(titl
     - onClick: STABLE (function type)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent(uiState: kotlinx.coroutines.flow.StateFlow<org.leviathan941.retrodromcompanion.ui.model.MainViewState>, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, navBackStackEntry: androidx.navigation.NavBackStackEntry?, drawerState: androidx.compose.material3.DrawerState, coroutineScope: kotlinx.coroutines.CoroutineScope, showMessage: kotlin.Function1<org.leviathan941.retrodromcompanion.app.message.UserMessage, kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent(uiState: kotlinx.coroutines.flow.StateFlow<org.leviathan941.retrodromcompanion.ui.model.MainViewState>, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, currentDestination: org.leviathan941.retrodromcompanion.ui.navigation.AppDestination?, drawerState: androidx.compose.material3.DrawerState, coroutineScope: kotlinx.coroutines.CoroutineScope, showMessage: kotlin.Function1<org.leviathan941.retrodromcompanion.app.message.UserMessage, kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - uiState: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - navigationActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
-    - navBackStackEntry: UNSTABLE (cross-module type without @Stable/@Immutable)
+    - currentDestination: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - drawerState: STABLE (marked @Stable or @Immutable)
     - coroutineScope: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - showMessage: STABLE (function type)
@@ -115,14 +115,12 @@ private fun org.leviathan941.retrodromcompanion.ui.drawer.SocialNetworkIconView(
     - icon: UNKNOWN (interface or non-final class; concrete implementation unknown)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost(navHostController: androidx.navigation.NavHostController, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, predefinedDestinations: org.leviathan941.retrodromcompanion.ui.navigation.MainNavPredefinedDestinations, uiState: kotlinx.coroutines.flow.StateFlow<org.leviathan941.retrodromcompanion.ui.model.MainViewState>, drawerState: androidx.compose.material3.DrawerState, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost(backStack: androidx.navigation3.runtime.NavBackStack<androidx.navigation3.runtime.NavKey>, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, drawerState: androidx.compose.material3.DrawerState, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
-    - navHostController: UNSTABLE (cross-module type without @Stable/@Immutable)
+    - backStack: STABLE (class with no mutable properties)
     - navigationActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
-    - predefinedDestinations: STABLE (class with no mutable properties)
-    - uiState: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - drawerState: STABLE (marked @Stable or @Immutable)
     - modifier: STABLE (marked @Stable or @Immutable)
 
@@ -136,11 +134,10 @@ public fun org.leviathan941.retrodromcompanion.ui.permission.NotificationPermiss
     - onRationaleDismiss: STABLE (function type)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromo(backStackEntry: androidx.navigation.NavBackStackEntry, viewModel: org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromo(viewModel: org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel): kotlin.Unit
   skippable: true
   restartable: true
   params:
-    - backStackEntry: UNSTABLE (cross-module type without @Stable/@Immutable)
     - viewModel: UNSTABLE (has mutable properties or unstable members)
 
 @Composable
@@ -197,12 +194,11 @@ public fun org.leviathan941.retrodromcompanion.ui.screen.LoadingView(state: org.
     - onRetryClick: STABLE (function type)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen(screen: org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen.RssFeed, viewModelStoreOwner: androidx.lifecycle.ViewModelStoreOwner, drawerState: androidx.compose.material3.DrawerState, modifier: androidx.compose.ui.Modifier, screenViewModel: org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel, userMessagesViewModel: org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel, itemClicked: kotlin.Function1<@[ParameterName(name = \): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen(screen: org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen.RssFeed, drawerState: androidx.compose.material3.DrawerState, modifier: androidx.compose.ui.Modifier, screenViewModel: org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel, userMessagesViewModel: org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel, itemClicked: kotlin.Function1<@[ParameterName(name = \): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - screen: STABLE (marked @Stable or @Immutable)
-    - viewModelStoreOwner: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - drawerState: STABLE (marked @Stable or @Immutable)
     - modifier: STABLE (marked @Stable or @Immutable)
     - screenViewModel: UNSTABLE (has mutable properties or unstable members)
@@ -219,12 +215,11 @@ public fun org.leviathan941.retrodromcompanion.ui.screen.RssItemDescriptionScree
     - modifier: STABLE (marked @Stable or @Immutable)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemScreen(item: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem, viewModelStoreOwner: androidx.lifecycle.ViewModelStoreOwner, navActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier, viewModel: org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewModel): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemScreen(item: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem, navActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier, viewModel: org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewModel): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - item: STABLE (marked @Stable or @Immutable)
-    - viewModelStoreOwner: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - navActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - modifier: STABLE (marked @Stable or @Immutable)
     - viewModel: UNSTABLE (has mutable properties or unstable members)

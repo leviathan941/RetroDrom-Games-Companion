@@ -24,7 +24,7 @@ import org.junit.Test
 
 /**
  * Pins the feed-item deeplink to the shape `android.net.Uri.Builder` used to produce, which the
- * `navDeepLink` on the loading-item destination still matches.
+ * loading-item destination's `UriDeepLinkMatcher` in `:app` still matches.
  */
 class NotificationUtilsTest {
 

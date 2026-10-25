@@ -22,10 +22,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModelStoreOwner
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewModel
@@ -42,14 +42,12 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 @Composable
 fun RssLoadingItemScreen(
     item: RssFeedDestination.LoadingItem,
-    viewModelStoreOwner: ViewModelStoreOwner,
     navActions: MainNavActions,
     modifier: Modifier = Modifier,
     viewModel: RssLoadingItemViewModel = assistedMetroViewModel<
         RssLoadingItemViewModel,
         RssLoadingItemViewModel.Factory,
         >(
-        viewModelStoreOwner = viewModelStoreOwner,
         key = ViewModelKeys.RSS_ITEM_LOADING_MODEL,
         createViewModel = {
             create(item)
@@ -90,11 +88,12 @@ fun RssLoadingItemScreen(
             }
         }
 
-        is RssLoadingItemViewState.Error -> {
+        // Navigating changes the back stack, which is state: never write it during composition.
+        is RssLoadingItemViewState.Error -> LaunchedEffect(state) {
             navActions.navigateToStartedRssFeed()
         }
 
-        is RssLoadingItemViewState.Success -> {
+        is RssLoadingItemViewState.Success -> LaunchedEffect(state) {
             state.item.toDestination()?.let {
                 navActions.navigateToRssItemDescription(it)
             } ?: run {

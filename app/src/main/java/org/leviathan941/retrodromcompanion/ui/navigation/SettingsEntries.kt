@@ -22,8 +22,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import dev.zacsweers.metrox.viewmodel.metroViewModel
@@ -41,12 +41,12 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.Notifica
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource
 
-fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
-    composable<SettingsDestination.Main> {
+fun EntryProviderScope<NavKey>.settingsEntries(navigationActions: MainNavActions) {
+    entry<SettingsDestination.Main> {
         MainSettingsSubScreen(navigationActions)
     }
 
-    composable<SettingsDestination.Notifications> {
+    entry<SettingsDestination.Notifications> {
         SettingsScreen(
             data = MainNavScreen.Settings(
                 title = stringResource(id = R.string.settings_interface_item_notifications_title),
@@ -57,7 +57,7 @@ fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
         }
     }
 
-    composable<SettingsDestination.AppTheme> {
+    entry<SettingsDestination.AppTheme> {
         val screenViewModel = metroViewModel<SettingsViewModel>(
             key = ViewModelKeys.SETTINGS_VIEW_MODEL,
         )
@@ -85,7 +85,7 @@ fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
         }
     }
 
-    composable<SettingsDestination.Feedback> {
+    entry<SettingsDestination.Feedback> {
         val userMessagesViewModel = metroViewModel<UserMessagesViewModel>(
             key = ViewModelKeys.USER_MESSAGES_VIEW_MODEL,
         )
@@ -99,7 +99,7 @@ fun NavGraphBuilder.settingsNavHost(navigationActions: MainNavActions) {
         }
     }
 
-    composable<SettingsDestination.Licenses> {
+    entry<SettingsDestination.Licenses> {
         SettingsScreen(
             data = MainNavScreen.Settings(
                 title = stringResource(id = R.string.settings_about_item_licenses_title),

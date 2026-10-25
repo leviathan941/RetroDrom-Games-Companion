@@ -21,81 +21,61 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.navigation
-import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 import org.leviathan941.retrodromcompanion.ui.NAVIGATION_ANIMATION_DURATION_MS
-import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 
 @Composable
 fun MainNavHost(
-    navHostController: NavHostController,
+    backStack: NavBackStack<NavKey>,
     navigationActions: MainNavActions,
-    predefinedDestinations: MainNavPredefinedDestinations,
-    uiState: StateFlow<MainViewState>,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
 ) {
-    val uiState by uiState.collectAsState()
+    val popTransition = slideInHorizontally(
+        initialOffsetX = { -it },
+        animationSpec = tween(durationMillis = NAVIGATION_ANIMATION_DURATION_MS),
+    ) togetherWith slideOutHorizontally(
+        targetOffsetX = { it },
+        animationSpec = tween(durationMillis = NAVIGATION_ANIMATION_DURATION_MS),
+    )
 
-    NavHost(
-        navController = navHostController,
-        startDestination = uiState.destination,
+    NavDisplay(
+        backStack = backStack,
         modifier = modifier,
-        enterTransition = {
+        onBack = navigationActions::navigateBack,
+        entryDecorators = listOf(
+            rememberSaveableStateHolderNavEntryDecorator(),
+            // Scopes the view models an entry obtains to that entry, as Nav2's back stack entry did.
+            rememberViewModelStoreNavEntryDecorator(),
+        ),
+        transitionSpec = {
             slideInHorizontally(
                 initialOffsetX = { it },
-                animationSpec = tween(
-                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
-                ),
-            )
-        },
-        exitTransition = {
-            slideOutHorizontally(
+                animationSpec = tween(durationMillis = NAVIGATION_ANIMATION_DURATION_MS),
+            ) togetherWith slideOutHorizontally(
                 targetOffsetX = { -it },
-                animationSpec = tween(
-                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
-                ),
+                animationSpec = tween(durationMillis = NAVIGATION_ANIMATION_DURATION_MS),
             )
         },
-        popExitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { it },
-                animationSpec = tween(
-                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
-                ),
-            )
-        },
-        popEnterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { -it },
-                animationSpec = tween(
-                    durationMillis = NAVIGATION_ANIMATION_DURATION_MS,
-                ),
-            )
-        },
-    ) {
-        navigation<MainDestination.RssFeed>(
-            startDestination = predefinedDestinations.rssFeedStart,
-        ) {
-            rssFeedNavHost(
+        popTransitionSpec = { popTransition },
+        predictivePopTransitionSpec = { popTransition },
+        entryProvider = entryProvider {
+            rssFeedEntries(
                 navigationActions = navigationActions,
                 drawerState = drawerState,
             )
-        }
-
-        navigation<MainDestination.Settings>(
-            startDestination = SettingsDestination.Main,
-        ) {
-            settingsNavHost(
+            settingsEntries(
                 navigationActions = navigationActions,
             )
-        }
-    }
+        },
+    )
 }

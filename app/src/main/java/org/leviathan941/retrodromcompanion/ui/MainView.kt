@@ -36,8 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation3.runtime.rememberNavBackStack
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.R
@@ -48,14 +47,16 @@ import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
 import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
+import org.leviathan941.retrodromcompanion.ui.navigation.AppDestination
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActionsImpl
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavHost
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavPredefinedDestinations
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
+import org.leviathan941.retrodromcompanion.ui.navigation.appDestinationSavedStateConfiguration
 
 @Composable
 fun MainView(
-    navController: NavHostController,
+    deepLinkDestination: RssFeedDestination.LoadingItem?,
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel = metroViewModel(
         key = ViewModelKeys.MAIN_VIEW_MODEL,
@@ -71,13 +72,20 @@ fun MainView(
             channelUrl = Constants.RETRODROM_BASE_URL,
         ),
     )
-    val navigationActions = remember(navController, predefinedDestinations) {
+
+    // The deep link opens on top of the start feed. Only a new back stack takes these: a restored
+    // one keeps what it saved.
+    @Suppress("SpreadOperator")
+    val backStack = rememberNavBackStack(
+        appDestinationSavedStateConfiguration,
+        *listOfNotNull(predefinedDestinations.rssFeedStart, deepLinkDestination).toTypedArray(),
+    )
+    val navigationActions = remember(backStack, predefinedDestinations) {
         MainNavActionsImpl(
-            navController,
+            backStack,
             predefinedDestinations,
         )
     }
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -112,7 +120,7 @@ fun MainView(
                         DrawerNavigationContent(
                             uiState = mainViewModel.uiState,
                             navigationActions = navigationActions,
-                            navBackStackEntry = navBackStackEntry,
+                            currentDestination = backStack.lastOrNull() as? AppDestination,
                             drawerState = drawerState,
                             coroutineScope = coroutineScope,
                             showMessage = userMessagesViewModel::show,
@@ -124,10 +132,8 @@ fun MainView(
             gesturesEnabled = drawerState.isOpen,
         ) {
             MainNavHost(
-                navHostController = navController,
+                backStack = backStack,
                 navigationActions = navigationActions,
-                predefinedDestinations = predefinedDestinations,
-                uiState = mainViewModel.uiState,
                 drawerState = drawerState,
             )
         }

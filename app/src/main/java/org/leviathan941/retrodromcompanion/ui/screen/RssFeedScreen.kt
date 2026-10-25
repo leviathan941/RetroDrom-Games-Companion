@@ -40,7 +40,6 @@ import androidx.compose.ui.platform.LocalClipboard
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
@@ -67,19 +66,16 @@ import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 @Composable
 fun RssFeedScreen(
     screen: MainNavScreen.RssFeed,
-    viewModelStoreOwner: ViewModelStoreOwner,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
     screenViewModel: RssFeedViewModel =
         assistedMetroViewModel<RssFeedViewModel, RssFeedViewModel.Factory>(
-            viewModelStoreOwner = viewModelStoreOwner,
             key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
             createViewModel = {
                 create(screen.channelUrl)
             },
         ),
     userMessagesViewModel: UserMessagesViewModel = metroViewModel(
-        viewModelStoreOwner = viewModelStoreOwner,
         key = ViewModelKeys.USER_MESSAGES_VIEW_MODEL,
     ),
     itemClicked: (item: RssChannelItem) -> Unit,

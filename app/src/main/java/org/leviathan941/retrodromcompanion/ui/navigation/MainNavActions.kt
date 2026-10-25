@@ -18,9 +18,7 @@
 
 package org.leviathan941.retrodromcompanion.ui.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.toRoute
+import androidx.navigation3.runtime.NavKey
 import org.leviathan941.retrodromcompanion.ui.mainViewLogger
 
 data class MainNavPredefinedDestinations(
@@ -37,11 +35,13 @@ interface MainNavActions {
 }
 
 class MainNavActionsImpl(
-    private val navController: NavController,
+    private val backStack: MutableList<NavKey>,
     private val predefinedDestinations: MainNavPredefinedDestinations,
 ) : MainNavActions {
     override fun navigateBack() {
-        if (navController.popBackStack()) {
+        // The display needs at least one entry, so the last one is never popped.
+        if (backStack.size > 1) {
+            backStack.removeAt(backStack.lastIndex)
             mainViewLogger.d { "Navigate back" }
         } else {
             mainViewLogger.d { "No back stack entry, cannot navigate back" }
@@ -55,41 +55,44 @@ class MainNavActionsImpl(
 
     override fun navigateToRssFeed(destination: RssFeedDestination.Feed) {
         mainViewLogger.d { "Navigate to RSS feed screen: $destination" }
-        val isInsideRssFeed = navController.currentDestination
-            ?.hasRoute<RssFeedDestination.Feed>() == true
-        val toSameFeed = navController.currentBackStackEntry?.takeIf { isInsideRssFeed }
-            ?.toRoute<RssFeedDestination.Feed>() == destination
-        if (toSameFeed) {
+        val currentDestination = backStack.lastOrNull()
+        if (currentDestination == destination) {
             mainViewLogger.d { "Already on the same RSS feed screen" }
             return
         }
-        navController.navigate(destination) {
-            popUpTo<RssFeedDestination.Feed> {
-                inclusive = isInsideRssFeed
-            }
-            launchSingleTop = true
-        }
+        popUpToLastFeed(inclusive = currentDestination is RssFeedDestination.Feed)
+        pushSingleTop(destination)
     }
 
     override fun navigateToRssItemDescription(destination: RssFeedDestination.ItemDescription) {
         mainViewLogger.d { "Navigate to RSS item description screen" }
-        navController.navigate(destination) {
-            popUpTo<RssFeedDestination.Feed>()
-            launchSingleTop = true
-        }
+        popUpToLastFeed(inclusive = false)
+        pushSingleTop(destination)
     }
 
     override fun navigateToSettings() {
         mainViewLogger.d { "Navigate to settings screen" }
-        navController.navigate(MainDestination.Settings) {
-            launchSingleTop = true
-        }
+        pushSingleTop(SettingsDestination.Main)
     }
 
     override fun navigateToSettingsItem(destination: SettingsDestination) {
         mainViewLogger.d { "Navigate to $destination settings screen" }
-        navController.navigate(destination) {
-            launchSingleTop = true
+        pushSingleTop(destination)
+    }
+
+    /**
+     * Pops every entry above the topmost feed, and that feed too when [inclusive].
+     */
+    private fun popUpToLastFeed(inclusive: Boolean) {
+        val feedIndex = backStack.indexOfLast { it is RssFeedDestination.Feed }
+        if (feedIndex < 0) return
+        val firstPopped = if (inclusive) feedIndex else feedIndex + 1
+        backStack.subList(firstPopped, backStack.size).clear()
+    }
+
+    private fun pushSingleTop(destination: AppDestination) {
+        if (backStack.lastOrNull() != destination) {
+            backStack.add(destination)
         }
     }
 }
