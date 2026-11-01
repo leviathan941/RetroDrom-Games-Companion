@@ -15,6 +15,8 @@
  */
 
 plugins {
+    // Gives the root project check/build, so `build` lints the root scripts, and clean.
+    base
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.parcelize) apply false
     alias(libs.plugins.android.library) apply false
@@ -26,8 +28,23 @@ plugins {
     alias(libs.plugins.androidx.room3) apply false
     alias(libs.plugins.skydoves.compose.stability.analyzer) apply false
     alias(libs.plugins.zacsweers.metro) apply false
+    alias(libs.plugins.jlleitschuh.ktlint)
 }
 
-tasks.register("clean", Delete::class) {
-    delete(rootProject.layout.buildDirectory)
+// Subprojects get their `libs` extension too late for allprojects, so read the catalog here.
+val ktlintPluginId = libs.plugins.jlleitschuh.ktlint.get().pluginId
+val ktlintVersion = libs.versions.pinterest.ktlint
+val composeRules = libs.nlopez.compose.rules.ktlint
+
+allprojects {
+    pluginManager.apply(ktlintPluginId)
+
+    ktlint {
+        version = ktlintVersion
+    }
+
+    dependencies {
+        // Honors the ktlint_compose_* keys in .editorconfig.
+        ktlintRuleset(composeRules)
+    }
 }

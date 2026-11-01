@@ -32,7 +32,8 @@ class HtmlParserTest {
     fun `featured image of a feed description`() {
         val html = "<a href=\"https://retrodrom.games/news/post/\" rel=\"nofollow\">" +
             "<img width=\"1024\" height=\"577\" " +
-            "src=\"https://retrodrom.games/wp-content/uploads/2026/10/moto-x-switch-1024x577.jpg\" " +
+            "src=\"https://retrodrom.games/wp-content/uploads/2026/10/" +
+            "moto-x-switch-1024x577.jpg\" " +
             "class=\"webfeedsFeaturedVisual wp-post-image\" alt=\"\" " +
             "style=\"display: block; margin: auto;\" decoding=\"async\" loading=\"lazy\" /></a>" +
             "<p>Отменённая гоночная игра Moto-X получила цифровой релиз.</p>" +

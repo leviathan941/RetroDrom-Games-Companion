@@ -65,21 +65,35 @@ Read them from there rather than restating them here — version numbers in this
   takes the current year, while a file that is moved, renamed or rewritten in place keeps the
   year it already had.
 - Style is ktlint (`android_studio` code style) configured in `.editorconfig`: trailing commas
-  allowed, multiline signatures from 2 parameters, import ordering rule disabled.
-- `detekt.yaml` exists for standalone/IDE detekt runs; no detekt or ktlint Gradle plugin is
-  wired into the build, so neither runs as part of `./gradlew build`.
+  allowed, multiline signatures from 2 parameters, import ordering rule disabled. The
+  [compose-rules](https://mrmans0n.github.io/compose-rules/) ruleset runs alongside, minus
+  `vm-injection-check`: new composables obtain view models in their body, not as default
+  parameters, so they add no entries to the stability baseline.
+- ktlint runs in the build through `org.jlleitschuh.gradle.ktlint`. The root `build.gradle.kts`
+  applies it to every project in `allprojects`, with the ktlint version and the compose-rules
+  ruleset, so a new module needs no line of its own. It must not move into a `buildSrc` convention
+  plugin on its own: from there it cannot see AGP and KGP, and silently lints no Kotlin sources.
+  `buildSrc` is not checked.
+- `detekt.yaml` exists for standalone/IDE detekt runs; no detekt Gradle plugin is wired into the
+  build, so it does not run as part of `./gradlew build`.
 
 ## Build & verify
 
 ```sh
 ./gradlew assembleDebug        # build the app
 ./gradlew lint                 # Android lint, every module
-./gradlew build                # compile everything (also runs lint)
+./gradlew ktlintCheck          # ktlint, every module and its *.gradle.kts
+./gradlew ktlintFormat         # apply ktlint's auto-fixes
+./gradlew build                # compile everything (also runs lint and ktlintCheck)
 ```
+
+ktlint's per-source-set tasks cache their findings: after deleting a file that had a violation,
+the check still reports it until `./gradlew clean` (or `--rerun` on the `runKtlintCheckOver…`
+task).
 
 The only tests are JVM unit tests: `:network`'s cover the RSS response mapping and feed URL
 building, `:notification`'s the feed-item deeplink string; `./gradlew test` runs them.
-Compilation plus Android lint is otherwise the gate.
+Compilation, Android lint and ktlint are otherwise the gate.
 
 `build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
 the committed baseline in `app/stability/`: a composable whose parameters become less stable

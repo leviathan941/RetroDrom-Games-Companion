@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 package org.leviathan941.retrodromcompanion.rssreader
 
 import org.junit.Assert.assertEquals

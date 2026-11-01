@@ -22,11 +22,14 @@ jetbrains-kotlin-plugin = "2.4.21"
 jetbrains-kotlinx-collections-immutable = "0.5.2"
 jetbrains-kotlinx-coroutines = "1.11.0"
 jetbrains-kotlinx-datetime = "0.8.0"
+jlleitschuh-ktlint-gradle = "14.2.0"
 junit = "4.13.2"
 jetbrains-kotlinx-serialization = "1.12.0"
 mohamedrejeb-calf = "0.14.0"
 mohamedrejeb-ksoup = "0.6.0"
 ktor-bom = "3.6.0"
+nlopez-compose-rules = "0.6.8"
+pinterest-ktlint = "1.8.0"
 slack-compose-lint-checks = "1.6.1"
 skydoves-compose-stability-analyzer = "0.15.0"
 touchlab-kermit = "2.2.0"
@@ -85,6 +88,7 @@ mohamedrejeb-calf-permissions-core = { group = "com.mohamedrejeb.calf", name = "
 mohamedrejeb-calf-permissions-notifications = { group = "com.mohamedrejeb.calf", name = "calf-permissions-notifications", version.ref = "mohamedrejeb-calf" }
 mohamedrejeb-ksoup-entities = { group = "com.mohamedrejeb.ksoup", name = "ksoup-entities", version.ref = "mohamedrejeb-ksoup" }
 mohamedrejeb-ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "mohamedrejeb-ksoup" }
+nlopez-compose-rules-ktlint = { group = "io.nlopez.compose.rules", name = "ktlint", version.ref = "nlopez-compose-rules" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 touchlab-kermit = { group = "co.touchlab", name = "kermit", version.ref = "touchlab-kermit" }
 zacsweers-metrox-viewmodel = { group = "dev.zacsweers.metro", name = "metrox-viewmodel", version.ref = "zacsweers-metro" }
@@ -100,5 +104,6 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 jetbrains-kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "jetbrains-kotlin-plugin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "jetbrains-kotlin-plugin" }
+jlleitschuh-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "jlleitschuh-ktlint-gradle" }
 skydoves-compose-stability-analyzer = { id = "com.github.skydoves.compose.stability.analyzer", version.ref = "skydoves-compose-stability-analyzer" }
 zacsweers-metro = { id = "dev.zacsweers.metro", version.ref = "zacsweers-metro" }
