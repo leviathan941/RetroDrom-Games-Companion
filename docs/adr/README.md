@@ -12,3 +12,4 @@ Status values: `Proposed` (needs a decision), `Accepted`, `Superseded by NNNN`.
 | [0003](0003-logging-kermit.md) | Logging: `android.util.Log` → Kermit | Accepted |
 | [0004](0004-room3.md) | Persistence: Room 2.x → Room 3 | Accepted |
 | [0005](0005-http-engine-selection.md) | HTTP engine selection: `ktor-client-engine-defaults` | Accepted |
+| [0006](0006-build-logic-included-build.md) | Build logic: convention plugins in an included `build-logic` build | Accepted |

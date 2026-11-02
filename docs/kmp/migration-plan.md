@@ -99,7 +99,8 @@ toolchain, and the resource migration depends on it.
 
 | # | Stage | Outcome | Blocked by |
 | --- | --- | --- | --- |
-| A9 | Toolchain spike | `org.jetbrains.kotlin.multiplatform` + `com.android.kotlin.multiplatform.library` applied alongside AGP 9.4; convention plugins in `buildSrc` so 14 modules do not each hand-roll a KMP block. Success = one module compiles for `android` and `iosSimulatorArm64`. | A1–A8 |
+| A9 | Toolchain spike | **Done.** Spike on `:common`, reverted; only docs landed. `org.jetbrains.kotlin.multiplatform` 2.4.21 + `com.android.kotlin.multiplatform.library` 9.4.1 in one module coexist with built-in Kotlin in the other 13 (AGP's hard-fail is per module), and `:common` compiled for `android`, `iosArm64` and `iosSimulatorArm64` with its Metro `ClockModule` generated on both. The full gate stayed green, including R8 release and the configuration cache. **Convention plugins belong in an included `build-logic` build, not `buildSrc`** (ADR-0006): with AGP and KGP on `buildSrc`'s classpath, every versioned `alias(…)` of an AGP or KGP plugin ID fails ("already on the classpath with an unknown version"), which meant rewriting all 14 scripts. `build-logic` takes them `compileOnly` and changed no other script. Findings the convention must carry: the KMP library plugin registers **no Android lint** until `com.android.lint` is applied (then `warningsAsErrors` holds, and `commonMain` is linted against minSdk 26); host tests need `withHostTest {}`; and root `./gradlew test` skips KMP modules, whose task is `testAndroidHostTest`, so the convention registers a `test` aggregate. ktlint already covers every KMP source set. **Xcode is needed before the first `commonTest` (B2):** iOS klibs compile with Command Line Tools only, but `build` runs `iosSimulatorArm64Test`, whose link fails with `MissingXcodeException`. KGP 2.4.21 adds one Gradle deprecation (`KotlinNativeBundleArtifactsTypes`) that fails under Gradle 10. | A1–A8 |
+| A9b | `buildSrc` → `build-logic` | Per ADR-0006. `buildSrc`'s constants move into an included `build-logic` build with an Android-library and an application convention, which every module applies. Constants in `build-logic` are only visible to scripts that apply one of its plugins. `buildSrc` is deleted. The KMP convention from A9 lands here or in B1. Still Android-only. | A9, ADR-0006 |
 | A10 | Compose BOM → Compose Multiplatform | Compose artifacts come from the CMP Gradle plugin's `compose.*` accessors. Includes swapping the Navigation 3 coordinates to the JetBrains ones — a version catalog change, no imports touched. Still Android-only at runtime. Note A4 already put `org.jetbrains.androidx.lifecycle:*` and `org.jetbrains.compose.*` on the Android classpath through `metrox-viewmodel-compose`; they resolve as metadata-only facades onto the `androidx.*` artifacts and changed no resolved version. | A9 |
 | A11 | Resources → `compose.resources` | `R.string` / `R.drawable` replaced at ~31 call sites; `values-ru` becomes `composeResources/values-ru`. | A10 |
 
@@ -129,7 +130,7 @@ Bottom-up along the real dependency graph.
 
 | # | Module | Main work | Risk |
 | --- | --- | --- | --- |
-| B1 | `:common` | First real KMP module; validates the A9 convention plugins. | low |
+| B1 | `:common` | First real KMP module, on A9b's `build-logic` KMP convention. | low |
 | B2 | `:html-text:api`, `:html-text`, `:html-text:imagecontent` | Compose + ksoup + Coil, no DI. No Android API left since A7h; the converter's JVM tests move to `commonTest`. | low |
 | B3 | `:preferences` | DataStore path via `expect`/`actual`. | low |
 | B4 | `:network` | Source-set configuration only: the existing JVM tests move to `commonTest` and the dependencies move to `commonMain`. The engine question was settled in A5 (ADR-0005) — `ktor-client-engine-defaults` already resolves Darwin for the Apple targets, so no engine work is left here. | low |
@@ -172,5 +173,5 @@ Bottom-up along the real dependency graph.
 
 ## Open decisions
 
-None. All five current ADRs are accepted; raise a new record if a stage turns up a decision that
+None. All six current ADRs are accepted; raise a new record if a stage turns up a decision that
 constrains later work.
