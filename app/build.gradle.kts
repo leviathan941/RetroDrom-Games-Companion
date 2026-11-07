@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.leviathan941.retrodromcompanion.AndroidSdk
 import org.leviathan941.retrodromcompanion.Application
-import org.leviathan941.retrodromcompanion.JvmVersions
 
 plugins {
-    alias(libs.plugins.android.application)
+    id("retrodrom.android-application")
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.google.services)
     alias(libs.plugins.jetbrains.kotlin.serialization)
@@ -29,20 +26,11 @@ plugins {
     alias(libs.plugins.zacsweers.metro)
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(JvmVersions.KOTLIN_JVM_TARGET)
-    }
-}
-
 android {
     namespace = "org.leviathan941.retrodromcompanion"
-    compileSdk = AndroidSdk.COMPILE_SDK_VERSION
 
     defaultConfig {
         applicationId = Application.ID
-        minSdk = AndroidSdk.MIN_SDK_VERSION
-        targetSdk = AndroidSdk.TARGET_SDK_VERSION
         versionCode = Application.version.code
         versionName = Application.version.name
 
@@ -71,13 +59,7 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
-        targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
-    }
-
     lint {
-        warningsAsErrors = true
         checkDependencies = true
     }
 

@@ -20,6 +20,8 @@ plugins {
     `kotlin-dsl`
 }
 
-repositories {
-    mavenCentral()
+dependencies {
+    // The root project's `apply false` declarations put these on the classpath at runtime.
+    compileOnly(libs.android.gradle.plugin)
+    compileOnly(libs.jetbrains.kotlin.gradle.plugin)
 }

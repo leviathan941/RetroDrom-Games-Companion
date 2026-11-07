@@ -32,13 +32,21 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:rss-reader` | Pages the cached feed with Paging 3 and refills it via a `RemoteMediator`. |
 
 Versions live in `gradle/libs.versions.toml`; SDK/JVM/app-version constants live in
-`buildSrc/src/main/kotlin/org/leviathan941/retrodromcompanion/` (bump `AppVersion` for releases).
+`build-logic/convention/src/main/kotlin/org/leviathan941/retrodromcompanion/` (bump `AppVersion`
+for releases).
 Read them from there rather than restating them here — version numbers in this file go stale.
 
 ## Conventions
 
-- Every library module enables `ExplicitApiMode.Strict` — public declarations need explicit
-  `public` and explicit return types. `:app` does not.
+- Build logic lives in the included build `build-logic` (ADR-0006), not `buildSrc`. Every module
+  applies one of its convention plugins instead of `com.android.*` directly:
+  `retrodrom.android-library` (every library) or `retrodrom.android-application` (`:app`). They set
+  the SDK levels, the JVM 17 targets and lint's `warningsAsErrors`; a module script keeps its
+  `namespace` and whatever is its own. Its constants are visible only to a script that applies one
+  of those plugins. AGP and KGP are `compileOnly` there: at runtime they come from the root
+  script's `apply false` list, which is where their versions are set.
+- Every library module enables `ExplicitApiMode.Strict` through `retrodrom.android-library` —
+  public declarations need explicit `public` and explicit return types. `:app` does not.
 - Package layout per module: public API at the top level (or `api/`), implementation under
   `internal/` or `impl/`; Metro binding containers and the app graph under `di/`.
 - DI is [Metro](https://github.com/ZacSweers/metro). `MainApplication` owns the single
@@ -60,7 +68,7 @@ Read them from there rather than restating them here — version numbers in this
   and its source location — the practical way to diff the graph across a change.
 - Source files and module `build.gradle.kts` scripts carry the GPL v3 header
   (`RetroDrom Games Companion / Copyright (C) …`). Only the root `build.gradle.kts`,
-  `settings.gradle.kts`, `buildSrc` and `app/build.gradle.kts` carry the Apache 2.0 header.
+  `settings.gradle.kts`, `build-logic` and `app/build.gradle.kts` carry the Apache 2.0 header.
   Copy a neighbouring file's header for its shape, but set the year deliberately: a new file
   takes the current year, while a file that is moved, renamed or rewritten in place keeps the
   year it already had.
@@ -71,9 +79,9 @@ Read them from there rather than restating them here — version numbers in this
   parameters, so they add no entries to the stability baseline.
 - ktlint runs in the build through `org.jlleitschuh.gradle.ktlint`. The root `build.gradle.kts`
   applies it to every project in `allprojects`, with the ktlint version and the compose-rules
-  ruleset, so a new module needs no line of its own. It must not move into a `buildSrc` convention
-  plugin on its own: from there it cannot see AGP and KGP, and silently lints no Kotlin sources.
-  `buildSrc` is not checked.
+  ruleset, so a new module needs no line of its own. Keep it there: from a `buildSrc` convention
+  plugin it could not see AGP and KGP and silently linted no Kotlin sources, and a `build-logic`
+  convention has not been tried. `build-logic` itself is not checked.
 - `detekt.yaml` exists for standalone/IDE detekt runs; no detekt Gradle plugin is wired into the
   build, so it does not run as part of `./gradlew build`.
 

@@ -16,44 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.leviathan941.retrodromcompanion.AndroidSdk
-import org.leviathan941.retrodromcompanion.JvmVersions
-
 plugins {
-    alias(libs.plugins.android.library)
+    id("retrodrom.android-library")
     alias(libs.plugins.androidx.room3)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.zacsweers.metro)
 }
 
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(JvmVersions.KOTLIN_JVM_TARGET)
-    }
-}
-
 android {
     namespace = "org.leviathan941.retrodromcompanion.network.cache"
-    compileSdk = AndroidSdk.COMPILE_SDK_VERSION
-
-    defaultConfig {
-        minSdk = AndroidSdk.MIN_SDK_VERSION
-    }
-
-    kotlin {
-        explicitApi = ExplicitApiMode.Strict
-    }
-
-    compileOptions {
-        sourceCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
-        targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
-    }
-
-    lint {
-        warningsAsErrors = true
-    }
 
     room3 {
         schemaDirectory("$projectDir/schemas")

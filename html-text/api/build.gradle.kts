@@ -1,8 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.leviathan941.retrodromcompanion.AndroidSdk
-import org.leviathan941.retrodromcompanion.JvmVersions
-
 /*
  * RetroDrom Games Companion
  * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
@@ -22,35 +17,11 @@ import org.leviathan941.retrodromcompanion.JvmVersions
  */
 
 plugins {
-    alias(libs.plugins.android.library)
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(JvmVersions.KOTLIN_JVM_TARGET)
-    }
+    id("retrodrom.android-library")
 }
 
 android {
     namespace = "org.leviathan941.compose.htmltext.api"
-    compileSdk = AndroidSdk.COMPILE_SDK_VERSION
-
-    defaultConfig {
-        minSdk = AndroidSdk.MIN_SDK_VERSION
-    }
-
-    compileOptions {
-        sourceCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
-        targetCompatibility = JvmVersions.JAVA_SOURCE_COMPATIBILITY
-    }
-
-    lint {
-        warningsAsErrors = true
-    }
-
-    kotlin {
-        explicitApi = ExplicitApiMode.Strict
-    }
 }
 
 dependencies {
