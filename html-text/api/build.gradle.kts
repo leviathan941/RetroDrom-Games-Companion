@@ -25,6 +25,5 @@ android {
 }
 
 dependencies {
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.compose.foundation)
+    implementation(libs.jetbrains.compose.foundation)
 }

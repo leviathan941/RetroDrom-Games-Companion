@@ -109,17 +109,16 @@ dependencies {
 
     implementation(libs.google.material)
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material.icons.core.android)
-    implementation(libs.androidx.compose.material3)
+    implementation(libs.jetbrains.compose.ui)
+    implementation(libs.jetbrains.compose.ui.tooling.preview)
+    implementation(libs.jetbrains.compose.material.icons.core)
+    implementation(libs.jetbrains.compose.material3)
 
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.jetbrains.androidx.navigation3.ui)
 
     implementation(libs.coil3.compose)
     implementation(libs.coil3.network.ktor3)
@@ -135,7 +134,7 @@ dependencies {
     implementation(libs.zacsweers.metrox.viewmodel)
     implementation(libs.zacsweers.metrox.viewmodel.compose)
 
-    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.jetbrains.compose.ui.tooling)
 
     testImplementation(libs.junit)
 

@@ -75,3 +75,17 @@ stays at 2.11.0 on both coordinates. 1.2.0 is also what brings the multiplatform
 The decision is unchanged. One detail of the shape it describes: the back stack is a single
 `NavBackStack<NavKey>` saved through an explicit `SavedStateConfiguration`, not a bare
 `SnapshotStateList`, so it survives configuration changes and process death on every target.
+
+## Amended 2026-11-07 (A10)
+
+A10 swaps **only `navigation3-ui`** to `org.jetbrains.androidx.navigation3:navigation3-ui` 1.2.0.
+`androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0 stays on Google's coordinate, and so
+does `navigation3-runtime`. Both publish `ios_arm64` and `ios_simulator_arm64`.
+`org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0 is an empty facade onto
+Google's artifact on every platform: its iOS klib is ~8 KB and depends on
+`androidx.lifecycle:lifecycle-viewmodel-navigation3` 2.11.0. So that swap would add a hop and
+nothing else. Google's `navigation3-ui` still has no iOS variant (1.2.1, 1.3.0-alpha04), so the
+JetBrains one remains necessary. On Android it is a facade onto Google's 1.2.0, so the shipped
+code is unchanged.
+
+The decision is unchanged.

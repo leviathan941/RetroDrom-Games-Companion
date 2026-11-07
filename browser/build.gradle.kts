@@ -28,8 +28,7 @@ android {
 dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.core.ktx)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.compose.ui)
+    implementation(libs.jetbrains.compose.ui)
 
     lintChecks(libs.slack.compose.lint.checks)
 }

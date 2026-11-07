@@ -30,9 +30,8 @@ dependencies {
 
     api(libs.jetbrains.kotlinx.collections.immutable)
 
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.compose.ui)
+    implementation(libs.jetbrains.compose.material3)
+    implementation(libs.jetbrains.compose.ui)
     implementation(libs.mohamedrejeb.ksoup.entities)
     implementation(libs.mohamedrejeb.ksoup.html)
 

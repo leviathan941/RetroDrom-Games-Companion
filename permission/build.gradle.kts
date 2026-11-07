@@ -28,13 +28,12 @@ android {
 dependencies {
     implementation(libs.mohamedrejeb.calf.permissions.core)
     implementation(libs.mohamedrejeb.calf.permissions.notifications)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.material.icons.core.android)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.jetbrains.compose.material.icons.core)
+    implementation(libs.jetbrains.compose.material3)
+    implementation(libs.jetbrains.compose.ui)
+    implementation(libs.jetbrains.compose.ui.tooling.preview)
 
-    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.jetbrains.compose.ui.tooling)
 
     lintChecks(libs.slack.compose.lint.checks)
 }
