@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation(project(":common"))
+    implementation(project(":resources"))
 
     implementation(libs.androidx.core.ktx)
     implementation(platform(libs.ktor.bom))

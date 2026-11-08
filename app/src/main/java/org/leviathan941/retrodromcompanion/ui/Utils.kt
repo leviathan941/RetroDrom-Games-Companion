@@ -20,13 +20,23 @@
 package org.leviathan941.retrodromcompanion.ui
 
 import android.content.ClipData
-import android.content.res.Resources
 import android.os.Build
-import androidx.annotation.PluralsRes
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.Clipboard
 import androidx.compose.ui.platform.UriHandler
-import org.leviathan941.retrodromcompanion.R
+import org.jetbrains.compose.resources.PluralStringResource
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.open_email_application_not_found
+import org.leviathan941.retrodromcompanion.resources.open_external_link_application_not_found
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_days
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_hours
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_just_now
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_minutes
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_months
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_years
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
@@ -54,37 +64,38 @@ internal val APP_THEME_DEFAULT = when {
     else -> ThemeType.LIGHT
 }
 
-fun Instant.toRssFeedPublicationTime(resources: Resources): String {
+@Composable
+fun Instant.toRssFeedPublicationTime(): String {
     val age = Clock.System.now() - this
     return when {
         age.inWholeMinutes < 1L ->
-            resources.getString(R.string.rss_feed_item_publication_time_just_now)
+            stringResource(Res.string.rss_feed_item_publication_time_just_now)
 
         age.inWholeHours < 1L ->
-            resources.getTimeQuantityString(
-                R.plurals.rss_feed_item_publication_time_minutes,
+            timeQuantityString(
+                Res.plurals.rss_feed_item_publication_time_minutes,
                 age,
                 DurationUnit.MINUTES,
             )
 
         age.inWholeDays < 1L ->
-            resources.getTimeQuantityString(
-                R.plurals.rss_feed_item_publication_time_hours,
+            timeQuantityString(
+                Res.plurals.rss_feed_item_publication_time_hours,
                 age,
                 DurationUnit.HOURS,
             )
 
         age.inWholeDays < 30L ->
-            resources.getTimeQuantityString(
-                R.plurals.rss_feed_item_publication_time_days,
+            timeQuantityString(
+                Res.plurals.rss_feed_item_publication_time_days,
                 age,
                 DurationUnit.DAYS,
             )
 
         age.inWholeDays < 365L ->
             (age.inWholeDays / 30L).let { diffMonths ->
-                resources.getQuantityString(
-                    R.plurals.rss_feed_item_publication_time_months,
+                pluralStringResource(
+                    Res.plurals.rss_feed_item_publication_time_months,
                     diffMonths.toInt(),
                     diffMonths,
                 )
@@ -92,8 +103,8 @@ fun Instant.toRssFeedPublicationTime(resources: Resources): String {
 
         else ->
             (age.inWholeDays / 365L).let { diffYears ->
-                resources.getQuantityString(
-                    R.plurals.rss_feed_item_publication_time_years,
+                pluralStringResource(
+                    Res.plurals.rss_feed_item_publication_time_years,
                     diffYears.toInt(),
                     diffYears,
                 )
@@ -101,12 +112,13 @@ fun Instant.toRssFeedPublicationTime(resources: Resources): String {
     }
 }
 
-private fun Resources.getTimeQuantityString(
-    @PluralsRes id: Int,
+@Composable
+private fun timeQuantityString(
+    resource: PluralStringResource,
     duration: Duration,
     durationUnit: DurationUnit,
 ): String = duration.toInt(durationUnit).let { quantity ->
-    getQuantityString(id, quantity, quantity)
+    pluralStringResource(resource, quantity, quantity)
 }
 
 fun RssChannelItem.toDestination(): RssFeedDestination.ItemDescription? = description?.let { desc ->
@@ -131,7 +143,7 @@ fun UriHandler.openUrl(
 ) = openUriOrReport(
     uri = url,
     showMessage = showMessage,
-    notFoundMessage = UserMessage.Resource(R.string.open_external_link_application_not_found),
+    notFoundMessage = UserMessage.Resource(Res.string.open_external_link_application_not_found),
 )
 
 fun UriHandler.openEmail(
@@ -140,7 +152,7 @@ fun UriHandler.openEmail(
 ) = openUriOrReport(
     uri = "mailto:$email",
     showMessage = showMessage,
-    notFoundMessage = UserMessage.Resource(R.string.open_email_application_not_found),
+    notFoundMessage = UserMessage.Resource(Res.string.open_email_application_not_found),
 )
 
 // UriHandler.openUri throws IllegalArgumentException when no app can open the URI.

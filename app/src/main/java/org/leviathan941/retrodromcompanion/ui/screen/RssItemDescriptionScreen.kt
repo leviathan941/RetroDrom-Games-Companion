@@ -26,7 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.persistentListOf
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.open_external_link_application_not_found
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.browser.rememberInAppBrowser
 import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
@@ -54,7 +55,7 @@ fun RssItemDescriptionScreen(
     val openUrl = { url: String ->
         if (!inAppBrowser.open(url)) {
             userMessagesViewModel.show(
-                UserMessage.Resource(R.string.open_external_link_application_not_found),
+                UserMessage.Resource(Res.string.open_external_link_application_not_found),
             )
         }
     }

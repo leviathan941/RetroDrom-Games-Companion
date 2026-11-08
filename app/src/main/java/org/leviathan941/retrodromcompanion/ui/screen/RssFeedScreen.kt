@@ -38,7 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboard
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -46,7 +46,8 @@ import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.error_copied_clipboard_label
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.rssreader.asInstant
 import org.leviathan941.retrodromcompanion.ui.copyToClipboard
@@ -200,7 +201,7 @@ private fun LazyItemScope.LoadingRefreshErrorView(
         modifier = Modifier.fillParentMaxSize(),
         state = LoadingState.Failure(
             message = error.error.message.orEmpty(),
-            clipboardLabel = stringResource(R.string.error_copied_clipboard_label),
+            clipboardLabel = stringResource(Res.string.error_copied_clipboard_label),
         ),
         onErrorLongPress = { label, message ->
             coroutineScope.launch {
@@ -219,7 +220,7 @@ private fun LoadingAppendErrorView(
     showMessage: (UserMessage) -> Unit,
 ) {
     val clipboard = LocalClipboard.current
-    val errorClipboardLabel = stringResource(R.string.error_copied_clipboard_label)
+    val errorClipboardLabel = stringResource(Res.string.error_copied_clipboard_label)
     RssFeedLoadFailedNextItem(
         errorMessage = error.error.message
             ?: "Error during Rss feed loading",

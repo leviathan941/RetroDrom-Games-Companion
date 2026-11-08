@@ -30,14 +30,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.loading_screen_failure_retry_button
+import org.leviathan941.retrodromcompanion.resources.loading_screen_failure_title
+import org.leviathan941.retrodromcompanion.resources.loading_screen_in_progress_message
 import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.theme.ClickableTextColor
 
@@ -72,7 +75,7 @@ private fun InProgressView(modifier: Modifier = Modifier) {
     ) {
         CircularProgressIndicator()
         Text(
-            text = stringResource(id = R.string.loading_screen_in_progress_message),
+            text = stringResource(Res.string.loading_screen_in_progress_message),
             style = MaterialTheme.typography.titleMedium,
         )
     }
@@ -107,7 +110,7 @@ private fun FailureView(
                     },
                     onClick = {},
                 ),
-            text = stringResource(R.string.loading_screen_failure_title),
+            text = stringResource(Res.string.loading_screen_failure_title),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.titleMedium,
             overflow = TextOverflow.Ellipsis,
@@ -118,7 +121,7 @@ private fun FailureView(
                 .clickable { onRetryClick() },
             text = AnnotatedString(
                 text = stringResource(
-                    id = R.string.loading_screen_failure_retry_button,
+                    Res.string.loading_screen_failure_retry_button,
                 ).uppercase(),
                 spanStyle = SpanStyle(
                     color = ClickableTextColor,

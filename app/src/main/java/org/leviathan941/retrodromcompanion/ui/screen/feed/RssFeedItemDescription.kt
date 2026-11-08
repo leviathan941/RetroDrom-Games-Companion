@@ -31,15 +31,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import org.leviathan941.compose.htmltext.HtmlText
 import org.leviathan941.compose.htmltext.imagecontent.ImageContentCreator
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_broken_image
+import org.leviathan941.retrodromcompanion.resources.google_material_image_placeholder
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_description_from_author
 import org.leviathan941.retrodromcompanion.rssreader.asInstant
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
 import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
@@ -67,7 +69,7 @@ fun RssFeedItemDescription(
                 .padding(top = 10.dp),
             text = itemDescription.pubDate
                 .asInstant()
-                .toRssFeedPublicationTime(LocalResources.current),
+                .toRssFeedPublicationTime(),
             color = nonImportantColor,
             style = MaterialTheme.typography.labelMedium,
         )
@@ -76,7 +78,7 @@ fun RssFeedItemDescription(
             Text(
                 modifier = Modifier
                     .padding(bottom = 10.dp),
-                text = stringResource(id = R.string.rss_feed_item_description_from_author, creator),
+                text = stringResource(Res.string.rss_feed_item_description_from_author, creator),
                 color = nonImportantColor,
                 style = MaterialTheme.typography.labelMedium,
             )
@@ -105,8 +107,8 @@ fun RssFeedItemDescription(
                 ImageContentCreator(
                     localDensity = LocalDensity.current,
                     modifier = Modifier.wrapContentSize(align = Alignment.TopStart),
-                    placeholder = painterResource(R.drawable.google_material_image_placeholder),
-                    error = painterResource(R.drawable.google_material_broken_image),
+                    placeholder = painterResource(Res.drawable.google_material_image_placeholder),
+                    error = painterResource(Res.drawable.google_material_broken_image),
                     defaultWidth = defaultImageWidth,
                     defaultHeight = defaultImageHeight,
                 ),

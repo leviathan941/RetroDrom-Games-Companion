@@ -20,6 +20,10 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.jetbrains.kotlin.parcelize) apply false
     alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.kotlin.multiplatform.library) apply false
+    alias(libs.plugins.android.lint) apply false
+    alias(libs.plugins.jetbrains.kotlin.multiplatform) apply false
+    alias(libs.plugins.jetbrains.compose) apply false
     alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.jetbrains.kotlin.serialization) apply false
     alias(libs.plugins.jetbrains.kotlin.compose.compiler) apply false
@@ -41,6 +45,14 @@ allprojects {
 
     ktlint {
         version = ktlintVersion
+        // The compose resources generator adds its output to the KMP source sets.
+        filter {
+            exclude {
+                it.file.path.contains(
+                    "${File.separator}build${File.separator}generated${File.separator}",
+                )
+            }
+        }
     }
 
     dependencies {

@@ -31,9 +31,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.drawer_submenu_item_collapsed_desc
+import org.leviathan941.retrodromcompanion.resources.drawer_submenu_item_expanded_desc
 
 @Composable
 fun DrawerSubMenuView(
@@ -71,12 +73,12 @@ private fun ExpandIcon(isExpanded: Boolean) {
     if (isExpanded) {
         Icon(
             imageVector = Icons.Default.KeyboardArrowDown,
-            contentDescription = stringResource(id = R.string.drawer_submenu_item_expanded_desc),
+            contentDescription = stringResource(Res.string.drawer_submenu_item_expanded_desc),
         )
     } else {
         Icon(
             imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
-            contentDescription = stringResource(id = R.string.drawer_submenu_item_collapsed_desc),
+            contentDescription = stringResource(Res.string.drawer_submenu_item_collapsed_desc),
         )
     }
 }

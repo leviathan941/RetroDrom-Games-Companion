@@ -1,82 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ RetroDrom Games Companion
+  ~ Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <resources>
     <string name="app_name" translatable="false">RetroDrom Games</string>
-
-    <string name="loading_screen_in_progress_message">Loading…</string>
-    <string name="loading_screen_failure_title">An error occurred.\nTry again later.</string>
-    <string name="loading_screen_failure_retry_button">Refresh</string>
-
-    <string name="rss_feed_item_publication_icon_desc">Post was published at</string>
-    <string name="rss_feed_item_load_failure_title">An error occurred. Try again later.</string>
-    <string name="rss_feed_item_load_retry_button_desc">Retry</string>
-
-    <string name="top_bar_navigation_icon_desc_back">Back</string>
-    <string name="top_bar_navigation_icon_desc_close">Close</string>
-    <string name="top_bar_navigation_icon_desc_drawer">Open menu</string>
-    <string name="top_bar_action_icon_desc_open_in_browser">Open in browser</string>
-
-    <string name="main_rss_feed_title" translatable="false">RetroDrom Games</string>
-
-    <string name="rss_feed_item_publication_time_just_now">just now</string>
-    <plurals name="rss_feed_item_publication_time_minutes">
-        <item quantity="one">%d minute ago</item>
-        <item quantity="other">%d minutes ago</item>
-    </plurals>
-    <plurals name="rss_feed_item_publication_time_hours">
-        <item quantity="one">%d hour ago</item>
-        <item quantity="other">%d hours ago</item>
-    </plurals>
-    <plurals name="rss_feed_item_publication_time_days">
-        <item quantity="one">%d day ago</item>
-        <item quantity="other">%d days ago</item>
-    </plurals>
-    <plurals name="rss_feed_item_publication_time_months">
-        <item quantity="one">%d month ago</item>
-        <item quantity="other">%d months ago</item>
-    </plurals>
-    <plurals name="rss_feed_item_publication_time_years">
-        <item quantity="one">%d year ago</item>
-        <item quantity="other">%d years ago</item>
-    </plurals>
-    <string name="drawer_submenu_item_expanded_desc">Submenu is expanded</string>
-    <string name="drawer_submenu_item_collapsed_desc">Submenu is collapsed</string>
-    <string name="drawer_rss_feeds_submenu_title">News categories</string>
-    <string name="settings_screen_title">Settings</string>
-    <string name="settings_group_name_interface">Interface</string>
-    <string name="settings_interface_item_theme_title">Theme</string>
-    <string name="theme_name_light">Light</string>
-    <string name="theme_name_dark">Dark</string>
-    <string name="theme_name_system">System</string>
-    <string name="theme_name_dynamic">Dynamic</string>
-    <string name="settings_group_name_about">About</string>
-    <string name="settings_about_item_feedback_title">Contact us</string>
-    <string name="settings_about_item_app_version_title">Application version</string>
-    <string name="settings_about_feedback_screen_description">For advertising, content errors and other questions:</string>
-    <string name="rss_feed_item_description_from_author">from %s</string>
-    <string name="notification_permission_dialog_title">Stay updated with push notifications</string>
-    <string name="notification_permission_dialog_text">To keep you informed with the latest updates and news, we would like to send you notifications. Please grant the permission to enhance your experience.</string>
-    <string name="permission_dialog_confirm_button">Allow</string>
-    <string name="permission_dialog_deny_button">Deny</string>
-    <string name="settings_interface_item_notifications_title">Notifications</string>
-    <string name="settings_notifications_item_push_title">New posts</string>
-    <string name="rss_news_notification_channel_description">Notifications about new posts from the RetroDrom Games site</string>
-    <string name="rss_news_notification_channel_name">New posts</string>
-    <string name="misc_notification_channel_name">Misc</string>
-    <string name="misc_notification_channel_description">Non-identified notifications</string>
-    <string name="push_topic_subscription_failed_message">Could not subscribe to topic \'%s\'</string>
-    <string name="push_topic_unsubscription_failed_message">Could not unsubscribe from topic \'%s\'</string>
-    <string name="rss_feed_post_loading_item_title">Loading post</string>
-    <string name="error_copied_clipboard_label">The error text copied into clipboard</string>
-    <string name="settings_about_item_licenses_title">Licenses</string>
-    <string name="drawer_telegram_external_link_badge_description">Open Telegram channel</string>
-    <string name="drawer_telegram_item_title" translatable="false">Telegram</string>
-    <string name="open_external_link_application_not_found">No application found to open the link</string>
-    <string name="drawer_youtube_item_title" translatable="false">YouTube</string>
-    <string name="drawer_youtube_external_link_badge_description">Open YouTube channel</string>
-    <string name="drawer_boosty_item_title" translatable="false">Boosty</string>
-    <string name="drawer_boosty_external_link_badge_description">Open our Boosty</string>
-    <string name="settings_about_feedback_screen_site_title">Website</string>
-    <string name="settings_about_feedback_screen_email_title">Email</string>
-    <string name="settings_about_feedback_screen_site_copied_clipboard_label">Link copied to clipboard</string>
-    <string name="settings_about_feedback_screen_email_copied_clipboard_label">Email copied to clipboard</string>
-    <string name="open_email_application_not_found">No application found to send an email</string>
 </resources>

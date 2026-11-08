@@ -23,8 +23,9 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import org.leviathan941.retrodromcompanion.R
+import org.jetbrains.compose.resources.stringResource
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.settings_screen_title
 
 @Composable
 fun SettingsDrawerNavView(
@@ -33,7 +34,7 @@ fun SettingsDrawerNavView(
     onClick: () -> Unit = {},
 ) {
     DrawerMenuItemView(
-        title = stringResource(id = R.string.settings_screen_title),
+        title = stringResource(Res.string.settings_screen_title),
         modifier = modifier,
         icon = {
             Icon(

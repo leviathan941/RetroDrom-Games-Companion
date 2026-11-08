@@ -29,11 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_globe
+import org.leviathan941.retrodromcompanion.resources.settings_about_feedback_screen_description
+import org.leviathan941.retrodromcompanion.resources.settings_about_feedback_screen_email_copied_clipboard_label
+import org.leviathan941.retrodromcompanion.resources.settings_about_feedback_screen_email_title
+import org.leviathan941.retrodromcompanion.resources.settings_about_feedback_screen_site_copied_clipboard_label
+import org.leviathan941.retrodromcompanion.resources.settings_about_feedback_screen_site_title
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_EMAIL
 import org.leviathan941.retrodromcompanion.ui.FEEDBACK_URL
@@ -52,21 +58,21 @@ fun FeedbackSettingsSubScreen(
     val clipboard = LocalClipboard.current
     val coroutineScope = rememberCoroutineScope()
     val siteCopiedLabel = stringResource(
-        id = R.string.settings_about_feedback_screen_site_copied_clipboard_label,
+        Res.string.settings_about_feedback_screen_site_copied_clipboard_label,
     )
     val emailCopiedLabel = stringResource(
-        id = R.string.settings_about_feedback_screen_email_copied_clipboard_label,
+        Res.string.settings_about_feedback_screen_email_copied_clipboard_label,
     )
 
     SettingsGroup(
-        title = stringResource(id = R.string.settings_about_feedback_screen_description),
+        title = stringResource(Res.string.settings_about_feedback_screen_description),
         modifier = modifier,
         titleStyle = MaterialTheme.typography.bodyLarge,
     ) {
         SettingsClickableItem(
-            title = stringResource(id = R.string.settings_about_feedback_screen_site_title),
+            title = stringResource(Res.string.settings_about_feedback_screen_site_title),
             subtitle = FEEDBACK_URL,
-            leadingIcon = painterResource(id = R.drawable.google_material_globe),
+            leadingIcon = painterResource(Res.drawable.google_material_globe),
             onLongClick = {
                 coroutineScope.launch {
                     copyToClipboard(clipboard, siteCopiedLabel, FEEDBACK_URL, showMessage)
@@ -80,7 +86,7 @@ fun FeedbackSettingsSubScreen(
         HorizontalDivider()
 
         SettingsClickableItem(
-            title = stringResource(id = R.string.settings_about_feedback_screen_email_title),
+            title = stringResource(Res.string.settings_about_feedback_screen_email_title),
             subtitle = FEEDBACK_EMAIL,
             leadingIcon = rememberVectorPainter(Icons.Default.Email),
             onLongClick = {

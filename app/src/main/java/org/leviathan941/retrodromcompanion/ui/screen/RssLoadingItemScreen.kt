@@ -25,9 +25,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.rss_feed_post_loading_item_title
 import org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewModel
 import org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewState
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -63,7 +64,7 @@ fun RssLoadingItemScreen(
                 topBar = {
                     TopBarView(
                         prefs = TopBarPrefs(
-                            title = stringResource(R.string.rss_feed_post_loading_item_title),
+                            title = stringResource(Res.string.rss_feed_post_loading_item_title),
                             navButton = TopBarNavButton.BACK,
                         ),
                         onNavButtonClick = { navButton ->

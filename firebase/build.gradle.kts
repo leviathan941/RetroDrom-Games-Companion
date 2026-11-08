@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":notification"))
     implementation(project(":preferences"))
+    implementation(project(":resources"))
 
     implementation(libs.androidx.lifecycle.process)
     implementation(platform(libs.google.firebase.bom))

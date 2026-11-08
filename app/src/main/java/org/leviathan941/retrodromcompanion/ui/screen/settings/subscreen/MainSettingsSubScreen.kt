@@ -26,11 +26,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.leviathan941.retrodromcompanion.BuildConfig
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_contrast
+import org.leviathan941.retrodromcompanion.resources.google_material_feedback
+import org.leviathan941.retrodromcompanion.resources.google_material_info
+import org.leviathan941.retrodromcompanion.resources.google_material_license
+import org.leviathan941.retrodromcompanion.resources.settings_about_item_app_version_title
+import org.leviathan941.retrodromcompanion.resources.settings_about_item_feedback_title
+import org.leviathan941.retrodromcompanion.resources.settings_about_item_licenses_title
+import org.leviathan941.retrodromcompanion.resources.settings_group_name_about
+import org.leviathan941.retrodromcompanion.resources.settings_group_name_interface
+import org.leviathan941.retrodromcompanion.resources.settings_interface_item_notifications_title
+import org.leviathan941.retrodromcompanion.resources.settings_interface_item_theme_title
+import org.leviathan941.retrodromcompanion.resources.settings_screen_title
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
@@ -55,18 +67,18 @@ fun MainSettingsSubScreen(
 
     SettingsScreen(
         data = MainNavScreen.Settings(
-            title = stringResource(id = R.string.settings_screen_title),
+            title = stringResource(Res.string.settings_screen_title),
         ),
         navigationActions = navigationActions,
         modifier = modifier,
     ) {
         SettingsGroup(
-            title = stringResource(id = R.string.settings_group_name_interface),
+            title = stringResource(Res.string.settings_group_name_interface),
         ) {
             SettingsClickableItem(
-                title = stringResource(id = R.string.settings_interface_item_theme_title),
-                subtitle = stringResource(id = appTheme.toStringResource()),
-                leadingIcon = painterResource(id = R.drawable.google_material_contrast),
+                title = stringResource(Res.string.settings_interface_item_theme_title),
+                subtitle = stringResource(appTheme.toStringResource()),
+                leadingIcon = painterResource(Res.drawable.google_material_contrast),
                 trailingIcon = rememberSettingsNavigationIcon(),
             ) {
                 navigationActions.navigateToSettingsItem(SettingsDestination.AppTheme)
@@ -75,7 +87,7 @@ fun MainSettingsSubScreen(
             HorizontalDivider()
 
             SettingsClickableItem(
-                title = stringResource(id = R.string.settings_interface_item_notifications_title),
+                title = stringResource(Res.string.settings_interface_item_notifications_title),
                 leadingIcon = rememberVectorPainter(Icons.Default.Notifications),
                 trailingIcon = rememberSettingsNavigationIcon(),
             ) {
@@ -84,11 +96,11 @@ fun MainSettingsSubScreen(
         }
 
         SettingsGroup(
-            title = stringResource(id = R.string.settings_group_name_about),
+            title = stringResource(Res.string.settings_group_name_about),
         ) {
             SettingsClickableItem(
-                title = stringResource(id = R.string.settings_about_item_feedback_title),
-                leadingIcon = painterResource(id = R.drawable.google_material_feedback),
+                title = stringResource(Res.string.settings_about_item_feedback_title),
+                leadingIcon = painterResource(Res.drawable.google_material_feedback),
                 trailingIcon = rememberSettingsNavigationIcon(),
             ) {
                 navigationActions.navigateToSettingsItem(SettingsDestination.Feedback)
@@ -97,8 +109,8 @@ fun MainSettingsSubScreen(
             HorizontalDivider()
 
             SettingsClickableItem(
-                title = stringResource(id = R.string.settings_about_item_licenses_title),
-                leadingIcon = painterResource(id = R.drawable.google_material_license),
+                title = stringResource(Res.string.settings_about_item_licenses_title),
+                leadingIcon = painterResource(Res.drawable.google_material_license),
                 trailingIcon = rememberSettingsNavigationIcon(),
             ) {
                 navigationActions.navigateToSettingsItem(SettingsDestination.Licenses)
@@ -107,9 +119,9 @@ fun MainSettingsSubScreen(
             HorizontalDivider()
 
             SettingsTitleItem(
-                title = stringResource(id = R.string.settings_about_item_app_version_title),
+                title = stringResource(Res.string.settings_about_item_app_version_title),
                 subtitle = BuildConfig.VERSION_NAME,
-                leadingIcon = painterResource(id = R.drawable.google_material_info),
+                leadingIcon = painterResource(Res.drawable.google_material_info),
             )
         }
     }

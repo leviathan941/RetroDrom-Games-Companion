@@ -27,29 +27,29 @@
     <string name="top_bar_action_icon_desc_open_in_browser">Открыть в браузере</string>
     <string name="rss_feed_item_publication_time_just_now">только что</string>
     <plurals name="rss_feed_item_publication_time_minutes">
-        <item quantity="one">%d минута назад</item>
-        <item quantity="few">%d минуты назад</item>
-        <item quantity="many">%d минут назад</item>
+        <item quantity="one">%1$d минута назад</item>
+        <item quantity="few">%1$d минуты назад</item>
+        <item quantity="many">%1$d минут назад</item>
     </plurals>
     <plurals name="rss_feed_item_publication_time_hours">
-        <item quantity="one">%d час назад</item>
-        <item quantity="few">%d часа назад</item>
-        <item quantity="many">%d часов назад</item>
+        <item quantity="one">%1$d час назад</item>
+        <item quantity="few">%1$d часа назад</item>
+        <item quantity="many">%1$d часов назад</item>
     </plurals>
     <plurals name="rss_feed_item_publication_time_days">
-        <item quantity="one">%d день назад</item>
-        <item quantity="few">%d дня назад</item>
-        <item quantity="many">%d дней назад</item>
+        <item quantity="one">%1$d день назад</item>
+        <item quantity="few">%1$d дня назад</item>
+        <item quantity="many">%1$d дней назад</item>
     </plurals>
     <plurals name="rss_feed_item_publication_time_months">
-        <item quantity="one">%d месяц назад</item>
-        <item quantity="few">%d месяца назад</item>
-        <item quantity="many">%d месяцев назад</item>
+        <item quantity="one">%1$d месяц назад</item>
+        <item quantity="few">%1$d месяца назад</item>
+        <item quantity="many">%1$d месяцев назад</item>
     </plurals>
     <plurals name="rss_feed_item_publication_time_years">
-        <item quantity="one">%d год назад</item>
-        <item quantity="few">%d года назад</item>
-        <item quantity="many">%d лет назад</item>
+        <item quantity="one">%1$d год назад</item>
+        <item quantity="few">%1$d года назад</item>
+        <item quantity="many">%1$d лет назад</item>
     </plurals>
     <string name="rss_feed_item_load_retry_button_desc">Повторить</string>
     <string name="rss_feed_item_load_failure_title">Произошла ошибка. Попробуйте позже.</string>
@@ -67,19 +67,15 @@
     <string name="settings_about_item_feedback_title">Связаться с нами</string>
     <string name="settings_about_item_app_version_title">Версия приложения</string>
     <string name="settings_about_feedback_screen_description">По вопросам рекламы, ошибок в публикациях и другим вопросам:</string>
-    <string name="rss_feed_item_description_from_author">от %s</string>
+    <string name="rss_feed_item_description_from_author">от %1$s</string>
     <string name="notification_permission_dialog_title">Получайте уведомления о новых публикациях</string>
     <string name="notification_permission_dialog_text">Мы хотим чтобы Вы всегда были в курсе новостей. Для этого разрешите нам показывать уведомления о новых публикациях.</string>
     <string name="permission_dialog_confirm_button">Разрешить</string>
     <string name="permission_dialog_deny_button">Отказаться</string>
     <string name="settings_interface_item_notifications_title">Уведомления</string>
     <string name="settings_notifications_item_push_title">Новые публикации</string>
-    <string name="rss_news_notification_channel_description">Уведомления о новых публикациях на сайте RetroDrom Games</string>
-    <string name="rss_news_notification_channel_name">Новые публикации</string>
-    <string name="misc_notification_channel_name">Остальное</string>
-    <string name="misc_notification_channel_description">Уведомления, для которых не определен канал</string>
-    <string name="push_topic_subscription_failed_message">Не получилось подписаться на топик \'%s\'</string>
-    <string name="push_topic_unsubscription_failed_message">Не получилось отписаться от топика \'%s\'</string>
+    <string name="push_topic_subscription_failed_message">Не получилось подписаться на топик '%1$s'</string>
+    <string name="push_topic_unsubscription_failed_message">Не получилось отписаться от топика '%1$s'</string>
     <string name="rss_feed_post_loading_item_title">Загрузка статьи</string>
     <string name="error_copied_clipboard_label">Текст ошибки скопирован в буфер</string>
     <string name="settings_about_item_licenses_title">Лицензии</string>

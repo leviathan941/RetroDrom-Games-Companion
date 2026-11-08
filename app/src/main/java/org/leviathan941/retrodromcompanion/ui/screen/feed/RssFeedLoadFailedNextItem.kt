@@ -36,11 +36,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_refresh
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_load_failure_title
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_load_retry_button_desc
 
 @Composable
 fun RssFeedLoadFailedNextItem(
@@ -64,9 +67,9 @@ fun RssFeedLoadFailedNextItem(
         ) {
             Box {
                 Icon(
-                    painter = painterResource(id = R.drawable.google_material_refresh),
+                    painter = painterResource(Res.drawable.google_material_refresh),
                     contentDescription = stringResource(
-                        id = R.string.rss_feed_item_load_retry_button_desc,
+                        Res.string.rss_feed_item_load_retry_button_desc,
                     ),
                 )
             }
@@ -82,7 +85,7 @@ fun RssFeedLoadFailedNextItem(
                     },
                     onClick = {},
                 ),
-            text = stringResource(id = R.string.rss_feed_item_load_failure_title),
+            text = stringResource(Res.string.rss_feed_item_load_failure_title),
             color = MaterialTheme.colorScheme.error,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 2,

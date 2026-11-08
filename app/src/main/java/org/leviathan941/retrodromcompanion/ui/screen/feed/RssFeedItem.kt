@@ -38,9 +38,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,7 +49,11 @@ import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_broken_image
+import org.leviathan941.retrodromcompanion.resources.google_material_image_placeholder
+import org.leviathan941.retrodromcompanion.resources.google_material_schedule
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_icon_desc
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
 import kotlin.time.Instant
@@ -87,10 +90,10 @@ fun RssFeedItem(
                         .data(imageUrl)
                         .build(),
                     placeholder = painterResource(
-                        id = R.drawable.google_material_image_placeholder,
+                        Res.drawable.google_material_image_placeholder,
                     ),
                     error = painterResource(
-                        id = R.drawable.google_material_broken_image,
+                        Res.drawable.google_material_broken_image,
                     ),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -127,16 +130,16 @@ fun RssFeedItem(
                 ) {
                     Image(
                         modifier = Modifier.size(12.dp),
-                        painter = painterResource(id = R.drawable.google_material_schedule),
+                        painter = painterResource(Res.drawable.google_material_schedule),
                         contentDescription = stringResource(
-                            id = R.string.rss_feed_item_publication_icon_desc,
+                            Res.string.rss_feed_item_publication_icon_desc,
                         ),
                         colorFilter = ColorFilter.tint(
                             color = nonImportantColor,
                         ),
                     )
                     Text(
-                        text = pubDate.toRssFeedPublicationTime(LocalResources.current),
+                        text = pubDate.toRssFeedPublicationTime(),
                         maxLines = 1,
                         style = MaterialTheme.typography.labelMedium,
                         color = nonImportantColor,

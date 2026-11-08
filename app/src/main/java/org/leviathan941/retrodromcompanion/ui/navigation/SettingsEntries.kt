@@ -21,7 +21,7 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
@@ -29,6 +29,11 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.toImmutableList
 import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.settings_about_item_feedback_title
+import org.leviathan941.retrodromcompanion.resources.settings_about_item_licenses_title
+import org.leviathan941.retrodromcompanion.resources.settings_interface_item_notifications_title
+import org.leviathan941.retrodromcompanion.resources.settings_interface_item_theme_title
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -49,7 +54,7 @@ fun EntryProviderScope<NavKey>.settingsEntries(navigationActions: MainNavActions
     entry<SettingsDestination.Notifications> {
         SettingsScreen(
             data = MainNavScreen.Settings(
-                title = stringResource(id = R.string.settings_interface_item_notifications_title),
+                title = stringResource(Res.string.settings_interface_item_notifications_title),
             ),
             navigationActions = navigationActions,
         ) {
@@ -65,13 +70,13 @@ fun EntryProviderScope<NavKey>.settingsEntries(navigationActions: MainNavActions
         val themeItems = ThemeType.supportedEntries().map {
             SettingsRadioGroupItem(
                 value = it,
-                title = stringResource(id = it.toStringResource()),
+                title = stringResource(it.toStringResource()),
             )
         }.toImmutableList()
         val selectedItem = themeItems.find { it.value == appTheme } ?: themeItems.first()
         SettingsScreen(
             data = MainNavScreen.Settings(
-                title = stringResource(id = R.string.settings_interface_item_theme_title),
+                title = stringResource(Res.string.settings_interface_item_theme_title),
             ),
             navigationActions = navigationActions,
         ) {
@@ -91,7 +96,7 @@ fun EntryProviderScope<NavKey>.settingsEntries(navigationActions: MainNavActions
         )
         SettingsScreen(
             data = MainNavScreen.Settings(
-                title = stringResource(id = R.string.settings_about_item_feedback_title),
+                title = stringResource(Res.string.settings_about_item_feedback_title),
             ),
             navigationActions = navigationActions,
         ) {
@@ -102,7 +107,7 @@ fun EntryProviderScope<NavKey>.settingsEntries(navigationActions: MainNavActions
     entry<SettingsDestination.Licenses> {
         SettingsScreen(
             data = MainNavScreen.Settings(
-                title = stringResource(id = R.string.settings_about_item_licenses_title),
+                title = stringResource(Res.string.settings_about_item_licenses_title),
             ),
             navigationActions = navigationActions,
         ) {

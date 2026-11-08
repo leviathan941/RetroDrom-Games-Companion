@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.app.model
 
-import androidx.annotation.StringRes
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
@@ -28,7 +27,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.R
+import org.jetbrains.compose.resources.StringResource
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.push_topic_subscription_failed_message
+import org.leviathan941.retrodromcompanion.resources.push_topic_unsubscription_failed_message
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.app.message.UserMessages
 import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
@@ -74,7 +76,7 @@ class PushNotificationModel(
                 preferencesRepository.uiEditor.addPushTopicSubscription(topic.value)
             } else if (showMessageOnFailed) {
                 showTopicSubscriptionFailedMessage(
-                    textRes = R.string.push_topic_subscription_failed_message,
+                    textRes = Res.string.push_topic_subscription_failed_message,
                     topicName = topic.value,
                 )
             }
@@ -90,7 +92,7 @@ class PushNotificationModel(
                 preferencesRepository.uiEditor.removePushTopicSubscription(topic.value)
             } else if (showMessageOnFailed) {
                 showTopicSubscriptionFailedMessage(
-                    textRes = R.string.push_topic_unsubscription_failed_message,
+                    textRes = Res.string.push_topic_unsubscription_failed_message,
                     topicName = topic.value,
                 )
             }
@@ -98,7 +100,7 @@ class PushNotificationModel(
     }
 
     private fun showTopicSubscriptionFailedMessage(
-        @StringRes textRes: Int,
+        textRes: StringResource,
         topicName: String,
     ) {
         userMessages.show(

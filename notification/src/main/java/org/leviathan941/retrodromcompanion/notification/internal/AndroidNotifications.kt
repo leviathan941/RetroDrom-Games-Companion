@@ -41,7 +41,7 @@ import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
 import org.leviathan941.retrodromcompanion.notification.NotificationData
 import org.leviathan941.retrodromcompanion.notification.POST_ID_PAYLOAD_DATA_KEY
 import org.leviathan941.retrodromcompanion.notification.Notifications
-import org.leviathan941.retrodromcompanion.notification.R
+import org.leviathan941.retrodromcompanion.resources.R
 import org.leviathan941.retrodromcompanion.notification.createFeedItemDeeplink
 
 @Inject

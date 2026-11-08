@@ -95,6 +95,7 @@ dependencies {
     implementation(project(":notification"))
     implementation(project(":permission"))
     implementation(project(":preferences"))
+    implementation(project(":resources"))
     implementation(project(":rss-reader"))
 
     implementation(libs.aboutlibraries.compose.m3)

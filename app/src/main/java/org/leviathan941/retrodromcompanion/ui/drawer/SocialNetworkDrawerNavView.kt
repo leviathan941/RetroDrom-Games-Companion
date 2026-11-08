@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.drawer
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -29,12 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.compose.LocalPlatformContext
 import coil3.request.ImageRequest
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_open_in_new
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 
 private val logger = Logger.withTag("SocialNetworkDrawerNav")
@@ -46,7 +47,7 @@ sealed interface SocialNetworkIcon {
         override val contentScale: ContentScale = ContentScale.Fit,
     ) : SocialNetworkIcon
     data class Resource(
-        @param:DrawableRes val resId: Int,
+        val drawable: DrawableResource,
         override val contentScale: ContentScale = ContentScale.Fit,
     ) : SocialNetworkIcon
 }
@@ -70,7 +71,7 @@ fun SocialNetworkDrawerNavView(
         },
         badge = {
             Icon(
-                painter = painterResource(R.drawable.google_material_open_in_new),
+                painter = painterResource(Res.drawable.google_material_open_in_new),
                 contentDescription = badgeContentDescription,
             )
         },
@@ -106,7 +107,7 @@ private fun SocialNetworkIconView(icon: SocialNetworkIcon) {
                 modifier = Modifier
                     .size(24.dp),
                 contentScale = icon.contentScale,
-                painter = painterResource(icon.resId),
+                painter = painterResource(icon.drawable),
                 contentDescription = null,
             )
         }

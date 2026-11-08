@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.AppScope
@@ -31,9 +30,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.R
+import org.jetbrains.compose.resources.getString
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.main_rss_feed_title
 import org.leviathan941.retrodromcompanion.common.Constants
-import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
 import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
@@ -45,8 +45,6 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
 class MainViewModel(
-    @param:ApplicationContext
-    private val context: Context,
     private val feedCacheProvider: FeedCacheProvider,
     private val feedCacheMutator: FeedCacheMutator,
 ) : ViewModel() {
@@ -76,7 +74,7 @@ class MainViewModel(
         }
     }
 
-    private fun convertFeedCategories(
+    private suspend fun convertFeedCategories(
         feedCategories: List<FeedCategory>,
     ): Map<Int, MainNavScreen.RssFeed> {
         val rssCategoryScreens = feedCategories
@@ -90,7 +88,7 @@ class MainViewModel(
             }
         val mainCategoryScreen = MainNavScreen.RssFeed(
             id = MAIN_RSS_FEED_ID,
-            title = context.getString(R.string.main_rss_feed_title),
+            title = getString(Res.string.main_rss_feed_title),
             channelUrl = Constants.RETRODROM_BASE_URL,
         )
         val allScreens = sequenceOf(mainCategoryScreen)

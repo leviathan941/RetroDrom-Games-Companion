@@ -31,14 +31,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.boosty_logo
+import org.leviathan941.retrodromcompanion.resources.drawer_boosty_external_link_badge_description
+import org.leviathan941.retrodromcompanion.resources.drawer_boosty_item_title
+import org.leviathan941.retrodromcompanion.resources.drawer_telegram_external_link_badge_description
+import org.leviathan941.retrodromcompanion.resources.drawer_telegram_item_title
+import org.leviathan941.retrodromcompanion.resources.drawer_youtube_external_link_badge_description
+import org.leviathan941.retrodromcompanion.resources.drawer_youtube_item_title
+import org.leviathan941.retrodromcompanion.resources.telegram_logo
+import org.leviathan941.retrodromcompanion.resources.youtube_logo
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 import org.leviathan941.retrodromcompanion.ui.navigation.AppDestination
@@ -99,10 +108,10 @@ fun DrawerNavigationContent(
         HorizontalDivider()
 
         SocialNetworkDrawerNavView(
-            title = stringResource(R.string.drawer_telegram_item_title),
-            icon = SocialNetworkIcon.Resource(R.drawable.telegram_logo),
+            title = stringResource(Res.string.drawer_telegram_item_title),
+            icon = SocialNetworkIcon.Resource(Res.drawable.telegram_logo),
             badgeContentDescription = stringResource(
-                R.string.drawer_telegram_external_link_badge_description,
+                Res.string.drawer_telegram_external_link_badge_description,
             ),
             onClick = {
                 uriHandler.openUrl(
@@ -116,12 +125,12 @@ fun DrawerNavigationContent(
         HorizontalDivider()
 
         SocialNetworkDrawerNavView(
-            title = stringResource(R.string.drawer_youtube_item_title),
+            title = stringResource(Res.string.drawer_youtube_item_title),
             icon = SocialNetworkIcon.Resource(
-                resId = R.drawable.youtube_logo,
+                drawable = Res.drawable.youtube_logo,
             ),
             badgeContentDescription = stringResource(
-                R.string.drawer_youtube_external_link_badge_description,
+                Res.string.drawer_youtube_external_link_badge_description,
             ),
             onClick = {
                 uriHandler.openUrl(
@@ -135,13 +144,13 @@ fun DrawerNavigationContent(
         HorizontalDivider()
 
         SocialNetworkDrawerNavView(
-            title = stringResource(R.string.drawer_boosty_item_title),
+            title = stringResource(Res.string.drawer_boosty_item_title),
             icon = SocialNetworkIcon.Resource(
-                resId = R.drawable.boosty_logo,
+                drawable = Res.drawable.boosty_logo,
                 contentScale = ContentScale.Crop,
             ),
             badgeContentDescription = stringResource(
-                R.string.drawer_boosty_external_link_badge_description,
+                Res.string.drawer_boosty_external_link_badge_description,
             ),
             onClick = {
                 uriHandler.openUrl(

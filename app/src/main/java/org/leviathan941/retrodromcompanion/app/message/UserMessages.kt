@@ -18,13 +18,13 @@
 
 package org.leviathan941.retrodromcompanion.app.message
 
-import androidx.annotation.StringRes
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
+import org.jetbrains.compose.resources.StringResource
 
 /**
  * A short message for the user, shown by the single snackbar host at the root of the UI.
@@ -35,7 +35,7 @@ sealed interface UserMessage {
     ) : UserMessage
 
     data class Resource(
-        @param:StringRes val textRes: Int,
+        val textRes: StringResource,
         val formatArgs: List<Any> = emptyList(),
     ) : UserMessage
 }

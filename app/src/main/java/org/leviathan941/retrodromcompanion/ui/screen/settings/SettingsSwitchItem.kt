@@ -31,11 +31,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_contrast
 
 @Composable
 fun SettingsSwitchItem(
@@ -85,7 +86,7 @@ fun SettingsSwitchItem(
 private fun SettingsSwitchItemPreview() {
     SettingsSwitchItem(
         title = "Switch item",
-        checkedIcon = painterResource(id = R.drawable.google_material_contrast),
+        checkedIcon = painterResource(Res.drawable.google_material_contrast),
         checked = true,
     )
 }

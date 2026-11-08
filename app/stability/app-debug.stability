@@ -367,6 +367,21 @@ public fun org.leviathan941.retrodromcompanion.ui.theme.MainTheme(materialColorS
     - content: STABLE (composable function type)
 
 @Composable
+private fun org.leviathan941.retrodromcompanion.ui.timeQuantityString(resource: org.jetbrains.compose.resources.PluralStringResource, duration: kotlin.time.Duration, durationUnit: kotlin.time.DurationUnit): kotlin.String
+  skippable: false
+  restartable: false
+  params:
+    - resource: STABLE (marked @Stable or @Immutable)
+    - duration: STABLE (known stable type)
+    - durationUnit: STABLE (class with no mutable properties)
+
+@Composable
+public fun org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime(): kotlin.String
+  skippable: false
+  restartable: false
+  params:
+
+@Composable
 private fun org.leviathan941.retrodromcompanion.ui.topbar.ActionsView(actions: kotlinx.collections.immutable.ImmutableList<org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction>, onClick: kotlin.Function1<org.leviathan941.retrodromcompanion.ui.topbar.TopBarAction, kotlin.Unit>): kotlin.Unit
   skippable: true
   restartable: true
@@ -375,13 +390,13 @@ private fun org.leviathan941.retrodromcompanion.ui.topbar.ActionsView(actions: k
     - onClick: STABLE (function type)
 
 @Composable
-private fun org.leviathan941.retrodromcompanion.ui.topbar.ButtonView(onClick: kotlin.Function0<kotlin.Unit>, painter: androidx.compose.ui.graphics.painter.Painter, contentDescRes: kotlin.Int): kotlin.Unit
+private fun org.leviathan941.retrodromcompanion.ui.topbar.ButtonView(onClick: kotlin.Function0<kotlin.Unit>, painter: androidx.compose.ui.graphics.painter.Painter, contentDescRes: org.jetbrains.compose.resources.StringResource): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - onClick: STABLE (function type)
     - painter: UNKNOWN (interface or non-final class; concrete implementation unknown)
-    - contentDescRes: STABLE (primitive type)
+    - contentDescRes: STABLE (marked @Stable or @Immutable)
 
 @Composable
 private fun org.leviathan941.retrodromcompanion.ui.topbar.NavigationIconView(button: org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton, onButtonClick: kotlin.Function1<org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton, kotlin.Unit>): kotlin.Unit

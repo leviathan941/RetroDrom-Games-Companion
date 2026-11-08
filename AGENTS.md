@@ -29,6 +29,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:notification` | Notification channels, builders, helpers; the `Notifications` and `PushMessaging` interfaces. |
 | `:permission` | Compose permission request and rationale UI on Calf (`calf-permissions`). |
 | `:preferences` | DataStore-backed UI/promo preferences with migrations. |
+| `:resources` | The first KMP module. UI strings (with `values-ru`) and drawables as compose resources in `commonMain/composeResources`, read through its public `Res`; plus, in `androidMain/res`, the Android resources Android itself reads for push (channel strings, notification icon and colour, default channel id). `:app` keeps only its identity: label, launcher icons, theme. |
 | `:rss-reader` | Pages the cached feed with Paging 3 and refills it via a `RemoteMediator`. |
 
 Versions live in `gradle/libs.versions.toml`; SDK/JVM/app-version constants live in
@@ -40,13 +41,21 @@ Read them from there rather than restating them here — version numbers in this
 
 - Build logic lives in the included build `build-logic` (ADR-0006), not `buildSrc`. Every module
   applies one of its convention plugins instead of `com.android.*` directly:
-  `retrodrom.android-library` (every library) or `retrodrom.android-application` (`:app`). They set
+  `retrodrom.android-library` (every Android-only library), `retrodrom.kmp-library` (KMP modules:
+  Android, `iosArm64`, `iosSimulatorArm64`, plus `com.android.lint`, which the KMP library plugin
+  needs to register any lint task) or `retrodrom.android-application` (`:app`). They set
   the SDK levels, the JVM 17 targets and lint's `warningsAsErrors`; a module script keeps its
   `namespace` and whatever is its own. Its constants are visible only to a script that applies one
   of those plugins. AGP and KGP are `compileOnly` there: at runtime they come from the root
   script's `apply false` list, which is where their versions are set.
-- Every library module enables `ExplicitApiMode.Strict` through `retrodrom.android-library` —
+- Every library module enables `ExplicitApiMode.Strict` through its convention plugin —
   public declarations need explicit `public` and explicit return types. `:app` does not.
+- Compose resources (`org.jetbrains.compose` plugin) generate `Res` only in a KMP or Kotlin/JVM
+  module, never under AGP's built-in Kotlin, which is why they live in `:resources`. Their
+  format arguments must be positional (`%1$s`, `%1$d`); `\n`, `\t` and `\uXXXX` are unescaped,
+  `\'` is not. Their vector parser takes literal `#` colours only (an `@android:color/…` throws
+  at runtime) and ignores `android:tint`, so a vector drawn by `Image` without a `colorFilter`
+  must carry its final colour.
 - Package layout per module: public API at the top level (or `api/`), implementation under
   `internal/` or `impl/`; Metro binding containers and the app graph under `di/`.
 - DI is [Metro](https://github.com/ZacSweers/metro). `MainApplication` owns the single
@@ -79,7 +88,8 @@ Read them from there rather than restating them here — version numbers in this
   parameters, so they add no entries to the stability baseline.
 - ktlint runs in the build through `org.jlleitschuh.gradle.ktlint`. The root `build.gradle.kts`
   applies it to every project in `allprojects`, with the ktlint version and the compose-rules
-  ruleset, so a new module needs no line of its own. Keep it there: from a `buildSrc` convention
+  ruleset, so a new module needs no line of its own. It skips `build/generated/`, which the
+  compose resources generator adds to the KMP source sets. Keep it there: from a `buildSrc` convention
   plugin it could not see AGP and KGP and silently linted no Kotlin sources, and a `build-logic`
   convention has not been tried. `build-logic` itself is not checked.
 - `detekt.yaml` exists for standalone/IDE detekt runs; no detekt Gradle plugin is wired into the
@@ -122,12 +132,9 @@ shows up as a `Hint` in `:app`'s lint report (it flags `gradle/libs.versions.tom
 failing the build.
 
 `:app` also sets `checkDependencies = true`, so its lint analyses the library modules'
-sources as well. That is what keeps `UnusedResources` quiet: `:notification`, `:permission`
-and `:firebase` each declare an empty placeholder resource in their own `res/values/ids.xml`
-so their code and manifests compile standalone, and `:app` supplies the real value and wins
-the merge. Without `checkDependencies` lint cannot see the library-side reference and reports
-every one of those `:app` values as unused. Never "fix" such a report by deleting the
-resource — that ships blank strings and missing icons at runtime.
+sources as well. Library modules that need a resource depend on `:resources` and read it from
+there (`org.leviathan941.retrodromcompanion.resources.R` or `Res`); no module declares
+placeholder resources for `:app` to override.
 
 `local.properties` (SDK path) and `app/google-services.json` are git-ignored but present
 locally; a build without the latter fails in the Google Services plugin.

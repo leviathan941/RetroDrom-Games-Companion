@@ -22,12 +22,12 @@ import android.content.Context
 import kotlin.math.absoluteValue
 import kotlin.uuid.Uuid
 import org.leviathan941.retrodromcompanion.notification.NotificationChannelId
-import org.leviathan941.retrodromcompanion.notification.R
+import org.leviathan941.retrodromcompanion.resources.R
 
 // Channel IDs:
 internal const val NEW_POSTS_CHANNEL_ID = "retrodrom_rss_posts"
 
-// It must be the same as "push_notification_default_channel_id"
+// It must be the same as "push_notification_default_channel_id" in :resources
 internal const val MISC_CHANNEL_ID = "misc"
 
 internal fun notificationChannelId(value: String?): NotificationChannelId =

@@ -26,10 +26,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import dev.zacsweers.metrox.viewmodel.metroViewModel
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_notifications_bell_off
+import org.leviathan941.retrodromcompanion.resources.google_material_notifications_bell_on
+import org.leviathan941.retrodromcompanion.resources.settings_notifications_item_push_title
 import org.leviathan941.retrodromcompanion.notification.PushMessaging
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -61,12 +64,12 @@ fun NotificationSettingsSubScreen(
         modifier = modifier,
     ) {
         SettingsSwitchItem(
-            title = stringResource(id = R.string.settings_notifications_item_push_title),
+            title = stringResource(Res.string.settings_notifications_item_push_title),
             checkedIcon = painterResource(
-                id = R.drawable.google_material_notifications_bell_on,
+                Res.drawable.google_material_notifications_bell_on,
             ),
             uncheckedIcon = painterResource(
-                id = R.drawable.google_material_notifications_bell_off,
+                Res.drawable.google_material_notifications_bell_off,
             ),
             checked = subscribedPushTopics.contains(PushMessaging.Topic.NEW_RETRODROM_POSTS) &&
                 permissionGranted.value,

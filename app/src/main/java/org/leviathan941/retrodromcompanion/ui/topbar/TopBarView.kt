@@ -18,7 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.topbar
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -35,13 +34,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_globe
+import org.leviathan941.retrodromcompanion.resources.top_bar_action_icon_desc_open_in_browser
+import org.leviathan941.retrodromcompanion.resources.top_bar_navigation_icon_desc_back
+import org.leviathan941.retrodromcompanion.resources.top_bar_navigation_icon_desc_close
+import org.leviathan941.retrodromcompanion.resources.top_bar_navigation_icon_desc_drawer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,7 +97,7 @@ private fun NavigationIconView(
             ButtonView(
                 onClick = { onButtonClick(TopBarNavButton.BACK) },
                 painter = rememberVectorPainter(image = Icons.AutoMirrored.Filled.ArrowBack),
-                contentDescRes = R.string.top_bar_navigation_icon_desc_back,
+                contentDescRes = Res.string.top_bar_navigation_icon_desc_back,
             )
         }
 
@@ -100,7 +105,7 @@ private fun NavigationIconView(
             ButtonView(
                 onClick = { onButtonClick(TopBarNavButton.CLOSE) },
                 painter = rememberVectorPainter(image = Icons.Filled.Close),
-                contentDescRes = R.string.top_bar_navigation_icon_desc_close,
+                contentDescRes = Res.string.top_bar_navigation_icon_desc_close,
             )
         }
 
@@ -108,7 +113,7 @@ private fun NavigationIconView(
             ButtonView(
                 onClick = { onButtonClick(TopBarNavButton.DRAWER) },
                 painter = rememberVectorPainter(image = Icons.Filled.Menu),
-                contentDescRes = R.string.top_bar_navigation_icon_desc_drawer,
+                contentDescRes = Res.string.top_bar_navigation_icon_desc_drawer,
             )
         }
     }
@@ -146,14 +151,14 @@ private fun TitleView(
 private fun ButtonView(
     onClick: () -> Unit,
     painter: Painter,
-    @StringRes contentDescRes: Int,
+    contentDescRes: StringResource,
 ) {
     IconButton(
         onClick = onClick,
     ) {
         Icon(
             painter = painter,
-            contentDescription = stringResource(id = contentDescRes),
+            contentDescription = stringResource(contentDescRes),
             tint = MaterialTheme.colorScheme.onPrimaryContainer,
         )
     }
@@ -170,8 +175,8 @@ private fun ActionsView(
             is TopBarAction.Browse -> {
                 ButtonView(
                     onClick = onActionClick,
-                    painter = painterResource(id = R.drawable.google_material_globe),
-                    contentDescRes = R.string.top_bar_action_icon_desc_open_in_browser,
+                    painter = painterResource(Res.drawable.google_material_globe),
+                    contentDescRes = Res.string.top_bar_action_icon_desc_open_in_browser,
                 )
             }
         }

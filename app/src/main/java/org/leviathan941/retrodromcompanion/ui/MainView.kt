@@ -34,12 +34,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.getString
+import org.jetbrains.compose.resources.stringResource
 import androidx.navigation3.runtime.rememberNavBackStack
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.launch
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.main_rss_feed_title
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.leviathan941.retrodromcompanion.common.Constants
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
@@ -68,7 +69,7 @@ fun MainView(
     val predefinedDestinations = MainNavPredefinedDestinations(
         rssFeedStart = RssFeedDestination.Feed(
             id = MAIN_RSS_FEED_ID,
-            title = stringResource(id = R.string.main_rss_feed_title),
+            title = stringResource(Res.string.main_rss_feed_title),
             channelUrl = Constants.RETRODROM_BASE_URL,
         ),
     )
@@ -92,8 +93,7 @@ fun MainView(
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val resources = LocalResources.current
-    LaunchedEffect(userMessagesViewModel, resources) {
+    LaunchedEffect(userMessagesViewModel) {
         userMessagesViewModel.messages.collect { message ->
             // getString takes its format arguments as a vararg.
             @Suppress("SpreadOperator")
@@ -101,7 +101,7 @@ fun MainView(
                 is UserMessage.Text -> message.text
 
                 is UserMessage.Resource ->
-                    resources.getString(message.textRes, *message.formatArgs.toTypedArray())
+                    getString(message.textRes, *message.formatArgs.toTypedArray())
             }
             snackbarHostState.showSnackbar(text)
         }

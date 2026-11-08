@@ -21,10 +21,12 @@ package org.leviathan941.retrodromcompanion.ui.drawer
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import kotlinx.collections.immutable.ImmutableList
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.drawer_rss_feeds_submenu_title
+import org.leviathan941.retrodromcompanion.resources.google_material_news
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
 @Composable
@@ -35,11 +37,11 @@ fun RssFeedDrawerNavView(
     onClick: (MainNavScreen.RssFeed) -> Unit = {},
 ) {
     DrawerSubMenuView(
-        title = stringResource(id = R.string.drawer_rss_feeds_submenu_title),
+        title = stringResource(Res.string.drawer_rss_feeds_submenu_title),
         modifier = modifier,
         icon = {
             Icon(
-                painter = painterResource(id = R.drawable.google_material_news),
+                painter = painterResource(Res.drawable.google_material_news),
                 contentDescription = null,
             )
         },

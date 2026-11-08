@@ -39,10 +39,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import org.jetbrains.compose.resources.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.leviathan941.retrodromcompanion.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.retrodrom_games_words
 import org.leviathan941.retrodromcompanion.ui.theme.DrawerLogoGradientEndColor
 import org.leviathan941.retrodromcompanion.ui.theme.DrawerLogoGradientStartColor
 
@@ -107,7 +108,7 @@ private fun DrawerHeader(onClick: () -> Unit = {}) {
         Image(
             modifier = Modifier
                 .padding(all = 20.dp),
-            painter = painterResource(id = R.drawable.retrodrom_games_words),
+            painter = painterResource(Res.drawable.retrodrom_games_words),
             contentDescription = null,
             contentScale = ContentScale.Fit,
         )

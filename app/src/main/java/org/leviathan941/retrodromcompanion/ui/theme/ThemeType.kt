@@ -19,8 +19,12 @@
 package org.leviathan941.retrodromcompanion.ui.theme
 
 import android.os.Build
-import androidx.annotation.StringRes
-import org.leviathan941.retrodromcompanion.R
+import org.jetbrains.compose.resources.StringResource
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.theme_name_dark
+import org.leviathan941.retrodromcompanion.resources.theme_name_dynamic
+import org.leviathan941.retrodromcompanion.resources.theme_name_light
+import org.leviathan941.retrodromcompanion.resources.theme_name_system
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
 
 enum class ThemeType(
@@ -36,12 +40,11 @@ enum class ThemeType(
         fun fromValue(value: String?): ThemeType =
             supportedEntries().firstOrNull { it.value == value } ?: APP_THEME_DEFAULT
 
-        @StringRes
-        fun ThemeType.toStringResource(): Int = when (this) {
-            LIGHT -> R.string.theme_name_light
-            DARK -> R.string.theme_name_dark
-            SYSTEM -> R.string.theme_name_system
-            DYNAMIC -> R.string.theme_name_dynamic
+        fun ThemeType.toStringResource(): StringResource = when (this) {
+            LIGHT -> Res.string.theme_name_light
+            DARK -> Res.string.theme_name_dark
+            SYSTEM -> Res.string.theme_name_system
+            DYNAMIC -> Res.string.theme_name_dynamic
         }
 
         fun supportedEntries(): List<ThemeType> = when {

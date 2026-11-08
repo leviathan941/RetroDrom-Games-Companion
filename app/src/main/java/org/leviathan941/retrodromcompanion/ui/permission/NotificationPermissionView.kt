@@ -19,9 +19,12 @@
 package org.leviathan941.retrodromcompanion.ui.permission
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import org.leviathan941.retrodromcompanion.R
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_notifications_bell_on
+import org.leviathan941.retrodromcompanion.resources.notification_permission_dialog_text
+import org.leviathan941.retrodromcompanion.resources.notification_permission_dialog_title
 import org.leviathan941.retrodromcompanion.permission.AppPermission
 import org.leviathan941.retrodromcompanion.permission.PermissionRationale
 import org.leviathan941.retrodromcompanion.permission.PermissionView
@@ -36,9 +39,9 @@ fun NotificationPermissionView(
         permission = AppPermission.Notifications,
         onPermissionResult = onPermissionResult,
         rationaleData = PermissionRationale.Data(
-            title = stringResource(id = R.string.notification_permission_dialog_title),
-            description = stringResource(id = R.string.notification_permission_dialog_text),
-            icon = painterResource(id = R.drawable.google_material_notifications_bell_on),
+            title = stringResource(Res.string.notification_permission_dialog_title),
+            description = stringResource(Res.string.notification_permission_dialog_text),
+            icon = painterResource(Res.drawable.google_material_notifications_bell_on),
             onDismiss = onRationaleDismiss,
         ),
         allowRationale = allowRationale,

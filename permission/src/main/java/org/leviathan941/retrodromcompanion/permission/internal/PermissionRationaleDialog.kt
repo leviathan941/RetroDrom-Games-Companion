@@ -26,11 +26,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import org.leviathan941.retrodromcompanion.permission.PermissionRationale
-import org.leviathan941.retrodromcompanion.permission.R
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.permission_dialog_confirm_button
+import org.leviathan941.retrodromcompanion.resources.permission_dialog_deny_button
 
 @Composable
 internal fun PermissionRationaleDialog(
@@ -66,7 +68,7 @@ internal fun PermissionRationaleDialog(
                 },
             ) {
                 Text(
-                    text = stringResource(id = R.string.permission_dialog_confirm_button),
+                    text = stringResource(Res.string.permission_dialog_confirm_button),
                 )
             }
         },
@@ -77,7 +79,7 @@ internal fun PermissionRationaleDialog(
                 },
             ) {
                 Text(
-                    text = stringResource(id = R.string.permission_dialog_deny_button),
+                    text = stringResource(Res.string.permission_dialog_deny_button),
                 )
             }
         },

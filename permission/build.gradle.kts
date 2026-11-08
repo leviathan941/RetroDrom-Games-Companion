@@ -26,6 +26,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":resources"))
+
     implementation(libs.mohamedrejeb.calf.permissions.core)
     implementation(libs.mohamedrejeb.calf.permissions.notifications)
     implementation(libs.jetbrains.compose.material.icons.core)
