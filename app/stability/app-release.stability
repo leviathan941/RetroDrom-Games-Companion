@@ -5,14 +5,23 @@
 //   ./gradlew :app:stabilityDump
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.MainView(deepLinkDestination: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem?, modifier: androidx.compose.ui.Modifier, mainViewModel: org.leviathan941.retrodromcompanion.ui.model.MainViewModel, userMessagesViewModel: org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.MainView(deepLinkDestination: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem?, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - deepLinkDestination: STABLE (marked @Stable or @Immutable)
     - modifier: STABLE (marked @Stable or @Immutable)
-    - mainViewModel: UNSTABLE (has mutable properties or unstable members)
-    - userMessagesViewModel: UNSTABLE (has mutable properties or unstable members)
+
+@Composable
+private fun org.leviathan941.retrodromcompanion.ui.MainViewContent(deepLinkDestination: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem?, uiState: kotlinx.coroutines.flow.StateFlow<org.leviathan941.retrodromcompanion.ui.model.MainViewState>, userMessages: kotlinx.coroutines.flow.Flow<org.leviathan941.retrodromcompanion.app.message.UserMessage>, showMessage: kotlin.Function1<org.leviathan941.retrodromcompanion.app.message.UserMessage, kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - deepLinkDestination: STABLE (marked @Stable or @Immutable)
+    - uiState: UNKNOWN (interface or non-final class; concrete implementation unknown)
+    - userMessages: UNKNOWN (interface or non-final class; concrete implementation unknown)
+    - showMessage: STABLE (function type)
+    - modifier: STABLE (marked @Stable or @Immutable)
 
 @Composable
 private fun org.leviathan941.retrodromcompanion.ui.drawer.DrawerHeader(onClick: kotlin.Function0<kotlin.Unit>): kotlin.Unit
@@ -134,11 +143,18 @@ public fun org.leviathan941.retrodromcompanion.ui.permission.NotificationPermiss
     - onRationaleDismiss: STABLE (function type)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromo(viewModel: org.leviathan941.retrodromcompanion.ui.model.RssFeedPromoModel): kotlin.Unit
+public fun org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromo(): kotlin.Unit
   skippable: true
   restartable: true
   params:
-    - viewModel: UNSTABLE (has mutable properties or unstable members)
+
+@Composable
+private fun org.leviathan941.retrodromcompanion.ui.promo.RssFeedPromoContent(showPushPostsPromo: kotlin.Boolean, onPushPostsPromoResult: kotlin.Function0<kotlin.Unit>): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - showPushPostsPromo: STABLE (primitive type)
+    - onPushPostsPromoResult: STABLE (function type)
 
 @Composable
 private fun org.leviathan941.retrodromcompanion.ui.screen.FailureView(failureState: org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState.Failure, onErrorLongPress: kotlin.Function2<@[ParameterName(name = \, onRetryClick: kotlin.Function0<kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
@@ -194,15 +210,25 @@ public fun org.leviathan941.retrodromcompanion.ui.screen.LoadingView(state: org.
     - onRetryClick: STABLE (function type)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen(screen: org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen.RssFeed, drawerState: androidx.compose.material3.DrawerState, modifier: androidx.compose.ui.Modifier, screenViewModel: org.leviathan941.retrodromcompanion.ui.model.RssFeedViewModel, userMessagesViewModel: org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel, itemClicked: kotlin.Function1<@[ParameterName(name = \): kotlin.Unit
+private fun org.leviathan941.retrodromcompanion.ui.screen.RssFeedContent(screen: org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen.RssFeed, drawerState: androidx.compose.material3.DrawerState, channelItems: kotlinx.coroutines.flow.Flow<androidx.paging.PagingData<org.leviathan941.retrodromcompanion.rssreader.RssChannelItem>>, showMessage: kotlin.Function1<org.leviathan941.retrodromcompanion.app.message.UserMessage, kotlin.Unit>, modifier: androidx.compose.ui.Modifier, itemClicked: kotlin.Function1<@[ParameterName(name = \): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - screen: STABLE (marked @Stable or @Immutable)
+    - drawerState: STABLE (marked @Stable or @Immutable)
+    - channelItems: UNKNOWN (interface or non-final class; concrete implementation unknown)
+    - showMessage: STABLE (function type)
+    - modifier: STABLE (marked @Stable or @Immutable)
+    - itemClicked: STABLE (function type)
+
+@Composable
+public fun org.leviathan941.retrodromcompanion.ui.screen.RssFeedScreen(screen: org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen.RssFeed, drawerState: androidx.compose.material3.DrawerState, modifier: androidx.compose.ui.Modifier, itemClicked: kotlin.Function1<@[ParameterName(name = \): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - screen: STABLE (marked @Stable or @Immutable)
     - drawerState: STABLE (marked @Stable or @Immutable)
     - modifier: STABLE (marked @Stable or @Immutable)
-    - screenViewModel: UNSTABLE (has mutable properties or unstable members)
-    - userMessagesViewModel: UNSTABLE (has mutable properties or unstable members)
     - itemClicked: STABLE (function type)
 
 @Composable
@@ -215,14 +241,23 @@ public fun org.leviathan941.retrodromcompanion.ui.screen.RssItemDescriptionScree
     - modifier: STABLE (marked @Stable or @Immutable)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemScreen(item: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem, navActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier, viewModel: org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewModel): kotlin.Unit
+private fun org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemContent(state: org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewState, navActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, onCancel: kotlin.Function0<kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - state: UNKNOWN (interface or non-final class; concrete implementation unknown)
+    - navActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
+    - onCancel: STABLE (function type)
+    - modifier: STABLE (marked @Stable or @Immutable)
+
+@Composable
+public fun org.leviathan941.retrodromcompanion.ui.screen.RssLoadingItemScreen(item: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.LoadingItem, navActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - item: STABLE (marked @Stable or @Immutable)
     - navActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - modifier: STABLE (marked @Stable or @Immutable)
-    - viewModel: UNSTABLE (has mutable properties or unstable members)
 
 @Composable
 public fun org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen(data: org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen.Settings, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier, content: @[Composable] @[ExtensionFunctionType] androidx.compose.runtime.internal.ComposableFunction1<androidx.compose.foundation.layout.ColumnScope, kotlin.Unit>): kotlin.Unit
@@ -341,21 +376,37 @@ public fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.Feed
     - modifier: STABLE (marked @Stable or @Immutable)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.MainSettingsSubScreen(navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier, screenViewModel: org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel): kotlin.Unit
+private fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.MainSettingsContent(appTheme: org.leviathan941.retrodromcompanion.ui.theme.ThemeType, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - appTheme: STABLE (class with no mutable properties)
+    - navigationActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
+    - modifier: STABLE (marked @Stable or @Immutable)
+
+@Composable
+public fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.MainSettingsSubScreen(navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - navigationActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - modifier: STABLE (marked @Stable or @Immutable)
-    - screenViewModel: UNSTABLE (has mutable properties or unstable members)
 
 @Composable
-public fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.NotificationSettingsSubScreen(modifier: androidx.compose.ui.Modifier, screenViewModel: org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel): kotlin.Unit
+private fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.NotificationSettingsContent(pushPostsSubscribed: kotlin.Boolean, onPushPostsSubscribedChange: kotlin.Function1<kotlin.Boolean, kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+  skippable: true
+  restartable: true
+  params:
+    - pushPostsSubscribed: STABLE (primitive type)
+    - onPushPostsSubscribedChange: STABLE (function type)
+    - modifier: STABLE (marked @Stable or @Immutable)
+
+@Composable
+public fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.NotificationSettingsSubScreen(modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
-    - screenViewModel: UNSTABLE (has mutable properties or unstable members)
 
 @Composable
 public fun org.leviathan941.retrodromcompanion.ui.theme.MainTheme(materialColorSchemes: org.leviathan941.retrodromcompanion.ui.theme.MaterialColorSchemes, selectedTheme: org.leviathan941.retrodromcompanion.ui.theme.ThemeType, content: @[Composable] androidx.compose.runtime.internal.ComposableFunction0<kotlin.Unit>): kotlin.Unit

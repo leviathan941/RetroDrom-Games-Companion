@@ -38,6 +38,8 @@ import org.jetbrains.compose.resources.getString
 import org.jetbrains.compose.resources.stringResource
 import androidx.navigation3.runtime.rememberNavBackStack
 import dev.zacsweers.metrox.viewmodel.metroViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.resources.Res
 import org.leviathan941.retrodromcompanion.resources.main_rss_feed_title
@@ -46,6 +48,7 @@ import org.leviathan941.retrodromcompanion.common.Constants
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerNavigationContent
 import org.leviathan941.retrodromcompanion.ui.drawer.DrawerView
 import org.leviathan941.retrodromcompanion.ui.model.MainViewModel
+import org.leviathan941.retrodromcompanion.ui.model.MainViewState
 import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.navigation.AppDestination
@@ -59,12 +62,29 @@ import org.leviathan941.retrodromcompanion.ui.navigation.appDestinationSavedStat
 fun MainView(
     deepLinkDestination: RssFeedDestination.LoadingItem?,
     modifier: Modifier = Modifier,
-    mainViewModel: MainViewModel = metroViewModel(
+) {
+    val mainViewModel = metroViewModel<MainViewModel>(
         key = ViewModelKeys.MAIN_VIEW_MODEL,
-    ),
-    userMessagesViewModel: UserMessagesViewModel = metroViewModel(
+    )
+    val userMessagesViewModel = metroViewModel<UserMessagesViewModel>(
         key = ViewModelKeys.USER_MESSAGES_VIEW_MODEL,
-    ),
+    )
+    MainViewContent(
+        deepLinkDestination = deepLinkDestination,
+        uiState = mainViewModel.uiState,
+        userMessages = userMessagesViewModel.messages,
+        showMessage = userMessagesViewModel::show,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun MainViewContent(
+    deepLinkDestination: RssFeedDestination.LoadingItem?,
+    uiState: StateFlow<MainViewState>,
+    userMessages: Flow<UserMessage>,
+    showMessage: (UserMessage) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val predefinedDestinations = MainNavPredefinedDestinations(
         rssFeedStart = RssFeedDestination.Feed(
@@ -93,8 +113,8 @@ fun MainView(
     val closeDrawer: () -> Unit = { coroutineScope.launch { drawerState.close() } }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    LaunchedEffect(userMessagesViewModel) {
-        userMessagesViewModel.messages.collect { message ->
+    LaunchedEffect(userMessages) {
+        userMessages.collect { message ->
             // getString takes its format arguments as a vararg.
             @Suppress("SpreadOperator")
             val text = when (message) {
@@ -118,12 +138,12 @@ fun MainView(
                     },
                     navigationContent = {
                         DrawerNavigationContent(
-                            uiState = mainViewModel.uiState,
+                            uiState = uiState,
                             navigationActions = navigationActions,
                             currentDestination = backStack.lastOrNull() as? AppDestination,
                             drawerState = drawerState,
                             coroutineScope = coroutineScope,
-                            showMessage = userMessagesViewModel::show,
+                            showMessage = showMessage,
                         )
                     },
                 )

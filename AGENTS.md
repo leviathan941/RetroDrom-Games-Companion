@@ -84,8 +84,9 @@ Read them from there rather than restating them here — version numbers in this
 - Style is ktlint (`android_studio` code style) configured in `.editorconfig`: trailing commas
   allowed, multiline signatures from 2 parameters, import ordering rule disabled. The
   [compose-rules](https://mrmans0n.github.io/compose-rules/) ruleset runs alongside, minus
-  `vm-injection-check`: new composables obtain view models in their body, not as default
-  parameters, so they add no entries to the stability baseline.
+  `vm-injection-check`: a screen composable obtains its view models in its body, not as default
+  parameters, and passes their state and lambdas to a private `…Content` composable, so view
+  models add no entries to the stability baseline.
 - ktlint runs in the build through `org.jlleitschuh.gradle.ktlint`. The root `build.gradle.kts`
   applies it to every project in `allprojects`, with the ktlint version and the compose-rules
   ruleset, so a new module needs no line of its own. It skips `build/generated/`, which the

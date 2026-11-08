@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.stringResource
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
@@ -45,7 +46,8 @@ fun RssLoadingItemScreen(
     item: RssFeedDestination.LoadingItem,
     navActions: MainNavActions,
     modifier: Modifier = Modifier,
-    viewModel: RssLoadingItemViewModel = assistedMetroViewModel<
+) {
+    val viewModel = assistedMetroViewModel<
         RssLoadingItemViewModel,
         RssLoadingItemViewModel.Factory,
         >(
@@ -53,11 +55,24 @@ fun RssLoadingItemScreen(
         createViewModel = {
             create(item)
         },
-    ),
-) {
-    val viewState = viewModel.viewState.collectAsState()
+    )
+    val viewState by viewModel.viewState.collectAsState()
+    RssLoadingItemContent(
+        state = viewState,
+        navActions = navActions,
+        onCancel = viewModel::cancel,
+        modifier = modifier,
+    )
+}
 
-    when (val state = viewState.value) {
+@Composable
+private fun RssLoadingItemContent(
+    state: RssLoadingItemViewState,
+    navActions: MainNavActions,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (state) {
         is RssLoadingItemViewState.Loading -> {
             Scaffold(
                 modifier = modifier,
@@ -70,7 +85,7 @@ fun RssLoadingItemScreen(
                         onNavButtonClick = { navButton ->
                             when (navButton) {
                                 TopBarNavButton.BACK -> {
-                                    viewModel.cancel()
+                                    onCancel()
                                     navActions.navigateToStartedRssFeed()
                                 }
 

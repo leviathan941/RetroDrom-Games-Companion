@@ -40,13 +40,34 @@ import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionV
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsSwitchItem
 
 @Composable
-fun NotificationSettingsSubScreen(
-    modifier: Modifier = Modifier,
-    screenViewModel: SettingsViewModel = metroViewModel<SettingsViewModel>(
+fun NotificationSettingsSubScreen(modifier: Modifier = Modifier) {
+    val screenViewModel = metroViewModel<SettingsViewModel>(
         key = ViewModelKeys.SETTINGS_VIEW_MODEL,
-    ),
-) {
+    )
     val subscribedPushTopics by screenViewModel.subscribedPushTopics.collectAsState()
+    NotificationSettingsContent(
+        pushPostsSubscribed = PushMessaging.Topic.NEW_RETRODROM_POSTS in subscribedPushTopics,
+        onPushPostsSubscribedChange = { isSubscribed ->
+            if (isSubscribed) {
+                screenViewModel.subscribeToTopic(
+                    topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
+                )
+            } else {
+                screenViewModel.unsubscribeFromTopic(
+                    topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
+                )
+            }
+        },
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun NotificationSettingsContent(
+    pushPostsSubscribed: Boolean,
+    onPushPostsSubscribedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val permissionGranted = remember { mutableStateOf(false) }
     val showRationale = remember { mutableStateOf(false) }
 
@@ -71,18 +92,9 @@ fun NotificationSettingsSubScreen(
             uncheckedIcon = painterResource(
                 Res.drawable.google_material_notifications_bell_off,
             ),
-            checked = subscribedPushTopics.contains(PushMessaging.Topic.NEW_RETRODROM_POSTS) &&
-                permissionGranted.value,
+            checked = pushPostsSubscribed && permissionGranted.value,
             onCheckedChange = { isChecked ->
-                if (isChecked) {
-                    screenViewModel.subscribeToTopic(
-                        topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
-                    )
-                } else {
-                    screenViewModel.unsubscribeFromTopic(
-                        topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
-                    )
-                }
+                onPushPostsSubscribedChange(isChecked)
                 if (!permissionGranted.value) {
                     showRationale.value = true
                 }

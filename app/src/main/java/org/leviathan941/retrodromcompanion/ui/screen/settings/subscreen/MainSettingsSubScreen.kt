@@ -53,18 +53,31 @@ import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableI
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsTitleItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.rememberSettingsNavigationIcon
+import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import org.leviathan941.retrodromcompanion.ui.theme.ThemeType.Companion.toStringResource
 
 @Composable
 fun MainSettingsSubScreen(
     navigationActions: MainNavActions,
     modifier: Modifier = Modifier,
-    screenViewModel: SettingsViewModel = metroViewModel<SettingsViewModel>(
-        key = ViewModelKeys.SETTINGS_VIEW_MODEL,
-    ),
 ) {
+    val screenViewModel = metroViewModel<SettingsViewModel>(
+        key = ViewModelKeys.SETTINGS_VIEW_MODEL,
+    )
     val appTheme by screenViewModel.appTheme.collectAsState()
+    MainSettingsContent(
+        appTheme = appTheme,
+        navigationActions = navigationActions,
+        modifier = modifier,
+    )
+}
 
+@Composable
+private fun MainSettingsContent(
+    appTheme: ThemeType,
+    navigationActions: MainNavActions,
+    modifier: Modifier = Modifier,
+) {
     SettingsScreen(
         data = MainNavScreen.Settings(
             title = stringResource(Res.string.settings_screen_title),

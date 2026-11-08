@@ -41,10 +41,12 @@ import org.leviathan941.retrodromcompanion.app.message.UserMessage
 import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.resources.Res
 import org.leviathan941.retrodromcompanion.resources.error_copied_clipboard_label
@@ -63,25 +65,44 @@ import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RssFeedScreen(
     screen: MainNavScreen.RssFeed,
     drawerState: DrawerState,
     modifier: Modifier = Modifier,
-    screenViewModel: RssFeedViewModel =
+    itemClicked: (item: RssChannelItem) -> Unit,
+) {
+    val screenViewModel =
         assistedMetroViewModel<RssFeedViewModel, RssFeedViewModel.Factory>(
             key = ViewModelKeys.RSS_FEED_VIEW_MODEL,
             createViewModel = {
                 create(screen.channelUrl)
             },
-        ),
-    userMessagesViewModel: UserMessagesViewModel = metroViewModel(
+        )
+    val userMessagesViewModel = metroViewModel<UserMessagesViewModel>(
         key = ViewModelKeys.USER_MESSAGES_VIEW_MODEL,
-    ),
+    )
+    RssFeedContent(
+        screen = screen,
+        drawerState = drawerState,
+        channelItems = screenViewModel.rssChannelItems,
+        showMessage = userMessagesViewModel::show,
+        modifier = modifier,
+        itemClicked = itemClicked,
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RssFeedContent(
+    screen: MainNavScreen.RssFeed,
+    drawerState: DrawerState,
+    channelItems: Flow<PagingData<RssChannelItem>>,
+    showMessage: (UserMessage) -> Unit,
+    modifier: Modifier = Modifier,
     itemClicked: (item: RssChannelItem) -> Unit,
 ) {
-    val rssChannelItems = screenViewModel.rssChannelItems.collectAsLazyPagingItems()
+    val rssChannelItems = channelItems.collectAsLazyPagingItems()
     val coroutineScope = rememberCoroutineScope()
 
     var isRefreshing by remember { mutableStateOf(false) }
@@ -143,7 +164,7 @@ fun RssFeedScreen(
                                 error = error,
                                 coroutineScope = coroutineScope,
                                 retry = { rssChannelItems.retry() },
-                                showMessage = userMessagesViewModel::show,
+                                showMessage = showMessage,
                             )
                         }
                     }
@@ -159,7 +180,7 @@ fun RssFeedScreen(
                                 error = error,
                                 coroutineScope = coroutineScope,
                                 retry = { rssChannelItems.retry() },
-                                showMessage = userMessagesViewModel::show,
+                                showMessage = showMessage,
                             )
                         }
                     }

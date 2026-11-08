@@ -27,17 +27,26 @@ import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.permission.NotificationPermissionView
 
 @Composable
-fun RssFeedPromo(
-    viewModel: RssFeedPromoModel = metroViewModel(
+fun RssFeedPromo() {
+    val viewModel = metroViewModel<RssFeedPromoModel>(
         key = ViewModelKeys.MAIN_VIEW_PROMO_MODEL,
-    ),
-) {
+    )
     val promoState by viewModel.promoState.collectAsState()
+    RssFeedPromoContent(
+        showPushPostsPromo = promoState.shouldApplyPushPostsPromo,
+        onPushPostsPromoResult = viewModel::subscribePushPostsTopic,
+    )
+}
 
-    if (promoState.shouldApplyPushPostsPromo) {
+@Composable
+private fun RssFeedPromoContent(
+    showPushPostsPromo: Boolean,
+    onPushPostsPromoResult: () -> Unit,
+) {
+    if (showPushPostsPromo) {
         NotificationPermissionView(
             onPermissionResult = { isGranted ->
-                viewModel.subscribePushPostsTopic()
+                onPushPostsPromoResult()
             },
             allowRationale = false,
             onRationaleDismiss = {},
