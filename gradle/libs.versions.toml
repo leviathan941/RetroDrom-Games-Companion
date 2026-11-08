@@ -8,7 +8,7 @@ androidx-core-ktx = "1.19.1"
 androidx-core-splashscreen = "1.2.0"
 androidx-datastore = "1.3.0"
 androidx-lifecycle = "2.11.0"
-androidx-navigation3 = "1.2.0"
+androidx-navigation3 = "1.2.1"
 androidx-paging-compose = "3.5.3"
 androidx-room3 = "3.0.3"
 androidx-sqlite = "2.7.1"
@@ -36,7 +36,7 @@ pinterest-ktlint = "1.8.0"
 slack-compose-lint-checks = "1.6.1"
 skydoves-compose-stability-analyzer = "0.15.0"
 touchlab-kermit = "2.2.0"
-zacsweers-metro = "1.5.1"
+zacsweers-metro = "1.5.2"
 
 [libraries]
 aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
