@@ -6,15 +6,15 @@ naming:
 complexity:
   LongParameterList:
     active: true
-    functionThreshold: 10
+    allowedFunctionParameters: 9
     ignoreDefaultParameters: true
   TooManyFunctions:
     ignoreAnnotatedFunctions: ['Preview', 'PreviewLightDark']
   LongMethod:
     active: true
-    threshold: 100
+    allowedLines: 99
 style:
-  UnusedPrivateMember:
+  UnusedPrivateFunction:
     active: true
     ignoreAnnotated: ['Preview', 'PreviewLightDark']
   ReturnCount:
@@ -149,6 +149,7 @@ Compose:
     # -- You can optionally add an allowlist for ViewModel/StateHolder names that won't be affected by this rule
     # allowedForwardingOfTypes: PotatoViewModel,(Apple|Banana)ViewModel,.*FancyViewModel
   ViewModelInjection:
-    active: true
+    # View models are obtained in the composable body (see AGENTS.md), as ktlint_compose_vm-injection-check is off.
+    active: false
     # -- You can optionally add your own ViewModel factories here
     # viewModelFactories: hiltViewModel,potatoViewModel

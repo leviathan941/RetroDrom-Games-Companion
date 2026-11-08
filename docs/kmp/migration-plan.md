@@ -40,7 +40,7 @@ the dependency graph from the leaves. Android stays the only running target; iOS
 
 | Phase | Gate |
 | --- | --- |
-| A, B (before any iOS target) | `./gradlew build` (compiles everything + Android lint with `warningsAsErrors` + ktlint) and `./gradlew test` |
+| A, B (before any iOS target) | `./gradlew build` (compiles everything + Android lint with `warningsAsErrors` + ktlint + detekt) and `./gradlew test` |
 | B (once a module has iOS targets) | the above **plus** `./gradlew iosSimulatorArm64Test` for that module |
 | C onwards | the above **plus** `./gradlew linkDebugFrameworkIosSimulatorArm64`, and a manual smoke run on both platforms |
 

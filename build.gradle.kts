@@ -33,12 +33,16 @@ plugins {
     alias(libs.plugins.skydoves.compose.stability.analyzer) apply false
     alias(libs.plugins.zacsweers.metro) apply false
     alias(libs.plugins.jlleitschuh.ktlint)
+    alias(libs.plugins.detekt)
 }
 
 // Subprojects get their `libs` extension too late for allprojects, so read the catalog here.
 val ktlintPluginId = libs.plugins.jlleitschuh.ktlint.get().pluginId
 val ktlintVersion = libs.versions.pinterest.ktlint
 val composeRules = libs.nlopez.compose.rules.ktlint
+val detektPluginId = libs.plugins.detekt.get().pluginId
+val composeRulesDetekt = libs.nlopez.compose.rules.detekt
+val detektConfig = files("detekt.yaml")
 
 allprojects {
     pluginManager.apply(ktlintPluginId)
@@ -58,5 +62,18 @@ allprojects {
     dependencies {
         // Honors the ktlint_compose_* keys in .editorconfig.
         ktlintRuleset(composeRules)
+    }
+
+    pluginManager.apply(detektPluginId)
+
+    detekt {
+        // The default covers only src/{main,test}; this adds KMP and other Android source sets.
+        source.setFrom("src")
+        config.from(detektConfig)
+        buildUponDefaultConfig = true
+    }
+
+    dependencies {
+        detektPlugins(composeRulesDetekt)
     }
 }

@@ -13,6 +13,7 @@ androidx-paging-compose = "3.5.3"
 androidx-room3 = "3.0.3"
 androidx-sqlite = "2.7.1"
 coil3 = "3.6.3"
+detekt = "2.0.0-alpha.6"
 google-firebase-bom = "35.1.0"
 google-material = "1.14.0"
 google-ksp = "2.3.13"
@@ -94,6 +95,7 @@ mohamedrejeb-calf-permissions-core = { group = "com.mohamedrejeb.calf", name = "
 mohamedrejeb-calf-permissions-notifications = { group = "com.mohamedrejeb.calf", name = "calf-permissions-notifications", version.ref = "mohamedrejeb-calf" }
 mohamedrejeb-ksoup-entities = { group = "com.mohamedrejeb.ksoup", name = "ksoup-entities", version.ref = "mohamedrejeb-ksoup" }
 mohamedrejeb-ksoup-html = { group = "com.mohamedrejeb.ksoup", name = "ksoup-html", version.ref = "mohamedrejeb-ksoup" }
+nlopez-compose-rules-detekt = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "nlopez-compose-rules" }
 nlopez-compose-rules-ktlint = { group = "io.nlopez.compose.rules", name = "ktlint", version.ref = "nlopez-compose-rules" }
 slack-compose-lint-checks = { group = "com.slack.lint.compose", name = "compose-lint-checks", version.ref = "slack-compose-lint-checks" }
 touchlab-kermit = { group = "co.touchlab", name = "kermit", version.ref = "touchlab-kermit" }
@@ -107,6 +109,7 @@ android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 android-lint = { id = "com.android.lint", version.ref = "android-gradle-plugin" }
 androidx-room3 = { id = "androidx.room3", version.ref = "androidx-room3" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }

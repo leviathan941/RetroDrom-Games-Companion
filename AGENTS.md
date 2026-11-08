@@ -92,8 +92,13 @@ Read them from there rather than restating them here — version numbers in this
   compose resources generator adds to the KMP source sets. Keep it there: from a `buildSrc` convention
   plugin it could not see AGP and KGP and silently linted no Kotlin sources, and a `build-logic`
   convention has not been tried. `build-logic` itself is not checked.
-- `detekt.yaml` exists for standalone/IDE detekt runs; no detekt Gradle plugin is wired into the
-  build, so it does not run as part of `./gradlew build`.
+- detekt runs in the build through `dev.detekt`, applied from the same root `allprojects` block
+  with `detekt.yaml` on top of the default config and the compose-rules detekt ruleset (its
+  `ViewModelInjection` is off, matching ktlint). It is a 2.0 alpha because compose-rules is built
+  against it and 1.23 is built on Kotlin 2.0, behind this project's 2.4. 2.0 renamed rules and
+  thresholds (e.g. `allowedLines`), and an unknown key in `detekt.yaml` fails the run. `check`
+  runs only the plain `detekt` task (no type resolution), pointed at all of `src/` so KMP and
+  Android variant source sets are covered. There is no baseline.
 
 ## Build & verify
 
@@ -101,8 +106,9 @@ Read them from there rather than restating them here — version numbers in this
 ./gradlew assembleDebug        # build the app
 ./gradlew lint                 # Android lint, every module
 ./gradlew ktlintCheck          # ktlint, every module and its *.gradle.kts
+./gradlew detekt               # detekt, every module
 ./gradlew ktlintFormat         # apply ktlint's auto-fixes
-./gradlew build                # compile everything (also runs lint and ktlintCheck)
+./gradlew build                # compile everything (also runs lint, ktlintCheck and detekt)
 ```
 
 ktlint's per-source-set tasks cache their findings: after deleting a file that had a violation,
@@ -111,7 +117,7 @@ task).
 
 The only tests are JVM unit tests: `:network`'s cover the RSS response mapping and feed URL
 building, `:notification`'s the feed-item deeplink string; `./gradlew test` runs them.
-Compilation, Android lint and ktlint are otherwise the gate.
+Compilation, Android lint, ktlint and detekt are otherwise the gate.
 
 `build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
 the committed baseline in `app/stability/`: a composable whose parameters become less stable
