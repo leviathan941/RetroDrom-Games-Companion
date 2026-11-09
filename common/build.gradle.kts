@@ -17,14 +17,17 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.zacsweers.metro)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.common"
-}
-
-dependencies {
-    implementation(libs.touchlab.kermit)
+kotlin {
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.common"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.touchlab.kermit)
+        }
+    }
 }

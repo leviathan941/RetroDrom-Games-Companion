@@ -21,7 +21,7 @@ package org.leviathan941.retrodromcompanion.common.di
 import dev.zacsweers.metro.Qualifier
 
 /**
- * The application [android.content.Context].
+ * The Android application `Context`.
  */
 @Qualifier
 public annotation class ApplicationContext
@@ -40,7 +40,7 @@ public annotation class ApplicationCoroutineScope
 public annotation class MainDataStore
 
 /**
- * The [Class] of the Activity a push notification opens.
+ * The `Class` of the Android Activity a push notification opens.
  */
 @Qualifier
 public annotation class MainActivityClass

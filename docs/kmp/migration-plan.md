@@ -141,7 +141,7 @@ Bottom-up along the real dependency graph.
 
 | # | Module | Main work | Risk |
 | --- | --- | --- | --- |
-| B1 | `:common` | First existing module moved to KMP source sets. Applies the `retrodrom.kmp-library` convention that A11 added (KMP + Android KMP library + `com.android.lint`, `withHostTest {}`, the `test` aggregate); `:common` is its first user with Metro and host tests, so any convention gap they expose is fixed here. | low |
+| B1 | `:common` | **Done.** The first existing module on KMP source sets. Its six files moved unchanged from `src/main/java` to `src/commonMain/kotlin`, and the script swapped `retrodrom.android-library` for A11's `retrodrom.kmp-library`, with Kermit in `commonMain`. No `androidMain` or `iosMain` was needed. The convention needed no change: Metro generates `ClockModule`'s factory and hints for Android, and the same factory is in both iOS klibs. `:app`'s graph still merges it, and ktlint, detekt and Android lint (`warningsAsErrors`) all run on `commonMain`. Two KDoc links to `android.content.Context` and `Class` became plain code spans, since `commonMain` cannot resolve them. The APK's `releaseRuntimeClasspath` holds the same artifacts at the same versions; only their order changed. `:common` has no tests, so host tests on the convention wait for B2, whose `commonTest` also needs Xcode (A9). | low |
 | B2 | `:html-text:api`, `:html-text`, `:html-text:imagecontent` | Compose + ksoup + Coil, no DI. No Android API left since A7h; the converter's JVM tests move to `commonTest`. | low |
 | B3 | `:preferences` | DataStore path via `expect`/`actual`. | low |
 | B4 | `:network` | Source-set configuration only: the existing JVM tests move to `commonTest` and the dependencies move to `commonMain`. The engine question was settled in A5 (ADR-0005) — `ktor-client-engine-defaults` already resolves Darwin for the Apple targets, so no engine work is left here. | low |
@@ -169,7 +169,7 @@ Bottom-up along the real dependency graph.
 | `:app` | no | no | Becomes a thin Android host in B9 |
 | `:app:migration` | n/a | n/a | Android-only by design |
 | `:browser` | yes | no | Added in A7j. `androidx.browser` stays behind `InAppBrowser` deliberately |
-| `:common` | yes | no | A7i replaced its `Clock` with the stdlib `kotlin.time.Clock` |
+| `:common` | yes | yes | B1: `commonMain` only, no platform source sets |
 | `:firebase` | n/a | n/a | Android-only until C3 |
 | `:html-text` | yes | no | A7h replaced AnnotatedText with its own ksoup converter |
 | `:html-text:api` | yes | no | `InlineContentCreator` takes an `HtmlTag` since A7h |
