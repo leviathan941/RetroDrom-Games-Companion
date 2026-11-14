@@ -21,17 +21,24 @@ package org.leviathan941.retrodromcompanion.browser
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import org.leviathan941.retrodromcompanion.browser.internal.CustomTabsInAppBrowser
+import androidx.compose.ui.graphics.colorspace.ColorSpaces
+import androidx.compose.ui.uikit.LocalUIViewController
+import org.leviathan941.retrodromcompanion.browser.internal.SafariInAppBrowser
+import platform.UIKit.UIColor
 
-/**
- * Returns an [InAppBrowser] whose toolbar is drawn in [toolbarColor].
- */
 @Composable
-public fun rememberInAppBrowser(toolbarColor: Color): InAppBrowser {
-    val context = LocalContext.current
-    return remember(context, toolbarColor) {
-        CustomTabsInAppBrowser(context, toolbarColor.toArgb())
+public actual fun rememberInAppBrowser(toolbarColor: Color): InAppBrowser {
+    val viewController = LocalUIViewController.current
+    return remember(viewController, toolbarColor) {
+        SafariInAppBrowser(viewController, toolbarColor.toUIColor())
     }
+}
+
+private fun Color.toUIColor(): UIColor = convert(ColorSpaces.Srgb).let {
+    UIColor(
+        red = it.red.toDouble(),
+        green = it.green.toDouble(),
+        blue = it.blue.toDouble(),
+        alpha = it.alpha.toDouble(),
+    )
 }

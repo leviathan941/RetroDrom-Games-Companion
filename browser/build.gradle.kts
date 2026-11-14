@@ -17,18 +17,25 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.browser"
+kotlin {
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.browser"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.jetbrains.compose.ui)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.browser)
+            implementation(libs.androidx.core.ktx)
+        }
+    }
 }
 
 dependencies {
-    implementation(libs.androidx.browser)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.jetbrains.compose.ui)
-
     lintChecks(libs.slack.compose.lint.checks)
 }

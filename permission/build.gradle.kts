@@ -17,25 +17,31 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.permission"
+kotlin {
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.permission"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":resources"))
+
+            implementation(libs.mohamedrejeb.calf.permissions.core)
+            implementation(libs.mohamedrejeb.calf.permissions.notifications)
+            implementation(libs.jetbrains.compose.material.icons.core)
+            implementation(libs.jetbrains.compose.material3)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.jetbrains.compose.ui.tooling.preview)
+        }
+    }
 }
 
 dependencies {
-    implementation(project(":resources"))
-
-    implementation(libs.mohamedrejeb.calf.permissions.core)
-    implementation(libs.mohamedrejeb.calf.permissions.notifications)
-    implementation(libs.jetbrains.compose.material.icons.core)
-    implementation(libs.jetbrains.compose.material3)
-    implementation(libs.jetbrains.compose.ui)
-    implementation(libs.jetbrains.compose.ui.tooling.preview)
-
-    debugImplementation(libs.jetbrains.compose.ui.tooling)
+    // Renders @Preview in the IDE; the KMP Android target has no debug variant.
+    androidRuntimeClasspath(libs.jetbrains.compose.ui.tooling)
 
     lintChecks(libs.slack.compose.lint.checks)
 }
