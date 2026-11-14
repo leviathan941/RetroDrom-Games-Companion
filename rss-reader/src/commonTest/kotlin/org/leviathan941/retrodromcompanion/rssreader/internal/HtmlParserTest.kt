@@ -18,9 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.rssreader.internal
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * Pins the feed item's image to the first `<img src>` in its description, which

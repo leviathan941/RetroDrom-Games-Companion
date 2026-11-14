@@ -18,8 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.rssreader
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.time.Instant
 
 /**
@@ -67,8 +68,10 @@ class PublicationDateTest {
         )
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun `malformed date is rejected`() {
-        "2026-09-04T04:45:38Z".asInstant()
+        assertFailsWith<IllegalArgumentException> {
+            "2026-09-04T04:45:38Z".asInstant()
+        }
     }
 }

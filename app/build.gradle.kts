@@ -121,6 +121,8 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.jetbrains.androidx.navigation3.ui)
 
+    implementation(libs.androidx.paging.compose)
+
     implementation(libs.coil3.compose)
     implementation(libs.coil3.network.ktor3)
 

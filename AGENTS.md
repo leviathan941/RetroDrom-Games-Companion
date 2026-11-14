@@ -118,7 +118,8 @@ task).
 
 The only tests are unit tests: `:notification`'s cover the feed-item deeplink string;
 `./gradlew test` runs them on the JVM. `:network`'s RSS response mapping and feed URL building tests,
-`:html-text`'s converter tests and `:preferences`' store and migration tests are in `commonTest` on
+`:html-text`'s converter tests, `:preferences`' store and migration tests and `:rss-reader`'s
+publication date and feed image tests are in `commonTest` on
 `kotlin.test`. `./gradlew test` runs them on the Android host, and `build` also runs them on the
 iOS simulator (`iosSimulatorArm64Test`), which needs Xcode. `:network:cache`'s Room round trip is in
 `iosTest`, so only `iosSimulatorArm64Test` runs it: the bundled SQLite driver has no native library

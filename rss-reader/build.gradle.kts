@@ -17,24 +17,28 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.zacsweers.metro)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.rssreader"
-}
+kotlin {
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.rssreader"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.androidx.paging.common)
 
-dependencies {
-    api(libs.androidx.paging.compose)
+            implementation(project(":common"))
+            implementation(project(":network:cache"))
 
-    implementation(project(":common"))
-    implementation(project(":network:cache"))
-
-    implementation(libs.jetbrains.kotlinx.collections.immutable)
-    implementation(libs.jetbrains.kotlinx.coroutines.android)
-    implementation(libs.jetbrains.kotlinx.datetime)
-    implementation(libs.mohamedrejeb.ksoup.html)
-
-    testImplementation(libs.junit)
+            implementation(libs.jetbrains.kotlinx.collections.immutable)
+            implementation(libs.jetbrains.kotlinx.coroutines.core)
+            implementation(libs.jetbrains.kotlinx.datetime)
+            implementation(libs.mohamedrejeb.ksoup.html)
+        }
+        commonTest.dependencies {
+            implementation(libs.jetbrains.kotlin.test)
+        }
+    }
 }
