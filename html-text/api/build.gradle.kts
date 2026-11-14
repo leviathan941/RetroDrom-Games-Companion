@@ -17,13 +17,16 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
 }
 
-android {
-    namespace = "org.leviathan941.compose.htmltext.api"
-}
-
-dependencies {
-    implementation(libs.jetbrains.compose.foundation)
+kotlin {
+    android {
+        namespace = "org.leviathan941.compose.htmltext.api"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.jetbrains.compose.foundation)
+        }
+    }
 }

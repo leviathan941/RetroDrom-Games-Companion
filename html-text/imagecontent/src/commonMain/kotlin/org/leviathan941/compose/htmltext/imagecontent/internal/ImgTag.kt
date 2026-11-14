@@ -26,7 +26,7 @@ internal data class ImgTag(
     val height: Int,
 )
 
-@SuppressWarnings("ReturnCount")
+@Suppress("ReturnCount")
 internal fun HtmlTag.toImgTag(): ImgTag? {
     require(name == "img") { "The tag must be 'img'" }
     val src = attributes["src"] ?: return null

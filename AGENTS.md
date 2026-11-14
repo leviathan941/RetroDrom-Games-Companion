@@ -116,9 +116,11 @@ ktlint's per-source-set tasks cache their findings: after deleting a file that h
 the check still reports it until `./gradlew clean` (or `--rerun` on the `runKtlintCheckOver…`
 task).
 
-The only tests are JVM unit tests: `:network`'s cover the RSS response mapping and feed URL
-building, `:notification`'s the feed-item deeplink string; `./gradlew test` runs them.
-Compilation, Android lint, ktlint and detekt are otherwise the gate.
+The only tests are unit tests: `:network`'s cover the RSS response mapping and feed URL
+building, `:notification`'s the feed-item deeplink string; `./gradlew test` runs them on the JVM.
+`:html-text`'s converter tests are in `commonTest` on `kotlin.test`. `./gradlew test` runs them on
+the Android host, and `build` also runs them on the iOS simulator (`iosSimulatorArm64Test`), which
+needs Xcode. Compilation, Android lint, ktlint and detekt are otherwise the gate.
 
 `build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
 the committed baseline in `app/stability/`: a composable whose parameters become less stable

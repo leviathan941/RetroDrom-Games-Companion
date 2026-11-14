@@ -26,6 +26,7 @@ version leaves this file for the catalog.
 | `com.mohamedrejeb.ksoup:ksoup-html` | yes | Also used by `:rss-reader` since A7g, where it replaced `android.text.Html` for feed image extraction. Re-verified 2026-10-24: `ios_arm64` and `ios_simulator_arm64` variants published. Since A7h it is also the parser behind `:html-text`'s own `AnnotatedString` converter. |
 | `com.mohamedrejeb.ksoup:ksoup-entities` | yes | Declared by `:html-text` since A7h, which decodes text and attributes with it because ksoup-html 0.6.0 leaves numeric entities undecoded. It was already on the runtime classpath through ksoup-html. Verified 2026-10-25: `ios_arm64` and `ios_simulator_arm64` variants published. |
 | `org.jetbrains.kotlinx:*` (coroutines, serialization, collections-immutable, datetime) | — | yes | `kotlinx-coroutines-android` is the Android artifact of a multiplatform library. `kotlinx-datetime` came in with A7i. |
+| `org.jetbrains.kotlin:kotlin-test` | from the Kotlin/Native distribution | Test-only, added in B2 for `:html-text`'s `commonTest`, where JUnit 4 cannot compile. The Android host test resolves its JUnit 4 variant. Its metadata has no `ios_*` variant because Kotlin/Native bundles it. Verified 2026-11-14: both iOS test compilations resolve it. |
 | `co.touchlab:kermit` | yes | Replaced `android.util.Log` in A1 (ADR-0003). Used through the `Logger` facade in `:common`; `:html-text:imagecontent` depends on it directly to stay app-agnostic. |
 
 

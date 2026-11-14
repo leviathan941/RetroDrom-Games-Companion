@@ -142,7 +142,7 @@ Bottom-up along the real dependency graph.
 | # | Module | Main work | Risk |
 | --- | --- | --- | --- |
 | B1 | `:common` | **Done.** The first existing module on KMP source sets. Its six files moved unchanged from `src/main/java` to `src/commonMain/kotlin`, and the script swapped `retrodrom.android-library` for A11's `retrodrom.kmp-library`, with Kermit in `commonMain`. No `androidMain` or `iosMain` was needed. The convention needed no change: Metro generates `ClockModule`'s factory and hints for Android, and the same factory is in both iOS klibs. `:app`'s graph still merges it, and ktlint, detekt and Android lint (`warningsAsErrors`) all run on `commonMain`. Two KDoc links to `android.content.Context` and `Class` became plain code spans, since `commonMain` cannot resolve them. The APK's `releaseRuntimeClasspath` holds the same artifacts at the same versions; only their order changed. `:common` has no tests, so host tests on the convention wait for B2, whose `commonTest` also needs Xcode (A9). | low |
-| B2 | `:html-text:api`, `:html-text`, `:html-text:imagecontent` | Compose + ksoup + Coil, no DI. No Android API left since A7h; the converter's JVM tests move to `commonTest`. | low |
+| B2 | `:html-text:api`, `:html-text`, `:html-text:imagecontent` | **Done.** All three modules moved from `src/main/java` to `src/commonMain/kotlin` and from `retrodrom.android-library` to `retrodrom.kmp-library`, with their dependencies in `commonMain`. `lintChecks` stays in the top-level `dependencies` block, where `com.android.lint` creates it. Two changes beyond the move, both forced by Kotlin/Native. `ImgTag`'s `@SuppressWarnings("ReturnCount")` is `java.lang` and does not resolve on iOS, so it became Kotlin's `@Suppress`, which detekt also honours. The converter's tests moved to `commonTest` on `kotlin.test` instead of JUnit 4, and one test name lost its commas, which Native rejects in identifiers. `org.jetbrains.kotlin:kotlin-test` is the one new catalog entry, at the Kotlin plugin's version. On the Android host test it resolves to the JUnit 4 variant. On Native it comes from the Kotlin/Native distribution, so its metadata publishes no `ios_*` variant. `./gradlew test` runs the 9 tests through the convention's `test` aggregate, and `iosSimulatorArm64Test` runs the same 9 on the simulator. This is the first `commonTest`, so it is the first stage gated on Xcode (A9). The APK's `releaseRuntimeClasspath` is identical to `main` (595 entries), and the stability baseline is unchanged. Verified on an API 37 emulator: an article renders with its inline image, heading, decoded entities and link. | low |
 | B3 | `:preferences` | DataStore path via `expect`/`actual`. | low |
 | B4 | `:network` | Source-set configuration only: the existing JVM tests move to `commonTest` and the dependencies move to `commonMain`. The engine question was settled in A5 (ADR-0005) — `ktor-client-engine-defaults` already resolves Darwin for the Apple targets, so no engine work is left here. | low |
 | B5 | `:network:cache` | `expect`/`actual` database builder and KSP running for the iOS targets. The driver and the Room 3 API surface are already done in A6, so this stage is build configuration rather than code. | medium |
@@ -171,9 +171,9 @@ Bottom-up along the real dependency graph.
 | `:browser` | yes | no | Added in A7j. `androidx.browser` stays behind `InAppBrowser` deliberately |
 | `:common` | yes | yes | B1: `commonMain` only, no platform source sets |
 | `:firebase` | n/a | n/a | Android-only until C3 |
-| `:html-text` | yes | no | A7h replaced AnnotatedText with its own ksoup converter |
-| `:html-text:api` | yes | no | `InlineContentCreator` takes an `HtmlTag` since A7h |
-| `:html-text:imagecontent` | yes | no | A7h removed the `android.text` spans |
+| `:html-text` | yes | yes | B2: `commonMain`, with the converter's tests in `commonTest` |
+| `:html-text:api` | yes | yes | B2: `commonMain` only |
+| `:html-text:imagecontent` | yes | yes | B2: `commonMain` only |
 | `:network` | yes | no | A5 removed the last Android-only dependency |
 | `:network:cache` | yes | no | A6 put it on Room 3 with a driver-based builder |
 | `:notification` | no | no | Common shape only |

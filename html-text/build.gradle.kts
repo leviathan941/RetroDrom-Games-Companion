@@ -17,25 +17,31 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
 }
 
-android {
-    namespace = "org.leviathan941.compose.htmltext"
+kotlin {
+    android {
+        namespace = "org.leviathan941.compose.htmltext"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            api(project(":html-text:api"))
+
+            api(libs.jetbrains.kotlinx.collections.immutable)
+
+            implementation(libs.jetbrains.compose.material3)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.mohamedrejeb.ksoup.entities)
+            implementation(libs.mohamedrejeb.ksoup.html)
+        }
+        commonTest.dependencies {
+            implementation(libs.jetbrains.kotlin.test)
+        }
+    }
 }
 
 dependencies {
-    api(project(":html-text:api"))
-
-    api(libs.jetbrains.kotlinx.collections.immutable)
-
-    implementation(libs.jetbrains.compose.material3)
-    implementation(libs.jetbrains.compose.ui)
-    implementation(libs.mohamedrejeb.ksoup.entities)
-    implementation(libs.mohamedrejeb.ksoup.html)
-
     lintChecks(libs.slack.compose.lint.checks)
-
-    testImplementation(libs.junit)
 }

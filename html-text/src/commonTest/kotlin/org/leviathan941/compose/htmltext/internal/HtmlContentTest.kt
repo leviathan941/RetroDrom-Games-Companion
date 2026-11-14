@@ -29,9 +29,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertSame
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertSame
 import org.leviathan941.compose.htmltext.api.HtmlTag
 import org.leviathan941.compose.htmltext.api.InlineContentCreator
 
@@ -130,7 +130,7 @@ class HtmlContentTest {
     }
 
     @Test
-    fun `scripts, styles and iframes are skipped`() {
+    fun `scripts styles and iframes are skipped`() {
         assertEquals(
             "a\n\nb",
             convert(

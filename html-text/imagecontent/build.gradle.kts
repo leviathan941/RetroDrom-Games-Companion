@@ -17,21 +17,26 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
 }
 
-android {
-    namespace = "org.leviathan941.compose.htmltext.imagecontent"
+kotlin {
+    android {
+        namespace = "org.leviathan941.compose.htmltext.imagecontent"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            api(project(":html-text:api"))
+
+            implementation(libs.coil3.compose)
+            implementation(libs.jetbrains.compose.foundation)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.touchlab.kermit)
+        }
+    }
 }
 
 dependencies {
-    api(project(":html-text:api"))
-
-    implementation(libs.coil3.compose)
-    implementation(libs.jetbrains.compose.foundation)
-    implementation(libs.jetbrains.compose.ui)
-    implementation(libs.touchlab.kermit)
-
     lintChecks(libs.slack.compose.lint.checks)
 }
