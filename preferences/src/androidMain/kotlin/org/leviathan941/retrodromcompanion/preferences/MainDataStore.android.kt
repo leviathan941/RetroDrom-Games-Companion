@@ -20,17 +20,21 @@ package org.leviathan941.retrodromcompanion.preferences
 
 import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.core.FileStorage
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.preferencesDataStore
-import org.leviathan941.retrodromcompanion.preferences.internal.Preference0To1Migration
+import androidx.datastore.preferences.core.PreferencesFileSerializer
+import androidx.datastore.preferences.preferencesDataStoreFile
+import org.leviathan941.retrodromcompanion.preferences.internal.MAIN_DATA_STORE_NAME
+import org.leviathan941.retrodromcompanion.preferences.internal.buildMainDataStore
 
-public object Preferences {
-    public val Context.mainDataStore: DataStore<Preferences> by preferencesDataStore(
-        name = "main_preferences",
-        produceMigrations = { _ ->
-            listOf(
-                Preference0To1Migration(),
-            )
-        },
-    )
-}
+/**
+ * Creates the app's single preferences store, in `files/datastore/main_preferences.preferences_pb`.
+ *
+ * Call it once per process and share the instance: two stores on one file fail when read.
+ */
+public fun createMainDataStore(context: Context): DataStore<Preferences> = buildMainDataStore(
+    storage = FileStorage(
+        serializer = PreferencesFileSerializer,
+        produceFile = { context.preferencesDataStoreFile(MAIN_DATA_STORE_NAME) },
+    ),
+)

@@ -17,18 +17,25 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.zacsweers.metro)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.preferences"
-}
+kotlin {
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.preferences"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":common"))
 
-dependencies {
-    implementation(project(":common"))
+            api(libs.androidx.datastore.preferences)
 
-    api(libs.androidx.datastore.preferences)
-
-    implementation(libs.jetbrains.kotlinx.coroutines.android)
+            implementation(libs.jetbrains.kotlinx.coroutines.core)
+        }
+        commonTest.dependencies {
+            implementation(libs.jetbrains.kotlin.test)
+            implementation(libs.jetbrains.kotlinx.coroutines.test)
+        }
+    }
 }

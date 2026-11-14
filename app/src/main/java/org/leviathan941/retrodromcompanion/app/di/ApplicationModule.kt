@@ -35,7 +35,7 @@ import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
 import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
 import org.leviathan941.retrodromcompanion.common.di.MainActivityClass
 import org.leviathan941.retrodromcompanion.common.di.MainDataStore
-import org.leviathan941.retrodromcompanion.preferences.Preferences.mainDataStore
+import org.leviathan941.retrodromcompanion.preferences.createMainDataStore
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -55,7 +55,7 @@ object ApplicationModule {
     @MainDataStore
     @SingleIn(AppScope::class)
     fun provideMainDataStore(application: Application): DataStore<Preferences> =
-        application.applicationContext.mainDataStore
+        createMainDataStore(application.applicationContext)
 
     @Provides
     @MainActivityClass
