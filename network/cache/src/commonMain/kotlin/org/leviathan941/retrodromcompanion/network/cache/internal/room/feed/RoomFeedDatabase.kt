@@ -20,10 +20,15 @@ package org.leviathan941.retrodromcompanion.network.cache.internal.room.feed
 
 import androidx.room3.AutoMigration
 import androidx.room3.ColumnTypeConverters
+import androidx.room3.ConstructedBy
 import androidx.room3.DaoReturnTypeConverters
 import androidx.room3.Database
 import androidx.room3.RoomDatabase
+import androidx.room3.RoomDatabaseConstructor
 import androidx.room3.paging.PagingSourceDaoReturnTypeConverter
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryDao
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.category.RoomFeedCategoryEntity
 import org.leviathan941.retrodromcompanion.network.cache.internal.room.feed.channel.RoomFeedChannelItemDao
@@ -48,6 +53,7 @@ private const val DB_VERSION = 2
 )
 @ColumnTypeConverters(RoomFeedTypeConverters::class)
 @DaoReturnTypeConverters(PagingSourceDaoReturnTypeConverter::class)
+@ConstructedBy(RoomFeedDatabaseConstructor::class)
 internal abstract class RoomFeedDatabase : RoomDatabase() {
     internal abstract fun categoriesDao(): RoomFeedCategoryDao
 
@@ -55,3 +61,20 @@ internal abstract class RoomFeedDatabase : RoomDatabase() {
 
     internal abstract fun cacheMetadataDao(): RoomFeedCacheMetadataDao
 }
+
+// Room generates the `actual` for each target, so the database is built without reflection.
+@Suppress("KotlinNoActualForExpect")
+internal expect object RoomFeedDatabaseConstructor : RoomDatabaseConstructor<RoomFeedDatabase> {
+    override fun initialize(): RoomFeedDatabase
+}
+
+/**
+ * Builds the database with the driver and query context every platform uses.
+ *
+ * Build one per process: each instance owns its own invalidation tracker, so a second one would
+ * not see the writes made through the first.
+ */
+internal fun RoomDatabase.Builder<RoomFeedDatabase>.buildFeedDatabase(): RoomFeedDatabase =
+    setDriver(BundledSQLiteDriver())
+        .setQueryCoroutineContext(Dispatchers.IO)
+        .build()

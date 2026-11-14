@@ -120,8 +120,9 @@ The only tests are unit tests: `:notification`'s cover the feed-item deeplink st
 `./gradlew test` runs them on the JVM. `:network`'s RSS response mapping and feed URL building tests,
 `:html-text`'s converter tests and `:preferences`' store and migration tests are in `commonTest` on
 `kotlin.test`. `./gradlew test` runs them on the Android host, and `build` also runs them on the
-iOS simulator (`iosSimulatorArm64Test`), which needs Xcode. Compilation, Android lint, ktlint and
-detekt are otherwise the gate.
+iOS simulator (`iosSimulatorArm64Test`), which needs Xcode. `:network:cache`'s Room round trip is in
+`iosTest`, so only `iosSimulatorArm64Test` runs it: the bundled SQLite driver has no native library
+for the Android host JVM. Compilation, Android lint, ktlint and detekt are otherwise the gate.
 
 `build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
 the committed baseline in `app/stability/`: a composable whose parameters become less stable

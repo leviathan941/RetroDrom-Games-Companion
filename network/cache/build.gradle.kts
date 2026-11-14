@@ -17,31 +17,47 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.androidx.room3)
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.zacsweers.metro)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.network.cache"
+kotlin {
+    compilerOptions {
+        // RoomFeedDatabaseConstructor is an `expect object`, still Beta in Kotlin.
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.network.cache"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.androidx.paging.common)
+            api(libs.jetbrains.kotlinx.collections.immutable)
+            api(libs.jetbrains.kotlinx.coroutines.core)
 
-    room3 {
-        schemaDirectory("$projectDir/schemas")
+            implementation(project(":common"))
+            implementation(project(":network"))
+
+            implementation(libs.androidx.room3.paging)
+            implementation(libs.androidx.room3.runtime)
+            implementation(libs.androidx.sqlite.bundled)
+        }
+        commonTest.dependencies {
+            implementation(libs.jetbrains.kotlin.test)
+            implementation(libs.jetbrains.kotlinx.coroutines.test)
+        }
     }
 }
 
+room3 {
+    schemaDirectory("$projectDir/schemas")
+}
+
+// Room generates the database for each target, including the `actual` of its constructor.
 dependencies {
-    api(libs.androidx.paging.common)
-    api(libs.jetbrains.kotlinx.collections.immutable)
-    api(libs.jetbrains.kotlinx.coroutines.android)
-
-    implementation(project(":common"))
-    implementation(project(":network"))
-
-    implementation(libs.androidx.room3.paging)
-    implementation(libs.androidx.room3.runtime)
-    implementation(libs.androidx.sqlite.bundled)
-
-    ksp(libs.androidx.room3.compiler)
+    add("kspAndroid", libs.androidx.room3.compiler)
+    add("kspIosArm64", libs.androidx.room3.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room3.compiler)
 }
