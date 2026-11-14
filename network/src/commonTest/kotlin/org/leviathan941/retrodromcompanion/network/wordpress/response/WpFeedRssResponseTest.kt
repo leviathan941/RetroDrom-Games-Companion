@@ -18,10 +18,11 @@
 
 package org.leviathan941.retrodromcompanion.network.wordpress.response
 
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import nl.adaptivity.xmlutil.serialization.XML
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.leviathan941.retrodromcompanion.network.wordpress.WP_FEED_SAMPLE
 
 /**
  * A WordPress feed carries plenty of elements and namespaces that are not modelled here, so a
@@ -34,12 +35,8 @@ class WpFeedRssResponseTest {
         }
     }
 
-    private val sample: String = requireNotNull(
-        javaClass.classLoader?.getResourceAsStream("wp_feed_sample.xml"),
-    ).use { it.readBytes().decodeToString() }
-
     private fun parseChannel(): WpFeedChannel =
-        requireNotNull(xml.decodeFromString(WpFeedRssResponse.serializer(), sample).channel)
+        requireNotNull(xml.decodeFromString(WpFeedRssResponse.serializer(), WP_FEED_SAMPLE).channel)
 
     @Test
     fun `parses channel of a WordPress RSS feed`() {
@@ -61,8 +58,8 @@ class WpFeedRssResponseTest {
         assertEquals("Первый Автор", item.creator)
         assertEquals("1001", item.postId)
         assertTrue(
-            "Description must keep its HTML markup: ${item.description}",
             item.description.orEmpty().startsWith("<a href="),
+            "Description must keep its HTML markup: ${item.description}",
         )
     }
 

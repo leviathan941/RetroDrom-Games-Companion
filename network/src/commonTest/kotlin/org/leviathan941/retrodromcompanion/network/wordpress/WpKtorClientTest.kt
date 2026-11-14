@@ -28,9 +28,9 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
 import io.ktor.http.headersOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpHttpClientFactory
 
 /**
@@ -38,10 +38,6 @@ import org.leviathan941.retrodromcompanion.network.wordpress.internal.WpHttpClie
  * permalink, and that the `application/rss+xml` content type is negotiated.
  */
 class WpKtorClientTest {
-    private val sample: String = requireNotNull(
-        javaClass.classLoader?.getResourceAsStream("wp_feed_sample.xml"),
-    ).use { it.readBytes().decodeToString() }
-
     @Test
     fun `requests the paged feed underneath the channel URL`() = runTest {
         var requestedUrl: Url? = null
@@ -100,7 +96,7 @@ class WpKtorClientTest {
         WpKtorClient(WpHttpClientFactory(HttpClient(engine)))
 
     private fun MockRequestHandleScope.respondRss() = respond(
-        content = sample,
+        content = WP_FEED_SAMPLE,
         headers = headersOf(HttpHeaders.ContentType, "application/rss+xml; charset=UTF-8"),
     )
 }

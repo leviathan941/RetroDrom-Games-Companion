@@ -17,37 +17,38 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.zacsweers.metro)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.network"
+kotlin {
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.network"
 
-    defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
+        optimization {
+            consumerKeepRules.publish = true
+            consumerKeepRules.file("consumer-rules.pro")
+        }
     }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":common"))
 
-    testOptions {
-        unitTests.isReturnDefaultValues = true
+            implementation(libs.jetbrains.kotlinx.coroutines.core)
+
+            implementation(project.dependencies.platform(libs.ktor.bom))
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.engine.defaults)
+            implementation(libs.ktor.client.resources)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.serialization.kotlinx.xml)
+        }
+        commonTest.dependencies {
+            implementation(libs.jetbrains.kotlin.test)
+            implementation(libs.jetbrains.kotlinx.coroutines.test)
+            implementation(libs.ktor.client.mock)
+        }
     }
-}
-
-dependencies {
-    implementation(project(":common"))
-
-    implementation(libs.jetbrains.kotlinx.coroutines.core)
-
-    implementation(platform(libs.ktor.bom))
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.engine.defaults)
-    implementation(libs.ktor.client.resources)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.ktor.serialization.kotlinx.xml)
-
-    testImplementation(libs.junit)
-    testImplementation(libs.jetbrains.kotlinx.coroutines.test)
-    testImplementation(libs.ktor.client.mock)
 }
