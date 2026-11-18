@@ -26,7 +26,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:html-text`, `:html-text:api`, `:html-text:imagecontent` | Standalone Compose library (`org.leviathan941.compose.htmltext`) that renders HTML as `AnnotatedString`, with pluggable inline content (e.g. `<img>`). Keep it app-agnostic. |
 | `:network` | Ktor client for the WordPress REST API and the RSS feed (`WpNetworkClient` / `WpKtorClient`). |
 | `:network:cache` | Room database caching feed categories and channel items, read behind `FeedCacheProvider` and written behind `FeedCacheMutator`. |
-| `:notification` | Notification channels, builders, helpers; the `Notifications` and `PushMessaging` interfaces. |
+| `:notification` | The `Notifications` and `PushMessaging` interfaces and the push deeplink helpers in `commonMain`; Android's channels and notification builder in `androidMain`. |
 | `:permission` | Compose permission request and rationale UI on Calf (`calf-permissions`). |
 | `:preferences` | DataStore-backed UI/promo preferences with migrations. |
 | `:resources` | The first KMP module. UI strings (with `values-ru`) and drawables as compose resources in `commonMain/composeResources`, read through its public `Res`; plus, in `androidMain/res`, the Android resources Android itself reads for push (channel strings, notification icon and colour, default channel id). `:app` keeps only its identity: label, launcher icons, theme. |
@@ -116,10 +116,10 @@ ktlint's per-source-set tasks cache their findings: after deleting a file that h
 the check still reports it until `./gradlew clean` (or `--rerun` on the `runKtlintCheckOver…`
 task).
 
-The only tests are unit tests: `:notification`'s cover the feed-item deeplink string;
-`./gradlew test` runs them on the JVM. `:network`'s RSS response mapping and feed URL building tests,
-`:html-text`'s converter tests, `:preferences`' store and migration tests and `:rss-reader`'s
-publication date and feed image tests are in `commonTest` on
+The only tests are unit tests: `:app`'s cover the navigation back stack;
+`./gradlew test` runs them on the JVM. `:notification`'s feed-item deeplink tests, `:network`'s RSS
+response mapping and feed URL building tests, `:html-text`'s converter tests, `:preferences`' store
+and migration tests and `:rss-reader`'s publication date and feed image tests are in `commonTest` on
 `kotlin.test`. `./gradlew test` runs them on the Android host, and `build` also runs them on the
 iOS simulator (`iosSimulatorArm64Test`), which needs Xcode. `:network:cache`'s Room round trip is in
 `iosTest`, so only `iosSimulatorArm64Test` runs it: the bundled SQLite driver has no native library

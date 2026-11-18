@@ -17,21 +17,28 @@
  */
 
 plugins {
-    id("retrodrom.android-library")
+    id("retrodrom.kmp-library")
     alias(libs.plugins.zacsweers.metro)
 }
 
-android {
-    namespace = "org.leviathan941.retrodromcompanion.notification"
-}
+kotlin {
+    android {
+        namespace = "org.leviathan941.retrodromcompanion.notification"
+    }
+    sourceSets {
+        commonMain.dependencies {
+            implementation(project(":common"))
 
-dependencies {
-    implementation(project(":common"))
-    implementation(project(":resources"))
+            implementation(project.dependencies.platform(libs.ktor.bom))
+            implementation(libs.ktor.http)
+        }
+        commonTest.dependencies {
+            implementation(libs.jetbrains.kotlin.test)
+        }
+        androidMain.dependencies {
+            implementation(project(":resources"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(platform(libs.ktor.bom))
-    implementation(libs.ktor.http)
-
-    testImplementation(libs.junit)
+            implementation(libs.androidx.core.ktx)
+        }
+    }
 }

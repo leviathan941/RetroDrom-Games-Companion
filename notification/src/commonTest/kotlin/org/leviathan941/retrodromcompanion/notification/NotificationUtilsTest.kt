@@ -18,9 +18,9 @@
 
 package org.leviathan941.retrodromcompanion.notification
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNull
 
 /**
  * Pins the feed-item deeplink to the shape `android.net.Uri.Builder` used to produce, which the
