@@ -20,7 +20,7 @@ plugins {
     id("retrodrom.android-application")
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.aboutlibraries.android)
+    alias(libs.plugins.aboutlibraries)
     alias(libs.plugins.skydoves.compose.stability.analyzer)
     alias(libs.plugins.zacsweers.metro)
 }

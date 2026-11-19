@@ -26,4 +26,5 @@ public object ViewModelKeys {
     public const val MAIN_VIEW_PROMO_MODEL: String = "main_view_promo_model"
     public const val RSS_ITEM_LOADING_MODEL: String = "rss_item_loading_model"
     public const val USER_MESSAGES_VIEW_MODEL: String = "user_messages_view_model"
+    public const val LICENSES_VIEW_MODEL: String = "licenses_view_model"
 }

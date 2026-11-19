@@ -1,5 +1,5 @@
 [versions]
-about-libraries-compose-m3 = "15.3.0"
+aboutlibraries = "15.3.0"
 android-gradle-plugin = "9.4.1"
 androidx-activity = "1.13.0"
 androidx-appcompat = "1.8.0"
@@ -39,7 +39,8 @@ touchlab-kermit = "2.2.0"
 zacsweers-metro = "1.5.2"
 
 [libraries]
-aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "about-libraries-compose-m3" }
+aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "aboutlibraries" }
+aboutlibraries-compose-m3 = { module = "com.mikepenz:aboutlibraries-compose-m3", version.ref = "aboutlibraries" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
@@ -102,7 +103,7 @@ zacsweers-metrox-viewmodel = { group = "dev.zacsweers.metro", name = "metrox-vie
 zacsweers-metrox-viewmodel-compose = { group = "dev.zacsweers.metro", name = "metrox-viewmodel-compose", version.ref = "zacsweers-metro" }
 
 [plugins]
-aboutlibraries-android = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "about-libraries-compose-m3" }
+aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }

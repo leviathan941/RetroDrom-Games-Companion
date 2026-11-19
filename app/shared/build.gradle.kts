@@ -35,6 +35,9 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
+            // Libs is part of the API: LicensesViewModel exposes it, :app binds AppLibrariesSource.
+            api(libs.aboutlibraries.core)
+
             implementation(project(":common"))
             implementation(project(":network:cache"))
             implementation(project(":notification"))

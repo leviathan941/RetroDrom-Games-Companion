@@ -24,16 +24,15 @@ import androidx.compose.ui.Modifier
 import org.jetbrains.compose.resources.stringResource
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.collections.immutable.toImmutableList
-import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.resources.Res
 import org.leviathan941.retrodromcompanion.resources.settings_about_item_feedback_title
 import org.leviathan941.retrodromcompanion.resources.settings_about_item_licenses_title
 import org.leviathan941.retrodromcompanion.resources.settings_interface_item_notifications_title
 import org.leviathan941.retrodromcompanion.resources.settings_interface_item_theme_title
+import org.leviathan941.retrodromcompanion.ui.model.LicensesViewModel
 import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
@@ -105,13 +104,16 @@ fun EntryProviderScope<NavKey>.settingsEntries(navigationActions: MainNavActions
     }
 
     entry<SettingsDestination.Licenses> {
+        val licensesViewModel = metroViewModel<LicensesViewModel>(
+            key = ViewModelKeys.LICENSES_VIEW_MODEL,
+        )
+        val libraries by licensesViewModel.libraries.collectAsState()
         SettingsScreen(
             data = MainNavScreen.Settings(
                 title = stringResource(Res.string.settings_about_item_licenses_title),
             ),
             navigationActions = navigationActions,
         ) {
-            val libraries by produceLibraries(R.raw.aboutlibraries)
             LibrariesContainer(
                 libraries = libraries,
                 modifier = Modifier,
