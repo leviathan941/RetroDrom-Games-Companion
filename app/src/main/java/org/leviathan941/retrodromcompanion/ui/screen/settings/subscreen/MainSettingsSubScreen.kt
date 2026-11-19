@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import dev.zacsweers.metrox.viewmodel.metroViewModel
-import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.resources.Res
 import org.leviathan941.retrodromcompanion.resources.google_material_contrast
 import org.leviathan941.retrodromcompanion.resources.google_material_feedback
@@ -67,6 +66,7 @@ fun MainSettingsSubScreen(
     val appTheme by screenViewModel.appTheme.collectAsState()
     MainSettingsContent(
         appTheme = appTheme,
+        appVersionName = screenViewModel.appVersionName,
         navigationActions = navigationActions,
         modifier = modifier,
     )
@@ -75,6 +75,7 @@ fun MainSettingsSubScreen(
 @Composable
 private fun MainSettingsContent(
     appTheme: ThemeType,
+    appVersionName: String,
     navigationActions: MainNavActions,
     modifier: Modifier = Modifier,
 ) {
@@ -133,7 +134,7 @@ private fun MainSettingsContent(
 
             SettingsTitleItem(
                 title = stringResource(Res.string.settings_about_item_app_version_title),
-                subtitle = BuildConfig.VERSION_NAME,
+                subtitle = appVersionName,
                 leadingIcon = painterResource(Res.drawable.google_material_info),
             )
         }

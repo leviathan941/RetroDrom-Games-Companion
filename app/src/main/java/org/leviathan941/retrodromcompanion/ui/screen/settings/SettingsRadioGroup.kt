@@ -71,7 +71,7 @@ fun <T> SettingsRadioGroup(
 
 @Preview(showBackground = true)
 @Composable
-@SuppressWarnings("MagicNumber")
+@Suppress("MagicNumber")
 private fun SettingsRadioGroupPreview() {
     val items = persistentListOf(
         SettingsRadioGroupItem(1, "Item 1"),

@@ -376,11 +376,12 @@ public fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.Feed
     - modifier: STABLE (marked @Stable or @Immutable)
 
 @Composable
-private fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.MainSettingsContent(appTheme: org.leviathan941.retrodromcompanion.ui.theme.ThemeType, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+private fun org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.MainSettingsContent(appTheme: org.leviathan941.retrodromcompanion.ui.theme.ThemeType, appVersionName: kotlin.String, navigationActions: org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions, modifier: androidx.compose.ui.Modifier): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - appTheme: STABLE (class with no mutable properties)
+    - appVersionName: STABLE (String is immutable)
     - navigationActions: UNKNOWN (interface or non-final class; concrete implementation unknown)
     - modifier: STABLE (marked @Stable or @Immutable)
 

@@ -29,8 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -91,13 +91,12 @@ fun RssFeedItemDescription(
             style = MaterialTheme.typography.titleLarge,
         )
 
-        val defaultImageWidth = with(LocalConfiguration.current) {
-            with(LocalDensity.current) {
-                (screenWidthDp.dp - horizontalPaddingDp * 2).toSp()
-            }
+        val windowWidth = LocalWindowInfo.current.containerDpSize.width
+        val defaultImageWidth = with(LocalDensity.current) {
+            (windowWidth - horizontalPaddingDp * 2).toSp()
         }
 
-        @SuppressWarnings("MagicNumber")
+        @Suppress("MagicNumber")
         val defaultImageHeight = defaultImageWidth * 0.75f
         HtmlText(
             html = itemDescription.html,

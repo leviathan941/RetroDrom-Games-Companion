@@ -30,9 +30,11 @@ import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
+import org.leviathan941.retrodromcompanion.BuildConfig
 import org.leviathan941.retrodromcompanion.MainActivity
 import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
 import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
+import org.leviathan941.retrodromcompanion.common.di.AppVersionName
 import org.leviathan941.retrodromcompanion.common.di.MainActivityClass
 import org.leviathan941.retrodromcompanion.common.di.MainDataStore
 import org.leviathan941.retrodromcompanion.preferences.createMainDataStore
@@ -60,4 +62,8 @@ object ApplicationModule {
     @Provides
     @MainActivityClass
     fun provideMainActivityClass(): Class<*> = MainActivity::class.java
+
+    @Provides
+    @AppVersionName
+    fun provideAppVersionName(): String = BuildConfig.VERSION_NAME
 }

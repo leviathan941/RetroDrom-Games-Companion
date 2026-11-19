@@ -169,7 +169,7 @@ fun RssFeedItem(
     showBackground = true,
 )
 @Composable
-@SuppressWarnings("MagicNumber")
+@Suppress("MagicNumber")
 private fun RssFeedItemPreview() = RssFeedItem(
     modifier = Modifier,
     title = "Very interesting news! Be hurry to read it! Do not miss! But be aware, " +

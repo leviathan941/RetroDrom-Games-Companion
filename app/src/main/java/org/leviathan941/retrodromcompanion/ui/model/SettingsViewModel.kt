@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.launch
 import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
+import org.leviathan941.retrodromcompanion.common.di.AppVersionName
 import org.leviathan941.retrodromcompanion.notification.PushMessaging
 import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 import org.leviathan941.retrodromcompanion.ui.APP_THEME_DEFAULT
@@ -42,6 +43,7 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 class SettingsViewModel(
     private val pushNotificationModel: PushNotificationModel,
     private val preferencesRepository: PreferencesRepository,
+    @AppVersionName val appVersionName: String,
 ) : ViewModel() {
 
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)

@@ -44,3 +44,9 @@ public annotation class MainDataStore
  */
 @Qualifier
 public annotation class MainActivityClass
+
+/**
+ * The app's version name, as shown to the user.
+ */
+@Qualifier
+public annotation class AppVersionName
