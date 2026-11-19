@@ -1,0 +1,83 @@
+/*
+ * RetroDrom Games Companion
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package org.leviathan941.retrodromcompanion.ui.model
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import org.leviathan941.retrodromcompanion.app.model.PushNotificationModel
+import org.leviathan941.retrodromcompanion.common.logging.Logger
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
+
+private val logger = Logger.withTag("MainViewPromoModel")
+
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
+public class RssFeedPromoModel(
+    private val preferencesRepository: PreferencesRepository,
+    private val pushNotificationModel: PushNotificationModel,
+) : ViewModel() {
+
+    public val promoState: StateFlow<RssFeedPromoState> = run {
+        val isPushPostsPromoAllowed = preferencesRepository.promo
+            .cancellable()
+            .map { prefs ->
+                prefs.pushPosts.run {
+                    logger.d { "Push posts prefs: startsUntilShow: $startsUntilShow" }
+                    startsUntilShow < 1
+                }
+            }
+
+        val isPushPostsTopicSubscribed = pushNotificationModel.subscribedPushTopics.map {
+            PushMessaging.Topic.NEW_RETRODROM_POSTS in it
+        }
+
+        combine(isPushPostsPromoAllowed, isPushPostsTopicSubscribed) { isAllowed, isSubscribed ->
+            logger.d { "Set promo state: isAllowed: $isAllowed, isSubscribed: $isSubscribed" }
+            RssFeedPromoState(
+                shouldApplyPushPostsPromo = isAllowed && !isSubscribed,
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = RssFeedPromoState(
+                shouldApplyPushPostsPromo = false,
+            ),
+        )
+    }
+
+    public fun subscribePushPostsTopic() {
+        pushNotificationModel.subscribeToTopic(
+            topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
+            showMessageOnFailed = false,
+        )
+    }
+}

@@ -1,0 +1,101 @@
+/*
+ * RetroDrom Games Companion
+ * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package org.leviathan941.retrodromcompanion.ui.model
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.getString
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.main_rss_feed_title
+import org.leviathan941.retrodromcompanion.common.Constants
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheMutator
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCacheProvider
+import org.leviathan941.retrodromcompanion.network.cache.api.feed.FeedCategory
+import org.leviathan941.retrodromcompanion.ui.MAIN_RSS_FEED_ID
+import org.leviathan941.retrodromcompanion.ui.mainViewLogger
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
+
+@Inject
+@ViewModelKey
+@ContributesIntoMap(AppScope::class, binding<ViewModel>())
+public class MainViewModel(
+    private val feedCacheProvider: FeedCacheProvider,
+    private val feedCacheMutator: FeedCacheMutator,
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(
+        MainViewState.RssFeed(
+            screenData = emptyMap(),
+        ),
+    )
+    public val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            feedCacheProvider.categories.map {
+                convertFeedCategories(it)
+            }.collect { categories ->
+                _uiState.value = MainViewState.RssFeed(categories)
+            }
+        }
+        refreshRssFeedData()
+    }
+
+    public fun refreshRssFeedData() {
+        viewModelScope.launch {
+            feedCacheMutator.refreshCategories().onFailure { e ->
+                mainViewLogger.e(e) { "Failed to fetch RSS categories" }
+            }
+        }
+    }
+
+    private suspend fun convertFeedCategories(
+        feedCategories: List<FeedCategory>,
+    ): Map<Int, MainNavScreen.RssFeed> {
+        val rssCategoryScreens = feedCategories
+            .filter { it.postsCount > 0 }
+            .map {
+                MainNavScreen.RssFeed(
+                    id = it.id,
+                    title = it.name,
+                    channelUrl = it.link,
+                )
+            }
+        val mainCategoryScreen = MainNavScreen.RssFeed(
+            id = MAIN_RSS_FEED_ID,
+            title = getString(Res.string.main_rss_feed_title),
+            channelUrl = Constants.RETRODROM_BASE_URL,
+        )
+        val allScreens = sequenceOf(mainCategoryScreen)
+            .plus(rssCategoryScreens)
+            .associateBy { it.id }
+            .toMap()
+        mainViewLogger.d { "Fetched RSS categories: $allScreens" }
+        return allScreens
+    }
+}

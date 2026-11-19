@@ -18,8 +18,9 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 
 | Module | Purpose |
 | --- | --- |
-| `:app` | UI layer: Compose screens, drawer, top bar, navigation, view models, themes. |
+| `:app` | UI layer: Compose screens, drawer, top bar, navigation entries, themes. Its view models and navigation keys moved to `:app:shared` in B9b. |
 | `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. |
+| `:app:shared` | KMP home of the UI layer, moving out of `:app` in B9: so far the view models, navigation keys and actions, `UserMessages` and `ThemeType` (with a per-platform theme list). Packages unchanged. |
 | `:browser` | In-app browser: the `InAppBrowser` interface and the `expect` `rememberInAppBrowser()`, on Custom Tabs (`androidx.browser`) on Android and `SFSafariViewController` on iOS. |
 | `:common` | Shared constants (site base URL), DI keys, request codes, the `kotlin.time.Clock` binding. |
 | `:firebase` | FCM messaging service and the Firebase implementation of `PushMessaging` (topic subscriptions). |
@@ -116,14 +117,14 @@ ktlint's per-source-set tasks cache their findings: after deleting a file that h
 the check still reports it until `./gradlew clean` (or `--rerun` on the `runKtlintCheckOver…`
 task).
 
-The only tests are unit tests: `:app`'s cover the navigation back stack;
-`./gradlew test` runs them on the JVM. `:notification`'s feed-item deeplink tests, `:network`'s RSS
-response mapping and feed URL building tests, `:html-text`'s converter tests, `:preferences`' store
-and migration tests and `:rss-reader`'s publication date and feed image tests are in `commonTest` on
-`kotlin.test`. `./gradlew test` runs them on the Android host, and `build` also runs them on the
-iOS simulator (`iosSimulatorArm64Test`), which needs Xcode. `:network:cache`'s Room round trip is in
-`iosTest`, so only `iosSimulatorArm64Test` runs it: the bundled SQLite driver has no native library
-for the Android host JVM. Compilation, Android lint, ktlint and detekt are otherwise the gate.
+The only tests are unit tests. `:app:shared`'s navigation back stack tests, `:notification`'s
+feed-item deeplink tests, `:network`'s RSS response mapping and feed URL building tests,
+`:html-text`'s converter tests, `:preferences`' store and migration tests and `:rss-reader`'s
+publication date and feed image tests are in `commonTest` on `kotlin.test`. `./gradlew test` runs
+them on the Android host, and `build` also runs them on the iOS simulator (`iosSimulatorArm64Test`),
+which needs Xcode. `:network:cache`'s Room round trip is in `iosTest`, so only
+`iosSimulatorArm64Test` runs it: the bundled SQLite driver has no native library for the Android
+host JVM. Compilation, Android lint, ktlint and detekt are otherwise the gate.
 
 `build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
 the committed baseline in `app/stability/`: a composable whose parameters become less stable

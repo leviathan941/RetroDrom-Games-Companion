@@ -46,6 +46,7 @@ dependencyResolutionManagement {
 rootProject.name = "Retrodrom Companion"
 include(":app")
 include(":app:migration")
+include(":app:shared")
 include(":browser")
 include(":common")
 include(":firebase")

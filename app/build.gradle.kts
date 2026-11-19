@@ -20,7 +20,6 @@ plugins {
     id("retrodrom.android-application")
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.aboutlibraries.android)
     alias(libs.plugins.skydoves.compose.stability.analyzer)
     alias(libs.plugins.zacsweers.metro)
@@ -68,11 +67,6 @@ android {
         buildConfig = true
     }
 
-    testOptions {
-        // The navigation actions log through Kermit, whose Android writer calls android.util.Log.
-        unitTests.isReturnDefaultValues = true
-    }
-
     packaging {
         resources {
             excludes += setOf(
@@ -97,6 +91,7 @@ dependencies {
     implementation(project(":preferences"))
     implementation(project(":resources"))
     implementation(project(":rss-reader"))
+    implementation(project(":app:shared"))
 
     implementation(libs.aboutlibraries.compose.m3)
 
@@ -132,14 +127,11 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.jetbrains.kotlinx.collections.immutable)
-    implementation(libs.jetbrains.kotlinx.serialization.json)
 
     implementation(libs.zacsweers.metrox.viewmodel)
     implementation(libs.zacsweers.metrox.viewmodel.compose)
 
     debugImplementation(libs.jetbrains.compose.ui.tooling)
-
-    testImplementation(libs.junit)
 
     lintChecks(libs.slack.compose.lint.checks)
 }

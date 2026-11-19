@@ -38,31 +38,18 @@ import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_t
 import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_months
 import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_time_years
 import org.leviathan941.retrodromcompanion.app.message.UserMessage
-import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
-import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 import kotlin.time.Clock
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.Instant
 
-internal val mainViewLogger = Logger.withTag("MainView")
-internal val rssScreenLogger = Logger.withTag("RssScreen")
-
 internal const val FEEDBACK_URL = "https://retrodrom.games/feedback/"
 internal const val FEEDBACK_EMAIL = "retrodrom.games@gmail.com"
 
-internal const val MAIN_RSS_FEED_ID = 0
-
 internal const val NAVIGATION_ANIMATION_DURATION_MS = 300
-
-internal val APP_THEME_DEFAULT = when {
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> ThemeType.DYNAMIC
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> ThemeType.SYSTEM
-    else -> ThemeType.LIGHT
-}
 
 @Composable
 fun Instant.toRssFeedPublicationTime(): String {
