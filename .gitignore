@@ -39,3 +39,6 @@ google-services.json
 
 # Agent-generated plans and reports
 .local/
+
+# Xcode per-user state
+xcuserdata/

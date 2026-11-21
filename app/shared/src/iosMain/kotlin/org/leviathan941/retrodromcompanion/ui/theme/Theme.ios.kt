@@ -26,8 +26,8 @@ import androidx.compose.ui.graphics.Color
 @Composable
 internal actual fun dynamicColorScheme(isDarkTheme: Boolean): ColorScheme? = null
 
-// shortcut: the status bar follows the system appearance rather than the app's theme; set the
-// hosting UIViewController's preferredStatusBarStyle to match it.
+// Nothing to set: Compose Multiplatform's view controller already styles the status bar to match
+// the app's theme, also when the app and the system are in opposite modes (seen in C1).
 @Composable
 internal actual fun StatusBarStyle(
     color: Color,

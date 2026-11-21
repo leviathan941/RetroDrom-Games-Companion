@@ -13,3 +13,4 @@ Status values: `Proposed` (needs a decision), `Accepted`, `Superseded by NNNN`.
 | [0004](0004-room3.md) | Persistence: Room 2.x → Room 3 | Accepted |
 | [0005](0005-http-engine-selection.md) | HTTP engine selection: `ktor-client-engine-defaults` | Accepted |
 | [0006](0006-build-logic-included-build.md) | Build logic: convention plugins in an included `build-logic` build | Accepted |
+| [0007](0007-ios-app-direct-framework-integration.md) | iOS app: an Xcode project at `iosApp/` with direct framework integration | Accepted |

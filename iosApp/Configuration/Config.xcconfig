@@ -1,0 +1,7 @@
+// The app's identity and version for a simulator debug build. C4 settles the bundle id and the
+// team for signing, and takes the version from build-logic's AppVersion.
+APP_DISPLAY_NAME = RetroDrom Games
+PRODUCT_BUNDLE_IDENTIFIER = org.segowski.retrodromgames
+MARKETING_VERSION = 1.12.0
+CURRENT_PROJECT_VERSION = 11200
+DEVELOPMENT_TEAM =

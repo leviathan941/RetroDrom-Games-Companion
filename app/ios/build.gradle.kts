@@ -19,7 +19,6 @@
 plugins {
     id("retrodrom.kmp-ios-library")
     alias(libs.plugins.jetbrains.compose)
-    // The CMP plugin refuses to configure without it, though the module has no composables.
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.aboutlibraries)
 }
@@ -35,12 +34,15 @@ kotlin {
         // In commonMain, though every target is iOS: the compose resources plugin generates `Res`
         // there, and only for a commonMain dependency on the resources library.
         commonMain.dependencies {
+            implementation(project(":app:migration"))
             implementation(project(":app:shared"))
 
             implementation(libs.aboutlibraries.core)
+            implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.jetbrains.compose.components.resources)
-            // The Compose compiler insists on it.
             implementation(libs.jetbrains.compose.runtime)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.zacsweers.metrox.viewmodel.compose)
         }
         iosTest.dependencies {
             implementation(libs.jetbrains.kotlin.test)

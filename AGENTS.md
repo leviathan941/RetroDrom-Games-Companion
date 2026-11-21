@@ -19,7 +19,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | Module | Purpose |
 | --- | --- |
 | `:app:android` | Thin Android host (`app/android`): `MainActivity`, and `MainApplication`, which builds `SharedApplication` from what only it can see (version name, main activity, the license list generated from its classpath), plus the app's identity resources. Its UI and DI moved to `:app:shared` in B9d; it was `:app` until B9e. `:app` itself is only the parent directory of the four `:app:*` projects and has no build script. |
-| `:app:ios` | Thin iOS host (`app/ios`), iOS targets only: builds the `RetroDromCompanion` framework the Xcode app embeds. Its public `createSharedApplication()` builds `SharedApplication` from what only it can see: the bundle's version name and the license list AboutLibraries exports from its classpath into its internal compose `Res` (`files/aboutlibraries.json`). |
+| `:app:ios` | Thin iOS host (`app/ios`), iOS targets only: builds the static `RetroDromCompanion` framework that the Xcode app `iosApp/` embeds (ADR-0007). Its public `createSharedApplication()` builds `SharedApplication` from what only it can see: the bundle's version name and the license list AboutLibraries exports from its classpath into its internal compose `Res` (`files/aboutlibraries.json`). Its public `MainViewController(sharedApplication)` is the `ComposeUIViewController` showing `AppUi`, as `MainActivity` does on Android. |
 | `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app:android` only starts the run and gates its first frame on it; the step registry is `internal`. KMP: the runner in `commonMain`, the Android steps and their registry in `androidMain`, an empty iOS registry in `iosMain`. |
 | `:app:shared` | KMP home of the UI layer and the app graph: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`; `SharedApplication`, the common `AppGraph`, `AndroidAppGraph` in `androidMain` and `IosAppGraph` in `iosMain`, each with a `SharedApplication` factory function; the iOS graph binds placeholder `Notifications` and `PushMessaging` until C2 and C3. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is `AppUi`, `SharedApplication`, `AppGraph` and `AppLibrariesSource`. |
 | `:browser` | In-app browser: the `InAppBrowser` interface and the `expect` `rememberInAppBrowser()`, on Custom Tabs (`androidx.browser`) on Android and `SFSafariViewController` on iOS. |
@@ -33,6 +33,13 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:preferences` | DataStore-backed UI/promo preferences with migrations. |
 | `:resources` | The first KMP module. UI strings (with `values-ru`) and drawables as compose resources in `commonMain/composeResources`, read through its public `Res`; plus, in `androidMain/res`, the Android resources Android itself reads for push (channel strings, notification icon and colour, default channel id). `:app:android` keeps only its identity: label, launcher icons, theme. |
 | `:rss-reader` | Pages the cached feed with Paging 3 and refills it via a `RemoteMediator`. |
+
+The iOS app itself is the Xcode project `iosApp/` at the repository root, not a Gradle project
+(ADR-0007): a SwiftUI `App` that builds and starts `SharedApplication` and shows
+`MainViewController`. Its first build phase runs `:app:ios:embedAndSignAppleFrameworkForXcode`,
+which also copies every module's compose resources into the app bundle. Its bundle id, version
+and display name are in `iosApp/Configuration/Config.xcconfig`; Swift files dropped into
+`iosApp/iosApp/` join the target without a project file edit.
 
 Versions live in `gradle/libs.versions.toml`; SDK/JVM/app-version constants live in
 `build-logic/convention/src/main/kotlin/org/leviathan941/retrodromcompanion/` (bump `AppVersion`
@@ -119,6 +126,20 @@ Read them from there rather than restating them here — version numbers in this
 ./gradlew ktlintFormat         # apply ktlint's auto-fixes
 ./gradlew build                # compile everything (also runs lint, ktlintCheck and detekt)
 ```
+
+The iOS app builds with Xcode, which runs Gradle for the framework itself
+(`embedAndSignAppleFrameworkForXcode` works only inside an Xcode build). From the command line,
+for the simulator:
+
+```sh
+xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug \
+  -destination 'platform=iOS Simulator,name=iPhone 17' build
+```
+
+Then install the `iosApp.app` from the build products with `xcrun simctl install booted …` and
+launch it with `xcrun simctl launch booted org.segowski.retrodromgames`, or run the scheme from
+Xcode. The linker warns that skiko's bundled ICU object was built for a newer iOS than the
+deployment target; that is expected until C4 settles the target.
 
 Kotlin/Native compiles and links the iOS binaries in processes of its own (`gradle.properties`:
 `kotlin.native.disableCompilerDaemon`, `kotlin.native.jvmArgs`), not in the 2 GB Gradle daemon.
