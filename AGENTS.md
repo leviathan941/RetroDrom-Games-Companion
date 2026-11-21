@@ -18,9 +18,10 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 
 | Module | Purpose |
 | --- | --- |
-| `:app:android` | Thin Android host (`app/android`): `MainActivity`, and `MainApplication`, which builds `SharedApplication` from what only it can see (version name, main activity, the license list generated from its classpath), plus the app's identity resources. Its UI and DI moved to `:app:shared` in B9d; it was `:app` until B9e. `:app` itself is only the parent directory of the three `:app:*` projects and has no build script. |
-| `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app:android` only starts the run and gates its first frame on it; the step registry is `internal`. KMP: the runner in `commonMain`, the Android steps and their registry in `androidMain`. |
-| `:app:shared` | KMP home of the UI layer and the app graph: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`; `SharedApplication`, the common `AppGraph` and, in `androidMain`, `AndroidAppGraph`. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is `AppUi`, `SharedApplication`, `AppGraph` and `AppLibrariesSource`. |
+| `:app:android` | Thin Android host (`app/android`): `MainActivity`, and `MainApplication`, which builds `SharedApplication` from what only it can see (version name, main activity, the license list generated from its classpath), plus the app's identity resources. Its UI and DI moved to `:app:shared` in B9d; it was `:app` until B9e. `:app` itself is only the parent directory of the four `:app:*` projects and has no build script. |
+| `:app:ios` | Thin iOS host (`app/ios`), iOS targets only: builds the `RetroDromCompanion` framework the Xcode app embeds. Its public `createSharedApplication()` builds `SharedApplication` from what only it can see: the bundle's version name and the license list AboutLibraries exports from its classpath into its internal compose `Res` (`files/aboutlibraries.json`). |
+| `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app:android` only starts the run and gates its first frame on it; the step registry is `internal`. KMP: the runner in `commonMain`, the Android steps and their registry in `androidMain`, an empty iOS registry in `iosMain`. |
+| `:app:shared` | KMP home of the UI layer and the app graph: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`; `SharedApplication`, the common `AppGraph`, `AndroidAppGraph` in `androidMain` and `IosAppGraph` in `iosMain`, each with a `SharedApplication` factory function; the iOS graph binds placeholder `Notifications` and `PushMessaging` until C2 and C3. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is `AppUi`, `SharedApplication`, `AppGraph` and `AppLibrariesSource`. |
 | `:browser` | In-app browser: the `InAppBrowser` interface and the `expect` `rememberInAppBrowser()`, on Custom Tabs (`androidx.browser`) on Android and `SFSafariViewController` on iOS. |
 | `:common` | Shared constants (site base URL), DI keys, request codes, the `kotlin.time.Clock` binding. |
 | `:firebase` | FCM messaging service and the Firebase implementation of `PushMessaging` (topic subscriptions). |
@@ -44,7 +45,8 @@ Read them from there rather than restating them here — version numbers in this
   applies one of its convention plugins instead of `com.android.*` directly:
   `retrodrom.android-library` (every Android-only library), `retrodrom.kmp-library` (KMP modules:
   Android, `iosArm64`, `iosSimulatorArm64`, plus `com.android.lint`, which the KMP library plugin
-  needs to register any lint task) or `retrodrom.android-application` (`:app:android`). They set
+  needs to register any lint task), `retrodrom.kmp-ios-library` (KMP modules with the iOS targets
+  only: `:app:ios`) or `retrodrom.android-application` (`:app:android`). The Android ones set
   the SDK levels, the JVM 17 targets and lint's `warningsAsErrors`; a module script keeps its
   `namespace` and whatever is its own. Its constants are visible only to a script that applies one
   of those plugins. AGP and KGP are `compileOnly` there: at runtime they come from the root
@@ -60,11 +62,11 @@ Read them from there rather than restating them here — version numbers in this
 - Package layout per module: public API at the top level (or `api/`), implementation under
   `internal/` or `impl/`; Metro binding containers and the app graph under `di/`.
 - DI is [Metro](https://github.com/ZacSweers/metro). `:app:shared` declares the app graph: the
-  common `AppGraph` interface and, in `androidMain`, the `@DependencyGraph(AppScope::class)`
-  `AndroidAppGraph` implementing it. Metro wants the final graph in platform code whenever
-  contributions are platform-specific, as `:firebase`'s and several `androidMain` ones are.
+  common `AppGraph` interface and the `@DependencyGraph(AppScope::class)` graphs implementing it,
+  `AndroidAppGraph` in `androidMain` and `IosAppGraph` in `iosMain`. Metro wants the final graph
+  in platform code whenever contributions are platform-specific, as `:firebase`'s and several `androidMain` ones are.
   `MainApplication` builds it through `SharedApplication`, passing what only `:app:android` can see as
-  graph factory parameters; framework-instantiated classes reach it through the `Application`. Any class carrying `@ContributesTo` / `@ContributesBinding` / `@ContributesIntoSet`
+  graph factory parameters, as `:app:ios`'s `createSharedApplication()` does on iOS; framework-instantiated classes reach it through the `Application`. Any class carrying `@ContributesTo` / `@ContributesBinding` / `@ContributesIntoSet`
   must be **public** for Metro to merge it from another module — a contribution from an `internal`
   class is rejected ("its module is not a friend module to this one") and shows up as a
   `[Metro/MissingBinding]` error naming it under `similar bindings:`, or, for a view model's
@@ -118,6 +120,11 @@ Read them from there rather than restating them here — version numbers in this
 ./gradlew build                # compile everything (also runs lint, ktlintCheck and detekt)
 ```
 
+Kotlin/Native compiles and links the iOS binaries in processes of its own (`gradle.properties`:
+`kotlin.native.disableCompilerDaemon`, `kotlin.native.jvmArgs`), not in the 2 GB Gradle daemon.
+A release framework link of `:app:ios` peaks at about 4 GB, so `build` can briefly use several
+GB of memory per parallel link.
+
 ktlint's per-source-set tasks cache their findings: after deleting a file that had a violation,
 the check still reports it until `./gradlew clean` (or `--rerun` on the `runKtlintCheckOver…`
 task).
@@ -129,7 +136,8 @@ publication date and feed image tests are in `commonTest` on `kotlin.test`. `./g
 them on the Android host, and `build` also runs them on the iOS simulator (`iosSimulatorArm64Test`),
 which needs Xcode. `:network:cache`'s Room round trip is in `iosTest`, so only
 `iosSimulatorArm64Test` runs it: the bundled SQLite driver has no native library for the Android
-host JVM. Compilation, Android lint, ktlint and detekt are otherwise the gate.
+host JVM. `:app:ios`'s license list test is in `iosTest` as well. Compilation, Android lint,
+ktlint and detekt are otherwise the gate.
 
 `build` also runs the Compose stability analyzer's `:app:shared:stabilityCheck` against the
 committed baseline `app/shared/stability/shared.stability`: a composable whose parameters become
