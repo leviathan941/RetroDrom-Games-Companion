@@ -61,6 +61,7 @@ internal fun RssItemDescriptionScreen(
     }
     Scaffold(
         modifier = modifier,
+        contentWindowInsets = screenContentWindowInsets(),
         topBar = {
             TopBarView(
                 prefs = TopBarPrefs(
@@ -95,6 +96,7 @@ internal fun RssItemDescriptionScreen(
             RssFeedItemDescription(
                 itemDescription = itemDescription,
                 openUrl = openUrl,
+                contentPadding = scrollingContentPadding(),
             )
         }
     }

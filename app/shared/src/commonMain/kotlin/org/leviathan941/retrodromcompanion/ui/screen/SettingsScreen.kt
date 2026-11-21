@@ -38,6 +38,7 @@ internal fun SettingsScreen(
 ) {
     Scaffold(
         modifier = modifier,
+        contentWindowInsets = screenContentWindowInsets(),
         topBar = {
             TopBarView(
                 prefs = data.topBarPrefs,

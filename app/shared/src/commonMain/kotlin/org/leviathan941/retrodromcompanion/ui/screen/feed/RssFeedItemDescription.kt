@@ -19,6 +19,7 @@
 package org.leviathan941.retrodromcompanion.ui.screen.feed
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
@@ -51,6 +52,7 @@ internal fun RssFeedItemDescription(
     itemDescription: RssFeedDestination.ItemDescription,
     openUrl: (String) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val horizontalPaddingDp = 10.dp
     Column(
@@ -59,7 +61,8 @@ internal fun RssFeedItemDescription(
             .fillMaxHeight()
             .verticalScroll(
                 state = rememberScrollState(),
-            ),
+            )
+            .padding(contentPadding),
         horizontalAlignment = Alignment.Start,
     ) {
         val nonImportantColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)

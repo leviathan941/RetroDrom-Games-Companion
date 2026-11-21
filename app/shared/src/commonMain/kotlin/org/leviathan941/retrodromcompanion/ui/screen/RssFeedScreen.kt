@@ -109,6 +109,7 @@ private fun RssFeedContent(
 
     Scaffold(
         modifier = modifier,
+        contentWindowInsets = screenContentWindowInsets(),
         topBar = {
             TopBarView(
                 prefs = screen.topBarPrefs,
@@ -134,7 +135,9 @@ private fun RssFeedContent(
             },
             isRefreshing = isRefreshing,
         ) {
-            LazyColumn {
+            LazyColumn(
+                contentPadding = scrollingContentPadding(),
+            ) {
                 items(rssChannelItems.itemCount) { index ->
                     val rssFeedItem = rssChannelItems[index]!!
                     RssFeedItem(

@@ -37,6 +37,7 @@ import org.leviathan941.retrodromcompanion.ui.model.SettingsViewModel
 import org.leviathan941.retrodromcompanion.ui.model.UserMessagesViewModel
 import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
 import org.leviathan941.retrodromcompanion.ui.screen.SettingsScreen
+import org.leviathan941.retrodromcompanion.ui.screen.scrollingContentPadding
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroup
 import org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsRadioGroupItem
 import org.leviathan941.retrodromcompanion.ui.screen.settings.subscreen.FeedbackSettingsSubScreen
@@ -117,6 +118,7 @@ internal fun EntryProviderScope<NavKey>.settingsEntries(navigationActions: MainN
             LibrariesContainer(
                 libraries = libraries,
                 modifier = Modifier,
+                contentPadding = scrollingContentPadding(),
             )
         }
     }

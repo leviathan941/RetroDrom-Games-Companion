@@ -289,13 +289,14 @@ internal fun org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItem(titl
     - imageUrl: STABLE (class with no mutable properties)
 
 @Composable
-internal fun org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItemDescription(itemDescription: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.ItemDescription, openUrl: kotlin.Function1<kotlin.String, kotlin.Unit>, modifier: androidx.compose.ui.Modifier): kotlin.Unit
+internal fun org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedItemDescription(itemDescription: org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination.ItemDescription, openUrl: kotlin.Function1<kotlin.String, kotlin.Unit>, modifier: androidx.compose.ui.Modifier, contentPadding: androidx.compose.foundation.layout.PaddingValues): kotlin.Unit
   skippable: true
   restartable: true
   params:
     - itemDescription: STABLE (marked @Stable or @Immutable)
     - openUrl: STABLE (function type)
     - modifier: STABLE (marked @Stable or @Immutable)
+    - contentPadding: STABLE (marked @Stable or @Immutable)
 
 @Composable
 internal fun org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadFailedNextItem(errorMessage: kotlin.String, onRetry: kotlin.Function0<kotlin.Unit>, onErrorLongPress: kotlin.Function1<@[ParameterName(name = \, modifier: androidx.compose.ui.Modifier): kotlin.Unit
@@ -313,6 +314,18 @@ internal fun org.leviathan941.retrodromcompanion.ui.screen.feed.RssFeedLoadingNe
   restartable: true
   params:
     - modifier: STABLE (marked @Stable or @Immutable)
+
+@Composable
+internal fun org.leviathan941.retrodromcompanion.ui.screen.screenContentWindowInsets(): androidx.compose.foundation.layout.WindowInsets
+  skippable: false
+  restartable: false
+  params:
+
+@Composable
+internal fun org.leviathan941.retrodromcompanion.ui.screen.scrollingContentPadding(): androidx.compose.foundation.layout.PaddingValues
+  skippable: false
+  restartable: false
+  params:
 
 @Composable
 internal fun org.leviathan941.retrodromcompanion.ui.screen.settings.SettingsClickableItem(title: kotlin.String, modifier: androidx.compose.ui.Modifier, subtitle: kotlin.String?, leadingIcon: androidx.compose.ui.graphics.painter.Painter?, trailingIcon: androidx.compose.ui.graphics.painter.Painter?, onLongClick: kotlin.Function0<kotlin.Unit>?, onClick: kotlin.Function0<kotlin.Unit>?): kotlin.Unit
