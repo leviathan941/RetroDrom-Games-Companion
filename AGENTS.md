@@ -19,7 +19,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | Module | Purpose |
 | --- | --- |
 | `:app` | Thin Android host: `MainActivity`, `MainApplication`, the Metro app graph and `ApplicationModule` (Android bindings, the license list), plus the app's identity resources. Its UI moved to `:app:shared` in B9. |
-| `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. |
+| `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. KMP: the runner in `commonMain`, the Android steps and their registry in `androidMain`. |
 | `:app:shared` | KMP home of the UI layer: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is the root composable `AppUi` and what Metro needs. |
 | `:browser` | In-app browser: the `InAppBrowser` interface and the `expect` `rememberInAppBrowser()`, on Custom Tabs (`androidx.browser`) on Android and `SFSafariViewController` on iOS. |
 | `:common` | Shared constants (site base URL), DI keys, request codes, the `kotlin.time.Clock` binding. |

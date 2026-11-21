@@ -22,7 +22,7 @@ package org.leviathan941.retrodromcompanion.app.migration.internal
  * A single step of the on-device app data migration.
  *
  * Steps are contributed to the runner as a multibound set, so an implementation may inject
- * whatever it needs (a [android.content.Context], a repository) instead of being handed a
+ * whatever it needs (a platform context, a repository) instead of being handed a
  * fixed set of arguments.
  *
  * Implementations must be safe to run on a fresh install: a brand-new install starts at
