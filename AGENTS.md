@@ -18,8 +18,8 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 
 | Module | Purpose |
 | --- | --- |
-| `:app` | Thin Android host: `MainActivity`, and `MainApplication`, which builds `SharedApplication` from what only it can see (version name, main activity, the license list generated from its classpath), plus the app's identity resources. Its UI and DI moved to `:app:shared` in B9d. |
-| `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. KMP: the runner in `commonMain`, the Android steps and their registry in `androidMain`. |
+| `:app:android` | Thin Android host (`app/android`): `MainActivity`, and `MainApplication`, which builds `SharedApplication` from what only it can see (version name, main activity, the license list generated from its classpath), plus the app's identity resources. Its UI and DI moved to `:app:shared` in B9d; it was `:app` until B9e. `:app` itself is only the parent directory of the three `:app:*` projects and has no build script. |
+| `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app:android` only starts the run and gates its first frame on it; the step registry is `internal`. KMP: the runner in `commonMain`, the Android steps and their registry in `androidMain`. |
 | `:app:shared` | KMP home of the UI layer and the app graph: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`; `SharedApplication`, the common `AppGraph` and, in `androidMain`, `AndroidAppGraph`. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is `AppUi`, `SharedApplication`, `AppGraph` and `AppLibrariesSource`. |
 | `:browser` | In-app browser: the `InAppBrowser` interface and the `expect` `rememberInAppBrowser()`, on Custom Tabs (`androidx.browser`) on Android and `SFSafariViewController` on iOS. |
 | `:common` | Shared constants (site base URL), DI keys, request codes, the `kotlin.time.Clock` binding. |
@@ -30,7 +30,7 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 | `:notification` | The `Notifications` and `PushMessaging` interfaces and the push deeplink helpers in `commonMain`; Android's channels and notification builder in `androidMain`. |
 | `:permission` | Compose permission request and rationale UI on Calf (`calf-permissions`). |
 | `:preferences` | DataStore-backed UI/promo preferences with migrations. |
-| `:resources` | The first KMP module. UI strings (with `values-ru`) and drawables as compose resources in `commonMain/composeResources`, read through its public `Res`; plus, in `androidMain/res`, the Android resources Android itself reads for push (channel strings, notification icon and colour, default channel id). `:app` keeps only its identity: label, launcher icons, theme. |
+| `:resources` | The first KMP module. UI strings (with `values-ru`) and drawables as compose resources in `commonMain/composeResources`, read through its public `Res`; plus, in `androidMain/res`, the Android resources Android itself reads for push (channel strings, notification icon and colour, default channel id). `:app:android` keeps only its identity: label, launcher icons, theme. |
 | `:rss-reader` | Pages the cached feed with Paging 3 and refills it via a `RemoteMediator`. |
 
 Versions live in `gradle/libs.versions.toml`; SDK/JVM/app-version constants live in
@@ -44,13 +44,13 @@ Read them from there rather than restating them here — version numbers in this
   applies one of its convention plugins instead of `com.android.*` directly:
   `retrodrom.android-library` (every Android-only library), `retrodrom.kmp-library` (KMP modules:
   Android, `iosArm64`, `iosSimulatorArm64`, plus `com.android.lint`, which the KMP library plugin
-  needs to register any lint task) or `retrodrom.android-application` (`:app`). They set
+  needs to register any lint task) or `retrodrom.android-application` (`:app:android`). They set
   the SDK levels, the JVM 17 targets and lint's `warningsAsErrors`; a module script keeps its
   `namespace` and whatever is its own. Its constants are visible only to a script that applies one
   of those plugins. AGP and KGP are `compileOnly` there: at runtime they come from the root
   script's `apply false` list, which is where their versions are set.
 - Every library module enables `ExplicitApiMode.Strict` through its convention plugin —
-  public declarations need explicit `public` and explicit return types. `:app` does not.
+  public declarations need explicit `public` and explicit return types. `:app:android` does not.
 - Compose resources (`org.jetbrains.compose` plugin) generate `Res` only in a KMP or Kotlin/JVM
   module, never under AGP's built-in Kotlin, which is why they live in `:resources`. Their
   format arguments must be positional (`%1$s`, `%1$d`); `\n`, `\t` and `\uXXXX` are unescaped,
@@ -63,7 +63,7 @@ Read them from there rather than restating them here — version numbers in this
   common `AppGraph` interface and, in `androidMain`, the `@DependencyGraph(AppScope::class)`
   `AndroidAppGraph` implementing it. Metro wants the final graph in platform code whenever
   contributions are platform-specific, as `:firebase`'s and several `androidMain` ones are.
-  `MainApplication` builds it through `SharedApplication`, passing what only `:app` can see as
+  `MainApplication` builds it through `SharedApplication`, passing what only `:app:android` can see as
   graph factory parameters; framework-instantiated classes reach it through the `Application`. Any class carrying `@ContributesTo` / `@ContributesBinding` / `@ContributesIntoSet`
   must be **public** for Metro to merge it from another module — a contribution from an `internal`
   class is rejected ("its module is not a friend module to this one") and shows up as a
@@ -83,7 +83,7 @@ Read them from there rather than restating them here — version numbers in this
   and its source location — the practical way to diff the graph across a change.
 - Source files and module `build.gradle.kts` scripts carry the GPL v3 header
   (`RetroDrom Games Companion / Copyright (C) …`). Only the root `build.gradle.kts`,
-  `settings.gradle.kts`, `build-logic` and `app/build.gradle.kts` carry the Apache 2.0 header.
+  `settings.gradle.kts`, `build-logic` and `app/android/build.gradle.kts` carry the Apache 2.0 header.
   Copy a neighbouring file's header for its shape, but set the year deliberately: a new file
   takes the current year, while a file that is moved, renamed or rewritten in place keeps the
   year it already had.
@@ -149,16 +149,17 @@ last resort.
 The one exception is the version-update checks (`NewerVersionAvailable`, `GradleDependency`,
 `AndroidGradlePluginVersion`): the root `lint.xml`, which every module inherits, lowers them to
 `informational`, which `warningsAsErrors` does not promote. A new upstream release therefore
-shows up as a `Hint` in `:app`'s lint report (it flags `gradle/libs.versions.toml`) instead of
+shows up as a `Hint` in `:app:android`'s lint report (it flags `gradle/libs.versions.toml`) instead of
 failing the build.
 
-`:app` also sets `checkDependencies = true`, so its lint analyses the library modules'
+`:app:android` also sets `checkDependencies = true`, so its lint analyses the library modules'
 sources as well. Library modules that need a resource depend on `:resources` and read it from
 there (`org.leviathan941.retrodromcompanion.resources.R` or `Res`); no module declares
-placeholder resources for `:app` to override.
+placeholder resources for `:app:android` to override.
 
-`local.properties` (SDK path) and `app/google-services.json` are git-ignored but present
-locally; a build without the latter fails in the Google Services plugin.
+`local.properties` (SDK path) and `app/android/google-services.json` are git-ignored but present
+locally; a build without the latter fails in the Google Services plugin. It sat in `app/` until
+B9e, so a checkout from before then has to move it to `app/android/` by hand.
 
 ## KMP migration (in progress)
 
