@@ -22,27 +22,17 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
-import dev.zacsweers.metrox.viewmodel.metroViewModel
 import org.leviathan941.retrodromcompanion.app.MainApplication
 import org.leviathan941.retrodromcompanion.app.di.AppGraph
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrationState
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
-import org.leviathan941.retrodromcompanion.common.logging.Logger
 import org.leviathan941.retrodromcompanion.notification.POST_ID_PAYLOAD_DATA_KEY
 import org.leviathan941.retrodromcompanion.notification.extractDeeplink
-import org.leviathan941.retrodromcompanion.ui.MainView
-import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
-import org.leviathan941.retrodromcompanion.ui.navigation.matchDeepLink
-import org.leviathan941.retrodromcompanion.ui.theme.MainTheme
-import org.leviathan941.retrodromcompanion.ui.theme.SecondThemeColorScheme
-import org.leviathan941.retrodromcompanion.ui.theme.ThemeViewModel
-
-private val logger = Logger.withTag("MainActivity")
+import org.leviathan941.retrodromcompanion.ui.AppUi
 
 class MainActivity : ComponentActivity() {
     private val appGraph: AppGraph
@@ -56,34 +46,19 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().setKeepOnScreenCondition {
             appDataMigrator.state.value !is AppDataMigrationState.Finished
         }
-        val deepLinkDestination = extractDeeplink(
+        val deepLink = extractDeeplink(
             data = intent.dataString,
             postId = intent.getStringExtra(POST_ID_PAYLOAD_DATA_KEY),
-        )?.let { deeplink ->
-            matchDeepLink(deeplink).also {
-                logger.d { "Handle deeplink $deeplink: $it" }
-            }
-        }
+        )
         setContent {
             CompositionLocalProvider(
                 LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
             ) {
-                val themeViewModel = metroViewModel<ThemeViewModel>(
-                    key = ViewModelKeys.THEME_VIEW_MODEL,
-                )
-                val appTheme by themeViewModel.appTheme.collectAsState()
                 val migrationState by appDataMigrator.state.collectAsStateWithLifecycle()
-
-                MainTheme(
-                    selectedTheme = appTheme,
-                    materialColorSchemes = SecondThemeColorScheme,
-                ) {
-                    // Nothing may read app data until the migrations are over. Holding the splash
-                    // screen alone would not do: the content underneath still composes.
-                    if (migrationState is AppDataMigrationState.Finished) {
-                        MainView(deepLinkDestination)
-                    }
-                }
+                AppUi(
+                    deepLink = deepLink,
+                    isAppDataReady = migrationState is AppDataMigrationState.Finished,
+                )
             }
         }
     }

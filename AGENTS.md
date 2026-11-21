@@ -18,9 +18,9 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 
 | Module | Purpose |
 | --- | --- |
-| `:app` | UI layer: Compose screens, drawer, top bar, navigation entries, themes. Its view models and navigation keys moved to `:app:shared` in B9b. |
+| `:app` | Thin Android host: `MainActivity`, `MainApplication`, the Metro app graph and `ApplicationModule` (Android bindings, the license list), plus the app's identity resources. Its UI moved to `:app:shared` in B9. |
 | `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. |
-| `:app:shared` | KMP home of the UI layer, moving out of `:app` in B9: so far the view models, navigation keys and actions, `UserMessages` and `ThemeType` (with a per-platform theme list). Packages unchanged. |
+| `:app:shared` | KMP home of the UI layer: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is the root composable `AppUi` and what Metro needs. |
 | `:browser` | In-app browser: the `InAppBrowser` interface and the `expect` `rememberInAppBrowser()`, on Custom Tabs (`androidx.browser`) on Android and `SFSafariViewController` on iOS. |
 | `:common` | Shared constants (site base URL), DI keys, request codes, the `kotlin.time.Clock` binding. |
 | `:firebase` | FCM messaging service and the Firebase implementation of `PushMessaging` (topic subscriptions). |
@@ -126,10 +126,13 @@ which needs Xcode. `:network:cache`'s Room round trip is in `iosTest`, so only
 `iosSimulatorArm64Test` runs it: the bundled SQLite driver has no native library for the Android
 host JVM. Compilation, Android lint, ktlint and detekt are otherwise the gate.
 
-`build` also runs the Compose stability analyzer's `:app:{debug,release}StabilityCheck` against
-the committed baseline in `app/stability/`: a composable whose parameters become less stable
-fails the build. When a change is intended (a new or changed composable), regenerate the baseline
-with `./gradlew :app:stabilityDump` and commit it with the change.
+`build` also runs the Compose stability analyzer's `:app:shared:stabilityCheck` against the
+committed baseline `app/shared/stability/shared.stability`: a composable whose parameters become
+less stable fails the build. `:app:shared` is a KMP module, so the analyzer writes one baseline,
+not one per variant; its build script pins both tasks to the Android compilation, because the
+iOS one spells types and infers stability differently. When a change is intended (a new or
+changed composable), regenerate the baseline with `./gradlew :app:shared:stabilityDump` and commit
+it with the change.
 
 Every module sets `lint { warningsAsErrors = true }`, so a lint *warning* in any module
 fails the build — the exit code is the gate, and per-module reports under

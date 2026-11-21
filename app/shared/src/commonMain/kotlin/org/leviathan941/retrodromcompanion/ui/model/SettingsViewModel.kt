@@ -43,13 +43,13 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 public class SettingsViewModel(
     private val pushNotificationModel: PushNotificationModel,
     private val preferencesRepository: PreferencesRepository,
-    @AppVersionName public val appVersionName: String,
+    @AppVersionName internal val appVersionName: String,
 ) : ViewModel() {
 
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
-    public val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
+    internal val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
 
-    public val subscribedPushTopics: StateFlow<Set<PushMessaging.Topic>>
+    internal val subscribedPushTopics: StateFlow<Set<PushMessaging.Topic>>
         get() = pushNotificationModel.subscribedPushTopics
 
     init {
@@ -62,20 +62,20 @@ public class SettingsViewModel(
         }
     }
 
-    public fun setAppTheme(appTheme: ThemeType) {
+    internal fun setAppTheme(appTheme: ThemeType) {
         viewModelScope.launch {
             preferencesRepository.uiEditor.setAppTheme(appTheme.value)
         }
     }
 
-    public fun subscribeToTopic(topic: PushMessaging.Topic) {
+    internal fun subscribeToTopic(topic: PushMessaging.Topic) {
         pushNotificationModel.subscribeToTopic(
             topic = topic,
             showMessageOnFailed = true,
         )
     }
 
-    public fun unsubscribeFromTopic(topic: PushMessaging.Topic) {
+    internal fun unsubscribeFromTopic(topic: PushMessaging.Topic) {
         pushNotificationModel.unsubscribeFromTopic(
             topic = topic,
             showMessageOnFailed = true,

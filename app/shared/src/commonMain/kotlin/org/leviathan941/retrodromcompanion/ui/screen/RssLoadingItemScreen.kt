@@ -1,0 +1,120 @@
+/*
+ * RetroDrom Games Companion
+ * Copyright (C) 2025 Alexey Kuzin <amkuzink@gmail.com>.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package org.leviathan941.retrodromcompanion.ui.screen
+
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import org.jetbrains.compose.resources.stringResource
+import dev.zacsweers.metrox.viewmodel.assistedMetroViewModel
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.rss_feed_post_loading_item_title
+import org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewModel
+import org.leviathan941.retrodromcompanion.ui.model.RssLoadingItemViewState
+import org.leviathan941.retrodromcompanion.ui.model.ViewModelKeys
+import org.leviathan941.retrodromcompanion.ui.navigation.MainNavActions
+import org.leviathan941.retrodromcompanion.ui.navigation.RssFeedDestination
+import org.leviathan941.retrodromcompanion.ui.screen.loading.LoadingState
+import org.leviathan941.retrodromcompanion.ui.toDestination
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
+import org.leviathan941.retrodromcompanion.ui.topbar.TopBarView
+
+@Composable
+internal fun RssLoadingItemScreen(
+    item: RssFeedDestination.LoadingItem,
+    navActions: MainNavActions,
+    modifier: Modifier = Modifier,
+) {
+    val viewModel = assistedMetroViewModel<
+        RssLoadingItemViewModel,
+        RssLoadingItemViewModel.Factory,
+        >(
+        key = ViewModelKeys.RSS_ITEM_LOADING_MODEL,
+        createViewModel = {
+            create(item)
+        },
+    )
+    val viewState by viewModel.viewState.collectAsState()
+    RssLoadingItemContent(
+        state = viewState,
+        navActions = navActions,
+        onCancel = viewModel::cancel,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun RssLoadingItemContent(
+    state: RssLoadingItemViewState,
+    navActions: MainNavActions,
+    onCancel: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    when (state) {
+        is RssLoadingItemViewState.Loading -> {
+            Scaffold(
+                modifier = modifier,
+                topBar = {
+                    TopBarView(
+                        prefs = TopBarPrefs(
+                            title = stringResource(Res.string.rss_feed_post_loading_item_title),
+                            navButton = TopBarNavButton.BACK,
+                        ),
+                        onNavButtonClick = { navButton ->
+                            when (navButton) {
+                                TopBarNavButton.BACK -> {
+                                    onCancel()
+                                    navActions.navigateToStartedRssFeed()
+                                }
+
+                                else -> Unit
+                            }
+                        },
+                    )
+                },
+            ) { paddings ->
+                LoadingView(
+                    modifier = Modifier
+                        .padding(paddings)
+                        .fillMaxSize(),
+                    state = LoadingState.InProgress,
+                )
+            }
+        }
+
+        // Navigating changes the back stack, which is state: never write it during composition.
+        is RssLoadingItemViewState.Error -> LaunchedEffect(state) {
+            navActions.navigateToStartedRssFeed()
+        }
+
+        is RssLoadingItemViewState.Success -> LaunchedEffect(state) {
+            state.item.toDestination()?.let {
+                navActions.navigateToRssItemDescription(it)
+            } ?: run {
+                navActions.navigateToStartedRssFeed()
+            }
+        }
+    }
+}

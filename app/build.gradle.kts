@@ -21,7 +21,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.google.services)
     alias(libs.plugins.aboutlibraries)
-    alias(libs.plugins.skydoves.compose.stability.analyzer)
     alias(libs.plugins.zacsweers.metro)
 }
 
@@ -79,23 +78,15 @@ android {
 
 dependencies {
     implementation(project(":app:migration"))
-    implementation(project(":browser"))
     implementation(project(":common"))
     implementation(project(":firebase"))
-    implementation(project(":html-text"))
-    implementation(project(":html-text:imagecontent"))
     implementation(project(":network"))
     implementation(project(":network:cache"))
     implementation(project(":notification"))
-    implementation(project(":permission"))
     implementation(project(":preferences"))
-    implementation(project(":resources"))
     implementation(project(":rss-reader"))
     implementation(project(":app:shared"))
 
-    implementation(libs.aboutlibraries.compose.m3)
-
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.process)
@@ -105,20 +96,9 @@ dependencies {
 
     implementation(libs.google.material)
 
-    implementation(libs.jetbrains.compose.ui)
-    implementation(libs.jetbrains.compose.ui.tooling.preview)
-    implementation(libs.jetbrains.compose.material.icons.core)
-    implementation(libs.jetbrains.compose.material3)
-
     implementation(libs.androidx.activity.compose)
 
-    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.androidx.navigation3.runtime)
-    implementation(libs.jetbrains.androidx.navigation3.ui)
-
-    implementation(libs.androidx.paging.compose)
-
-    implementation(libs.coil3.compose)
+    implementation(libs.coil3.coil)
     implementation(libs.coil3.network.ktor3)
 
     implementation(platform(libs.ktor.bom))
@@ -126,12 +106,8 @@ dependencies {
 
     implementation(libs.androidx.datastore.preferences)
 
-    implementation(libs.jetbrains.kotlinx.collections.immutable)
-
     implementation(libs.zacsweers.metrox.viewmodel)
     implementation(libs.zacsweers.metrox.viewmodel.compose)
-
-    debugImplementation(libs.jetbrains.compose.ui.tooling)
 
     lintChecks(libs.slack.compose.lint.checks)
 }

@@ -20,12 +20,12 @@ package org.leviathan941.retrodromcompanion.ui.model
 
 import org.leviathan941.retrodromcompanion.rssreader.RssChannelItem
 
-public sealed interface RssLoadingItemViewState {
-    public data object Loading : RssLoadingItemViewState
+internal sealed interface RssLoadingItemViewState {
+    data object Loading : RssLoadingItemViewState
 
-    public data object Error : RssLoadingItemViewState
+    data object Error : RssLoadingItemViewState
 
-    public data class Success(
-        public val item: RssChannelItem,
+    data class Success(
+        val item: RssChannelItem,
     ) : RssLoadingItemViewState
 }

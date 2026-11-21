@@ -22,14 +22,14 @@ import androidx.compose.runtime.Stable
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarNavButton
 import org.leviathan941.retrodromcompanion.ui.topbar.TopBarPrefs
 
-public sealed interface MainNavScreen {
-    public val topBarPrefs: TopBarPrefs
+internal sealed interface MainNavScreen {
+    val topBarPrefs: TopBarPrefs
 
     @Stable
-    public data class RssFeed(
-        public val id: Int,
-        public val title: String,
-        public val channelUrl: String,
+    data class RssFeed(
+        val id: Int,
+        val title: String,
+        val channelUrl: String,
     ) : MainNavScreen {
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(
@@ -39,8 +39,8 @@ public sealed interface MainNavScreen {
     }
 
     @Stable
-    public data class Settings(
-        public val title: String = "",
+    data class Settings(
+        val title: String = "",
     ) : MainNavScreen {
         override val topBarPrefs: TopBarPrefs
             get() = TopBarPrefs(

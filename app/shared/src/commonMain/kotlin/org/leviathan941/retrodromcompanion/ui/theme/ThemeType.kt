@@ -25,8 +25,8 @@ import org.leviathan941.retrodromcompanion.resources.theme_name_dynamic
 import org.leviathan941.retrodromcompanion.resources.theme_name_light
 import org.leviathan941.retrodromcompanion.resources.theme_name_system
 
-public enum class ThemeType(
-    public val value: String,
+internal enum class ThemeType(
+    val value: String,
 ) {
     LIGHT("light"),
     DARK("dark"),
@@ -34,18 +34,18 @@ public enum class ThemeType(
     DYNAMIC("dynamic"),
     ;
 
-    public companion object {
+    companion object {
         internal fun fromValue(value: String?): ThemeType =
             supportedEntries().firstOrNull { it.value == value } ?: APP_THEME_DEFAULT
 
-        public fun ThemeType.toStringResource(): StringResource = when (this) {
+        fun ThemeType.toStringResource(): StringResource = when (this) {
             LIGHT -> Res.string.theme_name_light
             DARK -> Res.string.theme_name_dark
             SYSTEM -> Res.string.theme_name_system
             DYNAMIC -> Res.string.theme_name_dynamic
         }
 
-        public fun supportedEntries(): List<ThemeType> = platformThemeTypes()
+        fun supportedEntries(): List<ThemeType> = platformThemeTypes()
     }
 }
 

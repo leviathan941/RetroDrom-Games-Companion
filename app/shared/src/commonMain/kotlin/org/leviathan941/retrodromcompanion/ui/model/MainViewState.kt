@@ -20,8 +20,8 @@ package org.leviathan941.retrodromcompanion.ui.model
 
 import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 
-public sealed interface MainViewState {
-    public data class RssFeed(
-        public val screenData: Map<Int, MainNavScreen.RssFeed>,
+internal sealed interface MainViewState {
+    data class RssFeed(
+        val screenData: Map<Int, MainNavScreen.RssFeed>,
     ) : MainViewState
 }

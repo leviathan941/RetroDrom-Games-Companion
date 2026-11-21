@@ -29,14 +29,14 @@ import org.jetbrains.compose.resources.StringResource
 /**
  * A short message for the user, shown by the single snackbar host at the root of the UI.
  */
-public sealed interface UserMessage {
-    public data class Text(
-        public val text: String,
+internal sealed interface UserMessage {
+    data class Text(
+        val text: String,
     ) : UserMessage
 
-    public data class Resource(
-        public val textRes: StringResource,
-        public val formatArgs: List<Any> = emptyList(),
+    data class Resource(
+        val textRes: StringResource,
+        val formatArgs: List<Any> = emptyList(),
     ) : UserMessage
 }
 

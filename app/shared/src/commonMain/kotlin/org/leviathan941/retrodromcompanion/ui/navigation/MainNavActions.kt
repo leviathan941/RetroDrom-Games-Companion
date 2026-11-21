@@ -21,20 +21,20 @@ package org.leviathan941.retrodromcompanion.ui.navigation
 import androidx.navigation3.runtime.NavKey
 import org.leviathan941.retrodromcompanion.ui.mainViewLogger
 
-public data class MainNavPredefinedDestinations(
-    public val rssFeedStart: RssFeedDestination.Feed,
+internal data class MainNavPredefinedDestinations(
+    val rssFeedStart: RssFeedDestination.Feed,
 )
 
-public interface MainNavActions {
-    public fun navigateBack()
-    public fun navigateToStartedRssFeed()
-    public fun navigateToRssFeed(destination: RssFeedDestination.Feed)
-    public fun navigateToRssItemDescription(destination: RssFeedDestination.ItemDescription)
-    public fun navigateToSettings()
-    public fun navigateToSettingsItem(destination: SettingsDestination)
+internal interface MainNavActions {
+    fun navigateBack()
+    fun navigateToStartedRssFeed()
+    fun navigateToRssFeed(destination: RssFeedDestination.Feed)
+    fun navigateToRssItemDescription(destination: RssFeedDestination.ItemDescription)
+    fun navigateToSettings()
+    fun navigateToSettingsItem(destination: SettingsDestination)
 }
 
-public class MainNavActionsImpl(
+internal class MainNavActionsImpl(
     private val backStack: MutableList<NavKey>,
     private val predefinedDestinations: MainNavPredefinedDestinations,
 ) : MainNavActions {
@@ -97,7 +97,7 @@ public class MainNavActionsImpl(
     }
 }
 
-public class MainNavActionsStub : MainNavActions {
+internal class MainNavActionsStub : MainNavActions {
     override fun navigateBack(): Unit = Unit
     override fun navigateToStartedRssFeed(): Unit = Unit
     override fun navigateToRssFeed(destination: RssFeedDestination.Feed): Unit = Unit

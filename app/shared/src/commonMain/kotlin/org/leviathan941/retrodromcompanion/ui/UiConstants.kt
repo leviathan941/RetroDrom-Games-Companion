@@ -21,6 +21,6 @@ package org.leviathan941.retrodromcompanion.ui
 import org.leviathan941.retrodromcompanion.common.logging.Logger
 
 internal val mainViewLogger = Logger.withTag("MainView")
-public val rssScreenLogger: Logger = Logger.withTag("RssScreen")
+internal val rssScreenLogger: Logger = Logger.withTag("RssScreen")
 
-public const val MAIN_RSS_FEED_ID: Int = 0
+internal const val MAIN_RSS_FEED_ID: Int = 0

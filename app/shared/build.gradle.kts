@@ -16,11 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import com.skydoves.compose.stability.gradle.StabilityCheckTask
+import com.skydoves.compose.stability.gradle.StabilityDumpTask
+
 plugins {
     id("retrodrom.kmp-library")
-    // Stability inference for the state classes and navigation keys :app's composables take.
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.jetbrains.kotlin.serialization)
+    alias(libs.plugins.skydoves.compose.stability.analyzer)
     alias(libs.plugins.zacsweers.metro)
 }
 
@@ -35,25 +38,63 @@ kotlin {
     }
     sourceSets {
         commonMain.dependencies {
-            // Libs is part of the API: LicensesViewModel exposes it, :app binds AppLibrariesSource.
+            // Libs are part of the API: LicensesViewModel exposes it, :app binds AppLibrariesSource.
             api(libs.aboutlibraries.core)
 
+            implementation(project(":browser"))
             implementation(project(":common"))
+            implementation(project(":html-text"))
+            implementation(project(":html-text:imagecontent"))
             implementation(project(":network:cache"))
             implementation(project(":notification"))
+            implementation(project(":permission"))
             implementation(project(":preferences"))
             implementation(project(":resources"))
             implementation(project(":rss-reader"))
 
+            implementation(libs.aboutlibraries.compose.m3)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(libs.androidx.navigation3.runtime)
+            implementation(libs.androidx.paging.compose)
+            implementation(libs.coil3.compose)
+            implementation(libs.jetbrains.androidx.navigation3.ui)
+            implementation(libs.jetbrains.compose.material.icons.core)
+            implementation(libs.jetbrains.compose.material3)
             implementation(libs.jetbrains.compose.runtime)
+            implementation(libs.jetbrains.compose.ui)
+            implementation(libs.jetbrains.compose.ui.tooling.preview)
             implementation(libs.jetbrains.kotlinx.collections.immutable)
             implementation(libs.jetbrains.kotlinx.coroutines.core)
             implementation(libs.jetbrains.kotlinx.serialization.json)
             implementation(libs.zacsweers.metrox.viewmodel)
+            implementation(libs.zacsweers.metrox.viewmodel.compose)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
         }
         commonTest.dependencies {
             implementation(libs.jetbrains.kotlin.test)
         }
     }
+}
+
+// The stability tasks read the first stability-info.json among the KMP compilations, and the
+// Android and iOS ones differ: native spells defaulted parameter types nullable and infers
+// NavBackStack unstable. Pin both tasks to the Android compilation, the one the app ships.
+val androidStabilityInfo =
+    layout.buildDirectory.file("stability/compileAndroidMain/stability-info.json")
+tasks.withType<StabilityDumpTask>().configureEach {
+    stabilityInputFiles.setFrom(androidStabilityInfo)
+    dependsOn("compileAndroidMain")
+}
+tasks.withType<StabilityCheckTask>().configureEach {
+    stabilityInputFiles.setFrom(androidStabilityInfo)
+    dependsOn("compileAndroidMain")
+}
+
+dependencies {
+    // Renders @Preview in the IDE; the KMP Android target has no debug variant.
+    androidRuntimeClasspath(libs.jetbrains.compose.ui.tooling)
+
+    lintChecks(libs.slack.compose.lint.checks)
 }

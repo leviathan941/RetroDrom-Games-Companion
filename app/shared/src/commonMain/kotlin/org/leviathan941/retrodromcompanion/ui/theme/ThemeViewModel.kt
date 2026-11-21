@@ -40,7 +40,7 @@ public class ThemeViewModel(
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)
-    public val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
+    internal val appTheme: StateFlow<ThemeType> = _appTheme.asStateFlow()
 
     init {
         viewModelScope.launch {

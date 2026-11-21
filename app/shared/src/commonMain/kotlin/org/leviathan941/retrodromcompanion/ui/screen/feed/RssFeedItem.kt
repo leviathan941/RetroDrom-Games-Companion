@@ -1,0 +1,187 @@
+/*
+ * RetroDrom Games Companion
+ * Copyright (C) 2024 Alexey Kuzin <amkuzink@gmail.com>.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package org.leviathan941.retrodromcompanion.ui.screen.feed
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.layout.ContentScale
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import org.leviathan941.retrodromcompanion.resources.Res
+import org.leviathan941.retrodromcompanion.resources.google_material_broken_image
+import org.leviathan941.retrodromcompanion.resources.google_material_image_placeholder
+import org.leviathan941.retrodromcompanion.resources.google_material_schedule
+import org.leviathan941.retrodromcompanion.resources.rss_feed_item_publication_icon_desc
+import org.leviathan941.retrodromcompanion.common.logging.Logger
+import org.leviathan941.retrodromcompanion.ui.toRssFeedPublicationTime
+import kotlin.time.Instant
+
+private val logger = Logger.withTag("RssFeedItem")
+
+@Composable
+internal fun RssFeedItem(
+    title: String,
+    categories: ImmutableList<String>,
+    pubDate: Instant,
+    modifier: Modifier = Modifier,
+    imageUrl: String? = null,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(RssFeedItemPaddings),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        val nonImportantColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+
+        Row(
+            modifier = Modifier.height(75.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (imageUrl != null) {
+                AsyncImage(
+                    modifier = Modifier
+                        .size(75.dp)
+                        .clip(RoundedCornerShape(3.dp)),
+                    model = ImageRequest.Builder(LocalPlatformContext.current)
+                        .data(imageUrl)
+                        .build(),
+                    placeholder = painterResource(
+                        Res.drawable.google_material_image_placeholder,
+                    ),
+                    error = painterResource(
+                        Res.drawable.google_material_broken_image,
+                    ),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    filterQuality = FilterQuality.Low,
+                    onError = { error ->
+                        logger.e(error.result.throwable) { "Error while loading image" }
+                    },
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .padding(all = 0.dp)
+                    .wrapContentHeight(),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f),
+                    contentAlignment = Alignment.TopCenter,
+                ) {
+                    Text(
+                        text = title,
+                        maxLines = 2,
+                        style = MaterialTheme.typography.titleMedium,
+                        overflow = TextOverflow.Ellipsis,
+                        lineHeight = 24.sp,
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .wrapContentHeight(),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        modifier = Modifier.size(12.dp),
+                        painter = painterResource(Res.drawable.google_material_schedule),
+                        contentDescription = stringResource(
+                            Res.string.rss_feed_item_publication_icon_desc,
+                        ),
+                        colorFilter = ColorFilter.tint(
+                            color = nonImportantColor,
+                        ),
+                    )
+                    Text(
+                        text = pubDate.toRssFeedPublicationTime(),
+                        maxLines = 1,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = nonImportantColor,
+                    )
+
+                    if (categories.isNotEmpty()) {
+                        Text(
+                            text = "\u2014",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = nonImportantColor,
+                        )
+                        Text(
+                            text = categories.joinToString(", "),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = nonImportantColor,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+)
+@Composable
+@Suppress("MagicNumber")
+private fun RssFeedItemPreview() = RssFeedItem(
+    modifier = Modifier,
+    title = "Very interesting news! Be hurry to read it! Do not miss! But be aware, " +
+        "it is a loooong title!",
+    categories = persistentListOf(
+        "Category 1",
+        "Category 2",
+        "Category 3",
+        "Category 4",
+        "Category 5",
+        "Category 6",
+    ),
+    pubDate = Instant.parse("2024-03-01T12:00:00Z"),
+    imageUrl = "https://example.com/image.jpg",
+)

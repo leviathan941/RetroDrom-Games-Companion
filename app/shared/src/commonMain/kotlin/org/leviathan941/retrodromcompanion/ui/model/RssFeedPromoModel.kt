@@ -46,7 +46,7 @@ public class RssFeedPromoModel(
     private val pushNotificationModel: PushNotificationModel,
 ) : ViewModel() {
 
-    public val promoState: StateFlow<RssFeedPromoState> = run {
+    internal val promoState: StateFlow<RssFeedPromoState> = run {
         val isPushPostsPromoAllowed = preferencesRepository.promo
             .cancellable()
             .map { prefs ->
@@ -74,7 +74,7 @@ public class RssFeedPromoModel(
         )
     }
 
-    public fun subscribePushPostsTopic() {
+    internal fun subscribePushPostsTopic() {
         pushNotificationModel.subscribeToTopic(
             topic = PushMessaging.Topic.NEW_RETRODROM_POSTS,
             showMessageOnFailed = false,

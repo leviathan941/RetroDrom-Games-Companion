@@ -42,10 +42,10 @@ public class UserMessagesViewModel(
      * Each message is delivered to exactly one collector, so the UI must collect this in one
      * place only — the snackbar host at its root.
      */
-    public val messages: Flow<UserMessage>
+    internal val messages: Flow<UserMessage>
         get() = userMessages.messages
 
-    public fun show(message: UserMessage) {
+    internal fun show(message: UserMessage) {
         userMessages.show(message)
     }
 }

@@ -41,7 +41,7 @@ public sealed interface AppDestination : NavKey
  * require: Android's reflection-based alternative is not multiplatform.
  */
 @OptIn(ExperimentalSerializationApi::class)
-public val appDestinationSavedStateConfiguration: SavedStateConfiguration =
+internal val appDestinationSavedStateConfiguration: SavedStateConfiguration =
     SavedStateConfiguration {
         serializersModule = SerializersModule {
             polymorphic(NavKey::class) {
@@ -59,50 +59,50 @@ private val feedItemDeepLinkMatcher = UriDeepLinkMatcher(
 )
 
 /** Returns the destination [deeplink] opens, or `null` when it matches none. */
-public fun matchDeepLink(deeplink: String): RssFeedDestination.LoadingItem? =
+internal fun matchDeepLink(deeplink: String): RssFeedDestination.LoadingItem? =
     feedItemDeepLinkMatcher.match(DeepLinkRequest(deeplink))?.key
 
-public sealed interface SettingsDestination : AppDestination {
+internal sealed interface SettingsDestination : AppDestination {
     @Serializable
-    public data object Main : SettingsDestination
+    data object Main : SettingsDestination
 
     @Serializable
-    public data object AppTheme : SettingsDestination
+    data object AppTheme : SettingsDestination
 
     @Serializable
-    public data object Notifications : SettingsDestination
+    data object Notifications : SettingsDestination
 
     @Serializable
-    public data object Feedback : SettingsDestination
+    data object Feedback : SettingsDestination
 
     @Serializable
-    public data object Licenses : SettingsDestination
+    data object Licenses : SettingsDestination
 }
 
 public sealed interface RssFeedDestination : AppDestination {
     @Stable
     @Serializable
     public data class Feed(
-        public val id: Int,
-        public val title: String,
-        public val channelUrl: String,
+        internal val id: Int,
+        internal val title: String,
+        internal val channelUrl: String,
     ) : RssFeedDestination
 
     @Stable
     @Serializable
     public data class ItemDescription(
-        public val title: String,
-        public val link: String,
-        public val pubDate: String,
-        public val html: String,
-        public val creator: String?,
+        internal val title: String,
+        internal val link: String,
+        internal val pubDate: String,
+        internal val html: String,
+        internal val creator: String?,
     ) : RssFeedDestination
 
     @Stable
     @Serializable
     public data class LoadingItem(
-        public val postId: String,
+        internal val postId: String,
         @SerialName(RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL)
-        public val channelUrl: String = Constants.RETRODROM_BASE_URL,
+        internal val channelUrl: String = Constants.RETRODROM_BASE_URL,
     ) : RssFeedDestination
 }

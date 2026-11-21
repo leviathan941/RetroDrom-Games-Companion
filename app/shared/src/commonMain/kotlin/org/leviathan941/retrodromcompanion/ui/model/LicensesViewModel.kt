@@ -38,7 +38,7 @@ public class LicensesViewModel(
     private val appLibrariesSource: AppLibrariesSource,
 ) : ViewModel() {
 
-    public val libraries: StateFlow<Libs?>
+    internal val libraries: StateFlow<Libs?>
         field = MutableStateFlow<Libs?>(null)
 
     init {

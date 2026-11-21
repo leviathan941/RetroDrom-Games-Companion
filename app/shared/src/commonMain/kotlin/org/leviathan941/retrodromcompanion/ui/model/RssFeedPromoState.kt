@@ -18,6 +18,6 @@
 
 package org.leviathan941.retrodromcompanion.ui.model
 
-public data class RssFeedPromoState(
-    public val shouldApplyPushPostsPromo: Boolean,
+internal data class RssFeedPromoState(
+    val shouldApplyPushPostsPromo: Boolean,
 )

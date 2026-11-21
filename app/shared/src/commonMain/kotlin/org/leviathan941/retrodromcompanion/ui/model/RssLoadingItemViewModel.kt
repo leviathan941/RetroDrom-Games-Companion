@@ -49,7 +49,7 @@ public class RssLoadingItemViewModel(
     private val _viewState = MutableStateFlow<RssLoadingItemViewState>(
         RssLoadingItemViewState.Loading,
     )
-    public val viewState: StateFlow<RssLoadingItemViewState> = _viewState.asStateFlow()
+    internal val viewState: StateFlow<RssLoadingItemViewState> = _viewState.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -61,7 +61,7 @@ public class RssLoadingItemViewModel(
         }
     }
 
-    public fun cancel() {
+    internal fun cancel() {
         viewModelScope.cancel()
     }
 

@@ -53,7 +53,7 @@ public class MainViewModel(
             screenData = emptyMap(),
         ),
     )
-    public val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
+    internal val uiState: StateFlow<MainViewState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -66,7 +66,7 @@ public class MainViewModel(
         refreshRssFeedData()
     }
 
-    public fun refreshRssFeedData() {
+    internal fun refreshRssFeedData() {
         viewModelScope.launch {
             feedCacheMutator.refreshCategories().onFailure { e ->
                 mainViewLogger.e(e) { "Failed to fetch RSS categories" }

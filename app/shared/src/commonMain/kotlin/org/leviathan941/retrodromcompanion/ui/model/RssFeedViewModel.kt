@@ -46,7 +46,7 @@ public class RssFeedViewModel(
     private val rssFeedProvider = rssFeedProviderFactory.create(channelUrl)
 
     private val _rssChannelItems = MutableStateFlow<PagingData<RssChannelItem>>(PagingData.empty())
-    public val rssChannelItems: StateFlow<PagingData<RssChannelItem>> =
+    internal val rssChannelItems: StateFlow<PagingData<RssChannelItem>> =
         _rssChannelItems.asStateFlow()
 
     init {
