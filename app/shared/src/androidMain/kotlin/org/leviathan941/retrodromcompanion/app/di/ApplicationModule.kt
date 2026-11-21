@@ -24,30 +24,20 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.mikepenz.aboutlibraries.Libs
-import com.mikepenz.aboutlibraries.util.withJson
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import org.leviathan941.retrodromcompanion.BuildConfig
-import org.leviathan941.retrodromcompanion.MainActivity
-import org.leviathan941.retrodromcompanion.R
-import org.leviathan941.retrodromcompanion.app.licenses.AppLibrariesSource
 import org.leviathan941.retrodromcompanion.common.di.ApplicationContext
 import org.leviathan941.retrodromcompanion.common.di.ApplicationCoroutineScope
-import org.leviathan941.retrodromcompanion.common.di.AppVersionName
-import org.leviathan941.retrodromcompanion.common.di.MainActivityClass
 import org.leviathan941.retrodromcompanion.common.di.MainDataStore
 import org.leviathan941.retrodromcompanion.preferences.createMainDataStore
 
 @BindingContainer
 @ContributesTo(AppScope::class)
-object ApplicationModule {
+internal object ApplicationModule {
 
     @Provides
     @ApplicationContext
@@ -64,22 +54,4 @@ object ApplicationModule {
     @SingleIn(AppScope::class)
     fun provideMainDataStore(application: Application): DataStore<Preferences> =
         createMainDataStore(application.applicationContext)
-
-    @Provides
-    @MainActivityClass
-    fun provideMainActivityClass(): Class<*> = MainActivity::class.java
-
-    @Provides
-    @AppVersionName
-    fun provideAppVersionName(): String = BuildConfig.VERSION_NAME
-
-    // The plugin generates R.raw.aboutlibraries from this module's classpath, the whole app's.
-    // Referencing it by id also keeps it from the resource shrinker.
-    @Provides
-    fun provideAppLibrariesSource(@ApplicationContext context: Context): AppLibrariesSource =
-        AppLibrariesSource {
-            withContext(Dispatchers.IO) {
-                Libs.Builder().withJson(context, R.raw.aboutlibraries).build()
-            }
-        }
 }

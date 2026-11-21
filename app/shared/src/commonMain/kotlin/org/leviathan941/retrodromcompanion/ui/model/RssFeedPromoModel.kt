@@ -41,7 +41,7 @@ private val logger = Logger.withTag("MainViewPromoModel")
 @Inject
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
-public class RssFeedPromoModel(
+internal class RssFeedPromoModel(
     private val preferencesRepository: PreferencesRepository,
     private val pushNotificationModel: PushNotificationModel,
 ) : ViewModel() {

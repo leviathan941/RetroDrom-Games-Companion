@@ -39,7 +39,7 @@ import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 @Inject
 @SingleIn(AppScope::class)
-public class PushNotificationModel(
+internal class PushNotificationModel(
     private val userMessages: UserMessages,
     @param:ApplicationCoroutineScope
     private val scope: CoroutineScope,

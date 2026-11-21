@@ -41,10 +41,12 @@ kotlin {
             // Libs are part of the API: LicensesViewModel exposes it, :app binds AppLibrariesSource.
             api(libs.aboutlibraries.core)
 
+            implementation(project(":app:migration"))
             implementation(project(":browser"))
             implementation(project(":common"))
             implementation(project(":html-text"))
             implementation(project(":html-text:imagecontent"))
+            implementation(project(":network"))
             implementation(project(":network:cache"))
             implementation(project(":notification"))
             implementation(project(":permission"))
@@ -56,7 +58,9 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.androidx.paging.compose)
+            implementation(libs.coil3.coil)
             implementation(libs.coil3.compose)
+            implementation(libs.coil3.network.ktor3)
             implementation(libs.jetbrains.androidx.navigation3.ui)
             implementation(libs.jetbrains.compose.material.icons.core)
             implementation(libs.jetbrains.compose.material3)
@@ -66,11 +70,17 @@ kotlin {
             implementation(libs.jetbrains.kotlinx.collections.immutable)
             implementation(libs.jetbrains.kotlinx.coroutines.core)
             implementation(libs.jetbrains.kotlinx.serialization.json)
+            implementation(project.dependencies.platform(libs.ktor.bom))
+            implementation(libs.ktor.client.core)
             implementation(libs.zacsweers.metrox.viewmodel)
             implementation(libs.zacsweers.metrox.viewmodel.compose)
         }
         androidMain.dependencies {
+            implementation(project(":firebase"))
+
             implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.androidx.lifecycle.process)
         }
         commonTest.dependencies {
             implementation(libs.jetbrains.kotlin.test)

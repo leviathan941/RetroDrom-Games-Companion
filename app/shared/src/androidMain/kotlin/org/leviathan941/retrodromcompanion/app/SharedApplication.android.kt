@@ -1,0 +1,42 @@
+/*
+ * RetroDrom Games Companion
+ * Copyright (C) 2026 Alexey Kuzin <amkuzink@gmail.com>.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package org.leviathan941.retrodromcompanion.app
+
+import android.app.Application
+import dev.zacsweers.metro.createGraphFactory
+import org.leviathan941.retrodromcompanion.app.di.AndroidAppGraph
+import org.leviathan941.retrodromcompanion.app.licenses.AppLibrariesSource
+
+/**
+ * Builds the [SharedApplication] for [application], from what only the application module can
+ * see: its version name, its main activity and the license list generated from its classpath.
+ */
+public fun SharedApplication(
+    application: Application,
+    appVersionName: String,
+    mainActivityClass: Class<*>,
+    appLibrariesSource: AppLibrariesSource,
+): SharedApplication = SharedApplication(
+    createGraphFactory<AndroidAppGraph.Factory>().create(
+        application = application,
+        appVersionName = appVersionName,
+        mainActivityClass = mainActivityClass,
+        appLibrariesSource = appLibrariesSource,
+    ),
+)

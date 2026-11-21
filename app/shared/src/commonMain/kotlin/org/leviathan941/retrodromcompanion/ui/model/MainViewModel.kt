@@ -44,7 +44,7 @@ import org.leviathan941.retrodromcompanion.ui.navigation.MainNavScreen
 @Inject
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
-public class MainViewModel(
+internal class MainViewModel(
     private val feedCacheProvider: FeedCacheProvider,
     private val feedCacheMutator: FeedCacheMutator,
 ) : ViewModel() {

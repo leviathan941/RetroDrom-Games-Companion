@@ -19,12 +19,15 @@
 package org.leviathan941.retrodromcompanion.app
 
 import android.app.Application
-import coil3.ImageLoader
-import coil3.PlatformContext
-import coil3.SingletonImageLoader
-import coil3.network.ktor3.KtorNetworkFetcherFactory
-import dev.zacsweers.metro.createGraphFactory
+import com.mikepenz.aboutlibraries.Libs
+import com.mikepenz.aboutlibraries.util.withJson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import org.leviathan941.retrodromcompanion.BuildConfig
+import org.leviathan941.retrodromcompanion.MainActivity
+import org.leviathan941.retrodromcompanion.R
 import org.leviathan941.retrodromcompanion.app.di.AppGraph
+import org.leviathan941.retrodromcompanion.app.licenses.AppLibrariesSource
 import org.leviathan941.retrodromcompanion.firebase.push.MessagingDependencies
 import org.leviathan941.retrodromcompanion.notification.Notifications
 import org.leviathan941.retrodromcompanion.notification.PushMessaging
@@ -32,9 +35,24 @@ import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 class MainApplication :
     Application(),
-    SingletonImageLoader.Factory,
     MessagingDependencies {
-    val appGraph: AppGraph by lazy { createGraphFactory<AppGraph.Factory>().create(this) }
+    private val sharedApplication: SharedApplication by lazy {
+        SharedApplication(
+            application = this,
+            appVersionName = BuildConfig.VERSION_NAME,
+            mainActivityClass = MainActivity::class.java,
+            // The plugin generates R.raw.aboutlibraries from this module's classpath, the whole
+            // app's. Referencing it by id also keeps it from the resource shrinker.
+            appLibrariesSource = AppLibrariesSource {
+                withContext(Dispatchers.IO) {
+                    Libs.Builder().withJson(applicationContext, R.raw.aboutlibraries).build()
+                }
+            },
+        )
+    }
+
+    val appGraph: AppGraph
+        get() = sharedApplication.appGraph
 
     override val notifications: Notifications
         get() = appGraph.notifications
@@ -47,21 +65,6 @@ class MainApplication :
 
     override fun onCreate() {
         super.onCreate()
-        // Call to initialize.
-        notifications
-        appGraph.appDataMigrator.start()
+        sharedApplication.onCreate()
     }
-
-    // Coil shares the app's base Ktor client rather than building its own, so image loading and
-    // the WordPress client use one engine and one connection pool.
-    override fun newImageLoader(context: PlatformContext): ImageLoader =
-        ImageLoader.Builder(context)
-            .components {
-                add(
-                    KtorNetworkFetcherFactory(
-                        httpClient = { appGraph.httpClient() },
-                    ),
-                )
-            }
-            .build()
 }

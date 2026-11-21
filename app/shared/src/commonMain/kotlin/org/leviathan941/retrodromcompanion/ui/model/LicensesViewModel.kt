@@ -34,7 +34,7 @@ import org.leviathan941.retrodromcompanion.app.licenses.AppLibrariesSource
 @Inject
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
-public class LicensesViewModel(
+internal class LicensesViewModel(
     private val appLibrariesSource: AppLibrariesSource,
 ) : ViewModel() {
 

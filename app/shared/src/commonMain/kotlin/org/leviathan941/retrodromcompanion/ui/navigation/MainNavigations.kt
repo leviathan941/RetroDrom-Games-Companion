@@ -34,7 +34,7 @@ import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_BASE
 import org.leviathan941.retrodromcompanion.notification.RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL
 
 @Serializable
-public sealed interface AppDestination : NavKey
+internal sealed interface AppDestination : NavKey
 
 /**
  * Saves the back stack by registering every [AppDestination] explicitly, which non-Android targets
@@ -79,30 +79,30 @@ internal sealed interface SettingsDestination : AppDestination {
     data object Licenses : SettingsDestination
 }
 
-public sealed interface RssFeedDestination : AppDestination {
+internal sealed interface RssFeedDestination : AppDestination {
     @Stable
     @Serializable
-    public data class Feed(
-        internal val id: Int,
-        internal val title: String,
-        internal val channelUrl: String,
+    data class Feed(
+        val id: Int,
+        val title: String,
+        val channelUrl: String,
     ) : RssFeedDestination
 
     @Stable
     @Serializable
-    public data class ItemDescription(
-        internal val title: String,
-        internal val link: String,
-        internal val pubDate: String,
-        internal val html: String,
-        internal val creator: String?,
+    data class ItemDescription(
+        val title: String,
+        val link: String,
+        val pubDate: String,
+        val html: String,
+        val creator: String?,
     ) : RssFeedDestination
 
     @Stable
     @Serializable
-    public data class LoadingItem(
-        internal val postId: String,
+    data class LoadingItem(
+        val postId: String,
         @SerialName(RETRODROM_FEED_ITEM_QUERY_CHANNEL_URL)
-        internal val channelUrl: String = Constants.RETRODROM_BASE_URL,
+        val channelUrl: String = Constants.RETRODROM_BASE_URL,
     ) : RssFeedDestination
 }

@@ -30,8 +30,8 @@ import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
 import kotlin.reflect.KClass
 
 /**
- * Builds every view model on the graph. Installed once, as `LocalMetroViewModelFactory`, in
- * `MainActivity`.
+ * Builds every view model on the graph. The platform host installs it once, as
+ * `LocalMetroViewModelFactory`.
  *
  * The bound type is written out rather than inferred: [MetroViewModelFactory] is an abstract
  * class implementing `ViewModelProvider.Factory`, and inference across that hierarchy would
@@ -43,7 +43,7 @@ import kotlin.reflect.KClass
 // Two of the overridden types do not fit on one line, and ktlint would put their continuation at
 // the property's own indent, where it reads as a separate parameter.
 @Suppress("ktlint:standard:indent", "ktlint:standard:parameter-list-spacing")
-class AppViewModelFactory(
+internal class AppViewModelFactory(
     override val viewModelProviders:
         Map<KClass<out ViewModel>, () -> ViewModel>,
     override val assistedFactoryProviders:

@@ -36,7 +36,7 @@ import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 @Inject
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
-public class ThemeViewModel(
+internal class ThemeViewModel(
     private val preferencesRepository: PreferencesRepository,
 ) : ViewModel() {
     private val _appTheme = MutableStateFlow(APP_THEME_DEFAULT)

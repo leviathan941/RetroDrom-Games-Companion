@@ -18,9 +18,9 @@ notifications. Content is mostly Russian (`values-ru`); UI is Jetpack Compose on
 
 | Module | Purpose |
 | --- | --- |
-| `:app` | Thin Android host: `MainActivity`, `MainApplication`, the Metro app graph and `ApplicationModule` (Android bindings, the license list), plus the app's identity resources. Its UI moved to `:app:shared` in B9. |
+| `:app` | Thin Android host: `MainActivity`, and `MainApplication`, which builds `SharedApplication` from what only it can see (version name, main activity, the license list generated from its classpath), plus the app's identity resources. Its UI and DI moved to `:app:shared` in B9d. |
 | `:app:migration` | Versioned on-device app data migrations (stale files, orphaned databases). `:app` only starts the run and gates its first frame on it; the step registry is `internal`. KMP: the runner in `commonMain`, the Android steps and their registry in `androidMain`. |
-| `:app:shared` | KMP home of the UI layer: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is the root composable `AppUi` and what Metro needs. |
+| `:app:shared` | KMP home of the UI layer and the app graph: Compose screens, drawer, top bar, navigation entries and keys, theme, view models, `UserMessages`; `SharedApplication`, the common `AppGraph` and, in `androidMain`, `AndroidAppGraph`. `expect`/`actual` for dynamic colour, the status bar, the theme list and the clipboard. Packages unchanged; its public API is `AppUi`, `SharedApplication`, `AppGraph` and `AppLibrariesSource`. |
 | `:browser` | In-app browser: the `InAppBrowser` interface and the `expect` `rememberInAppBrowser()`, on Custom Tabs (`androidx.browser`) on Android and `SFSafariViewController` on iOS. |
 | `:common` | Shared constants (site base URL), DI keys, request codes, the `kotlin.time.Clock` binding. |
 | `:firebase` | FCM messaging service and the Firebase implementation of `PushMessaging` (topic subscriptions). |
@@ -59,12 +59,17 @@ Read them from there rather than restating them here — version numbers in this
   must carry its final colour.
 - Package layout per module: public API at the top level (or `api/`), implementation under
   `internal/` or `impl/`; Metro binding containers and the app graph under `di/`.
-- DI is [Metro](https://github.com/ZacSweers/metro). `MainApplication` owns the single
-  `@DependencyGraph(AppScope::class)`; framework-instantiated classes reach it through the
-  `Application`. Any class carrying `@ContributesTo` / `@ContributesBinding` / `@ContributesIntoSet`
-  must be **public** for Metro to merge it — a contribution from an `internal` class is rejected
-  ("its module is not a friend module to this one") and shows up as a `[Metro/MissingBinding]`
-  error naming it under `similar bindings:`. Its members may be `internal`, which is why the
+- DI is [Metro](https://github.com/ZacSweers/metro). `:app:shared` declares the app graph: the
+  common `AppGraph` interface and, in `androidMain`, the `@DependencyGraph(AppScope::class)`
+  `AndroidAppGraph` implementing it. Metro wants the final graph in platform code whenever
+  contributions are platform-specific, as `:firebase`'s and several `androidMain` ones are.
+  `MainApplication` builds it through `SharedApplication`, passing what only `:app` can see as
+  graph factory parameters; framework-instantiated classes reach it through the `Application`. Any class carrying `@ContributesTo` / `@ContributesBinding` / `@ContributesIntoSet`
+  must be **public** for Metro to merge it from another module — a contribution from an `internal`
+  class is rejected ("its module is not a friend module to this one") and shows up as a
+  `[Metro/MissingBinding]` error naming it under `similar bindings:`, or, for a view model's
+  `@ContributesIntoMap`, is silently left out of the graph. `:app:shared`'s own contributions
+  are `internal`, since its graph is in the same module. Its members may be `internal`, which is why the
   `@Binds`-only binding containers still exist: they keep the implementations internal. Hilt
   tolerated internal implementations only because Dagger generates Java, which ignores Kotlin
   `internal`. `@Provides` must sit in an `object` or a `companion object`, never directly in an
@@ -73,8 +78,8 @@ Read them from there rather than restating them here — version numbers in this
 - Metro's graph reports are off by default: Metro marks them debugging-only because they add
   noticeable compile overhead. Request them with the `metro.reportsDestination` property (a path
   relative to the module's build directory). The path is not a compile input, so force the
-  compilation: `./gradlew :app:compileDebugKotlin --rerun -Pmetro.reportsDestination=reports/metro`.
-  `app/build/reports/metro/<variant>/graph-dump/` then names every binding, its kind, its scope
+  compilation: `./gradlew :app:shared:compileAndroidMain --rerun -Pmetro.reportsDestination=reports/metro`.
+  `app/shared/build/reports/metro/android/main/graph-dump/` then names every binding, its kind, its scope
   and its source location — the practical way to diff the graph across a change.
 - Source files and module `build.gradle.kts` scripts carry the GPL v3 header
   (`RetroDrom Games Companion / Copyright (C) …`). Only the root `build.gradle.kts`,

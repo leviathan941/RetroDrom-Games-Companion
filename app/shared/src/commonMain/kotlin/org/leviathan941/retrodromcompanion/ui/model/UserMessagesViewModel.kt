@@ -35,7 +35,7 @@ import org.leviathan941.retrodromcompanion.app.message.UserMessages
 @Inject
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
-public class UserMessagesViewModel(
+internal class UserMessagesViewModel(
     private val userMessages: UserMessages,
 ) : ViewModel() {
     /**

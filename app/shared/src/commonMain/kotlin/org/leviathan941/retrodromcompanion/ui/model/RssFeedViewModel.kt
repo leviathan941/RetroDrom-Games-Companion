@@ -39,7 +39,7 @@ import org.leviathan941.retrodromcompanion.rssreader.RssFeedProvider
 import org.leviathan941.retrodromcompanion.ui.rssScreenLogger
 
 @AssistedInject
-public class RssFeedViewModel(
+internal class RssFeedViewModel(
     @Assisted channelUrl: String,
     rssFeedProviderFactory: RssFeedProvider.Factory,
 ) : ViewModel() {
@@ -63,7 +63,7 @@ public class RssFeedViewModel(
     @AssistedFactory
     @ManualViewModelAssistedFactoryKey
     @ContributesIntoMap(AppScope::class, binding<ManualViewModelAssistedFactory>())
-    public interface Factory : ManualViewModelAssistedFactory {
-        public fun create(channelUrl: String): RssFeedViewModel
+    interface Factory : ManualViewModelAssistedFactory {
+        fun create(channelUrl: String): RssFeedViewModel
     }
 }

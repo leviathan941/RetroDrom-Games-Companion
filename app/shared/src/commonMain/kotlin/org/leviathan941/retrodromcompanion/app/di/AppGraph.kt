@@ -18,34 +18,28 @@
 
 package org.leviathan941.retrodromcompanion.app.di
 
-import android.app.Application
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.DependencyGraph
-import dev.zacsweers.metro.Provides
 import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 import io.ktor.client.HttpClient
 import org.leviathan941.retrodromcompanion.app.migration.AppDataMigrator
-import org.leviathan941.retrodromcompanion.firebase.push.MessagingDependencies
+import org.leviathan941.retrodromcompanion.notification.Notifications
+import org.leviathan941.retrodromcompanion.notification.PushMessaging
+import org.leviathan941.retrodromcompanion.preferences.PreferencesRepository
 
 /**
- * The single application-wide object graph. Built once in `MainApplication.onCreate` and reached
- * from framework-instantiated classes through the `Application`, since neither an Activity nor a
- * Service can be constructor injected.
+ * The single application-wide object graph, built once per process by [org.leviathan941.retrodromcompanion.app.SharedApplication]
+ * and reached from the platform's entry points through it.
+ *
+ * Each platform declares the `@DependencyGraph` that implements it, since a graph must see the
+ * platform-specific contributions.
  */
-@DependencyGraph(AppScope::class)
-interface AppGraph :
-    ViewModelGraph,
-    MessagingDependencies {
-
-    val appDataMigrator: AppDataMigrator
+public interface AppGraph : ViewModelGraph {
+    public val appDataMigrator: AppDataMigrator
+    public val notifications: Notifications
+    public val pushMessaging: PushMessaging
+    public val preferencesRepository: PreferencesRepository
 
     // Deliberately a Provider: Coil only builds its ImageLoader on the first image request, so
     // the client must not be created at process start. The binding is app-scoped, so every
     // invocation returns the one shared client.
-    val httpClient: () -> HttpClient
-
-    @DependencyGraph.Factory
-    fun interface Factory {
-        fun create(@Provides application: Application): AppGraph
-    }
+    public val httpClient: () -> HttpClient
 }

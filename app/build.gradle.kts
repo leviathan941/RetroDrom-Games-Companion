@@ -21,7 +21,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.google.services)
     alias(libs.plugins.aboutlibraries)
-    alias(libs.plugins.zacsweers.metro)
 }
 
 android {
@@ -78,18 +77,13 @@ android {
 
 dependencies {
     implementation(project(":app:migration"))
-    implementation(project(":common"))
     implementation(project(":firebase"))
-    implementation(project(":network"))
-    implementation(project(":network:cache"))
     implementation(project(":notification"))
     implementation(project(":preferences"))
-    implementation(project(":rss-reader"))
     implementation(project(":app:shared"))
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -97,14 +91,6 @@ dependencies {
     implementation(libs.google.material)
 
     implementation(libs.androidx.activity.compose)
-
-    implementation(libs.coil3.coil)
-    implementation(libs.coil3.network.ktor3)
-
-    implementation(platform(libs.ktor.bom))
-    implementation(libs.ktor.client.core)
-
-    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.zacsweers.metrox.viewmodel)
     implementation(libs.zacsweers.metrox.viewmodel.compose)

@@ -40,7 +40,7 @@ import org.leviathan941.retrodromcompanion.ui.theme.ThemeType
 @Inject
 @ViewModelKey
 @ContributesIntoMap(AppScope::class, binding<ViewModel>())
-public class SettingsViewModel(
+internal class SettingsViewModel(
     private val pushNotificationModel: PushNotificationModel,
     private val preferencesRepository: PreferencesRepository,
     @AppVersionName internal val appVersionName: String,

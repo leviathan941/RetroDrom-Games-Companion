@@ -46,7 +46,7 @@ internal sealed interface UserMessage {
  */
 @Inject
 @SingleIn(AppScope::class)
-public class UserMessages {
+internal class UserMessages {
     // A Channel rather than a SharedFlow, which would drop messages posted with no collector.
     private val channel = Channel<UserMessage>(Channel.BUFFERED)
 
