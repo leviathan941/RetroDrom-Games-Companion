@@ -20,6 +20,7 @@ package org.leviathan941.retrodromcompanion.app.ios
 
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.window.ComposeUIViewController
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
@@ -39,6 +40,7 @@ public fun MainViewController(sharedApplication: SharedApplication): UIViewContr
     return ComposeUIViewController {
         CompositionLocalProvider(
             LocalMetroViewModelFactory provides appGraph.metroViewModelFactory,
+            LocalUriHandler provides IosUriHandler,
         ) {
             val migrationState by appGraph.appDataMigrator.state.collectAsStateWithLifecycle()
             AppUi(
